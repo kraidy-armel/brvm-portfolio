@@ -162,6 +162,9 @@
     <button class="btn alt" onclick="openPrices()">🔄 Cours / Sync BRVM</button>
   </div>
 
+  <div class="sect-title">Liquidités</div>
+  <div class="card" id="cashCard"></div>
+
   <div class="sect-title">Évolution de la valeur</div>
   <div class="card" id="evoCard"><canvas id="evoChart" height="150"></canvas></div>
 
@@ -319,7 +322,7 @@ const stockMap={}; STOCKS.forEach(s=>stockMap[s[0]]={name:s[1],sector:s[2]});
 /* ================= ÉTAT (multi-portefeuilles) ================= */
 const DB_KEY="brvm_portfolio_v2";
 const OLD_KEY="brvm_portfolio_v1";
-function blankPortfolio(name){return {id:uid(),name:name||"Mon portefeuille",tx:[],div:[],events:[],prices:{},history:[],brvmIndex:null};}
+function blankPortfolio(name){return {id:uid(),name:name||"Mon portefeuille",tx:[],div:[],events:[],prices:{},history:[],brvmIndex:null,cash:[]};}
 let store={portfolios:[],activeId:null,lock:null};
 let db; /* pointe vers le portefeuille actif */
 function activate(id){const p=store.portfolios.find(x=>x.id===id)||store.portfolios[0];store.activeId=p.id;db=p;}
@@ -401,6 +404,15 @@ function totals(){
     dayPct:(value-day)?day/(value-day)*100:0};
 }
 
+/* Trésorerie disponible : dépôts + ventes + dividendes − retraits − achats */
+function cashBalance(){
+  let bal=0;
+  (db.cash||[]).forEach(m=>bal+=(m.type==='depot'?1:-1)*(+m.montant||0));
+  db.tx.forEach(t=>{const brut=t.qty*t.price; bal+= t.type==='achat'? -(brut+(+t.frais||0)) : (brut-(+t.frais||0));});
+  db.div.forEach(d=>bal+=(+d.montant||0));
+  return bal;
+}
+
 /* Enregistre la valeur du portefeuille (1 point max par jour) */
 function recordSnapshot(){
   const v=totals().value; if(v<=0)return;
@@ -476,7 +488,54 @@ function renderHome(){
   const ha=document.getElementById("homeAgenda");
   const up=[...db.events].filter(e=>e.date>=today()).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);
   ha.innerHTML=up.length?up.map(evRow).join(""):`<div class="empty" style="padding:18px">Aucun événement à venir.</div>`;
+  renderCash();
   drawEvo();
+}
+
+/* --- Trésorerie (liquidités) --- */
+function renderCash(){
+  const card=document.getElementById("cashCard"); if(!card)return;
+  const bal=cashBalance(), titres=totals().value, patrimoine=titres+bal;
+  const bc=bal>=0?"pos":"neg";
+  card.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center">
+      <div><div class="sub">Disponible</div><div style="font-size:22px;font-weight:700" class="${bal>=0?'':'neg'}">${fmt(bal)}</div></div>
+    </div>
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn alt sm" onclick="openCash('depot')">＋ Dépôt</button>
+      <button class="btn alt sm" onclick="openCash('retrait')">− Retrait</button>
+    </div>
+    <div class="kv" style="margin-top:12px"><span class="k">Valeur des titres</span><b>${fmtShort(titres)} FCFA</b></div>
+    <div class="kv"><span class="k">Patrimoine total (titres + cash)</span><b>${fmtShort(patrimoine)} FCFA</b></div>
+    ${(db.cash&&db.cash.length)?`<button class="del" style="color:var(--green);margin-top:8px" onclick="openCashList()">Voir les mouvements (${db.cash.length}) →</button>`:`<div class="hint" style="margin-top:8px">Enregistre tes dépôts et retraits d'argent pour suivre ton cash disponible.</div>`}`;
+}
+function openCash(type){
+  const dep=type==='depot';
+  openSheet(`<h3>${dep?'💰 Dépôt de liquidités':'🏧 Retrait de liquidités'}</h3>
+    <div class="hint">${dep?'Argent que tu ajoutes sur ton compte titres.':'Argent que tu retires de ton compte titres.'}</div>
+    <label>Montant (FCFA)</label><input id="csAmt" type="number" inputmode="decimal" placeholder="ex : 500000">
+    <label>Date</label><input id="csDate" type="date" value="${today()}">
+    <label>Libellé <span class="hint">Optionnel</span></label><input id="csLib" placeholder="ex : virement bancaire, salaire...">
+    <button class="btn" style="margin-top:18px" onclick="saveCash('${type}')">Enregistrer</button>`);
+}
+function saveCash(type){
+  const montant=+document.getElementById("csAmt").value;
+  if(!montant||montant<=0){alert("Renseigne un montant valide.");return;}
+  if(type==='retrait'&&montant>cashBalance()){if(!confirm("Ce retrait dépasse ta trésorerie disponible. Enregistrer quand même ?"))return;}
+  if(!db.cash)db.cash=[];
+  db.cash.push({id:uid(),type,montant,date:document.getElementById("csDate").value||today(),libelle:(document.getElementById("csLib").value||"").trim()});
+  closeSheet();save();
+}
+function delCash(id){if(confirm("Supprimer ce mouvement ?")){db.cash=(db.cash||[]).filter(m=>m.id!==id);save();openCashList();}}
+function openCashList(){
+  const ms=[...(db.cash||[])].sort((a,b)=>b.date.localeCompare(a.date));
+  openSheet(`<h3>Mouvements de trésorerie</h3>
+    <div class="kv"><span class="k">Disponible</span><b class="${cashBalance()>=0?'pos':'neg'}">${fmt(cashBalance())}</b></div>
+    <div style="margin-top:10px">${ms.length?ms.map(m=>{const dep=m.type==='depot';return `<div class="row">
+      <div class="tick" style="background:${dep?'var(--green-l)':'var(--neg-l)'};color:${dep?'var(--green)':'var(--neg)'}">${dep?'DÉP':'RET'}</div>
+      <div class="grow"><div class="nm">${dep?'Dépôt':'Retrait'}${m.libelle?` <span class="tag gray" style="font-weight:500">${m.libelle}</span>`:""}</div><div class="sub">${frDate(m.date)}</div></div>
+      <div class="right"><div class="val ${dep?'pos':'neg'}">${dep?'+':'−'}${fmtShort(m.montant)}</div><button class="del" onclick="delCash('${m.id}')">Suppr.</button></div>
+    </div>`;}).join(""):'<div class="empty" style="padding:18px">Aucun mouvement.</div>'}</div>
+    <div class="btn-row" style="margin-top:14px"><button class="btn alt sm" onclick="closeSheet();openCash('depot')">＋ Dépôt</button><button class="btn alt sm" onclick="closeSheet();openCash('retrait')">− Retrait</button></div>`);
 }
 
 let evoChartObj=null;
@@ -502,7 +561,7 @@ function renderPortfolio(){
     const buy=t.type==="achat";
     return `<div class="row">
       <div class="tick" style="background:${buy?"var(--green-l)":"var(--neg-l)"};color:${buy?"var(--green)":"var(--neg)"}">${buy?"ACH":"VTE"}</div>
-      <div class="grow"><div class="nm">${stockMap[t.ticker]?.name||t.ticker}</div>
+      <div class="grow"><div class="nm">${stockMap[t.ticker]?.name||t.ticker}${t.libelle?` <span class="tag gray" style="font-weight:500">${t.libelle}</span>`:""}</div>
         <div class="sub">${frDate(t.date)} · ${t.qty} × ${fmtShort(t.price)}</div></div>
       <div class="right"><div class="val">${fmtShort(t.qty*t.price)}</div>
         <button class="del" onclick="delTx('${t.id}')">Suppr.</button></div>
@@ -520,7 +579,7 @@ function renderDiv(){
   const ds=[...db.div].sort((a,b)=>b.date.localeCompare(a.date));
   document.getElementById("divList").innerHTML=ds.length?ds.map(d=>`<div class="row">
     <div class="tick" style="background:#FBF1D8;color:var(--gold)">${d.ticker.slice(0,4)}</div>
-    <div class="grow"><div class="nm">${stockMap[d.ticker]?.name||d.ticker}</div><div class="sub">${frDate(d.date)}</div></div>
+    <div class="grow"><div class="nm">${stockMap[d.ticker]?.name||d.ticker}${d.libelle?` <span class="tag gray" style="font-weight:500">${d.libelle}</span>`:""}</div><div class="sub">${frDate(d.date)}</div></div>
     <div class="right"><div class="val pos">+${fmtShort(d.montant)}</div><button class="del" onclick="delDiv('${d.id}')">Suppr.</button></div>
   </div>`).join(""):`<div class="empty"><div class="ico">💰</div>Aucun dividende enregistré.</div>`;
 }
@@ -665,6 +724,7 @@ function openTx(){
     <label>Prix par action (FCFA)</label><input id="txPrice" type="number" inputmode="decimal" placeholder="ex : 15000">
     <label>Frais / commission (FCFA)<span class="hint">Optionnel — la commission du SGI</span></label><input id="txFrais" type="number" inputmode="decimal" placeholder="0">
     <label>Date</label><input id="txDate" type="date" value="${today()}">
+    <label>Libellé <span class="hint">Optionnel — une note pour reconnaître l'opération</span></label><input id="txLib" placeholder="ex : PEA long terme, ordre via SGI X...">
     <button class="btn" style="margin-top:18px" onclick="saveTx()">Enregistrer</button>`);
   window.txType="achat";
 }
@@ -673,7 +733,7 @@ function saveTx(){
   const qty=+document.getElementById("txQty").value, price=+document.getElementById("txPrice").value;
   if(!ticker){alert("Choisis ou tape une société.");return;}
   if(!qty||!price){alert("Renseigne le nombre de titres et le prix.");return;}
-  db.tx.push({id:uid(),type:window.txType,ticker,qty,price,frais:+document.getElementById("txFrais").value||0,date:document.getElementById("txDate").value||today()});
+  db.tx.push({id:uid(),type:window.txType,ticker,qty,price,frais:+document.getElementById("txFrais").value||0,date:document.getElementById("txDate").value||today(),libelle:(document.getElementById("txLib").value||"").trim()});
   if(!db.prices[ticker])db.prices[ticker]={actuel:price,veille:price};
   closeSheet();save();
 }
@@ -686,6 +746,7 @@ function openDiv(){
     <label>Société <span class="hint">Tape pour chercher</span></label>${combo('dvTicker','Ex : Sonatel, SNTS...')}
     <label>Montant total reçu (FCFA)</label><input id="dvAmt" type="number" inputmode="decimal" placeholder="ex : 45000">
     <label>Date de réception</label><input id="dvDate" type="date" value="${today()}">
+    <label>Libellé <span class="hint">Optionnel</span></label><input id="dvLib" placeholder="ex : dividende 2025, solde...">
     <button class="btn" style="margin-top:18px" onclick="saveDiv()">Enregistrer</button>`);
 }
 function saveDiv(){
@@ -693,7 +754,7 @@ function saveDiv(){
   const montant=+document.getElementById("dvAmt").value;
   if(!ticker){alert("Choisis une société.");return;}
   if(!montant){alert("Renseigne le montant reçu.");return;}
-  db.div.push({id:uid(),ticker,montant,date:document.getElementById("dvDate").value||today()});
+  db.div.push({id:uid(),ticker,montant,date:document.getElementById("dvDate").value||today(),libelle:(document.getElementById("dvLib").value||"").trim()});
   closeSheet();save();
 }
 function delDiv(id){if(confirm("Supprimer ?")){db.div=db.div.filter(d=>d.id!==id);save();}}
@@ -778,7 +839,7 @@ function importData(input){
   }catch(x){alert("Fichier invalide.");}};
   r.readAsText(f);
 }
-function resetData(){if(confirm("Effacer le contenu de ce portefeuille ? Cette action est irréversible.")){Object.assign(db,{tx:[],div:[],events:[],prices:{},history:[],brvmIndex:null});save();closeSheet();}}
+function resetData(){if(confirm("Effacer le contenu de ce portefeuille ? Cette action est irréversible.")){Object.assign(db,{tx:[],div:[],events:[],prices:{},history:[],brvmIndex:null,cash:[]});save();closeSheet();}}
 
 /* Rendement du dividende sur 12 mois pour un titre */
 function tickerYield(ticker,value){
@@ -845,6 +906,10 @@ function loadDemo(){
       {date:"2026-02-28",value:402000,index:281},
       {date:"2026-04-30",value:428000,index:288},
       {date:"2026-06-20",value:440500,index:291}
+    ],
+    cash:[
+      {id:uid(),type:"depot",montant:600000,date:"2025-09-10"},
+      {id:uid(),type:"depot",montant:200000,date:"2026-01-10"}
     ],
     events:[]
   });
