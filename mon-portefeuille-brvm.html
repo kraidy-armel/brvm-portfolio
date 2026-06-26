@@ -7,6 +7,7 @@
 <title>Mon Portefeuille BRVM</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
   :root{
     --green:#0B6B53; --green-d:#085441; --green-l:#E6F4F0;
@@ -210,11 +211,26 @@
   <div class="help">💡 <div>Les dates importantes : <b>AGO</b> (assemblée des actionnaires), publication des <b>résultats</b>, et <b>détachement du dividende</b> (date où il faut détenir l'action pour toucher le dividende).</div></div>
   <div class="card" id="agendaList"></div>
   <button class="btn" style="margin-top:6px" onclick="openEvent()">＋ Ajouter un événement</button>
+  <button class="btn ghost" style="margin-top:10px" onclick="window.open('https://www.brvm.org/fr/agenda-evenements/0','_blank')">📅 Publications officielles BRVM ↗</button>
+
+  <div class="sect-title">🔔 Alertes de prix</div>
+  <div class="card" id="alertsList"></div>
+  <button class="btn alt" style="margin-top:6px" onclick="openAlert()">＋ Nouvelle alerte</button>
 </section>
 
 <!-- ANALYSE -->
 <section class="screen" id="s-analyse">
   <h2 style="margin:6px 4px 4px">Analyse</h2>
+  <div class="card">
+    <h3 style="font-size:15px;margin-bottom:4px">🧠 Bilan expert</h3>
+    <div class="muted" style="font-size:12.5px;margin-bottom:10px">Lecture analytique de ton portefeuille (éducatif, sans conseil d'achat/vente).</div>
+    <div id="expertWrap"></div>
+  </div>
+  <div class="card">
+    <h3 style="font-size:15px;margin-bottom:4px">📋 Compte de résultat</h3>
+    <div class="muted" style="font-size:12.5px;margin-bottom:10px">Synthèse de TES résultats sur ce portefeuille.</div>
+    <div id="compteWrap"></div>
+  </div>
   <div class="card">
     <h3 style="font-size:15px;margin-bottom:4px">Répartition par secteur</h3>
     <div class="muted" style="font-size:12.5px;margin-bottom:8px">Bien répartir réduit le risque.</div>
@@ -322,7 +338,7 @@ const stockMap={}; STOCKS.forEach(s=>stockMap[s[0]]={name:s[1],sector:s[2]});
 /* ================= ÉTAT (multi-portefeuilles) ================= */
 const DB_KEY="brvm_portfolio_v2";
 const OLD_KEY="brvm_portfolio_v1";
-function blankPortfolio(name){return {id:uid(),name:name||"Mon portefeuille",tx:[],div:[],events:[],prices:{},history:[],brvmIndex:null,cash:[]};}
+function blankPortfolio(name){return {id:uid(),name:name||"Mon portefeuille",tx:[],div:[],events:[],prices:{},history:[],brvmIndex:null,cash:[],alerts:[]};}
 let store={portfolios:[],activeId:null,lock:null};
 let db; /* pointe vers le portefeuille actif */
 function activate(id){const p=store.portfolios.find(x=>x.id===id)||store.portfolios[0];store.activeId=p.id;db=p;}
@@ -357,7 +373,7 @@ async function syncPrices(btn){
     }catch(e){fail.push(p.ticker);}
   }
   if(btn){btn.textContent=orig;btn.disabled=false;}
-  save();
+  checkAlerts();save();
   alert("✅ Cours synchronisés : "+ok+" titre(s)."+(fail.length?"\n⚠️ Non disponibles : "+fail.join(", ")+"\n(Saisis-les manuellement ci-dessous.)":""));
 }
 function save(){recordSnapshot();localStorage.setItem(DB_KEY,JSON.stringify(store));renderAll();if(typeof cloudPushDebounced==="function")cloudPushDebounced();}
@@ -601,11 +617,100 @@ function evRow(e){
 function renderAgenda(){
   const evs=[...db.events].sort((a,b)=>a.date.localeCompare(b.date));
   document.getElementById("agendaList").innerHTML=evs.length?evs.map(evRow).join(""):`<div class="empty"><div class="ico">📅</div>Aucun événement.<br><br><button class="del" style="color:var(--green)" onclick="loadDemoEvents()">Charger des exemples</button></div>`;
+  renderAlerts();
+}
+function renderAlerts(){
+  const el=document.getElementById("alertsList"); if(!el)return;
+  const as=db.alerts||[];
+  el.innerHTML=as.length?as.map(a=>`<div class="row">
+    <div class="tick" style="background:${a.statut==='active'?'var(--green-l)':'#EEF1F0'};color:${a.statut==='active'?'var(--green)':'var(--muted)'}">🔔</div>
+    <div class="grow"><div class="nm">${stockMap[a.ticker]?.name||a.ticker} ${a.condition} ${fmtShort(a.seuil)}</div>
+      <div class="sub">${a.statut==='active'?'Active':'⚡ Déclenchée'}${a.note?' · '+a.note:''}</div></div>
+    <div class="right">${a.statut!=='active'?`<button class="del" style="color:var(--green)" onclick="rearmAlert('${a.id}')">Réarmer</button>`:''} <button class="del" onclick="delAlert('${a.id}')">Suppr.</button></div>
+  </div>`).join(""):`<div class="empty" style="padding:18px">Aucune alerte. Crée-en une pour être prévenu quand un cours franchit un seuil (au moment où tu synchronises les cours).</div>`;
+}
+function openAlert(){
+  openSheet(`<h3>🔔 Nouvelle alerte de prix</h3>
+    <div class="hint">Tu seras prévenu quand le cours franchit le seuil, au moment où tu mets à jour / synchronises les cours.</div>
+    <label>Société <span class="hint">Tape pour chercher</span></label>${combo('alTicker','Ex : Sonatel, SNTS...')}
+    <label>Condition</label><select id="alCond"><option value="&gt;=">Cours ≥ seuil (hausse)</option><option value="&lt;=">Cours ≤ seuil (baisse)</option></select>
+    <label>Seuil (FCFA)</label><input id="alSeuil" type="number" inputmode="decimal" placeholder="ex : 18000">
+    <label>Note (optionnel)</label><input id="alNote" placeholder="ex : objectif de vente">
+    <button class="btn" style="margin-top:18px" onclick="saveAlert()">Créer l'alerte</button>`);
+}
+function saveAlert(){
+  const ticker=comboValue('alTicker'); const seuil=+document.getElementById('alSeuil').value;
+  if(!ticker){alert("Choisis une société.");return;}
+  if(!seuil){alert("Renseigne un seuil de prix.");return;}
+  if(!db.alerts)db.alerts=[];
+  db.alerts.push({id:uid(),ticker,condition:document.getElementById('alCond').value,seuil,note:(document.getElementById('alNote').value||'').trim(),statut:'active'});
+  closeSheet();save();
+}
+function delAlert(id){db.alerts=(db.alerts||[]).filter(a=>a.id!==id);save();}
+function rearmAlert(id){const a=(db.alerts||[]).find(x=>x.id===id);if(a){a.statut='active';save();}}
+/* Vérifie les alertes après mise à jour des cours */
+function checkAlerts(){
+  if(!db.alerts)return;
+  const trig=[];
+  db.alerts.forEach(a=>{
+    if(a.statut!=='active')return;
+    const cur=+(db.prices[a.ticker]||{}).actuel; if(!cur)return;
+    if((a.condition===">="&&cur>=a.seuil)||(a.condition==="<="&&cur<=a.seuil)){a.statut='declenchee';trig.push({a,cur});}
+  });
+  if(trig.length)setTimeout(()=>alert("🔔 Alerte(s) déclenchée(s) :\n\n"+trig.map(t=>`${stockMap[t.a.ticker]?.name||t.a.ticker} : cours ${t.a.condition} ${fmtShort(t.a.seuil)} (actuel ${fmtShort(t.cur)})`).join("\n")),350);
 }
 
 /* ================= ANALYSE ================= */
+function drawExpert(){
+  const w=document.getElementById("expertWrap"); if(!w)return;
+  const t=totals(), ps=t.ps;
+  if(!ps.length){w.innerHTML='<div class="muted" style="font-size:13px">Ajoute des positions pour obtenir ton bilan expert.</div>';return;}
+  const sectors={}; ps.forEach(p=>{const s=stockMap[p.ticker]?.sector||"Autre";sectors[s]=(sectors[s]||0)+p.value;});
+  const nbSect=Object.keys(sectors).length;
+  const top=[...ps].sort((a,b)=>b.value-a.value)[0], topPct=top.value/(t.value||1)*100;
+  const n=new Date(), cutoff=new Date(n.getFullYear()-1,n.getMonth(),n.getDate()).toISOString().slice(0,10);
+  const div12=db.div.filter(d=>d.date>=cutoff).reduce((s,d)=>s+(+d.montant||0),0);
+  const yieldG=t.invested>0?div12/t.invested*100:0;
+  const best=[...ps].sort((a,b)=>b.plPct-a.plPct)[0], worst=[...ps].sort((a,b)=>a.plPct-b.plPct)[0];
+  const it=[];
+  it.push(`<b>${ps.length}</b> ligne(s) sur <b>${nbSect}</b> secteur(s). `+(ps.length<4?"Portefeuille peu diversifié — répartir sur plus de valeurs réduit le risque.":nbSect<=2?"Concentré sur peu de secteurs — attention à l'exposition sectorielle.":"Diversification correcte."));
+  it.push(`Concentration : <b>${stockMap[top.ticker]?.name||top.ticker}</b> pèse <b>${topPct.toFixed(0)}%</b>. `+(topPct>=40?"⚠️ Très concentré : risque élevé si ce titre baisse.":topPct>=25?"Part importante, à surveiller.":"Réparti raisonnablement."));
+  it.push(`Rendement dividende (12 mois) : <b>${yieldG.toFixed(1)}%</b>. `+(yieldG>=6?"Élevé — profil « valeur de rendement ».":yieldG>=3?"Correct pour la BRVM.":"Faible (ou dividendes non encore saisis)."));
+  it.push(`Performance : meilleure ligne <b>${top.ticker===best.ticker?best.ticker:best.ticker}</b> (${best.plPct>=0?'+':''}${best.plPct.toFixed(1)}%), plus faible <b>${worst.ticker}</b> (${worst.plPct>=0?'+':''}${worst.plPct.toFixed(1)}%).`);
+  w.innerHTML=it.map(x=>`<div class="help" style="margin-bottom:8px">•&nbsp;<div>${x}</div></div>`).join("")+'<div class="hint" style="margin-top:4px">⚖️ Analyse éducative — pas un conseil d\'achat ou de vente.</div>';
+}
+
+function drawCompte(){
+  const w=document.getElementById("compteWrap"); if(!w)return;
+  const t=totals();
+  const depots=(db.cash||[]).filter(m=>m.type==='depot').reduce((s,m)=>s+(+m.montant||0),0);
+  const retraits=(db.cash||[]).filter(m=>m.type==='retrait').reduce((s,m)=>s+(+m.montant||0),0);
+  const apports=depots-retraits, titres=t.value, liquid=cashBalance(), patrimoine=titres+liquid;
+  const latent=t.pl, realise=Object.values(realized()).reduce((s,v)=>s+v,0);
+  const divs=db.div.reduce((s,d)=>s+(+d.montant||0),0), frais=db.tx.reduce((s,x)=>s+(+x.frais||0),0);
+  const resultat=patrimoine-apports, rPct=apports>0?resultat/apports*100:0;
+  const kv=(k,v,b)=>`<div class="kv"><span class="k">${k}</span><b ${b?'class="'+b+'"':''}>${v}</b></div>`;
+  w.innerHTML=
+    kv("Dépôts","+"+fmtShort(depots)+" FCFA")
+    +kv("Retraits","−"+fmtShort(retraits)+" FCFA")
+    +kv("Apports nets",fmtShort(apports)+" FCFA")
+    +`<div class="sect-title" style="margin:12px 4px 4px">Ce que tu détiens</div>`
+    +kv("Valeur des titres",fmtShort(titres)+" FCFA")
+    +kv("Liquidités",fmtShort(liquid)+" FCFA",liquid<0?'neg':'')
+    +kv("<b>Patrimoine total</b>","<b>"+fmtShort(patrimoine)+" FCFA</b>")
+    +`<div class="sect-title" style="margin:12px 4px 4px">Détail des gains</div>`
+    +kv("Plus-value latente",sign(latent),latent>=0?'pos':'neg')
+    +kv("Plus-values réalisées",sign(realise),realise>=0?'pos':'neg')
+    +kv("Dividendes reçus","+"+fmtShort(divs)+" FCFA",'pos')
+    +kv("Frais payés","−"+fmtShort(frais)+" FCFA",'neg')
+    +`<div class="kv" style="border-top:2px solid var(--line);margin-top:6px;padding-top:12px"><span class="k" style="font-weight:700;color:var(--ink)">RÉSULTAT GLOBAL</span><b style="font-size:17px" class="${resultat>=0?'pos':'neg'}">${sign(resultat)}${apports>0?` (${resultat>=0?'+':''}${rPct.toFixed(1)}%)`:''}</b></div>`
+    +`<div class="hint" style="margin-top:8px">Résultat global = patrimoine actuel − apports nets (intègre plus-values latentes + réalisées + dividendes − frais).</div>`;
+}
+
 let sectorChartObj=null;
 function drawAnalyse(){
+  drawExpert();
+  drawCompte();
   const t=totals();
   const bySector={};
   t.ps.forEach(p=>{const s=stockMap[p.ticker]?.sector||"Autre";bySector[s]=(bySector[s]||0)+p.value;});
@@ -802,7 +907,7 @@ function savePrices(){
     const a=document.getElementById("pa_"+p.ticker), v=document.getElementById("pv_"+p.ticker);
     if(a)db.prices[p.ticker]={actuel:+a.value||p.cur,veille:+(v&&v.value)||+a.value||p.cur};
   });
-  closeSheet();save();
+  checkAlerts();closeSheet();save();
 }
 
 /* --- Réglages / sauvegarde --- */
@@ -815,9 +920,10 @@ function openSettings(){
     <label style="margin-top:16px">Frais SGI — commission + taxes (%)</label>
     <input id="sgiRate" type="number" step="0.1" min="0" value="${store.sgiRate}" onchange="store.sgiRate=+this.value||0;save()">
     <div class="hint">Appliqué à la vente pour estimer ta plus-value <b>nette</b> (visible dans le détail d'un titre). Sur la BRVM, c'est souvent autour de 1,2 à 1,7 %.</div>
-    <button class="btn ghost" style="margin-top:10px" onclick="exportData()">⬇ Sauvegarder mes données (fichier)</button>
-    <label style="margin-top:16px">⬆ Restaurer depuis un fichier</label>
-    <input type="file" accept=".json" onchange="importData(this)">
+    <button class="btn ghost" style="margin-top:10px" onclick="openImportOps()">📥 Importer des opérations (CSV / Excel)</button>
+    <button class="btn ghost" style="margin-top:10px" onclick="exportData()">⬇ Sauvegarder mes données (fichier .json)</button>
+    <label style="margin-top:16px">⬆ Restaurer une sauvegarde <span class="hint">(fichier .json exporté par l'appli)</span></label>
+    <input type="file" accept=".json,application/json" onchange="importData(this)">
     <button class="btn alt" style="margin-top:18px" onclick="loadDemo()">Charger des données d'exemple</button>
     <button class="btn" style="margin-top:10px;background:var(--neg)" onclick="resetData()">Effacer ce portefeuille</button>
     <div class="hint" style="margin-top:18px;text-align:center">Mon Portefeuille BRVM · données indicatives, hors temps réel.</div>`);
@@ -840,7 +946,62 @@ function importData(input){
   }catch(x){alert("Fichier invalide.");}};
   r.readAsText(f);
 }
-function resetData(){if(confirm("Effacer le contenu de ce portefeuille ? Cette action est irréversible.")){Object.assign(db,{tx:[],div:[],events:[],prices:{},history:[],brvmIndex:null,cash:[]});save();closeSheet();}}
+function resetData(){if(confirm("Effacer le contenu de ce portefeuille ? Cette action est irréversible.")){Object.assign(db,{tx:[],div:[],events:[],prices:{},history:[],brvmIndex:null,cash:[],alerts:[]});save();closeSheet();}}
+
+/* --- Import d'opérations (CSV / Excel) --- */
+function openImportOps(){
+  openSheet(`<h3>📥 Importer des opérations</h3>
+    <div class="hint">Importe tes achats/ventes depuis un fichier <b>CSV</b> ou <b>Excel</b>. Première ligne = en-têtes. Colonnes attendues :<br><b>date, type, ticker, quantite, prix, frais, libelle</b><br>· <b>date</b> : AAAA-MM-JJ ou JJ/MM/AAAA · <b>type</b> : achat ou vente · frais & libelle optionnels.</div>
+    <button class="btn ghost" style="margin-top:14px" onclick="downloadTemplate()">⬇ Télécharger le modèle CSV</button>
+    <label style="margin-top:16px">Choisir un fichier (.csv, .xlsx)</label>
+    <input type="file" accept=".csv,.xlsx,.xls,text/csv" onchange="importOps(this)">
+    <div id="impMsg" class="hint" style="margin-top:12px"></div>`);
+}
+function downloadTemplate(){
+  const csv="date,type,ticker,quantite,prix,frais,libelle\n2026-01-15,achat,SNTS,10,16000,1500,Long terme\n2026-03-02,vente,SNTS,4,17000,500,";
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="modele-operations-brvm.csv";a.click();
+}
+function normDate(v){
+  if(v==null||v==="")return "";
+  if(typeof v==='number'){const d=new Date(Math.round((v-25569)*86400*1000));if(!isNaN(d))return d.toISOString().slice(0,10);}
+  const s=String(v).trim();
+  let m=s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})$/);
+  if(m){let y=m[3];if(y.length===2)y='20'+y;return y+'-'+m[2].padStart(2,'0')+'-'+m[1].padStart(2,'0');}
+  m=s.match(/^(\d{4})[\/\-.](\d{1,2})[\/\-.](\d{1,2})/);
+  if(m)return m[1]+'-'+m[2].padStart(2,'0')+'-'+m[3].padStart(2,'0');
+  return s.slice(0,10);
+}
+function importOps(input){
+  const f=input.files[0]; if(!f)return;
+  const msg=document.getElementById('impMsg');
+  if(typeof XLSX==='undefined'){msg.innerHTML="⚠️ Module de lecture non chargé (vérifie ta connexion internet).";return;}
+  const r=new FileReader();
+  r.onload=e=>{
+    try{
+      const wb=XLSX.read(e.target.result,{type:'binary',cellDates:false});
+      const rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:""});
+      const num=x=>+String(x).replace(/\s/g,'').replace(/,/g,'.')||0;
+      const get=(row,keys)=>{for(const rk in row){if(keys.includes(rk.toLowerCase().trim()))return row[rk];}return "";};
+      let n=0; const errs=[];
+      rows.forEach((row,i)=>{
+        const type=String(get(row,['type','sens','operation'])).toLowerCase().trim();
+        const ticker=String(get(row,['ticker','titre','symbole','symbol'])).toUpperCase().trim();
+        const qty=num(get(row,['quantite','quantité','qte','qty','nombre']));
+        const price=num(get(row,['prix','cours','price','prix unitaire']));
+        const frais=num(get(row,['frais','fees','commission']));
+        const date=normDate(get(row,['date']));
+        const libelle=String(get(row,['libelle','libellé','note','description'])||'').trim();
+        const t2=type.startsWith('ach')||type==='buy'?'achat':(type.startsWith('ven')||type==='sell'?'vente':'');
+        if(!ticker||!qty||!price||!t2){errs.push(i+2);return;}
+        db.tx.push({id:uid(),type:t2,ticker,qty,price,frais,date:date||today(),libelle});
+        n++;
+      });
+      save();
+      msg.innerHTML="✅ "+n+" opération(s) importée(s)."+(errs.length?"<br>⚠️ Lignes ignorées (données manquantes) : "+errs.join(', '):"");
+    }catch(x){msg.innerHTML="⚠️ Fichier illisible. Vérifie qu'il s'agit d'un CSV ou Excel avec les bonnes colonnes.";}
+  };
+  r.readAsBinaryString(f);
+}
 
 /* Rendement du dividende sur 12 mois pour un titre */
 function tickerYield(ticker,value){
