@@ -504,6 +504,7 @@ function renderCash(){
       <button class="btn alt sm" onclick="openCash('depot')">＋ Dépôt</button>
       <button class="btn alt sm" onclick="openCash('retrait')">− Retrait</button>
     </div>
+    ${bal<0?`<div class="help" style="margin-top:12px;background:var(--neg-l);color:var(--neg)">ℹ️ <div>Solde négatif : tes achats sont enregistrés mais pas les dépôts qui les ont financés. Ajoute un <b>dépôt</b> ≈ au total investi pour équilibrer.</div></div>`:""}
     <div class="kv" style="margin-top:12px"><span class="k">Valeur des titres</span><b>${fmtShort(titres)} FCFA</b></div>
     <div class="kv"><span class="k">Patrimoine total (titres + cash)</span><b>${fmtShort(patrimoine)} FCFA</b></div>
     ${(db.cash&&db.cash.length)?`<button class="del" style="color:var(--green);margin-top:8px" onclick="openCashList()">Voir les mouvements (${db.cash.length}) →</button>`:`<div class="hint" style="margin-top:8px">Enregistre tes dépôts et retraits d'argent pour suivre ton cash disponible.</div>`}`;
