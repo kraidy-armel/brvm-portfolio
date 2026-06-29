@@ -850,18 +850,26 @@ function openTx(id){
       <button class="${ed&&ed.type==='vente'?'on':''}" onclick="txType='vente';this.parentNode.querySelectorAll('button').forEach(b=>b.classList.remove('on'));this.classList.add('on')">Vente</button>
     </div>
     <label>Société <span class="hint">Tape pour chercher, ou ajoute un titre non listé</span></label>${combo('txTicker','Ex : Sonatel, SNTS, BOA...')}
-    <label>Nombre de titres</label><input id="txQty" type="number" inputmode="numeric" placeholder="ex : 10" value="${ed?ed.qty:''}">
-    <label>Prix par action (FCFA)</label><input id="txPrice" type="number" inputmode="decimal" placeholder="ex : 15000" value="${ed?ed.price:''}">
-    <label>Frais / commission (FCFA)<span class="hint">Optionnel — la commission du SGI</span></label><input id="txFrais" type="number" inputmode="decimal" placeholder="0" value="${ed&&ed.frais?ed.frais:''}">
+    <label>Nombre de titres</label><input id="txQty" type="number" inputmode="numeric" placeholder="ex : 10" value="${ed?ed.qty:''}" oninput="txAutoFrais()">
+    <label>Prix par action (FCFA)</label><input id="txPrice" type="number" inputmode="decimal" placeholder="ex : 15000" value="${ed?ed.price:''}" oninput="txAutoFrais()">
+    <label>Frais / commission (FCFA)<span class="hint">Calculés auto depuis ton taux SGI (${store.sgiRate||0} %) — modifiable à la main</span></label><input id="txFrais" type="number" inputmode="decimal" placeholder="0" value="${ed&&ed.frais?ed.frais:''}" oninput="window.txFraisManual=true">
     <label>Date</label><input id="txDate" type="date" value="${ed?ed.date:today()}">
     <label>Libellé <span class="hint">Optionnel — une note pour reconnaître l'opération</span></label><input id="txLib" placeholder="ex : PEA long terme, ordre via SGI X..." value="${ed?escAttr(ed.libelle):''}">
     <button class="btn" style="margin-top:18px" onclick="saveTx(${ed?`'${id}'`:''})">${ed?'Enregistrer les modifications':'Enregistrer'}</button>
     ${ed?`<button class="del" style="display:block;margin:12px auto 0" onclick="delTx('${id}')">Supprimer cette opération</button>`:''}`);
   window.txType=ed?ed.type:"achat";
+  window.txFraisManual=false;
   if(ed){
     document.getElementById('txTicker').value=ed.ticker;
     document.getElementById('txTicker_q').value=stockMap[ed.ticker]?stockMap[ed.ticker].name+' ('+ed.ticker+')':ed.ticker;
   }
+}
+/* Calcule les frais SGI automatiquement (qty × prix × taux %), sauf si saisis à la main */
+function txAutoFrais(){
+  if(window.txFraisManual)return;
+  const qty=+document.getElementById("txQty").value, price=+document.getElementById("txPrice").value;
+  const f=document.getElementById("txFrais");
+  if(f&&qty>0&&price>0)f.value=Math.round(qty*price*(store.sgiRate||0)/100);
 }
 function saveTx(id){
   const ticker=comboValue("txTicker");
