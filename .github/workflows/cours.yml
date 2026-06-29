@@ -1,0 +1,39 @@
+name: Mise a jour des cours BRVM
+
+on:
+  schedule:
+    - cron: "*/15 9-16 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cours:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recuperer le depot
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installer les dependances
+        run: pip install requests beautifulsoup4
+
+      - name: Lancer le robot (genere cours.json)
+        run: python brvm_cours.py
+
+      - name: Publier cours.json (s'il a change)
+        run: |
+          git config user.name "robot-cours-brvm"
+          git config user.email "actions@users.noreply.github.com"
+          git add cours.json
+          if git diff --staged --quiet; then
+            echo "Aucun changement de cours."
+          else
+            git commit -m "Maj cours BRVM"
+            git push
+          fi
