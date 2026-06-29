@@ -355,26 +355,44 @@ function load(){
   if(store.sgiRate==null)store.sgiRate=1.5;
   activate(store.activeId);
 }
-const DATA_BASE="https://raw.githubusercontent.com/Fredysessie/brvm-data-public/main/data/";
-/* Synchronise les cours depuis le dépôt public BRVM (cours de clôture les plus récents) */
+/* Le robot (GitHub Action) publie un seul fichier cours.json dans TON dépôt.
+   L'appli le lit ici. raw.githubusercontent autorise la lecture directe (pas de
+   blocage CORS). Adapte cette URL si tu changes de dépôt/branche. */
+const COURS_URL="https://raw.githubusercontent.com/kraidy-armel/brvm-portfolio/main/cours.json";
 async function syncPrices(btn){
   const held=positions(); if(!held.length){alert("Ajoute d'abord des positions.");return;}
   const orig=btn?btn.textContent:""; if(btn){btn.textContent="⏳ Synchronisation…";btn.disabled=true;}
-  let ok=0; const fail=[];
-  for(const p of held){
-    try{
-      const res=await fetch(DATA_BASE+p.ticker+"/"+p.ticker+".daily.csv",{cache:"no-store"});
-      if(!res.ok){fail.push(p.ticker);continue;}
-      const rows=(await res.text()).trim().split("\n").filter(l=>l&&!l.toLowerCase().startsWith("date"));
-      if(!rows.length){fail.push(p.ticker);continue;}
-      const last=+rows[rows.length-1].split(",")[4];
-      const prev=rows.length>=2?+rows[rows.length-2].split(",")[4]:last;
-      if(last>0){db.prices[p.ticker]={actuel:last,veille:prev};ok++;}else fail.push(p.ticker);
-    }catch(e){fail.push(p.ticker);}
+  try{
+    const res=await fetch(COURS_URL+"?t="+Date.now(),{cache:"no-store"});
+    if(!res.ok)throw new Error("HTTP "+res.status);
+    const data=await res.json();
+    const meta=data._meta||{};
+    let ok=0; const fail=[]; const dates=[];
+    for(const p of held){
+      const row=data[p.ticker];
+      if(row&&+row.actuel>0){
+        db.prices[p.ticker]={actuel:+row.actuel,veille:+row.veille||+row.actuel,date:row.date||""};
+        if(row.date)dates.push(row.date);
+        ok++;
+      }else fail.push(p.ticker);
+    }
+    checkAlerts();save();
+    const lastDate=dates.sort().slice(-1)[0]||"";
+    let msg="✅ "+ok+" cours mis à jour.";
+    if(lastDate)msg+="\n📅 Cours datés du "+lastDate;
+    if(meta.updated_human)msg+="\n🤖 Dernier passage du robot : "+meta.updated_human;
+    if(lastDate){
+      const ageJ=Math.floor((Date.now()-new Date(lastDate+"T00:00").getTime())/86400000);
+      if(ageJ>=4)msg+="\n\n⚠️ Ces cours datent de "+ageJ+" jours. Soit le marché est fermé (week-end/férié), soit la source n'a pas été rafraîchie — vérifie l'onglet Actions de ton dépôt GitHub.";
+    }
+    if(ok===0)msg="⚠️ Le fichier de cours a été lu, mais aucun de tes titres n'y figure.\nVérifie le journal du robot (onglet Actions) : il n'a peut-être rien pu récupérer cette fois.";
+    if(fail.length)msg+="\n\nNon trouvés : "+fail.join(", ")+"\n(Tu peux les saisir à la main ci-dessous.)";
+    alert(msg);
+  }catch(e){
+    alert("❌ Synchronisation impossible.\n\nLe fichier cours.json n'est pas encore accessible sur ton dépôt.\n\nÀ vérifier :\n• le robot est bien installé (fichiers brvm_cours.py + .github/workflows/cours.yml)\n• il a tourné au moins une fois (onglet « Actions » sur GitHub → « Run workflow »)\n• le dépôt/branche dans l'appli correspond bien au tien\n\nDétail technique : "+e.message);
+  }finally{
+    if(btn){btn.textContent=orig;btn.disabled=false;}
   }
-  if(btn){btn.textContent=orig;btn.disabled=false;}
-  checkAlerts();save();
-  alert("✅ Cours synchronisés : "+ok+" titre(s)."+(fail.length?"\n⚠️ Non disponibles : "+fail.join(", ")+"\n(Saisis-les manuellement ci-dessous.)":""));
 }
 function save(){recordSnapshot();localStorage.setItem(DB_KEY,JSON.stringify(store));renderAll();if(typeof cloudPushDebounced==="function")cloudPushDebounced();}
 
@@ -889,8 +907,8 @@ function openPrices(){
   const held=positions();
   if(!held.length){openSheet(`<h3>Cours du jour</h3><div class="empty">Ajoute d'abord des positions.</div>`);return;}
   openSheet(`<h3>Cours du jour</h3>
-    <button class="btn" onclick="syncPrices(this)">🔄 Synchroniser automatiquement (BRVM)</button>
-    <div class="hint" style="text-align:center;margin:8px 0 2px">Source : données publiques BRVM (github.com/Fredysessie), cours de clôture les plus récents.</div>
+    <button class="btn" onclick="syncPrices(this)">🔄 Synchroniser les cours (robot BRVM)</button>
+    <div class="hint" style="text-align:center;margin:8px 0 2px">Le robot installé sur ton dépôt récupère les cours du marché et les met à jour tout seul en séance. Ici tu importes simplement le dernier cours connu (avec sa date).</div>
     <div class="hint" style="text-align:center;margin:10px 0">— ou saisir / corriger manuellement —</div>
     <label>Indice BRVM Composite <span class="hint">Optionnel — pour te comparer au marché (visible sur brvm.org)</span></label>
     <input id="brvmIdx" type="number" inputmode="decimal" value="${db.brvmIndex||''}" placeholder="ex : 290,50">
