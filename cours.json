@@ -1,0 +1,295 @@
+{
+ "_meta": {
+  "updated": "2026-06-29T20:36:26+00:00",
+  "updated_human": "29/06/2026 20:36 UTC",
+  "count": 47,
+  "diagnostic": {
+   "brvm_officiel": "https://www.brvm.org/en/cours-actions/0 -> HTTPSConnectionPool(host='www.brvm.org', port=443): Max retries exceeded with url: /en/cours-actions/0 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1016)')))",
+   "github_secours": "47 titres",
+   "resultat": "47 titres",
+   "dates_couvertes": "2019-05-10 -> 2026-06-26"
+  }
+ },
+ "ABJC": {
+  "actuel": 3275.0,
+  "veille": 3300.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "BICC": {
+  "actuel": 29000.0,
+  "veille": 28900.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "BICB": {
+  "actuel": 5750.0,
+  "veille": 5700.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "BNBC": {
+  "actuel": 1965.0,
+  "veille": 1990.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "BOAB": {
+  "actuel": 9025.0,
+  "veille": 8950.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "BOABF": {
+  "actuel": 5695.0,
+  "veille": 5600.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "BOAC": {
+  "actuel": 9100.0,
+  "veille": 9100.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "BOAM": {
+  "actuel": 4855.0,
+  "veille": 5110.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "BOAN": {
+  "actuel": 4115.0,
+  "veille": 4045.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "BOAS": {
+  "actuel": 7295.0,
+  "veille": 7345.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "CABC": {
+  "actuel": 3900.0,
+  "veille": 3900.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "CBIBF": {
+  "actuel": 22000.0,
+  "veille": 21995.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "CFAC": {
+  "actuel": 1775.0,
+  "veille": 1665.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "CIEC": {
+  "actuel": 5200.0,
+  "veille": 5190.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "ECOC": {
+  "actuel": 17150.0,
+  "veille": 16800.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "ETIT": {
+  "actuel": 37.0,
+  "veille": 37.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "FTSC": {
+  "actuel": 1965.0,
+  "veille": 1955.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "NEIC": {
+  "actuel": 2400.0,
+  "veille": 2285.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "NSBC": {
+  "actuel": 19750.0,
+  "veille": 19500.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "NTLC": {
+  "actuel": 14800.0,
+  "veille": 14995.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "ONTBF": {
+  "actuel": 2820.0,
+  "veille": 2805.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "ORAC": {
+  "actuel": 16700.0,
+  "veille": 16695.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "ORGT": {
+  "actuel": 2650.0,
+  "veille": 2625.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "PALC": {
+  "actuel": 8800.0,
+  "veille": 8740.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "PRSC": {
+  "actuel": 4595.0,
+  "veille": 4620.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "SAFC": {
+  "actuel": 4510.0,
+  "veille": 4480.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "SCRC": {
+  "actuel": 3170.0,
+  "veille": 3105.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "SDCC": {
+  "actuel": 11900.0,
+  "veille": 12000.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "SDSC": {
+  "actuel": 2550.0,
+  "veille": 2500.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "SEMC": {
+  "actuel": 1550.0,
+  "veille": 1555.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "SGBC": {
+  "actuel": 39000.0,
+  "veille": 38995.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "SHEC": {
+  "actuel": 2105.0,
+  "veille": 2165.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "SIBC": {
+  "actuel": 8890.0,
+  "veille": 8890.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "SICC": {
+  "actuel": 4380.0,
+  "veille": 4500.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "SIVC": {
+  "actuel": 2625.0,
+  "veille": 2650.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "SLBC": {
+  "actuel": 38350.0,
+  "veille": 38500.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "SMBC": {
+  "actuel": 16400.0,
+  "veille": 16500.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "SNTS": {
+  "actuel": 29000.0,
+  "veille": 28600.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "SOGC": {
+  "actuel": 8400.0,
+  "veille": 8335.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "SPHC": {
+  "actuel": 7670.0,
+  "veille": 7600.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "STAC": {
+  "actuel": 3625.0,
+  "veille": 3630.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "STBC": {
+  "actuel": 23980.0,
+  "veille": 22310.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "SVOC": {
+  "actuel": 2395.0,
+  "veille": 2395.0,
+  "date": "2019-05-10",
+  "source": "github/Fredysessie"
+ },
+ "TTLC": {
+  "actuel": 2855.0,
+  "veille": 2780.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "TTLS": {
+  "actuel": 3500.0,
+  "veille": 3455.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "UNLC": {
+  "actuel": 57000.0,
+  "veille": 57000.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ },
+ "UNXC": {
+  "actuel": 1985.0,
+  "veille": 1980.0,
+  "date": "2026-06-26",
+  "source": "github/Fredysessie"
+ }
+}
