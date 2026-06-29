@@ -132,6 +132,19 @@
   .price-line:last-child{border:none}
   .price-line input{width:110px;text-align:right}
   .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+
+  /* Hero consolidé (accueil) */
+  .scard .hero-rows{margin-top:16px;background:rgba(255,255,255,.10);border-radius:14px;padding:2px 14px}
+  .scard .hr{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.15);font-size:14px}
+  .scard .hr:last-child{border-bottom:none}
+  .scard .hr span{opacity:.85}
+  .scard .hr b{font-weight:700;white-space:nowrap}
+  .scard .hr.total{font-size:15px}
+  .scard .hr.total b{font-size:16px}
+  .scard .hr .pos{color:#9BE7C4}
+  .scard .hr .neg{color:#FFC2BD}
+  .scard .hero-note{margin-top:12px;background:rgba(255,255,255,.14);border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.4}
+  .scard .hero-link{display:inline-block;margin-top:12px;color:#fff;opacity:.92;font-size:13px;font-weight:600;text-decoration:underline}
 </style>
 </head>
 <body>
@@ -148,23 +161,12 @@
 
 <!-- ACCUEIL -->
 <section class="screen active" id="s-accueil">
-  <div class="scard">
-    <div class="lbl">Valeur totale du portefeuille</div>
-    <div class="big" id="totVal">0 FCFA</div>
-    <div id="dayPill"></div>
-    <div class="twin">
-      <div><div class="k">Investi</div><div class="v" id="invested">0</div></div>
-      <div><div class="k">Plus/Moins-value</div><div class="v" id="totPL">0</div></div>
-    </div>
-  </div>
+  <div class="scard" id="heroCard"></div>
 
   <div class="btn-row">
     <button class="btn" onclick="openTx()">＋ Opération</button>
     <button class="btn alt" onclick="openPrices()">🔄 Cours / Sync BRVM</button>
   </div>
-
-  <div class="sect-title">Liquidités</div>
-  <div class="card" id="cashCard"></div>
 
   <div class="sect-title">Évolution de la valeur</div>
   <div class="card" id="evoCard"><canvas id="evoChart" height="150"></canvas></div>
@@ -404,6 +406,7 @@ const today=()=>new Date().toISOString().slice(0,10);
 const frDate=d=>{const o=new Date(d+"T00:00");return o.toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"})};
 const frDateShort=d=>new Date(d+"T00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short"});
 const sign=n=>(n>=0?"+":"")+fmtShort(n)+" FCFA";
+const signFull=n=>(n>=0?"+":"")+fmt(n);
 
 /* Calcule les positions à partir des opérations */
 function positions(){
@@ -504,15 +507,24 @@ function renderHome(){
   const h=new Date().getHours();
   document.getElementById("greet").textContent=(h<12?"Bonjour":h<18?"Bon après-midi":"Bonsoir")+" 👋";
   document.getElementById("pfName").textContent=db.name||"Mon Portefeuille";
-  document.getElementById("totVal").textContent=fmt(t.value);
-  document.getElementById("invested").textContent=fmtShort(t.invested)+" FCFA";
-  const plEl=document.getElementById("totPL");
-  plEl.textContent=sign(t.pl);
-  const dp=document.getElementById("dayPill");
-  if(t.value>0){
-    const up=t.day>=0;
-    dp.innerHTML=`<span class="pill ${up?"":"dn"}">${up?"▲":"▼"} ${sign(t.day)} aujourd'hui (${(up?"+":"")+t.dayPct.toFixed(2)}%)</span>`;
-  }else dp.innerHTML="";
+  const bal=cashBalance(), titres=t.value, patrimoine=titres+bal;
+  const up=t.day>=0;
+  document.getElementById("heroCard").innerHTML=`
+    <div class="lbl">Valeur totale du portefeuille</div>
+    <div class="big">${fmt(patrimoine)}</div>
+    ${t.value>0?`<span class="pill ${up?"":"dn"}">${up?"▲":"▼"} ${signFull(t.day)} aujourd'hui (${(up?"+":"")+t.dayPct.toFixed(2)}%)</span>`:""}
+    <div class="hero-rows">
+      <div class="hr"><span>Valeur des titres</span><b>${fmt(titres)}</b></div>
+      <div class="hr"><span>Liquidités disponibles</span><b class="${bal<0?'neg':''}">${fmt(bal)}</b></div>
+      <div class="hr"><span>Investi</span><b>${fmt(t.invested)}</b></div>
+      <div class="hr"><span>Plus / Moins-value</span><b class="${t.pl>=0?'pos':'neg'}">${signFull(t.pl)}</b></div>
+    </div>
+    <div class="btn-row" style="margin-top:14px">
+      <button class="btn alt sm" onclick="openCash('depot')">＋ Dépôt</button>
+      <button class="btn alt sm" onclick="openCash('retrait')">− Retrait</button>
+    </div>
+    ${bal<0?`<div class="hero-note">ℹ️ Solde négatif : tes achats sont enregistrés mais pas les dépôts qui les ont financés. Ajoute un <b>dépôt</b> ≈ au total investi pour équilibrer.</div>`:""}
+    ${(db.cash&&db.cash.length)?`<button class="hero-link" onclick="openCashList()">Voir les mouvements (${db.cash.length}) →</button>`:""}`;
 
   const hp=document.getElementById("homePositions");
   if(t.ps.length){hp.innerHTML=t.ps.slice(0,4).map(p=>posRow(p,true)).join("")+
@@ -522,27 +534,11 @@ function renderHome(){
   const ha=document.getElementById("homeAgenda");
   const up=[...db.events].filter(e=>e.date>=today()).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);
   ha.innerHTML=up.length?up.map(evRow).join(""):`<div class="empty" style="padding:18px">Aucun événement à venir.</div>`;
-  renderCash();
   drawEvo();
 }
 
-/* --- Trésorerie (liquidités) --- */
-function renderCash(){
-  const card=document.getElementById("cashCard"); if(!card)return;
-  const bal=cashBalance(), titres=totals().value, patrimoine=titres+bal;
-  const bc=bal>=0?"pos":"neg";
-  card.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center">
-      <div><div class="sub">Disponible</div><div style="font-size:22px;font-weight:700" class="${bal>=0?'':'neg'}">${fmt(bal)}</div></div>
-    </div>
-    <div class="btn-row" style="margin-top:12px">
-      <button class="btn alt sm" onclick="openCash('depot')">＋ Dépôt</button>
-      <button class="btn alt sm" onclick="openCash('retrait')">− Retrait</button>
-    </div>
-    ${bal<0?`<div class="help" style="margin-top:12px;background:var(--neg-l);color:var(--neg)">ℹ️ <div>Solde négatif : tes achats sont enregistrés mais pas les dépôts qui les ont financés. Ajoute un <b>dépôt</b> ≈ au total investi pour équilibrer.</div></div>`:""}
-    <div class="kv" style="margin-top:12px"><span class="k">Valeur des titres</span><b>${fmtShort(titres)} FCFA</b></div>
-    <div class="kv"><span class="k">Patrimoine total (titres + cash)</span><b>${fmtShort(patrimoine)} FCFA</b></div>
-    ${(db.cash&&db.cash.length)?`<button class="del" style="color:var(--green);margin-top:8px" onclick="openCashList()">Voir les mouvements (${db.cash.length}) →</button>`:`<div class="hint" style="margin-top:8px">Enregistre tes dépôts et retraits d'argent pour suivre ton cash disponible.</div>`}`;
-}
+/* --- Trésorerie (liquidités) : désormais intégrée au bloc d'accueil --- */
+function renderCash(){renderHome();}
 function openCash(type){
   const dep=type==='depot';
   openSheet(`<h3>${dep?'💰 Dépôt de liquidités':'🏧 Retrait de liquidités'}</h3>
