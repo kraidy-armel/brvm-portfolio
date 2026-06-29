@@ -265,6 +265,14 @@ def main():
         for sym, row in src.items():
             merged[sym] = row
 
+    # Codes alternatifs : certains portefeuilles utilisent un code different du
+    # code officiel. On duplique l'entree sous l'autre code pour que l'appli
+    # retrouve le titre quoi qu'il arrive. (cle = code alternatif, valeur = code officiel)
+    ALIASES = {"SGBCI": "SGBC"}
+    for alt, official_code in ALIASES.items():
+        if official_code in merged and alt not in merged:
+            merged[alt] = dict(merged[official_code])
+
     if not merged:
         diag["resultat"] = "AUCUNE donnee recuperee - sources indisponibles"
     else:
