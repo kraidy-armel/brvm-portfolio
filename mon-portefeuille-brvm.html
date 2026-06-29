@@ -508,11 +508,11 @@ function renderHome(){
   document.getElementById("greet").textContent=(h<12?"Bonjour":h<18?"Bon après-midi":"Bonsoir")+" 👋";
   document.getElementById("pfName").textContent=db.name||"Mon Portefeuille";
   const bal=cashBalance(), titres=t.value, patrimoine=titres+bal;
-  const up=t.day>=0;
+  const dayUp=t.day>=0;
   document.getElementById("heroCard").innerHTML=`
     <div class="lbl">Valeur totale du portefeuille</div>
     <div class="big">${fmt(patrimoine)}</div>
-    ${t.value>0?`<span class="pill ${up?"":"dn"}">${up?"▲":"▼"} ${signFull(t.day)} aujourd'hui (${(up?"+":"")+t.dayPct.toFixed(2)}%)</span>`:""}
+    ${t.value>0?`<span class="pill ${dayUp?"":"dn"}">${dayUp?"▲":"▼"} ${signFull(t.day)} aujourd'hui (${(dayUp?"+":"")+t.dayPct.toFixed(2)}%)</span>`:""}
     <div class="hero-rows">
       <div class="hr"><span>Valeur des titres</span><b>${fmt(titres)}</b></div>
       <div class="hr"><span>Liquidités disponibles</span><b class="${bal<0?'neg':''}">${fmt(bal)}</b></div>
