@@ -404,6 +404,8 @@ const fmt=n=>Math.round(n).toLocaleString("fr-FR")+" FCFA";
 const fmtShort=n=>Math.round(n).toLocaleString("fr-FR");
 /* Format compact réservé aux graduations de graphique (sinon ça déborde) */
 const fmtAxis=n=>{const a=Math.abs(n);return a>=1e6?(n/1e6).toFixed(1).replace(".",",")+" M":a>=1e3?Math.round(n/1e3)+" k":Math.round(n);};
+/* Échappe les guillemets pour un usage sûr dans value="..." */
+const escAttr=s=>(s||"").replace(/"/g,"&quot;");
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const today=()=>new Date().toISOString().slice(0,10);
 const frDate=d=>{const o=new Date(d+"T00:00");return o.toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"})};
@@ -542,21 +544,25 @@ function renderHome(){
 
 /* --- Trésorerie (liquidités) : désormais intégrée au bloc d'accueil --- */
 function renderCash(){renderHome();}
-function openCash(type){
+function openCash(type,id){
+  const ed=id?(db.cash||[]).find(m=>m.id===id):null;
+  if(ed)type=ed.type;
   const dep=type==='depot';
-  openSheet(`<h3>${dep?'💰 Dépôt de liquidités':'🏧 Retrait de liquidités'}</h3>
+  openSheet(`<h3>${ed?(dep?'Modifier le dépôt':'Modifier le retrait'):(dep?'💰 Dépôt de liquidités':'🏧 Retrait de liquidités')}</h3>
     <div class="hint">${dep?'Argent que tu ajoutes sur ton compte titres.':'Argent que tu retires de ton compte titres.'}</div>
-    <label>Montant (FCFA)</label><input id="csAmt" type="number" inputmode="decimal" placeholder="ex : 500000">
-    <label>Date</label><input id="csDate" type="date" value="${today()}">
-    <label>Libellé <span class="hint">Optionnel</span></label><input id="csLib" placeholder="ex : virement bancaire, salaire...">
-    <button class="btn" style="margin-top:18px" onclick="saveCash('${type}')">Enregistrer</button>`);
+    <label>Montant (FCFA)</label><input id="csAmt" type="number" inputmode="decimal" placeholder="ex : 500000" value="${ed?ed.montant:''}">
+    <label>Date</label><input id="csDate" type="date" value="${ed?ed.date:today()}">
+    <label>Libellé <span class="hint">Optionnel</span></label><input id="csLib" placeholder="ex : virement bancaire, salaire..." value="${ed?escAttr(ed.libelle):''}">
+    <button class="btn" style="margin-top:18px" onclick="saveCash('${type}'${ed?`,'${id}'`:''})">${ed?'Enregistrer les modifications':'Enregistrer'}</button>
+    ${ed?`<button class="del" style="display:block;margin:12px auto 0" onclick="delCash('${id}')">Supprimer ce mouvement</button>`:''}`);
 }
-function saveCash(type){
+function saveCash(type,id){
   const montant=+document.getElementById("csAmt").value;
   if(!montant||montant<=0){alert("Renseigne un montant valide.");return;}
-  if(type==='retrait'&&montant>cashBalance()){if(!confirm("Ce retrait dépasse ta trésorerie disponible. Enregistrer quand même ?"))return;}
+  if(!id&&type==='retrait'&&montant>cashBalance()){if(!confirm("Ce retrait dépasse ta trésorerie disponible. Enregistrer quand même ?"))return;}
   if(!db.cash)db.cash=[];
-  db.cash.push({id:uid(),type,montant,date:document.getElementById("csDate").value||today(),libelle:(document.getElementById("csLib").value||"").trim()});
+  if(id){const m=db.cash.find(x=>x.id===id); if(m){m.montant=montant;m.date=document.getElementById("csDate").value||today();m.libelle=(document.getElementById("csLib").value||"").trim();}}
+  else db.cash.push({id:uid(),type,montant,date:document.getElementById("csDate").value||today(),libelle:(document.getElementById("csLib").value||"").trim()});
   closeSheet();save();
 }
 function delCash(id){if(confirm("Supprimer ce mouvement ?")){db.cash=(db.cash||[]).filter(m=>m.id!==id);save();openCashList();}}
@@ -567,7 +573,7 @@ function openCashList(){
     <div style="margin-top:10px">${ms.length?ms.map(m=>{const dep=m.type==='depot';return `<div class="row">
       <div class="tick" style="background:${dep?'var(--green-l)':'var(--neg-l)'};color:${dep?'var(--green)':'var(--neg)'}">${dep?'DÉP':'RET'}</div>
       <div class="grow"><div class="nm">${dep?'Dépôt':'Retrait'}${m.libelle?` <span class="tag gray" style="font-weight:500">${m.libelle}</span>`:""}</div><div class="sub">${frDate(m.date)}</div></div>
-      <div class="right"><div class="val ${dep?'pos':'neg'}">${dep?'+':'−'}${fmtShort(m.montant)}</div><button class="del" onclick="delCash('${m.id}')">Suppr.</button></div>
+      <div class="right"><div class="val ${dep?'pos':'neg'}">${dep?'+':'−'}${fmtShort(m.montant)}</div><div style="display:flex;gap:10px;justify-content:flex-end;margin-top:3px"><button class="del" style="color:var(--green)" onclick="openCash('${m.type}','${m.id}')">Modifier</button><button class="del" onclick="delCash('${m.id}')">Suppr.</button></div></div>
     </div>`;}).join(""):'<div class="empty" style="padding:18px">Aucun mouvement.</div>'}</div>
     <div class="btn-row" style="margin-top:14px"><button class="btn alt sm" onclick="closeSheet();openCash('depot')">＋ Dépôt</button><button class="btn alt sm" onclick="closeSheet();openCash('retrait')">− Retrait</button></div>`);
 }
@@ -598,7 +604,7 @@ function renderPortfolio(){
       <div class="grow"><div class="nm">${stockMap[t.ticker]?.name||t.ticker}${t.libelle?` <span class="tag gray" style="font-weight:500">${t.libelle}</span>`:""}</div>
         <div class="sub">${frDate(t.date)} · ${t.qty} × ${fmtShort(t.price)}</div></div>
       <div class="right"><div class="val">${fmtShort(t.qty*t.price)}</div>
-        <button class="del" onclick="delTx('${t.id}')">Suppr.</button></div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:3px"><button class="del" style="color:var(--green)" onclick="openTx('${t.id}')">Modifier</button><button class="del" onclick="delTx('${t.id}')">Suppr.</button></div></div>
     </div>`;}).join(""):`<div class="empty" style="padding:18px">Aucune opération.</div>`;
 }
 
@@ -614,7 +620,7 @@ function renderDiv(){
   document.getElementById("divList").innerHTML=ds.length?ds.map(d=>`<div class="row">
     <div class="tick" style="background:#FBF1D8;color:var(--gold)">${d.ticker.slice(0,4)}</div>
     <div class="grow"><div class="nm">${stockMap[d.ticker]?.name||d.ticker}${d.libelle?` <span class="tag gray" style="font-weight:500">${d.libelle}</span>`:""}</div><div class="sub">${frDate(d.date)}</div></div>
-    <div class="right"><div class="val pos">+${fmtShort(d.montant)}</div><button class="del" onclick="delDiv('${d.id}')">Suppr.</button></div>
+    <div class="right"><div class="val pos">+${fmtShort(d.montant)}</div><div style="display:flex;gap:10px;justify-content:flex-end;margin-top:3px"><button class="del" style="color:var(--green)" onclick="openDiv('${d.id}')">Modifier</button><button class="del" onclick="delDiv('${d.id}')">Suppr.</button></div></div>
   </div>`).join(""):`<div class="empty"><div class="ico">💰</div>Aucun dividende enregistré.</div>`;
 }
 
@@ -835,52 +841,68 @@ function comboValue(id){
 }
 
 /* --- Opération (achat/vente) --- */
-function openTx(){
-  openSheet(`<h3>Nouvelle opération</h3>
+function openTx(id){
+  const ed=id?db.tx.find(t=>t.id===id):null;
+  openSheet(`<h3>${ed?"Modifier l'opération":"Nouvelle opération"}</h3>
     <div class="hint">Enregistre un achat ou une vente d'actions.</div>
     <div class="seg" style="margin-top:14px" id="txSeg">
-      <button class="on" onclick="txType='achat';this.parentNode.querySelectorAll('button').forEach(b=>b.classList.remove('on'));this.classList.add('on')">Achat</button>
-      <button onclick="txType='vente';this.parentNode.querySelectorAll('button').forEach(b=>b.classList.remove('on'));this.classList.add('on')">Vente</button>
+      <button class="${(!ed||ed.type==='achat')?'on':''}" onclick="txType='achat';this.parentNode.querySelectorAll('button').forEach(b=>b.classList.remove('on'));this.classList.add('on')">Achat</button>
+      <button class="${ed&&ed.type==='vente'?'on':''}" onclick="txType='vente';this.parentNode.querySelectorAll('button').forEach(b=>b.classList.remove('on'));this.classList.add('on')">Vente</button>
     </div>
     <label>Société <span class="hint">Tape pour chercher, ou ajoute un titre non listé</span></label>${combo('txTicker','Ex : Sonatel, SNTS, BOA...')}
-    <label>Nombre de titres</label><input id="txQty" type="number" inputmode="numeric" placeholder="ex : 10">
-    <label>Prix par action (FCFA)</label><input id="txPrice" type="number" inputmode="decimal" placeholder="ex : 15000">
-    <label>Frais / commission (FCFA)<span class="hint">Optionnel — la commission du SGI</span></label><input id="txFrais" type="number" inputmode="decimal" placeholder="0">
-    <label>Date</label><input id="txDate" type="date" value="${today()}">
-    <label>Libellé <span class="hint">Optionnel — une note pour reconnaître l'opération</span></label><input id="txLib" placeholder="ex : PEA long terme, ordre via SGI X...">
-    <button class="btn" style="margin-top:18px" onclick="saveTx()">Enregistrer</button>`);
-  window.txType="achat";
+    <label>Nombre de titres</label><input id="txQty" type="number" inputmode="numeric" placeholder="ex : 10" value="${ed?ed.qty:''}">
+    <label>Prix par action (FCFA)</label><input id="txPrice" type="number" inputmode="decimal" placeholder="ex : 15000" value="${ed?ed.price:''}">
+    <label>Frais / commission (FCFA)<span class="hint">Optionnel — la commission du SGI</span></label><input id="txFrais" type="number" inputmode="decimal" placeholder="0" value="${ed&&ed.frais?ed.frais:''}">
+    <label>Date</label><input id="txDate" type="date" value="${ed?ed.date:today()}">
+    <label>Libellé <span class="hint">Optionnel — une note pour reconnaître l'opération</span></label><input id="txLib" placeholder="ex : PEA long terme, ordre via SGI X..." value="${ed?escAttr(ed.libelle):''}">
+    <button class="btn" style="margin-top:18px" onclick="saveTx(${ed?`'${id}'`:''})">${ed?'Enregistrer les modifications':'Enregistrer'}</button>
+    ${ed?`<button class="del" style="display:block;margin:12px auto 0" onclick="delTx('${id}')">Supprimer cette opération</button>`:''}`);
+  window.txType=ed?ed.type:"achat";
+  if(ed){
+    document.getElementById('txTicker').value=ed.ticker;
+    document.getElementById('txTicker_q').value=stockMap[ed.ticker]?stockMap[ed.ticker].name+' ('+ed.ticker+')':ed.ticker;
+  }
 }
-function saveTx(){
+function saveTx(id){
   const ticker=comboValue("txTicker");
   const qty=+document.getElementById("txQty").value, price=+document.getElementById("txPrice").value;
   if(!ticker){alert("Choisis ou tape une société.");return;}
   if(!qty||!price){alert("Renseigne le nombre de titres et le prix.");return;}
-  db.tx.push({id:uid(),type:window.txType,ticker,qty,price,frais:+document.getElementById("txFrais").value||0,date:document.getElementById("txDate").value||today(),libelle:(document.getElementById("txLib").value||"").trim()});
+  const rec={type:window.txType,ticker,qty,price,frais:+document.getElementById("txFrais").value||0,date:document.getElementById("txDate").value||today(),libelle:(document.getElementById("txLib").value||"").trim()};
+  if(id){const t=db.tx.find(x=>x.id===id); if(t)Object.assign(t,rec);}
+  else{rec.id=uid();db.tx.push(rec);}
   if(!db.prices[ticker])db.prices[ticker]={actuel:price,veille:price};
   closeSheet();save();
 }
-function delTx(id){if(confirm("Supprimer cette opération ?")){db.tx=db.tx.filter(t=>t.id!==id);save();}}
+function delTx(id){if(confirm("Supprimer cette opération ?")){db.tx=db.tx.filter(t=>t.id!==id);closeSheet();save();}}
 
 /* --- Dividende --- */
-function openDiv(){
-  openSheet(`<h3>Dividende reçu</h3>
+function openDiv(id){
+  const ed=id?db.div.find(d=>d.id===id):null;
+  openSheet(`<h3>${ed?'Modifier le dividende':'Dividende reçu'}</h3>
     <div class="hint">Note le montant total que tu as reçu.</div>
     <label>Société <span class="hint">Tape pour chercher</span></label>${combo('dvTicker','Ex : Sonatel, SNTS...')}
-    <label>Montant total reçu (FCFA)</label><input id="dvAmt" type="number" inputmode="decimal" placeholder="ex : 45000">
-    <label>Date de réception</label><input id="dvDate" type="date" value="${today()}">
-    <label>Libellé <span class="hint">Optionnel</span></label><input id="dvLib" placeholder="ex : dividende 2025, solde...">
-    <button class="btn" style="margin-top:18px" onclick="saveDiv()">Enregistrer</button>`);
+    <label>Montant total reçu (FCFA)</label><input id="dvAmt" type="number" inputmode="decimal" placeholder="ex : 45000" value="${ed?ed.montant:''}">
+    <label>Date de réception</label><input id="dvDate" type="date" value="${ed?ed.date:today()}">
+    <label>Libellé <span class="hint">Optionnel</span></label><input id="dvLib" placeholder="ex : dividende 2025, solde..." value="${ed?escAttr(ed.libelle):''}">
+    <button class="btn" style="margin-top:18px" onclick="saveDiv(${ed?`'${id}'`:''})">${ed?'Enregistrer les modifications':'Enregistrer'}</button>
+    ${ed?`<button class="del" style="display:block;margin:12px auto 0" onclick="delDiv('${id}')">Supprimer ce dividende</button>`:''}`);
+  if(ed){
+    document.getElementById('dvTicker').value=ed.ticker;
+    document.getElementById('dvTicker_q').value=stockMap[ed.ticker]?stockMap[ed.ticker].name+' ('+ed.ticker+')':ed.ticker;
+  }
 }
-function saveDiv(){
+function saveDiv(id){
   const ticker=comboValue("dvTicker");
   const montant=+document.getElementById("dvAmt").value;
   if(!ticker){alert("Choisis une société.");return;}
   if(!montant){alert("Renseigne le montant reçu.");return;}
-  db.div.push({id:uid(),ticker,montant,date:document.getElementById("dvDate").value||today(),libelle:(document.getElementById("dvLib").value||"").trim()});
+  const rec={ticker,montant,date:document.getElementById("dvDate").value||today(),libelle:(document.getElementById("dvLib").value||"").trim()};
+  if(id){const d=db.div.find(x=>x.id===id); if(d)Object.assign(d,rec);}
+  else{rec.id=uid();db.div.push(rec);}
   closeSheet();save();
 }
-function delDiv(id){if(confirm("Supprimer ?")){db.div=db.div.filter(d=>d.id!==id);save();}}
+function delDiv(id){if(confirm("Supprimer ?")){db.div=db.div.filter(d=>d.id!==id);closeSheet();save();}}
 
 /* --- Événement agenda --- */
 function openEvent(){
