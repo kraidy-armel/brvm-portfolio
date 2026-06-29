@@ -43,6 +43,24 @@ UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
 SESSION = requests.Session()
 SESSION.headers.update({"User-Agent": UA, "Accept-Language": "fr-FR,fr;q=0.9"})
 
+# Le serveur brvm.org sert une chaine de certificat incomplete : requests refuse
+# alors la connexion ("CERTIFICATE_VERIFY_FAILED"). Pour lire des cours publics,
+# on s'autorise un repli sans verification du certificat (lecture seule, aucune
+# donnee envoyee). On coupe juste l'avertissement correspondant.
+try:
+    import urllib3
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+except Exception:
+    pass
+
+
+def http_get(url, timeout=30):
+    """GET tolerant au certificat mal configure de brvm.org."""
+    try:
+        return SESSION.get(url, timeout=timeout)
+    except requests.exceptions.SSLError:
+        return SESSION.get(url, timeout=timeout, verify=False)
+
 # Liste des tickers BRVM connus (pour la source de secours CSV).
 # Si un ticker n'existe pas dans la source, il est simplement ignore.
 TICKERS = [
@@ -107,7 +125,7 @@ def scrape_brvm_official():
     last_err = "aucune URL exploitable"
     for url in BRVM_URLS:
         try:
-            r = SESSION.get(url, timeout=30)
+            r = http_get(url, timeout=30)
             if r.status_code != 200 or not r.text:
                 last_err = f"{url} -> HTTP {r.status_code}"
                 continue
