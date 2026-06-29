@@ -1,12 +1,12 @@
 {
  "_meta": {
-  "updated": "2026-06-29T20:48:19+00:00",
-  "updated_human": "29/06/2026 20:48 UTC",
-  "count": 47,
+  "updated": "2026-06-29T21:04:39+00:00",
+  "updated_human": "29/06/2026 21:04 UTC",
+  "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
    "github_secours": "non utilise (officiel suffisant)",
-   "resultat": "47 titres",
+   "resultat": "48 titres",
    "dates_couvertes": "2026-06-29 -> 2026-06-29"
   }
  },
@@ -289,6 +289,12 @@
  "UNXC": {
   "actuel": 1970.0,
   "veille": 1985.0,
+  "date": "2026-06-29",
+  "source": "brvm.org"
+ },
+ "SGBCI": {
+  "actuel": 39000.0,
+  "veille": 39000.0,
   "date": "2026-06-29",
   "source": "brvm.org"
  }
