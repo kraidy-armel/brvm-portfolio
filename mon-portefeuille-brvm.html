@@ -187,6 +187,7 @@
   <div class="topbar" style="margin-top:18px">
     <div class="sect-title" style="margin:0">Historique des opérations</div>
   </div>
+  <input id="txSearch" placeholder="🔍 Rechercher (société, ticker, libellé, date…)" oninput="renderPortfolio()" style="margin-bottom:10px">
   <div class="card" id="txList"></div>
   <button class="btn" style="margin-top:6px" onclick="openTx()">＋ Ajouter une opération</button>
 </section>
@@ -488,18 +489,18 @@ function positions(){
   // tri chronologique
   const txs=[...db.tx].sort((a,b)=>a.date.localeCompare(b.date));
   txs.forEach(t=>{
-    if(!m[t.ticker])m[t.ticker]={ticker:t.ticker,qty:0,costBuy:0,qtyBuy:0};
+    if(!m[t.ticker])m[t.ticker]={ticker:t.ticker,qty:0,cost:0};
     const p=m[t.ticker];
-    if(t.type==="achat"){p.qty+=t.qty;p.qtyBuy+=t.qty;p.costBuy+=t.qty*t.price+(+t.frais||0);}
-    else{p.qty-=t.qty;}
+    if(t.type==="achat"){p.qty+=t.qty;p.cost+=t.qty*t.price+(+t.frais||0);}
+    else{const avg=p.qty>0?p.cost/p.qty:0;p.cost-=avg*Math.min(t.qty,p.qty);p.qty-=t.qty;}
   });
   return Object.values(m).filter(p=>p.qty>0.0001).map(p=>{
-    const pru=p.qtyBuy?p.costBuy/p.qtyBuy:0;
+    const pru=p.qty>0?p.cost/p.qty:0;
     const px=db.prices[p.ticker]||{};
     const cur=+px.actuel||pru;
     const prev=+px.veille||cur;
     const value=p.qty*cur;
-    const invested=p.qty*pru;
+    const invested=p.cost;
     return {...p,pru,cur,prev,value,invested,pl:value-invested,
       plPct:invested?(value-invested)/invested*100:0,
       day:p.qty*(cur-prev)};
@@ -538,19 +539,23 @@ function recordSnapshot(){
 /* Plus-values réalisées (lors des ventes), par année — méthode coût moyen */
 function realized(){
   const txs=[...db.tx].sort((a,b)=>a.date.localeCompare(b.date));
-  const m={}, byYear={};
+  const m={}, byYear={}, byYearTicker={}, byTicker={};
   txs.forEach(t=>{
     if(!m[t.ticker])m[t.ticker]={qty:0,cost:0};
     const p=m[t.ticker];
     if(t.type==="achat"){p.qty+=t.qty;p.cost+=t.qty*t.price+(+t.frais||0);}
     else{
-      const avg=p.qty?p.cost/p.qty:0;
+      const avg=p.qty>0?p.cost/p.qty:0;
       const gain=t.qty*(t.price-avg)-(+t.frais||0);
-      byYear[t.date.slice(0,4)]=(byYear[t.date.slice(0,4)]||0)+gain;
-      p.cost-=avg*t.qty; p.qty-=t.qty;
+      const y=t.date.slice(0,4);
+      byYear[y]=(byYear[y]||0)+gain;
+      if(!byYearTicker[y])byYearTicker[y]={};
+      byYearTicker[y][t.ticker]=(byYearTicker[y][t.ticker]||0)+gain;
+      byTicker[t.ticker]=(byTicker[t.ticker]||0)+gain;
+      p.cost-=avg*Math.min(t.qty,p.qty); p.qty-=t.qty;
     }
   });
-  return byYear;
+  return {byYear, byYearTicker, byTicker};
 }
 
 /* ================= NAVIGATION ================= */
@@ -665,8 +670,13 @@ function drawEvo(){
 function renderPortfolio(){
   const t=totals();
   document.getElementById("positions").innerHTML=t.ps.length?t.ps.map(p=>posRow(p,true)).join(""):`<div class="empty"><div class="ico">📊</div>Ton portefeuille est vide.</div>`;
-  const txs=[...db.tx].sort((a,b)=>b.date.localeCompare(a.date));
-  document.getElementById("txList").innerHTML=txs.length?txs.map(t=>{
+  let txs=[...db.tx].sort((a,b)=>b.date.localeCompare(a.date));
+  const q=(document.getElementById("txSearch")?.value||"").toLowerCase().trim();
+  if(q)txs=txs.filter(x=>((stockMap[x.ticker]?.name||"")+" "+x.ticker+" "+(x.libelle||"")+" "+x.date+" "+x.type).toLowerCase().includes(q));
+  const total=db.tx.length;
+  document.getElementById("txList").innerHTML=txs.length?
+    (q?`<div class="hint" style="margin-bottom:6px">${txs.length} résultat(s) sur ${total}</div>`:"")
+    +txs.map(t=>{
     const buy=t.type==="achat";
     return `<div class="row">
       <div class="tick" style="background:${buy?"var(--green-l)":"var(--neg-l)"};color:${buy?"var(--green)":"var(--neg)"}">${buy?"ACH":"VTE"}</div>
@@ -674,7 +684,7 @@ function renderPortfolio(){
         <div class="sub">${frDate(t.date)} · ${t.qty} × ${fmtShort(t.price)}</div></div>
       <div class="right"><div class="val">${fmtShort(t.qty*t.price)}</div>
         <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:3px"><button class="del" style="color:var(--green)" onclick="openTx('${t.id}')">Modifier</button><button class="del" onclick="delTx('${t.id}')">Suppr.</button></div></div>
-    </div>`;}).join(""):`<div class="empty" style="padding:18px">Aucune opération.</div>`;
+    </div>`;}).join(""):`<div class="empty" style="padding:18px">${q?"Aucun résultat pour « "+q+" ».":"Aucune opération."}</div>`;
 }
 
 function renderDiv(){
@@ -778,7 +788,7 @@ function drawCompte(){
   const depots=(db.cash||[]).filter(m=>m.type==='depot').reduce((s,m)=>s+(+m.montant||0),0);
   const retraits=(db.cash||[]).filter(m=>m.type==='retrait').reduce((s,m)=>s+(+m.montant||0),0);
   const apports=depots-retraits, titres=t.value, liquid=cashBalance(), patrimoine=titres+liquid;
-  const latent=t.pl, realise=Object.values(realized()).reduce((s,v)=>s+v,0);
+  const latent=t.pl, realise=Object.values(realized().byYear).reduce((s,v)=>s+v,0);
   const divs=db.div.reduce((s,d)=>s+(+d.montant||0),0), frais=db.tx.reduce((s,x)=>s+(+x.frais||0),0);
   const resultat=patrimoine-apports, rPct=apports>0?resultat/apports*100:0;
   const kv=(k,v,b)=>`<div class="kv"><span class="k">${k}</span><b ${b?'class="'+b+'"':''}>${v}</b></div>`;
@@ -857,11 +867,27 @@ function drawIndexCompare(){
 }
 
 function drawFiscal(){
-  const by=realized(), ys=Object.keys(by).sort().reverse();
+  const R=realized(), ys=Object.keys(R.byYear).sort().reverse();
   const wrap=document.getElementById("fiscalWrap"); if(!wrap)return;
   if(!ys.length){wrap.innerHTML='<div class="muted" style="font-size:13px">Tes plus-values réalisées s\'afficheront ici dès que tu auras vendu des actions.</div>';return;}
-  wrap.innerHTML=ys.map(y=>`<div class="kv"><span class="k">Année ${y}</span><b class="${by[y]>=0?'pos':'neg'}">${sign(by[y])}</b></div>`).join("")
-    +'<div class="hint" style="margin-top:10px">💡 La plus-value réalisée est le gain encaissé lors de tes ventes (prix de vente − prix de revient moyen). C\'est cette base qui sert au calcul de l\'impôt sur les plus-values.</div>';
+  const nm=tk=>stockMap[tk]?.name||tk;
+  // Détail par année, ventilé par titre
+  let html=ys.map(y=>{
+    const tk=R.byYearTicker[y]||{};
+    const lignes=Object.keys(tk).sort((a,b)=>Math.abs(tk[b])-Math.abs(tk[a]))
+      .map(t=>`<div class="kv" style="padding:6px 0 6px 14px;font-size:13px;border-bottom:1px dashed var(--line)"><span class="k">${nm(t)}</span><b class="${tk[t]>=0?'pos':'neg'}" style="font-weight:600">${sign(tk[t])}</b></div>`).join("");
+    return `<div class="kv" style="border-bottom:none;padding-bottom:2px;margin-top:6px"><span class="k" style="font-size:15px;color:var(--ink)"><b>Année ${y}</b></span><b class="${R.byYear[y]>=0?'pos':'neg'}" style="font-size:15px">${sign(R.byYear[y])}</b></div>${lignes}`;
+  }).join("");
+  // Bilan « ce que chaque titre m'a rapporté » : réalisé + dividendes
+  const divByTk={}; (db.div||[]).forEach(d=>{divByTk[d.ticker]=(divByTk[d.ticker]||0)+(+d.montant||0);});
+  const all=new Set([...Object.keys(R.byTicker),...Object.keys(divByTk)]);
+  const lignes=[...all].map(t=>({t,re:R.byTicker[t]||0,dv:divByTk[t]||0,tot:(R.byTicker[t]||0)+(divByTk[t]||0)}))
+    .filter(l=>Math.abs(l.tot)>0.5).sort((a,b)=>b.tot-a.tot);
+  html+='<div class="sect-title" style="margin:20px 0 4px">Ce que chaque titre m\'a rapporté</div>'
+    +'<div class="hint" style="margin-bottom:8px">Gains <b>réalisés</b> (ventes) + <b>dividendes</b> encaissés, sur toute la durée. N\'inclut pas la plus-value latente des titres encore détenus.</div>'
+    +lignes.map(l=>`<div class="kv"><span class="k">${nm(l.t)}<br><span style="font-size:11px;color:var(--muted)">réalisé ${sign(l.re)} · dividendes ${fmtShort(l.dv)} FCFA</span></span><b class="${l.tot>=0?'pos':'neg'}">${sign(l.tot)}</b></div>`).join("")
+    +'<div class="hint" style="margin-top:10px">💡 La plus-value réalisée = gain encaissé à la vente (prix de vente − coût moyen). C\'est la base de l\'impôt sur les plus-values.</div>';
+  wrap.innerHTML=html;
 }
 
 /* ================= MODALES ================= */
