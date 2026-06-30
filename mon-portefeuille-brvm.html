@@ -394,10 +394,16 @@ function brvmParse(html){
   if(best.SGBC&&!best.SGBCI)best.SGBCI={...best.SGBC};
   return best;
 }
+/* fetch avec délai d'expiration : évite qu'un relais muet bloque la synchro */
+function fetchTimeout(url,ms){
+  const ctl=new AbortController();
+  const id=setTimeout(()=>ctl.abort(),ms||8000);
+  return fetch(url,{cache:"no-store",signal:ctl.signal}).finally(()=>clearTimeout(id));
+}
 async function liveScrape(){
   for(const mk of RELAYS){
     try{
-      const r=await fetch(mk(BRVM_PAGE),{cache:"no-store"});
+      const r=await fetchTimeout(mk(BRVM_PAGE),8000);
       if(!r.ok)continue;
       const html=await r.text(); if(!html||html.length<500)continue;
       const d=brvmParse(html);
@@ -418,7 +424,7 @@ async function syncPrices(btn){
     let data=null, via="robot";
     if(live){
       try{
-        const r=await fetch(live+(live.indexOf("?")>=0?"&":"?")+"t="+Date.now(),{cache:"no-store"});
+        const r=await fetchTimeout(live+(live.indexOf("?")>=0?"&":"?")+"t="+Date.now(),8000);
         if(r.ok){data=await r.json(); via="direct";}
       }catch(e){data=null;}
     }
@@ -427,7 +433,7 @@ async function syncPrices(btn){
       if(data)via="direct";
     }
     if(!data){                       // repli : dernier fichier du robot GitHub
-      const res=await fetch(COURS_URL+"?t="+Date.now(),{cache:"no-store"});
+      const res=await fetchTimeout(COURS_URL+"?t="+Date.now(),8000);
       if(!res.ok)throw new Error("HTTP "+res.status);
       data=await res.json();
     }
