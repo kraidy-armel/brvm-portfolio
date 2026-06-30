@@ -365,9 +365,19 @@ async function syncPrices(btn){
   const held=positions(); if(!held.length){alert("Ajoute d'abord des positions.");return;}
   const orig=btn?btn.textContent:""; if(btn){btn.textContent="⏳ Synchronisation…";btn.disabled=true;}
   try{
-    const res=await fetch(COURS_URL+"?t="+Date.now(),{cache:"no-store"});
-    if(!res.ok)throw new Error("HTTP "+res.status);
-    const data=await res.json();
+    const live=(store.liveUrl||"").trim();
+    let data=null, via="robot";
+    if(live){
+      try{
+        const r=await fetch(live+(live.indexOf("?")>=0?"&":"?")+"t="+Date.now(),{cache:"no-store"});
+        if(r.ok){data=await r.json(); via="direct";}
+      }catch(e){data=null;}
+    }
+    if(!data){
+      const res=await fetch(COURS_URL+"?t="+Date.now(),{cache:"no-store"});
+      if(!res.ok)throw new Error("HTTP "+res.status);
+      data=await res.json();
+    }
     const meta=data._meta||{};
     let ok=0; const fail=[]; const dates=[];
     for(const p of held){
@@ -382,7 +392,7 @@ async function syncPrices(btn){
     const lastDate=dates.sort().slice(-1)[0]||"";
     let msg="✅ "+ok+" cours mis à jour.";
     if(lastDate)msg+="\n📅 Cours datés du "+lastDate;
-    if(meta.updated_human)msg+="\n🤖 Dernier passage du robot : "+meta.updated_human;
+    if(meta.updated_human)msg+=(via==="direct"?"\n🔴 Récupéré en direct sur la BRVM : ":"\n🤖 Dernier passage du robot : ")+meta.updated_human;
     if(lastDate){
       const ageJ=Math.floor((Date.now()-new Date(lastDate+"T00:00").getTime())/86400000);
       if(ageJ>=4)msg+="\n\n⚠️ Ces cours datent de "+ageJ+" jours. Soit le marché est fermé (week-end/férié), soit la source n'a pas été rafraîchie — vérifie l'onglet Actions de ton dépôt GitHub.";
@@ -967,6 +977,8 @@ function openSettings(){
     <label style="margin-top:16px">Frais SGI — commission + taxes (%)</label>
     <input id="sgiRate" type="number" step="0.1" min="0" value="${store.sgiRate}" onchange="store.sgiRate=+this.value||0;save()">
     <div class="hint">Appliqué à la vente pour estimer ta plus-value <b>nette</b> (visible dans le détail d'un titre). Sur la BRVM, c'est souvent autour de 1,2 à 1,7 %.</div>
+    <label style="margin-top:16px">🔴 Service de cours en direct <span class="hint">URL de ton Worker Cloudflare — « Synchroniser » ira chercher les cours du jour à la demande. Laisse vide pour utiliser le robot GitHub.</span></label>
+    <input id="liveUrl" type="url" placeholder="https://brvm-cours.xxxx.workers.dev" value="${escAttr(store.liveUrl||'')}" onchange="store.liveUrl=(this.value||'').trim();save()">
     <button class="btn ghost" style="margin-top:10px" onclick="openImportOps()">📥 Importer des opérations (CSV / Excel)</button>
     <button class="btn ghost" style="margin-top:10px" onclick="exportData()">⬇ Sauvegarder mes données (fichier .json)</button>
     <label style="margin-top:16px">⬆ Restaurer une sauvegarde <span class="hint">(fichier .json exporté par l'appli)</span></label>
