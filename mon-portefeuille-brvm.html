@@ -1069,7 +1069,7 @@ function resetData(){if(confirm("Effacer le contenu de ce portefeuille ? Cette a
 /* --- Import d'opérations (CSV / Excel) --- */
 function openImportOps(){
   openSheet(`<h3>📥 Importer des opérations</h3>
-    <div class="hint">Importe tes achats/ventes depuis un fichier <b>CSV</b> ou <b>Excel</b>. Première ligne = en-têtes. Colonnes attendues :<br><b>date, type, ticker, quantite, prix, frais, libelle</b><br>· <b>date</b> : AAAA-MM-JJ ou JJ/MM/AAAA · <b>type</b> : achat ou vente · frais & libelle optionnels.</div>
+    <div class="hint">Importe tes opérations <b>et</b> tes espèces depuis un <b>CSV</b> ou <b>Excel</b>. 1re ligne = en-têtes.<br>· Achats/ventes : <b>date, type, ticker, quantite, prix, frais, libelle</b> (type = achat/vente).<br>· Espèces : <b>date, type, montant, ticker, libelle</b> (type = depot, retrait, dividende ou frais).<br>Le séparateur ; ou , est détecté automatiquement.</div>
     <button class="btn ghost" style="margin-top:14px" onclick="downloadTemplate()">⬇ Télécharger le modèle CSV</button>
     <label style="margin-top:16px">Choisir un fichier (.csv, .xlsx)</label>
     <input type="file" accept=".csv,.xlsx,.xls,text/csv" onchange="importOps(this)">
@@ -1123,23 +1123,39 @@ function importOps(input){
       if(!rows||!rows.length){msg.innerHTML="⚠️ Aucune ligne lue. Il faut une 1re ligne d'en-têtes + au moins une ligne de données.";return;}
       const num=x=>+String(x).replace(/\s/g,'').replace(/,/g,'.')||0;
       const get=(row,keys)=>{for(const rk in row){if(keys.includes(rk.toLowerCase().trim().replace(/^﻿/,'')))return row[rk];}return "";};
-      let n=0; const errs=[];
+      const errs=[]; let nTx=0,nDep=0,nRet=0,nDiv=0,nFr=0;
       rows.forEach((row,i)=>{
-        const type=String(get(row,['type','sens','operation','opération'])).toLowerCase().trim();
-        const ticker=String(get(row,['ticker','titre','symbole','symbol','code'])).toUpperCase().trim();
-        const qty=num(get(row,['quantite','quantité','qte','qté','qty','nombre']));
-        const price=num(get(row,['prix','cours','price','prix unitaire','prix unitaire (fcfa)']));
-        const frais=num(get(row,['frais','fees','commission']));
+        const rawType=String(get(row,['type','sens','operation','opération','type opération','type operation'])).toLowerCase().trim();
+        const ticker=String(get(row,['ticker','titre','symbole','symbol','code','symbole action'])).toUpperCase().trim();
         const date=normDate(get(row,['date']));
-        const libelle=String(get(row,['libelle','libellé','note','description'])||'').trim();
-        const t2=type.startsWith('ach')||type==='buy'?'achat':(type.startsWith('ven')||type==='sell'?'vente':'');
-        if(!ticker||!qty||!price||!t2){errs.push(i+2);return;}
-        db.tx.push({id:uid(),type:t2,ticker,qty,price,frais,date:date||today(),libelle});
-        n++;
+        const libelle=String(get(row,['libelle','libellé','note','description','commentaire'])||'').trim();
+        const montant=num(get(row,['montant','amount','total','valeur']));
+        if(rawType.startsWith('ach')||rawType==='buy'||rawType.startsWith('ven')||rawType==='sell'){
+          const t2=(rawType.startsWith('ach')||rawType==='buy')?'achat':'vente';
+          const qty=num(get(row,['quantite','quantité','qte','qté','qty','nombre']));
+          const price=num(get(row,['prix','cours','price','prix unitaire','prix unitaire (fcfa)']));
+          const frais=num(get(row,['frais','fees','commission','total frais']));
+          if(!ticker||!qty||!price){errs.push(i+2);return;}
+          db.tx.push({id:uid(),type:t2,ticker,qty,price,frais,date:date||today(),libelle}); nTx++;
+        }else if(rawType.startsWith('dép')||rawType.startsWith('dep')||rawType.startsWith('versement')){
+          if(!montant){errs.push(i+2);return;}
+          (db.cash=db.cash||[]).push({id:uid(),type:'depot',montant,date:date||today(),libelle}); nDep++;
+        }else if(rawType.startsWith('retr')||rawType.startsWith('withdraw')){
+          if(!montant){errs.push(i+2);return;}
+          (db.cash=db.cash||[]).push({id:uid(),type:'retrait',montant,date:date||today(),libelle}); nRet++;
+        }else if(rawType.startsWith('div')){
+          if(!montant){errs.push(i+2);return;}
+          db.div.push({id:uid(),ticker:ticker||'—',montant,date:date||today(),libelle}); nDiv++;
+        }else if(rawType.indexOf('taxe')>=0||rawType.indexOf('frais')>=0||rawType.indexOf('fee')>=0||rawType.indexOf('commission')>=0){
+          if(!montant){errs.push(i+2);return;}
+          (db.cash=db.cash||[]).push({id:uid(),type:'retrait',montant,date:date||today(),libelle:('Frais '+libelle).trim()}); nFr++;
+        }else{ errs.push(i+2); }
       });
-      if(n===0){msg.innerHTML="⚠️ 0 opération importée.<br>Colonnes détectées : <b>"+Object.keys(rows[0]).join(' · ')+"</b>.<br>Attendu : <b>date, type, ticker, quantite, prix</b> (frais, libelle optionnels). Vérifie aussi le séparateur (; ou ,).";return;}
+      const total=nTx+nDep+nRet+nDiv+nFr;
+      if(total===0){msg.innerHTML="⚠️ 0 ligne importée.<br>Colonnes détectées : <b>"+Object.keys(rows[0]).join(' · ')+"</b>.<br>Attendu : <b>date, type</b> + (quantite, prix) pour achat/vente, ou (montant) pour dépôt/retrait/dividende. Vérifie le séparateur (; ou ,).";return;}
       save();
-      msg.innerHTML="✅ "+n+" opération(s) importée(s)."+(errs.length?"<br>⚠️ Lignes ignorées (données incomplètes) : "+errs.join(', '):"");
+      const parts=[]; if(nTx)parts.push(nTx+" opération(s)"); if(nDep)parts.push(nDep+" dépôt(s)"); if(nRet)parts.push(nRet+" retrait(s)"); if(nDiv)parts.push(nDiv+" dividende(s)"); if(nFr)parts.push(nFr+" ligne(s) de frais");
+      msg.innerHTML="✅ Importé : "+parts.join(", ")+"."+(errs.length?"<br>⚠️ Lignes ignorées : "+errs.join(', '):"");
     }catch(x){msg.innerHTML="⚠️ Fichier illisible : "+(x&&x.message?x.message:x)+". Essaie en CSV avec les colonnes attendues.";}
   };
   if(isCsv)r.readAsText(f,'utf-8'); else r.readAsBinaryString(f);
