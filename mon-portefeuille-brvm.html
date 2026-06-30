@@ -361,6 +361,55 @@ function load(){
    L'appli le lit ici. raw.githubusercontent autorise la lecture directe (pas de
    blocage CORS). Adapte cette URL si tu changes de dépôt/branche. */
 const COURS_URL="https://raw.githubusercontent.com/kraidy-armel/brvm-portfolio/main/cours.json";
+
+/* ---- Lecture LIVE de la BRVM via relais publics (aucun compte requis) ---- */
+const BRVM_PAGE="https://www.brvm.org/fr/cours-actions/0";
+const RELAYS=[
+  u=>"https://api.allorigins.win/raw?url="+encodeURIComponent(u),
+  u=>"https://corsproxy.io/?url="+encodeURIComponent(u),
+  u=>"https://api.codetabs.com/v1/proxy/?quest="+u,
+  u=>"https://thingproxy.freeboard.io/fetch/"+u
+];
+function brvmStrip(s){return (s||"").replace(/<[^>]*>/g,"").replace(/&nbsp;/gi," ").replace(/&amp;/gi,"&").replace(/&#\d+;/g," ").replace(/\s+/g," ").trim();}
+function brvmNum(t){if(t==null)return null;t=String(t).replace(/\s/g,"");if(!t||t==="-")return null;if(t.indexOf(",")>=0)t=t.replace(/\./g,"").replace(",",".");else t=t.replace(/\./g,"");t=t.replace(/[^0-9.\-]/g,"");const n=parseFloat(t);return isNaN(n)?null:n;}
+function brvmParse(html){
+  const today=new Date().toISOString().slice(0,10);
+  const tables=html.match(/<table[\s\S]*?<\/table>/gi)||[]; let best={};
+  for(const tb of tables){
+    const trs=tb.match(/<tr[\s\S]*?<\/tr>/gi)||[]; if(trs.length<2)continue;
+    const headers=(trs[0].match(/<t[hd][\s\S]*?<\/t[hd]>/gi)||[]).map(c=>brvmStrip(c).toLowerCase());
+    if(!/(cours|clôture|cloture|veille|précédent|precedent)/.test(headers.join(" ")))continue;
+    const col=(...ks)=>{for(const k of ks)for(let i=0;i<headers.length;i++)if(headers[i].indexOf(k)>=0)return i;return -1;};
+    const iSym=col("symbole","ticker","code"),iCur=col("clôture","cloture","cours du jour","dernier cours","dernier","cours"); let iPrev=col("veille","précédent","precedent","ouverture"); if(iPrev===iCur)iPrev=-1;
+    const local={};
+    for(let j=1;j<trs.length;j++){
+      const cells=(trs[j].match(/<t[hd][\s\S]*?<\/t[hd]>/gi)||[]).map(brvmStrip); if(cells.length<3)continue;
+      let sym=(iSym>=0&&iSym<cells.length?cells[iSym]:cells[0]).toUpperCase().trim();
+      if(!/^[A-Z0-9]{3,6}$/.test(sym))continue;
+      const cur=iCur>=0&&iCur<cells.length?brvmNum(cells[iCur]):null,prev=iPrev>=0&&iPrev<cells.length?brvmNum(cells[iPrev]):null;
+      if(cur&&cur>0)local[sym]={actuel:cur,veille:prev&&prev>0?prev:cur,date:today,source:"brvm.org"};
+    }
+    if(Object.keys(local).length>Object.keys(best).length)best=local;
+  }
+  if(best.SGBC&&!best.SGBCI)best.SGBCI={...best.SGBC};
+  return best;
+}
+async function liveScrape(){
+  for(const mk of RELAYS){
+    try{
+      const r=await fetch(mk(BRVM_PAGE),{cache:"no-store"});
+      if(!r.ok)continue;
+      const html=await r.text(); if(!html||html.length<500)continue;
+      const d=brvmParse(html);
+      if(Object.keys(d).length>=5){
+        const n=new Date(),p=x=>String(x).padStart(2,"0");
+        const human=`${p(n.getDate())}/${p(n.getMonth()+1)}/${n.getFullYear()} ${p(n.getHours())}:${p(n.getMinutes())}`;
+        return Object.assign({_meta:{updated_human:human,count:Object.keys(d).length,mode:"live"}},d);
+      }
+    }catch(e){}
+  }
+  return null;
+}
 async function syncPrices(btn){
   const held=positions(); if(!held.length){alert("Ajoute d'abord des positions.");return;}
   const orig=btn?btn.textContent:""; if(btn){btn.textContent="⏳ Synchronisation…";btn.disabled=true;}
@@ -373,7 +422,11 @@ async function syncPrices(btn){
         if(r.ok){data=await r.json(); via="direct";}
       }catch(e){data=null;}
     }
-    if(!data){
+    if(!data){                       // lecture directe BRVM via relais public
+      data=await liveScrape();
+      if(data)via="direct";
+    }
+    if(!data){                       // repli : dernier fichier du robot GitHub
       const res=await fetch(COURS_URL+"?t="+Date.now(),{cache:"no-store"});
       if(!res.ok)throw new Error("HTTP "+res.status);
       data=await res.json();
