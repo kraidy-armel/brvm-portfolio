@@ -1083,23 +1083,46 @@ function normDate(v){
   if(m)return m[1]+'-'+m[2].padStart(2,'0')+'-'+m[3].padStart(2,'0');
   return s.slice(0,10);
 }
+/* Parse un CSV texte : détecte le séparateur ( ; , ou tab ), gère BOM et guillemets */
+function parseCSVText(text){
+  text=String(text).replace(/^﻿/,'');
+  const lines=text.split(/\r?\n/).filter(l=>l.trim()!=='');
+  if(!lines.length)return [];
+  const head=lines[0];
+  const cnt=c=>head.split(c).length;
+  let sep=','; if(cnt(';')>cnt(','))sep=';'; if(cnt('\t')>cnt(sep))sep='\t';
+  const parseLine=l=>{const out=[];let cur='',q=false;for(let i=0;i<l.length;i++){const c=l[i];
+    if(q){if(c==='"'){if(l[i+1]==='"'){cur+='"';i++;}else q=false;}else cur+=c;}
+    else{if(c==='"')q=true;else if(c===sep){out.push(cur);cur='';}else cur+=c;}}
+    out.push(cur);return out;};
+  const header=parseLine(lines[0]).map(h=>h.trim());
+  const objs=[];
+  for(let i=1;i<lines.length;i++){const cells=parseLine(lines[i]);const o={};header.forEach((h,j)=>o[h]=cells[j]!==undefined?cells[j]:'');objs.push(o);}
+  return objs;
+}
 function importOps(input){
   const f=input.files[0]; if(!f)return;
   const msg=document.getElementById('impMsg');
-  if(typeof XLSX==='undefined'){msg.innerHTML="⚠️ Module de lecture non chargé (vérifie ta connexion internet).";return;}
+  const isCsv=/\.csv$/i.test(f.name)||((f.type||'').indexOf('csv')>=0);
   const r=new FileReader();
   r.onload=e=>{
     try{
-      const wb=XLSX.read(e.target.result,{type:'binary',cellDates:false});
-      const rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:""});
+      let rows;
+      if(isCsv){ rows=parseCSVText(e.target.result); }
+      else{
+        if(typeof XLSX==='undefined'){msg.innerHTML="⚠️ Module Excel non chargé (vérifie ta connexion). Astuce : enregistre ton fichier en <b>CSV</b> et réessaie.";return;}
+        const wb=XLSX.read(e.target.result,{type:'binary',cellDates:false});
+        rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:""});
+      }
+      if(!rows||!rows.length){msg.innerHTML="⚠️ Aucune ligne lue. Il faut une 1re ligne d'en-têtes + au moins une ligne de données.";return;}
       const num=x=>+String(x).replace(/\s/g,'').replace(/,/g,'.')||0;
-      const get=(row,keys)=>{for(const rk in row){if(keys.includes(rk.toLowerCase().trim()))return row[rk];}return "";};
+      const get=(row,keys)=>{for(const rk in row){if(keys.includes(rk.toLowerCase().trim().replace(/^﻿/,'')))return row[rk];}return "";};
       let n=0; const errs=[];
       rows.forEach((row,i)=>{
-        const type=String(get(row,['type','sens','operation'])).toLowerCase().trim();
-        const ticker=String(get(row,['ticker','titre','symbole','symbol'])).toUpperCase().trim();
-        const qty=num(get(row,['quantite','quantité','qte','qty','nombre']));
-        const price=num(get(row,['prix','cours','price','prix unitaire']));
+        const type=String(get(row,['type','sens','operation','opération'])).toLowerCase().trim();
+        const ticker=String(get(row,['ticker','titre','symbole','symbol','code'])).toUpperCase().trim();
+        const qty=num(get(row,['quantite','quantité','qte','qté','qty','nombre']));
+        const price=num(get(row,['prix','cours','price','prix unitaire','prix unitaire (fcfa)']));
         const frais=num(get(row,['frais','fees','commission']));
         const date=normDate(get(row,['date']));
         const libelle=String(get(row,['libelle','libellé','note','description'])||'').trim();
@@ -1108,11 +1131,12 @@ function importOps(input){
         db.tx.push({id:uid(),type:t2,ticker,qty,price,frais,date:date||today(),libelle});
         n++;
       });
+      if(n===0){msg.innerHTML="⚠️ 0 opération importée.<br>Colonnes détectées : <b>"+Object.keys(rows[0]).join(' · ')+"</b>.<br>Attendu : <b>date, type, ticker, quantite, prix</b> (frais, libelle optionnels). Vérifie aussi le séparateur (; ou ,).";return;}
       save();
-      msg.innerHTML="✅ "+n+" opération(s) importée(s)."+(errs.length?"<br>⚠️ Lignes ignorées (données manquantes) : "+errs.join(', '):"");
-    }catch(x){msg.innerHTML="⚠️ Fichier illisible. Vérifie qu'il s'agit d'un CSV ou Excel avec les bonnes colonnes.";}
+      msg.innerHTML="✅ "+n+" opération(s) importée(s)."+(errs.length?"<br>⚠️ Lignes ignorées (données incomplètes) : "+errs.join(', '):"");
+    }catch(x){msg.innerHTML="⚠️ Fichier illisible : "+(x&&x.message?x.message:x)+". Essaie en CSV avec les colonnes attendues.";}
   };
-  r.readAsBinaryString(f);
+  if(isCsv)r.readAsText(f,'utf-8'); else r.readAsBinaryString(f);
 }
 
 /* Rendement du dividende sur 12 mois pour un titre */
