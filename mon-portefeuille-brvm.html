@@ -155,7 +155,10 @@
       <div class="hello" id="greet">Bonjour 👋</div>
       <h1 style="font-size:20px;margin-top:2px;cursor:pointer" onclick="openPortfolios()"><span id="pfName">Mon Portefeuille</span> <span style="opacity:.7;font-size:14px">▾</span></h1>
     </div>
-    <button class="gear" onclick="openSettings()">⚙</button>
+    <div style="display:flex;gap:8px">
+      <button class="gear" id="eyeBtn" onclick="toggleMask()" title="Masquer / afficher les montants">👁</button>
+      <button class="gear" onclick="openSettings()">⚙</button>
+    </div>
   </div>
 </header>
 
@@ -278,9 +281,10 @@
 <div id="lockScreen" style="display:none;position:fixed;inset:0;background:linear-gradient(135deg,var(--green),var(--green-d));z-index:100;color:#fff;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center">
   <div style="font-size:44px">🔒</div>
   <h2 style="margin:12px 0 2px">Mon Portefeuille</h2>
-  <p style="opacity:.85;margin:0 0 18px">Entre ton code d'accès</p>
-  <input id="lockInput" type="password" inputmode="numeric" maxlength="8" autocomplete="off" style="width:200px;text-align:center;font-size:26px;letter-spacing:8px;padding:14px;border-radius:14px;border:none" onkeydown="if(event.key==='Enter')tryUnlock()">
-  <button class="btn" style="max-width:200px;margin-top:16px" onclick="tryUnlock()">Déverrouiller</button>
+  <p style="opacity:.85;margin:0 0 18px">Connecte-toi pour accéder à ton portefeuille</p>
+  <input id="lockUser" placeholder="Identifiant" autocomplete="off" style="width:250px;text-align:center;font-size:17px;padding:13px;border-radius:14px;border:none;margin-bottom:10px" onkeydown="if(event.key==='Enter')document.getElementById('lockInput').focus()">
+  <input id="lockInput" type="password" placeholder="Mot de passe" autocomplete="off" style="width:250px;text-align:center;font-size:17px;padding:13px;border-radius:14px;border:none" onkeydown="if(event.key==='Enter')tryUnlock()">
+  <button class="btn" style="max-width:250px;margin-top:16px" onclick="tryUnlock()">Se connecter</button>
   <div id="lockErr" style="color:#FFD2C9;margin-top:12px;height:18px;font-size:13.5px"></div>
 </div>
 
@@ -354,8 +358,9 @@ function load(){
       if(old){const o=JSON.parse(old);const p=Object.assign(blankPortfolio("Mon portefeuille"),o);store={portfolios:[p],activeId:p.id,lock:null};}
     }
   }catch(e){}
-  if(!store.portfolios||!store.portfolios.length){const p=blankPortfolio();store={portfolios:[p],activeId:p.id,lock:(store&&store.lock)||null};}
+  if(!store.portfolios||!store.portfolios.length){const p=blankPortfolio();store={portfolios:[p],activeId:p.id,lock:(store&&store.lock)||null,lockUser:(store&&store.lockUser)||null};}
   if(store.sgiRate==null)store.sgiRate=1.5;
+  masked=!!store.maskValues;
   activate(store.activeId);
 }
 /* Le robot (GitHub Action) publie un seul fichier cours.json dans TON dépôt.
@@ -469,19 +474,23 @@ async function syncPrices(btn){
 function save(){recordSnapshot();localStorage.setItem(DB_KEY,JSON.stringify(store));renderAll();if(typeof cloudPushDebounced==="function")cloudPushDebounced();}
 
 /* ================= UTILITAIRES ================= */
-const fmt=n=>Math.round(n).toLocaleString("fr-FR")+" FCFA";
+let masked=false;  /* œil : quand vrai, tous les montants sont masqués */
+const MASK="•••••";
+const fmt=n=>masked?MASK+" FCFA":Math.round(n).toLocaleString("fr-FR")+" FCFA";
 /* Montants affichés en entier partout (plus d'abréviation k/M) */
-const fmtShort=n=>Math.round(n).toLocaleString("fr-FR");
+const fmtShort=n=>masked?MASK:Math.round(n).toLocaleString("fr-FR");
 /* Format compact réservé aux graduations de graphique (sinon ça déborde) */
-const fmtAxis=n=>{const a=Math.abs(n);return a>=1e6?(n/1e6).toFixed(1).replace(".",",")+" M":a>=1e3?Math.round(n/1e3)+" k":Math.round(n);};
+const fmtAxis=n=>{if(masked)return"";const a=Math.abs(n);return a>=1e6?(n/1e6).toFixed(1).replace(".",",")+" M":a>=1e3?Math.round(n/1e3)+" k":Math.round(n);};
 /* Échappe les guillemets pour un usage sûr dans value="..." */
 const escAttr=s=>(s||"").replace(/"/g,"&quot;");
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const today=()=>new Date().toISOString().slice(0,10);
 const frDate=d=>{const o=new Date(d+"T00:00");return o.toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"})};
 const frDateShort=d=>new Date(d+"T00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short"});
-const sign=n=>(n>=0?"+":"")+fmtShort(n)+" FCFA";
-const signFull=n=>(n>=0?"+":"")+fmt(n);
+const sign=n=>masked?MASK+" FCFA":(n>=0?"+":"")+fmtShort(n)+" FCFA";
+const signFull=n=>masked?MASK+" FCFA":(n>=0?"+":"")+fmt(n);
+/* Œil : masque / affiche tous les montants */
+function toggleMask(){masked=!masked;store.maskValues=masked;save();const e=document.getElementById("eyeBtn");if(e)e.textContent=masked?"🙈":"👁";}
 
 /* Calcule les positions à partir des opérations */
 function positions(){
@@ -585,6 +594,7 @@ function renderHome(){
   const t=totals();
   const h=new Date().getHours();
   document.getElementById("greet").textContent=(h<12?"Bonjour":h<18?"Bon après-midi":"Bonsoir")+" 👋";
+  {const eb=document.getElementById("eyeBtn");if(eb)eb.textContent=masked?"🙈":"👁";}
   document.getElementById("pfName").textContent=db.name||"Mon Portefeuille";
   const bal=cashBalance(), titres=t.value, patrimoine=titres+bal;
   const dayUp=t.day>=0;
@@ -1058,7 +1068,7 @@ function openSettings(){
     <div class="hint">Tes données sont stockées sur cet appareil uniquement. Pense à les sauvegarder.</div>
     <button class="btn ghost" style="margin-top:16px" onclick="openAccount()">☁️ Compte & synchronisation en ligne</button>
     <button class="btn ghost" style="margin-top:10px" onclick="openPortfolios()">📁 Gérer mes portefeuilles</button>
-    <button class="btn ghost" style="margin-top:10px" onclick="setLock()">${store.lock?'🔒 Modifier / retirer le code de verrouillage':'🔒 Ajouter un code de verrouillage'}</button>
+    <button class="btn ghost" style="margin-top:10px" onclick="setLock()">${store.lock?'🔒 Retirer le verrouillage (identifiant + mot de passe)':'🔒 Protéger par identifiant + mot de passe'}</button>
     <label style="margin-top:16px">Frais SGI — commission + taxes (%)</label>
     <input id="sgiRate" type="number" step="0.1" min="0" value="${store.sgiRate}" onchange="store.sgiRate=+this.value||0;save()">
     <div class="hint">Appliqué à la vente pour estimer ta plus-value <b>nette</b> (visible dans le détail d'un titre). Sur la BRVM, c'est souvent autour de 1,2 à 1,7 %.</div>
@@ -1294,20 +1304,24 @@ function deletePf(id){if(store.portfolios.length<=1)return;if(confirm("Supprimer
 function lockHash(s){return btoa(unescape(encodeURIComponent("brvm:"+s)));}
 function setLock(){
   if(store.lock){
-    const c=prompt("Code actuel pour retirer le verrouillage (laisse vide pour annuler) :");
-    if(c===null)return;
-    if(lockHash(c.trim())===store.lock){store.lock=null;save();closeSheet();alert("Code retiré.");}
-    else alert("Code incorrect.");
+    const p=prompt("Mot de passe actuel pour RETIRER le verrouillage (laisse vide pour annuler) :");
+    if(p===null)return;
+    if(lockHash((store.lockUser||"")+"\n"+p.trim())===store.lock){store.lock=null;store.lockUser=null;save();closeSheet();alert("Verrouillage retiré.");}
+    else alert("Mot de passe incorrect.");
     return;
   }
-  const c=prompt("Choisis un code (4 à 8 chiffres) :");
-  if(c&&c.trim().length>=4){store.lock=lockHash(c.trim());save();closeSheet();alert("Code activé ✔ — il sera demandé au prochain lancement.");}
-  else if(c!==null)alert("Le code doit faire au moins 4 chiffres.");
+  const id=prompt("Choisis un identifiant (nom d'utilisateur) :");
+  if(id===null)return; if(!id.trim()){alert("L'identifiant ne peut pas être vide.");return;}
+  const pw=prompt("Choisis un mot de passe (au moins 4 caractères) :");
+  if(pw===null)return; if(pw.trim().length<4){alert("Le mot de passe doit faire au moins 4 caractères.");return;}
+  store.lockUser=id.trim(); store.lock=lockHash(id.trim()+"\n"+pw.trim()); save(); closeSheet();
+  alert("Verrouillage activé ✔ — identifiant + mot de passe seront demandés au prochain lancement.\n\n⚠️ Note bien tes identifiants : sans eux, l'accès à cet appareil sera bloqué.");
 }
 function tryUnlock(){
-  const v=document.getElementById("lockInput").value;
-  if(lockHash(v)===store.lock){document.getElementById("lockScreen").style.display="none";document.getElementById("lockInput").value="";document.getElementById("lockErr").textContent="";}
-  else document.getElementById("lockErr").textContent="Code incorrect, réessaie.";
+  const u=(document.getElementById("lockUser")?document.getElementById("lockUser").value:"").trim();
+  const v=(document.getElementById("lockInput").value||"").trim();
+  if(lockHash(u+"\n"+v)===store.lock){document.getElementById("lockScreen").style.display="none";document.getElementById("lockInput").value="";if(document.getElementById("lockUser"))document.getElementById("lockUser").value="";document.getElementById("lockErr").textContent="";}
+  else document.getElementById("lockErr").textContent="Identifiant ou mot de passe incorrect.";
 }
 
 /* ================= SYNCHRONISATION CLOUD (Supabase) ================= */
@@ -1376,7 +1390,7 @@ async function cloudSyncNow(btn){ btn.disabled=true; await pushCloud(); await pu
 /* --- Démarrage --- */
 load();
 renderAll();
-if(store.lock){document.getElementById("lockScreen").style.display="flex";setTimeout(()=>document.getElementById("lockInput").focus(),150);}
+if(store.lock){document.getElementById("lockScreen").style.display="flex";setTimeout(()=>document.getElementById("lockUser").focus(),150);}
 initCloud();
 </script>
 </body>
