@@ -921,9 +921,26 @@ function drawFiscal(){
   const all=new Set([...Object.keys(R.byTicker),...Object.keys(divByTk)]);
   const parTitre=[...all].map(t=>({t,re:R.byTicker[t]||0,dv:divByTk[t]||0,tot:(R.byTicker[t]||0)+(divByTk[t]||0)}))
     .filter(l=>Math.abs(l.tot)>0.5).sort((a,b)=>b.tot-a.tot);
-  html+='<div class="sect-title" style="margin:20px 0 4px">Ce que chaque titre m\'a rapporté</div>'
-    +'<div class="hint" style="margin-bottom:8px">Gains <b>réalisés</b> (ventes) + <b>dividendes</b> encaissés, sur toute la durée. N\'inclut pas la plus-value latente des titres encore détenus.</div>'
-    +parTitre.map(l=>`<div class="kv"><span class="k">${nm(l.t)}<br><span style="font-size:11px;color:var(--muted)">réalisé ${sign(l.re)} · dividendes ${fmtShort(l.dv)} FCFA</span></span><b class="${l.tot>=0?'pos':'neg'}">${sign(l.tot)}</b></div>`).join("")
+  const maxAbs=Math.max(1,...parTitre.map(l=>Math.abs(l.tot)));
+  const medals=["🥇","🥈","🥉"];
+  html+='<div class="sect-title" style="margin:22px 0 4px">Ce que chaque titre m\'a rapporté</div>'
+    +'<div class="hint" style="margin-bottom:10px">Gains <b>réalisés</b> (ventes) + <b>dividendes</b> encaissés, sur toute la durée. Hors plus-value latente des titres encore détenus.</div>'
+    +'<div class="card" style="padding:2px 14px">'
+    +parTitre.map((l,i)=>{
+        const pos=l.tot>=0, col=pos?"var(--green)":"var(--neg)";
+        const pct=masked?0:Math.round(Math.abs(l.tot)/maxAbs*100);
+        const md=(pos&&i<3)?medals[i]+" ":"";
+        return `<div style="padding:11px 0;border-bottom:1px solid var(--line)">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="tick" style="width:48px;height:34px;font-size:11.5px;background:${pos?'var(--green-l)':'var(--neg-l)'};color:${col}">${l.t}</div>
+            <div class="grow"><div class="nm" style="font-size:14px">${md}${nm(l.t)}</div>
+              <div class="sub" style="font-size:11px">réalisé ${sign(l.re)} · div ${fmtShort(l.dv)}</div></div>
+            <b class="${pos?'pos':'neg'}" style="white-space:nowrap">${sign(l.tot)}</b>
+          </div>
+          <div class="bar" style="margin-top:8px"><span style="width:${pct}%;background:${col}"></span></div>
+        </div>`;
+      }).join("")
+    +'</div>'
     +'<div class="hint" style="margin-top:10px">💡 La plus-value réalisée = gain encaissé à la vente (prix de vente − coût moyen). C\'est la base de l\'impôt sur les plus-values.</div>';
   wrap.innerHTML=html;
   if(!masked)drawFiscalChart(R.byYear);
