@@ -1240,11 +1240,16 @@ function importOps(input){
       if(!rows||!rows.length){msg.innerHTML="⚠️ Aucune ligne lue. Il faut une 1re ligne d'en-têtes + au moins une ligne de données.";return;}
       const num=x=>+String(x).replace(/\s/g,'').replace(/,/g,'.')||0;
       const get=(row,keys)=>{for(const rk in row){if(keys.includes(rk.toLowerCase().trim().replace(/^﻿/,'')))return row[rk];}return "";};
-      const errs=[]; let nTx=0,nDep=0,nRet=0,nDiv=0,nFr=0;
+      const errs=[]; let nTx=0,nDep=0,nRet=0,nDiv=0,nFr=0,dup=0;
+      /* Empreintes des données déjà présentes → anti-doublon (ré-import sûr) */
+      const seen={}, bump=k=>{seen[k]=(seen[k]||0)+1;}, isDup=k=>{if(seen[k]>0){seen[k]--;return true;}return false;};
+      db.tx.forEach(t=>bump('tx|'+t.type+'|'+t.ticker+'|'+t.date+'|'+t.qty+'|'+t.price));
+      (db.cash||[]).forEach(m=>bump('cash|'+m.type+'|'+m.date+'|'+m.montant));
+      (db.div||[]).forEach(d=>bump('div|'+d.ticker+'|'+d.date+'|'+d.montant));
       rows.forEach((row,i)=>{
         const rawType=String(get(row,['type','sens','operation','opération','type opération','type operation'])).toLowerCase().trim();
         const ticker=String(get(row,['ticker','titre','symbole','symbol','code','symbole action'])).toUpperCase().trim();
-        const date=normDate(get(row,['date']));
+        const date=normDate(get(row,['date']))||today();
         const libelle=String(get(row,['libelle','libellé','note','description','commentaire'])||'').trim();
         const montant=num(get(row,['montant','amount','total','valeur']));
         if(rawType.startsWith('ach')||rawType==='buy'||rawType.startsWith('ven')||rawType==='sell'){
@@ -1253,26 +1258,34 @@ function importOps(input){
           const price=num(get(row,['prix','cours','price','prix unitaire','prix unitaire (fcfa)']));
           const frais=num(get(row,['frais','fees','commission','total frais']));
           if(!ticker||!qty||!price){errs.push(i+2);return;}
-          db.tx.push({id:uid(),type:t2,ticker,qty,price,frais,date:date||today(),libelle}); nTx++;
+          if(isDup('tx|'+t2+'|'+ticker+'|'+date+'|'+qty+'|'+price)){dup++;return;}
+          db.tx.push({id:uid(),type:t2,ticker,qty,price,frais,date,libelle}); nTx++;
         }else if(rawType.startsWith('dép')||rawType.startsWith('dep')||rawType.startsWith('versement')){
           if(!montant){errs.push(i+2);return;}
-          (db.cash=db.cash||[]).push({id:uid(),type:'depot',montant,date:date||today(),libelle}); nDep++;
+          if(isDup('cash|depot|'+date+'|'+montant)){dup++;return;}
+          (db.cash=db.cash||[]).push({id:uid(),type:'depot',montant,date,libelle}); nDep++;
         }else if(rawType.startsWith('retr')||rawType.startsWith('withdraw')){
           if(!montant){errs.push(i+2);return;}
-          (db.cash=db.cash||[]).push({id:uid(),type:'retrait',montant,date:date||today(),libelle}); nRet++;
+          if(isDup('cash|retrait|'+date+'|'+montant)){dup++;return;}
+          (db.cash=db.cash||[]).push({id:uid(),type:'retrait',montant,date,libelle}); nRet++;
         }else if(rawType.startsWith('div')){
           if(!montant){errs.push(i+2);return;}
-          db.div.push({id:uid(),ticker:ticker||'—',montant,date:date||today(),libelle}); nDiv++;
+          if(isDup('div|'+(ticker||'—')+'|'+date+'|'+montant)){dup++;return;}
+          db.div.push({id:uid(),ticker:ticker||'—',montant,date,libelle}); nDiv++;
         }else if(rawType.indexOf('taxe')>=0||rawType.indexOf('frais')>=0||rawType.indexOf('fee')>=0||rawType.indexOf('commission')>=0){
           if(!montant){errs.push(i+2);return;}
-          (db.cash=db.cash||[]).push({id:uid(),type:'retrait',montant,date:date||today(),libelle:('Frais '+libelle).trim()}); nFr++;
+          if(isDup('cash|retrait|'+date+'|'+montant)){dup++;return;}
+          (db.cash=db.cash||[]).push({id:uid(),type:'retrait',montant,date,libelle:('Frais '+libelle).trim()}); nFr++;
         }else{ errs.push(i+2); }
       });
       const total=nTx+nDep+nRet+nDiv+nFr;
-      if(total===0){msg.innerHTML="⚠️ 0 ligne importée.<br>Colonnes détectées : <b>"+Object.keys(rows[0]).join(' · ')+"</b>.<br>Attendu : <b>date, type</b> + (quantite, prix) pour achat/vente, ou (montant) pour dépôt/retrait/dividende. Vérifie le séparateur (; ou ,).";return;}
-      save();
+      if(total+dup===0){msg.innerHTML="⚠️ 0 ligne importée.<br>Colonnes détectées : <b>"+Object.keys(rows[0]).join(' · ')+"</b>.<br>Attendu : <b>date, type</b> + (quantite, prix) pour achat/vente, ou (montant) pour dépôt/retrait/dividende. Vérifie le séparateur (; ou ,).";return;}
+      if(total>0)save();
       const parts=[]; if(nTx)parts.push(nTx+" opération(s)"); if(nDep)parts.push(nDep+" dépôt(s)"); if(nRet)parts.push(nRet+" retrait(s)"); if(nDiv)parts.push(nDiv+" dividende(s)"); if(nFr)parts.push(nFr+" ligne(s) de frais");
-      msg.innerHTML="✅ Importé : "+parts.join(", ")+"."+(errs.length?"<br>⚠️ Lignes ignorées : "+errs.join(', '):"");
+      let out=total>0?("✅ Importé : "+parts.join(", ")+"."):"↩️ Rien de nouveau à importer.";
+      if(dup)out+=(total>0?"<br>":" ")+"↩️ "+dup+" ligne(s) déjà présente(s), ignorée(s) (anti-doublon).";
+      if(errs.length)out+="<br>⚠️ Lignes ignorées (invalides) : "+errs.join(', ');
+      msg.innerHTML=out;
     }catch(x){msg.innerHTML="⚠️ Fichier illisible : "+(x&&x.message?x.message:x)+". Essaie en CSV avec les colonnes attendues.";}
   };
   if(isCsv)r.readAsText(f,'utf-8'); else r.readAsBinaryString(f);
