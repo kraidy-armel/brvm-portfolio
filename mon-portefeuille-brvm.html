@@ -876,28 +876,57 @@ function drawIndexCompare(){
    <div class="hint" style="margin-top:8px">Période : ${frDateShort(a.date)} → ${frDateShort(b.date)}</div>`;
 }
 
+let fiscalChartObj=null;
+/* Déroule / replie le détail d'une année */
+function toggleFiscalYear(y){
+  const d=document.getElementById('fy_'+y), c=document.getElementById('fc_'+y);
+  if(!d)return;
+  const open=d.style.display==='none';
+  d.style.display=open?'block':'none';
+  if(c)c.textContent=open?'▾':'▸';
+}
+/* Graphique en barres des plus-values réalisées, année par année */
+function drawFiscalChart(byYear){
+  const cv=document.getElementById("fiscalChart"); if(!cv||typeof Chart==='undefined')return;
+  const ys=Object.keys(byYear).sort();
+  if(fiscalChartObj)fiscalChartObj.destroy();
+  fiscalChartObj=new Chart(cv,{
+    type:"bar",
+    data:{labels:ys,datasets:[{data:ys.map(y=>Math.round(byYear[y])),
+      backgroundColor:ys.map(y=>byYear[y]>=0?"rgba(11,107,83,.85)":"rgba(199,64,54,.85)"),
+      borderRadius:6,maxBarThickness:70}]},
+    options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>sign(c.parsed.y)}}},
+      scales:{y:{ticks:{callback:v=>fmtAxis(v),font:{size:10}}},x:{ticks:{font:{size:13,weight:"600"}}}}}
+  });
+}
 function drawFiscal(){
   const R=realized(), ys=Object.keys(R.byYear).sort().reverse();
   const wrap=document.getElementById("fiscalWrap"); if(!wrap)return;
   if(!ys.length){wrap.innerHTML='<div class="muted" style="font-size:13px">Tes plus-values réalisées s\'afficheront ici dès que tu auras vendu des actions.</div>';return;}
   const nm=tk=>stockMap[tk]?.name||tk;
-  // Détail par année, ventilé par titre
-  let html=ys.map(y=>{
+  const chart=masked?'':'<div style="height:180px;margin:2px 0 14px"><canvas id="fiscalChart"></canvas></div>';
+  // Accordéon : clique une année pour dérouler le détail par titre
+  let html=chart+ys.map((y,i)=>{
     const tk=R.byYearTicker[y]||{};
     const lignes=Object.keys(tk).sort((a,b)=>Math.abs(tk[b])-Math.abs(tk[a]))
-      .map(t=>`<div class="kv" style="padding:6px 0 6px 14px;font-size:13px;border-bottom:1px dashed var(--line)"><span class="k">${nm(t)}</span><b class="${tk[t]>=0?'pos':'neg'}" style="font-weight:600">${sign(tk[t])}</b></div>`).join("");
-    return `<div class="kv" style="border-bottom:none;padding-bottom:2px;margin-top:6px"><span class="k" style="font-size:15px;color:var(--ink)"><b>Année ${y}</b></span><b class="${R.byYear[y]>=0?'pos':'neg'}" style="font-size:15px">${sign(R.byYear[y])}</b></div>${lignes}`;
+      .map(t=>`<div class="kv" style="padding:6px 0 6px 22px;font-size:13px;border-bottom:1px dashed var(--line)"><span class="k">${nm(t)}</span><b class="${tk[t]>=0?'pos':'neg'}" style="font-weight:600">${sign(tk[t])}</b></div>`).join("");
+    const open=i===0;
+    return `<div class="kv" onclick="toggleFiscalYear('${y}')" style="cursor:pointer;border-bottom:none;padding:8px 0 2px;margin-top:2px">
+      <span class="k" style="font-size:15px;color:var(--ink)"><span id="fc_${y}" style="display:inline-block;width:16px;color:var(--green)">${open?'▾':'▸'}</span><b>Année ${y}</b></span>
+      <b class="${R.byYear[y]>=0?'pos':'neg'}" style="font-size:15px">${sign(R.byYear[y])}</b></div>
+      <div id="fy_${y}" style="display:${open?'block':'none'}">${lignes}</div>`;
   }).join("");
   // Bilan « ce que chaque titre m'a rapporté » : réalisé + dividendes
   const divByTk={}; (db.div||[]).forEach(d=>{divByTk[d.ticker]=(divByTk[d.ticker]||0)+(+d.montant||0);});
   const all=new Set([...Object.keys(R.byTicker),...Object.keys(divByTk)]);
-  const lignes=[...all].map(t=>({t,re:R.byTicker[t]||0,dv:divByTk[t]||0,tot:(R.byTicker[t]||0)+(divByTk[t]||0)}))
+  const parTitre=[...all].map(t=>({t,re:R.byTicker[t]||0,dv:divByTk[t]||0,tot:(R.byTicker[t]||0)+(divByTk[t]||0)}))
     .filter(l=>Math.abs(l.tot)>0.5).sort((a,b)=>b.tot-a.tot);
   html+='<div class="sect-title" style="margin:20px 0 4px">Ce que chaque titre m\'a rapporté</div>'
     +'<div class="hint" style="margin-bottom:8px">Gains <b>réalisés</b> (ventes) + <b>dividendes</b> encaissés, sur toute la durée. N\'inclut pas la plus-value latente des titres encore détenus.</div>'
-    +lignes.map(l=>`<div class="kv"><span class="k">${nm(l.t)}<br><span style="font-size:11px;color:var(--muted)">réalisé ${sign(l.re)} · dividendes ${fmtShort(l.dv)} FCFA</span></span><b class="${l.tot>=0?'pos':'neg'}">${sign(l.tot)}</b></div>`).join("")
+    +parTitre.map(l=>`<div class="kv"><span class="k">${nm(l.t)}<br><span style="font-size:11px;color:var(--muted)">réalisé ${sign(l.re)} · dividendes ${fmtShort(l.dv)} FCFA</span></span><b class="${l.tot>=0?'pos':'neg'}">${sign(l.tot)}</b></div>`).join("")
     +'<div class="hint" style="margin-top:10px">💡 La plus-value réalisée = gain encaissé à la vente (prix de vente − coût moyen). C\'est la base de l\'impôt sur les plus-values.</div>';
   wrap.innerHTML=html;
+  if(!masked)drawFiscalChart(R.byYear);
 }
 
 /* ================= MODALES ================= */
