@@ -930,7 +930,7 @@ function drawFiscal(){
         const pos=l.tot>=0, col=pos?"var(--green)":"var(--neg)";
         const pct=masked?0:Math.round(Math.abs(l.tot)/maxAbs*100);
         const md=(pos&&i<3)?medals[i]+" ":"";
-        return `<div style="padding:11px 0;border-bottom:1px solid var(--line)">
+        return `<div onclick="gainDetail('${l.t}')" style="padding:11px 0;border-bottom:1px solid var(--line);cursor:pointer">
           <div style="display:flex;align-items:center;gap:10px">
             <div class="tick" style="width:48px;height:34px;font-size:11.5px;background:${pos?'var(--green-l)':'var(--neg-l)'};color:${col}">${l.t}</div>
             <div class="grow"><div class="nm" style="font-size:14px">${md}${nm(l.t)}</div>
@@ -944,6 +944,41 @@ function drawFiscal(){
     +'<div class="hint" style="margin-top:10px">💡 La plus-value réalisée = gain encaissé à la vente (prix de vente − coût moyen). C\'est la base de l\'impôt sur les plus-values.</div>';
   wrap.innerHTML=html;
   if(!masked)drawFiscalChart(R.byYear);
+}
+/* Fiche : d'où vient le résultat sur un titre (achats, ventes, dividendes) */
+function gainDetail(ticker){
+  const nm=stockMap[ticker]?.name||ticker;
+  const txs=[...db.tx].filter(t=>t.ticker===ticker).sort((a,b)=>a.date.localeCompare(b.date));
+  let qty=0,cost=0,boughtQ=0,boughtC=0,soldQ=0,soldNet=0,realized=0;
+  const rows=[];
+  txs.forEach(t=>{
+    if(t.type==='achat'){
+      const c=t.qty*t.price+(+t.frais||0); qty+=t.qty; cost+=c; boughtQ+=t.qty; boughtC+=c;
+      rows.push({date:t.date,html:`<div style="padding:9px 0;border-bottom:1px solid var(--line)"><div style="font-size:13px">🟢 <b>Achat</b> — ${t.qty.toLocaleString('fr-FR')} × ${fmtShort(t.price)} = <b>${fmtShort(c)}</b>${(+t.frais)?` <span style="color:var(--muted)">(dont frais ${fmtShort(t.frais)})</span>`:''}</div><div class="sub" style="font-size:11px">${frDate(t.date)}${t.libelle?' · '+t.libelle:''}</div></div>`});
+    }else{
+      const avg=qty>0?cost/qty:0, proceeds=t.qty*t.price-(+t.frais||0), gain=t.qty*(t.price-avg)-(+t.frais||0);
+      realized+=gain; soldQ+=t.qty; soldNet+=proceeds; cost-=avg*Math.min(t.qty,qty); qty-=t.qty;
+      rows.push({date:t.date,html:`<div style="padding:9px 0;border-bottom:1px solid var(--line)"><div style="font-size:13px">🔴 <b>Vente</b> — ${t.qty.toLocaleString('fr-FR')} × ${fmtShort(t.price)} = <b>${fmtShort(proceeds)}</b> · <b class="${gain>=0?'pos':'neg'}">${sign(gain)}</b></div><div class="sub" style="font-size:11px">${frDate(t.date)} · coût moyen ${fmtShort(avg)}${t.libelle?' · '+t.libelle:''}</div></div>`});
+    }
+  });
+  const divs=(db.div||[]).filter(d=>d.ticker===ticker);
+  divs.forEach(d=>rows.push({date:d.date,html:`<div style="padding:9px 0;border-bottom:1px solid var(--line)"><div style="font-size:13px">💰 <b>Dividende</b> — <b class="pos">+${fmtShort(d.montant)}</b></div><div class="sub" style="font-size:11px">${frDate(d.date)}${d.libelle?' · '+d.libelle:''}</div></div>`}));
+  const divTot=divs.reduce((s,d)=>s+(+d.montant||0),0);
+  rows.sort((a,b)=>a.date.localeCompare(b.date));
+  const resultat=realized+divTot;
+  openSheet(`<h3>${nm}</h3>
+    <div class="hint">D'où vient ton résultat sur ce titre, opération par opération.</div>
+    <div class="scard" style="margin:14px 0">
+      <div class="hr"><span>Acheté (${boughtQ.toLocaleString('fr-FR')} titres)</span><b>${fmt(boughtC)}</b></div>
+      <div class="hr"><span>Vendu (${soldQ.toLocaleString('fr-FR')} titres)</span><b>${fmt(soldNet)}</b></div>
+      <div class="hr"><span>Plus-value réalisée</span><b class="${realized>=0?'pos':'neg'}">${sign(realized)}</b></div>
+      <div class="hr"><span>Dividendes reçus</span><b>${fmt(divTot)}</b></div>
+      ${qty>0.0001?`<div class="hr"><span>Encore détenu</span><b>${qty.toLocaleString('fr-FR')} titres</b></div>`:''}
+      <div class="hr total"><span>Résultat (réalisé + dividendes)</span><b class="${resultat>=0?'pos':'neg'}">${sign(resultat)}</b></div>
+    </div>
+    ${qty>0.0001?`<div class="hint">ℹ️ Tu détiens encore ${qty.toLocaleString('fr-FR')} titres : leur plus-value <b>latente</b> (non vendue) est dans l'onglet Portefeuille, elle n'est pas comptée ici.</div>`:''}
+    <div class="sect-title" style="margin:16px 0 4px">Détail chronologique (${rows.length})</div>
+    <div class="card" style="padding:2px 14px">${rows.length?rows.map(r=>r.html).join(''):'<div class="empty" style="padding:14px">Aucune opération.</div>'}</div>`);
 }
 
 /* ================= MODALES ================= */
