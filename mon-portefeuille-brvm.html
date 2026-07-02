@@ -154,6 +154,7 @@
     <div>
       <div class="hello" id="greet">Bonjour 👋</div>
       <h1 style="font-size:20px;margin-top:2px;cursor:pointer" onclick="openPortfolios()"><span id="pfName">Mon Portefeuille</span> <span style="opacity:.7;font-size:14px">▾</span></h1>
+      <div id="syncStatus" style="font-size:11px;color:var(--muted);height:14px;margin-top:1px"></div>
     </div>
     <div style="display:flex;gap:8px">
       <button class="gear" id="eyeBtn" onclick="toggleMask()" title="Masquer / afficher les montants">👁</button>
@@ -544,7 +545,8 @@ async function syncPrices(btn){
         ok++;
       }else fail.push(p.ticker);
     }
-    checkAlerts();save();
+    if(ok){store.lastSync=Date.now();store.lastSyncClock=new Date().toTimeString().slice(0,5);}
+    checkAlerts();save();setSyncStatus();
     const lastDate=dates.sort().slice(-1)[0]||"";
     let msg="✅ "+ok+" cours mis à jour.";
     if(lastDate)msg+="\n📅 Cours datés du "+lastDate;
@@ -563,6 +565,29 @@ async function syncPrices(btn){
   }
 }
 function save(){recordSnapshot();localStorage.setItem(DB_KEY,JSON.stringify(store));renderAll();if(typeof cloudPushDebounced==="function")cloudPushDebounced();}
+/* Indicateur discret de fraîcheur des cours */
+function setSyncStatus(state){
+  const el=document.getElementById("syncStatus"); if(!el)return;
+  if(state==="maj"){el.textContent="⏳ mise à jour des cours…";return;}
+  el.textContent=store.lastSyncClock?((state==="off"?"⚪ ":"🟢 ")+"cours à jour à "+store.lastSyncClock):(state==="off"?"⚪ hors-ligne":"");
+}
+/* Synchro silencieuse en arrière-plan (à l'ouverture) — sans pop-up */
+async function autoSync(force){
+  const held=positions(); if(!held.length){setSyncStatus();return;}
+  const now=Date.now();
+  if(!force && store.lastSync && (now-store.lastSync)<10*60*1000){ setSyncStatus(); return; }
+  setSyncStatus("maj");
+  try{
+    const got=await fetchCours();
+    if(!got){ setSyncStatus("off"); return; }
+    const data=got.data;
+    recordPriceHist(data);
+    let ok=0;
+    for(const p of held){ const row=data[p.ticker]||data[resolveTicker(p.ticker)]; if(row&&+row.actuel>0){db.prices[p.ticker]={actuel:+row.actuel,veille:+row.veille||+row.actuel,date:row.date||""};ok++;} }
+    if(ok){ store.lastSync=now; store.lastSyncClock=new Date().toTimeString().slice(0,5); checkAlerts(); save(); }
+    setSyncStatus(ok?"":"off");
+  }catch(e){ setSyncStatus("off"); }
+}
 
 /* ================= UTILITAIRES ================= */
 let masked=false;  /* œil : quand vrai, tous les montants sont masqués */
@@ -1426,6 +1451,8 @@ function posDetail(ticker){
       <div class="kv"><span class="k">Plus/Moins-value (brute)</span><b class="${c}">${sign(p.pl)} (${p.pl>=0?"+":""}${p.plPct.toFixed(1)}%)</b></div>
       ${(()=>{const rate=(store.sgiRate||0)/100;const net=p.value*(1-rate)-p.invested;const nc=net>=0?"pos":"neg";return `<div class="kv"><span class="k">Plus-value <b>nette</b> si je vends<br><span style="font-weight:400;font-size:12px">(après frais SGI de ${store.sgiRate}%)</span></span><b class="${nc}">${sign(net)}</b></div>`;})()}
     </div>
+    <div class="sect-title" style="margin:18px 4px 6px">📈 Évolution du cours</div>
+    <div id="titleChartWrap" style="min-height:40px"><canvas id="titleChart" height="150"></canvas></div>
     <div class="sect-title" style="margin:18px 4px 6px">Simulateur « et si... »</div>
     <div class="hint" style="margin:0 0 6px">Si le cours de cette action variait, voici l'effet sur ta ligne :</div>
     <div>${[-10,-5,5,10].map(pct=>{const nv=p.value*(1+pct/100),npl=nv-p.invested;return `<div class="kv"><span class="k">Cours ${pct>0?'+':''}${pct}%</span><b class="${npl>=0?'pos':'neg'}">${fmt(nv)} <span style="font-weight:400;color:var(--muted)">(${sign(npl)})</span></b></div>`;}).join("")}</div>
@@ -1433,6 +1460,24 @@ function posDetail(ticker){
     ${eduNotes(p).map(n=>`<div class="help" style="margin-bottom:8px">💡 <div>${n}</div></div>`).join("")}
     <div class="hint" style="margin-top:4px">⚖️ Aide pédagogique, <b>pas</b> un conseil d'achat ou de vente. Je ne suis pas un conseiller financier agréé — les décisions et leurs conséquences t'appartiennent.</div>
     <button class="btn alt" style="margin-top:18px" onclick="closeSheet();openTx()">＋ Nouvelle opération</button>`);
+  drawTitleChart(ticker);
+}
+let titleChartObj=null;
+/* Courbe d'évolution du cours d'un titre, depuis l'historique mémorisé */
+function drawTitleChart(ticker){
+  const wrap=document.getElementById("titleChartWrap"); if(!wrap)return;
+  if(masked){wrap.innerHTML='<div class="hint" style="padding:6px 0">Courbe masquée (œil actif).</div>';return;}
+  const H=(store.priceHist&&store.priceHist[ticker])||{};
+  const dates=Object.keys(H).sort();
+  if(dates.length<2){wrap.innerHTML='<div class="hint" style="padding:6px 0">📈 La courbe se construira au fil de tes synchros — l\'appli mémorise les cours à chaque mise à jour.</div>';return;}
+  wrap.innerHTML='<canvas id="titleChart" height="150"></canvas>';
+  const cv=document.getElementById("titleChart"); if(!cv||typeof Chart==="undefined")return;
+  if(titleChartObj)titleChartObj.destroy();
+  titleChartObj=new Chart(cv,{
+    type:"line",
+    data:{labels:dates.map(frDateShort),datasets:[{data:dates.map(d=>H[d]),borderColor:"#0B6B53",backgroundColor:"rgba(11,107,83,.12)",fill:true,tension:.3,pointRadius:2,borderWidth:2}]},
+    options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt(c.parsed.y)}}},scales:{y:{ticks:{callback:v=>fmtAxis(v),font:{size:10}}},x:{ticks:{maxTicksLimit:6,font:{size:9}}}}}
+  });
 }
 
 /* --- Données d'exemple --- */
@@ -1587,6 +1632,8 @@ load();
 renderAll();
 if(store.lock){document.getElementById("lockScreen").style.display="flex";setTimeout(()=>document.getElementById("lockUser").focus(),150);}
 initCloud();
+setSyncStatus();
+setTimeout(autoSync,700);   /* synchro auto silencieuse à l'ouverture */
 </script>
 </body>
 </html>
