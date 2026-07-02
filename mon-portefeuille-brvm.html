@@ -341,6 +341,31 @@ const STOCKS = [
 ];
 const SECTOR_COLORS={"Télécoms":"#0B6B53","Finances":"#1E78C8","Énergie":"#E0A23D","Distribution":"#9B5DE5","Consommation":"#13A36B","Industrie":"#E0533D","Services publics":"#5A6B82","Autre":"#9AA5A1"};
 const stockMap={}; STOCKS.forEach(s=>stockMap[s[0]]={name:s[1],sector:s[2]});
+/* Normalise un nom/code de titre (accents, ponctuation, pays abrégés) */
+function normStock(s){
+  return (s||"").toString().toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
+    .replace(/[’'`().,\-\/]/g," ")
+    .replace(/\bCI\b/g,"COTE D IVOIRE").replace(/\bSN\b/g,"SENEGAL")
+    .replace(/\bBF\b/g,"BURKINA FASO").replace(/\bBN\b/g,"BENIN")
+    .replace(/\bML\b/g,"MALI").replace(/\bNG\b/g,"NIGER").replace(/\bTG\b/g,"TOGO")
+    .replace(/\s+/g," ").trim();
+}
+const STOCK_NORM=STOCKS.map(s=>[s[0],normStock(s[1])]);
+/* Variantes de codes courantes -> code officiel BRVM */
+const TICK_ALIASES={SGBCI:"SGBC",PALMCI:"PALC",PALM:"PALC",SONATEL:"SNTS",ECOBANK:"ETIT",ETI:"ETIT",BICICI:"BICC",BIIC:"BICB",AGL:"SDSC",BOLLORE:"SDSC",SODECI:"SDCC",SODE:"SDCC",SAPH:"SPHC",SOGB:"SOGC",SITAB:"STBC",SETAO:"STAC",FILTISAC:"FTSC",UNIWAX:"UNXC",SICABLE:"CABC",SUCRIVOIRE:"SCRC",SAFCA:"SAFC",SERVAIR:"ABJC",NSIA:"NSBC",ORAGROUP:"ORGT",TRACTAFRIC:"PRSC",ERIUM:"SIVC",VIVO:"SHEC",NESTLE:"NTLC",TOTAL:"TTLC"};
+/* Retrouve le code BRVM officiel à partir d'un code, d'un nom ou d'une variante */
+function resolveTicker(x){
+  if(!x)return x;
+  const up=x.toString().toUpperCase().trim();
+  if(stockMap[up])return up;                 // déjà un code officiel
+  if(TICK_ALIASES[up])return TICK_ALIASES[up];
+  const nx=normStock(x);
+  const first=nx.split(" ")[0];
+  if(TICK_ALIASES[first])return TICK_ALIASES[first];
+  for(const [tk,nm] of STOCK_NORM){ if(nm===nx||nm.startsWith(nx)||nx.startsWith(nm))return tk; }
+  if(first&&first.length>=3){ for(const [tk,nm] of STOCK_NORM){ if(nm.split(" ")[0]===first)return tk; } }
+  return up;
+}
 
 /* ================= ÉTAT (multi-portefeuilles) ================= */
 const DB_KEY="brvm_portfolio_v2";
@@ -446,7 +471,7 @@ async function syncPrices(btn){
     const meta=data._meta||{};
     let ok=0; const fail=[]; const dates=[];
     for(const p of held){
-      const row=data[p.ticker];
+      const row=data[p.ticker]||data[resolveTicker(p.ticker)];
       if(row&&+row.actuel>0){
         db.prices[p.ticker]={actuel:+row.actuel,veille:+row.veille||+row.actuel,date:row.date||""};
         if(row.date)dates.push(row.date);
@@ -1014,15 +1039,18 @@ function comboPick(id,ticker){
   document.getElementById(id+'_list').style.display='none';
 }
 function comboPickCustom(id){
-  const cust=document.getElementById(id+'_q').value.trim().toUpperCase();
-  document.getElementById(id).value=cust;
-  document.getElementById(id+'_q').value=cust;
+  const raw=document.getElementById(id+'_q').value.trim();
+  const r=resolveTicker(raw);                 // reconnaît un nom/variante connu -> vrai code
+  const known=!!stockMap[r];
+  document.getElementById(id).value=known?r:raw.toUpperCase();
+  document.getElementById(id+'_q').value=known?(stockMap[r].name+' ('+r+')'):raw.toUpperCase();
   document.getElementById(id+'_list').style.display='none';
 }
-/* Récupère le ticker choisi (liste ou saisie libre) */
+/* Récupère le ticker choisi (liste ou saisie libre), normalisé si possible */
 function comboValue(id){
   let v=document.getElementById(id).value;
   if(!v){const q=document.getElementById(id+'_q'); if(q&&q.value.trim())v=q.value.trim().toUpperCase();}
+  if(v){const r=resolveTicker(v); if(stockMap[r])v=r;}
   return v;
 }
 
