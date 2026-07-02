@@ -460,16 +460,43 @@ async function fetchCours(){
   if(!data){ try{ const res=await fetchTimeout(COURS_URL+"?t="+Date.now(),8000); if(res.ok)data=await res.json(); }catch(e){} }
   return data?{data,via}:null;
 }
+/* Mémorise le cours de clôture de chaque titre (construit l'historique au fil du temps) */
+function recordPriceHist(data){
+  if(!data)return;
+  if(!store.priceHist)store.priceHist={};
+  const H=store.priceHist;
+  const prevDay=d=>{const x=new Date(d+"T00:00");x.setDate(x.getDate()-1);return x.toISOString().slice(0,10);};
+  for(const k in data){
+    if(k==="_meta")continue;
+    const r=data[k]; const cur=+ (r&&r.actuel); if(!(cur>0))continue;
+    const d=(r.date||today());
+    if(!H[k])H[k]={};
+    H[k][d]=cur;
+    const pv=+r.veille; if(pv>0){const pd=prevDay(d); if(H[k][pd]==null)H[k][pd]=pv;}
+    const ds=Object.keys(H[k]); if(ds.length>400){ds.sort();ds.slice(0,ds.length-400).forEach(x=>delete H[k][x]);}
+  }
+  try{localStorage.setItem(DB_KEY,JSON.stringify(store));}catch(e){}
+}
+/* Variation d'un titre sur N jours, depuis l'historique mémorisé. Renvoie % ou null */
+function varPct(ticker,cur,days){
+  const H=store.priceHist&&store.priceHist[ticker]; if(!H)return null;
+  const c=new Date(); c.setDate(c.getDate()-days); const cutoff=c.toISOString().slice(0,10);
+  const ds=Object.keys(H).filter(d=>d<=cutoff).sort();
+  if(!ds.length)return null;
+  const ref=H[ds[ds.length-1]];
+  return ref>0?(cur-ref)/ref*100:null;
+}
 /* Écran : tous les cours de la BRVM (au-delà de ton portefeuille) */
 async function openMarket(){
   openSheet(`<h3>📊 Tous les cours BRVM</h3><div class="empty" style="padding:26px">⏳ Chargement des cours du marché…</div>`);
   const got=await fetchCours();
   if(!got){openSheet(`<h3>📊 Tous les cours BRVM</h3><div class="empty" style="padding:20px">Cours indisponibles pour le moment. Réessaie dans un instant.</div><button class="btn alt" style="margin-top:12px" onclick="openMarket()">↻ Réessayer</button>`);return;}
   const data=got.data, meta=data._meta||{};
+  recordPriceHist(data);
+  const heldSet=new Set(); positions().forEach(p=>{heldSet.add(p.ticker);heldSet.add(resolveTicker(p.ticker));});
   const list=Object.keys(data).filter(k=>k!=="_meta"&&data[k]&&+data[k].actuel>0).map(k=>{
     const r=data[k], cur=+r.actuel||0, prev=+r.veille||cur, dp=prev>0?(cur-prev)/prev*100:0;
-    const held=positions().some(p=>p.ticker===k||resolveTicker(p.ticker)===k);
-    return {tk:k,name:stockMap[k]?.name||k,cur,dp,held};
+    return {tk:k,name:stockMap[k]?.name||k,cur,dp,wv:varPct(k,cur,7),held:heldSet.has(k)};
   }).sort((a,b)=>a.name.localeCompare(b.name));
   window._market=list; // pour le tri
   renderMarket("nom");
@@ -477,22 +504,27 @@ async function openMarket(){
 function renderMarket(sortBy){
   const list=window._market||[];
   let arr=[...list];
+  const nn=v=>v==null?-Infinity:v;
   if(sortBy==="hausse")arr.sort((a,b)=>b.dp-a.dp);
   else if(sortBy==="baisse")arr.sort((a,b)=>a.dp-b.dp);
+  else if(sortBy==="7j")arr.sort((a,b)=>nn(b.wv)-nn(a.wv));
   else arr.sort((a,b)=>a.name.localeCompare(b.name));
+  const wvTxt=w=>w==null?'<span style="color:var(--muted)">7j —</span>':`7j <b class="${w>0?'pos':(w<0?'neg':'')}">${(w>0?'▲':(w<0?'▼':'▬'))}${(w>=0?'+':'')+w.toFixed(1)}%</b>`;
   const rows=arr.map(s=>{
-    const cls=s.dp>0?"pos":(s.dp<0?"neg":""), arr2=s.dp>0?"▲":(s.dp<0?"▼":"▬");
+    const cls=s.dp>0?"pos":(s.dp<0?"neg":""), a2=s.dp>0?"▲":(s.dp<0?"▼":"▬");
     return `<div class="row" ${s.held?'style="background:var(--green-l)"':''}>
       <div class="tick" style="width:46px;height:34px;font-size:11px">${s.tk}</div>
       <div class="grow"><div class="nm" style="font-size:14px">${s.name}${s.held?' <span class="tag" style="font-size:9px">portefeuille</span>':''}</div>
-        <div class="sub" style="font-size:11px">${s.tk}</div></div>
+        <div class="sub" style="font-size:11px">${s.tk} · ${wvTxt(s.wv)}</div></div>
       <div class="right"><div class="val">${fmtShort(s.cur)}</div>
-        <div class="chg ${cls}" style="font-size:11.5px">${arr2} ${(s.dp>=0?"+":"")+s.dp.toFixed(1)}%</div></div>
+        <div class="chg ${cls}" style="font-size:11.5px">${a2} ${(s.dp>=0?"+":"")+s.dp.toFixed(1)}% <span style="color:var(--muted);font-weight:400">1j</span></div></div>
     </div>`;}).join("");
-  const seg=v=>`<button onclick="renderMarket('${v}')" style="flex:1;padding:8px;border-radius:9px;font-weight:600;font-size:13px;${sortBy===v?'background:#fff;color:var(--green);box-shadow:0 1px 4px rgba(0,0,0,.08)':'color:var(--muted)'}">${v==='nom'?'A→Z':v==='hausse'?'▲ Hausses':'▼ Baisses'}</button>`;
+  const seg=v=>`<button onclick="renderMarket('${v}')" style="flex:1;padding:8px 4px;border-radius:9px;font-weight:600;font-size:12.5px;${sortBy===v?'background:#fff;color:var(--green);box-shadow:0 1px 4px rgba(0,0,0,.08)':'color:var(--muted)'}">${v==='nom'?'A→Z':v==='hausse'?'▲ 1j':v==='baisse'?'▼ 1j':'7 jours'}</button>`;
+  const anyWv=(window._market||[]).some(s=>s.wv!=null);
   openSheet(`<h3>📊 Tous les cours BRVM <span class="hint" style="font-weight:400">(${(window._market||[]).length} titres)</span></h3>
-    <div class="seg" style="margin:8px 0 4px">${seg('nom')}${seg('hausse')}${seg('baisse')}</div>
-    <div class="card" style="padding:2px 14px;max-height:62vh;overflow:auto">${rows||'<div class="empty">Aucun cours.</div>'}</div>`);
+    <div class="seg" style="margin:8px 0 4px">${seg('nom')}${seg('hausse')}${seg('baisse')}${seg('7j')}</div>
+    ${anyWv?'':'<div class="hint" style="margin:2px 0 8px">ℹ️ La variation <b>7 jours</b> se construit au fil de tes synchros — reviens dans quelques jours, elle se remplira toute seule.</div>'}
+    <div class="card" style="padding:2px 14px;max-height:60vh;overflow:auto">${rows||'<div class="empty">Aucun cours.</div>'}</div>`);
 }
 async function syncPrices(btn){
   const held=positions(); if(!held.length){alert("Ajoute d'abord des positions.");return;}
@@ -501,6 +533,7 @@ async function syncPrices(btn){
     const got=await fetchCours();
     if(!got)throw new Error("cours indisponibles");
     const data=got.data, via=got.via;
+    recordPriceHist(data);
     const meta=data._meta||{};
     let ok=0; const fail=[]; const dates=[];
     for(const p of held){
@@ -1387,6 +1420,7 @@ function posDetail(ticker){
       <div class="kv"><span class="k">Titres détenus</span><b>${p.qty.toLocaleString("fr-FR")}</b></div>
       <div class="kv"><span class="k">Prix de revient moyen (PRU)</span><b>${fmt(p.pru)}</b></div>
       <div class="kv"><span class="k">Cours actuel</span><b>${fmt(p.cur)}</b></div>
+      <div class="kv"><span class="k">Variation du titre</span><b>${(()=>{const d=p.prev>0?(p.cur-p.prev)/p.prev*100:0,w=varPct(ticker,p.cur,7),f=(v,l)=>v==null?`<span style="color:var(--muted)">${l} —</span>`:`<span class="${v>0?'pos':(v<0?'neg':'')}">${(v>0?'▲':v<0?'▼':'▬')}${(v>=0?'+':'')+v.toFixed(1)}% ${l}</span>`;return f(d,'1j')+' · '+f(w,'7j');})()}</b></div>
       <div class="kv"><span class="k">Montant investi</span><b>${fmt(p.invested)}</b></div>
       <div class="kv"><span class="k">Valeur actuelle</span><b>${fmt(p.value)}</b></div>
       <div class="kv"><span class="k">Plus/Moins-value (brute)</span><b class="${c}">${sign(p.pl)} (${p.pl>=0?"+":""}${p.plPct.toFixed(1)}%)</b></div>
