@@ -238,8 +238,8 @@
     <div id="compteWrap"></div>
   </div>
   <div class="card">
-    <h3 style="font-size:15px;margin-bottom:4px">Répartition par secteur</h3>
-    <div class="muted" style="font-size:12.5px;margin-bottom:8px">Bien répartir réduit le risque.</div>
+    <h3 style="font-size:15px;margin-bottom:4px">Répartition par titre</h3>
+    <div class="muted" style="font-size:12.5px;margin-bottom:8px">Poids de chaque ligne dans ton portefeuille. Bien répartir réduit le risque.</div>
     <div id="sectorWrap"><canvas id="sectorChart" height="200"></canvas></div>
     <div class="legend" id="sectorLegend"></div>
   </div>
@@ -340,6 +340,8 @@ const STOCKS = [
   ["SDCC","SODECI Côte d'Ivoire","Services publics"]
 ];
 const SECTOR_COLORS={"Télécoms":"#0B6B53","Finances":"#1E78C8","Énergie":"#E0A23D","Distribution":"#9B5DE5","Consommation":"#13A36B","Industrie":"#E0533D","Services publics":"#5A6B82","Autre":"#9AA5A1"};
+/* Palette de couleurs distinctes pour la répartition par titre */
+const PALETTE=["#0B6B53","#1E78C8","#E0A23D","#9B5DE5","#13A36B","#E0533D","#5A6B82","#F15BB5","#00BBF9","#8AC926","#FF924C","#6A4C93","#1982C4","#C1121F","#2A9D8F","#E76F51"];
 const stockMap={}; STOCKS.forEach(s=>stockMap[s[0]]={name:s[1],sector:s[2]});
 /* Normalise un nom/code de titre (accents, ponctuation, pays abrégés) */
 function normStock(s){
@@ -447,27 +449,58 @@ async function liveScrape(){
   }
   return null;
 }
+/* Récupère les cours (Worker -> relais direct -> fichier robot). Renvoie {data,via} ou null */
+async function fetchCours(){
+  const live=(store.liveUrl||"").trim();
+  let data=null, via="robot";
+  if(live){
+    try{ const r=await fetchTimeout(live+(live.indexOf("?")>=0?"&":"?")+"t="+Date.now(),8000); if(r.ok){data=await r.json(); via="direct";} }catch(e){}
+  }
+  if(!data){ data=await liveScrape(); if(data)via="direct"; }
+  if(!data){ try{ const res=await fetchTimeout(COURS_URL+"?t="+Date.now(),8000); if(res.ok)data=await res.json(); }catch(e){} }
+  return data?{data,via}:null;
+}
+/* Écran : tous les cours de la BRVM (au-delà de ton portefeuille) */
+async function openMarket(){
+  openSheet(`<h3>📊 Tous les cours BRVM</h3><div class="empty" style="padding:26px">⏳ Chargement des cours du marché…</div>`);
+  const got=await fetchCours();
+  if(!got){openSheet(`<h3>📊 Tous les cours BRVM</h3><div class="empty" style="padding:20px">Cours indisponibles pour le moment. Réessaie dans un instant.</div><button class="btn alt" style="margin-top:12px" onclick="openMarket()">↻ Réessayer</button>`);return;}
+  const data=got.data, meta=data._meta||{};
+  const list=Object.keys(data).filter(k=>k!=="_meta"&&data[k]&&+data[k].actuel>0).map(k=>{
+    const r=data[k], cur=+r.actuel||0, prev=+r.veille||cur, dp=prev>0?(cur-prev)/prev*100:0;
+    const held=positions().some(p=>p.ticker===k||resolveTicker(p.ticker)===k);
+    return {tk:k,name:stockMap[k]?.name||k,cur,dp,held};
+  }).sort((a,b)=>a.name.localeCompare(b.name));
+  window._market=list; // pour le tri
+  renderMarket("nom");
+}
+function renderMarket(sortBy){
+  const list=window._market||[];
+  let arr=[...list];
+  if(sortBy==="hausse")arr.sort((a,b)=>b.dp-a.dp);
+  else if(sortBy==="baisse")arr.sort((a,b)=>a.dp-b.dp);
+  else arr.sort((a,b)=>a.name.localeCompare(b.name));
+  const rows=arr.map(s=>{
+    const cls=s.dp>0?"pos":(s.dp<0?"neg":""), arr2=s.dp>0?"▲":(s.dp<0?"▼":"▬");
+    return `<div class="row" ${s.held?'style="background:var(--green-l)"':''}>
+      <div class="tick" style="width:46px;height:34px;font-size:11px">${s.tk}</div>
+      <div class="grow"><div class="nm" style="font-size:14px">${s.name}${s.held?' <span class="tag" style="font-size:9px">portefeuille</span>':''}</div>
+        <div class="sub" style="font-size:11px">${s.tk}</div></div>
+      <div class="right"><div class="val">${fmtShort(s.cur)}</div>
+        <div class="chg ${cls}" style="font-size:11.5px">${arr2} ${(s.dp>=0?"+":"")+s.dp.toFixed(1)}%</div></div>
+    </div>`;}).join("");
+  const seg=v=>`<button onclick="renderMarket('${v}')" style="flex:1;padding:8px;border-radius:9px;font-weight:600;font-size:13px;${sortBy===v?'background:#fff;color:var(--green);box-shadow:0 1px 4px rgba(0,0,0,.08)':'color:var(--muted)'}">${v==='nom'?'A→Z':v==='hausse'?'▲ Hausses':'▼ Baisses'}</button>`;
+  openSheet(`<h3>📊 Tous les cours BRVM <span class="hint" style="font-weight:400">(${(window._market||[]).length} titres)</span></h3>
+    <div class="seg" style="margin:8px 0 4px">${seg('nom')}${seg('hausse')}${seg('baisse')}</div>
+    <div class="card" style="padding:2px 14px;max-height:62vh;overflow:auto">${rows||'<div class="empty">Aucun cours.</div>'}</div>`);
+}
 async function syncPrices(btn){
   const held=positions(); if(!held.length){alert("Ajoute d'abord des positions.");return;}
   const orig=btn?btn.textContent:""; if(btn){btn.textContent="⏳ Synchronisation…";btn.disabled=true;}
   try{
-    const live=(store.liveUrl||"").trim();
-    let data=null, via="robot";
-    if(live){
-      try{
-        const r=await fetchTimeout(live+(live.indexOf("?")>=0?"&":"?")+"t="+Date.now(),8000);
-        if(r.ok){data=await r.json(); via="direct";}
-      }catch(e){data=null;}
-    }
-    if(!data){                       // lecture directe BRVM via relais public
-      data=await liveScrape();
-      if(data)via="direct";
-    }
-    if(!data){                       // repli : dernier fichier du robot GitHub
-      const res=await fetchTimeout(COURS_URL+"?t="+Date.now(),8000);
-      if(!res.ok)throw new Error("HTTP "+res.status);
-      data=await res.json();
-    }
+    const got=await fetchCours();
+    if(!got)throw new Error("cours indisponibles");
+    const data=got.data, via=got.via;
     const meta=data._meta||{};
     let ok=0; const fail=[]; const dates=[];
     for(const p of held){
@@ -853,22 +886,23 @@ function drawAnalyse(){
   drawExpert();
   drawCompte();
   const t=totals();
-  const bySector={};
-  t.ps.forEach(p=>{const s=stockMap[p.ticker]?.sector||"Autre";bySector[s]=(bySector[s]||0)+p.value;});
-  const labels=Object.keys(bySector), data=labels.map(l=>bySector[l]);
-  const colors=labels.map(l=>SECTOR_COLORS[l]||"#999");
+  const ps=[...t.ps].sort((a,b)=>b.value-a.value);
+  const labels=ps.map(p=>stockMap[p.ticker]?.name||p.ticker);
+  const data=ps.map(p=>p.value);
+  const colors=ps.map((p,i)=>PALETTE[i%PALETTE.length]);
   const leg=document.getElementById("sectorLegend");
-  if(!labels.length){
+  if(!ps.length){
     document.getElementById("sectorWrap").innerHTML=`<div class="empty">Ajoute des positions pour voir l'analyse.</div>`;
     leg.innerHTML="";document.getElementById("concentration").innerHTML="";document.getElementById("perfList").innerHTML="";return;
   }
+  if(!document.getElementById("sectorChart"))document.getElementById("sectorWrap").innerHTML='<canvas id="sectorChart" height="200"></canvas>';
   if(sectorChartObj)sectorChartObj.destroy();
   sectorChartObj=new Chart(document.getElementById("sectorChart"),{
     type:"doughnut",
     data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:2,borderColor:"#fff"}]},
-    options:{plugins:{legend:{display:false}},cutout:"62%"}
+    options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.label+" : "+fmt(c.parsed)}}},cutout:"62%"}
   });
-  leg.innerHTML=labels.map((l,i)=>`<div class="li"><span class="dot" style="background:${colors[i]}"></span><span class="grow">${l}</span><b>${(data[i]/t.value*100).toFixed(0)}%</b></div>`).join("");
+  leg.innerHTML=ps.map((p,i)=>`<div class="li"><span class="dot" style="background:${colors[i]}"></span><span class="grow">${labels[i]}</span><b>${(data[i]/t.value*100).toFixed(0)}%</b></div>`).join("");
 
   // concentration
   const sorted=[...t.ps].sort((a,b)=>b.value-a.value);
@@ -1155,6 +1189,7 @@ function openPrices(){
   if(!held.length){openSheet(`<h3>Cours du jour</h3><div class="empty">Ajoute d'abord des positions.</div>`);return;}
   openSheet(`<h3>Cours du jour</h3>
     <button class="btn" onclick="syncPrices(this)">🔄 Synchroniser les cours (robot BRVM)</button>
+    <button class="btn alt" style="margin-top:8px" onclick="openMarket()">📊 Voir tous les cours de la BRVM</button>
     <div class="hint" style="text-align:center;margin:8px 0 2px">Le robot installé sur ton dépôt récupère les cours du marché et les met à jour tout seul en séance. Ici tu importes simplement le dernier cours connu (avec sa date).</div>
     <div class="hint" style="text-align:center;margin:10px 0">— ou saisir / corriger manuellement —</div>
     <label>Indice BRVM Composite <span class="hint">Optionnel — pour te comparer au marché (visible sur brvm.org)</span></label>
