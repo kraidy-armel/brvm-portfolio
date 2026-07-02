@@ -3,13 +3,16 @@
    - Librairies CDN : cache d'abord -> chargement rapide + hors-ligne.
    - Cours en direct (relais, github) : NON interceptés -> données toujours fraîches.
    Change CACHE_VERSION pour forcer une mise à jour du cache. */
-const CACHE_VERSION = "brvm-v1";
+const CACHE_VERSION = "brvm-v2";
 const CORE = ["./", "./index.html", "./mon-portefeuille-brvm.html",
               "./icon-192.png", "./icon-512.png", "./manifest.webmanifest"];
 
 self.addEventListener("install", e => {
+  // On ne bloque pas l'installation si un fichier manque (réseau) : cache "au mieux"
   e.waitUntil(
-    caches.open(CACHE_VERSION).then(c => c.addAll(CORE)).then(() => self.skipWaiting())
+    caches.open(CACHE_VERSION).then(c =>
+      Promise.all(CORE.map(u => c.add(u).catch(() => null)))
+    ).then(() => self.skipWaiting())
   );
 });
 
@@ -29,10 +32,12 @@ self.addEventListener("fetch", e => {
   if (url.origin === location.origin) {
     e.respondWith(
       fetch(req).then(res => {
-        const copy = res.clone();
-        caches.open(CACHE_VERSION).then(c => c.put(req, copy));
+        if (res && res.ok) {                       // ne cache QUE les réponses valides
+          const copy = res.clone();
+          caches.open(CACHE_VERSION).then(c => c.put(req, copy));
+        }
         return res;
-      }).catch(() => caches.match(req).then(m => m || caches.match("./mon-portefeuille-brvm.html")))
+      }).catch(() => caches.match(req).then(m => m || caches.match("./mon-portefeuille-brvm.html") || caches.match("./index.html")))
     );
     return;
   }
@@ -41,8 +46,10 @@ self.addEventListener("fetch", e => {
   if (/cdnjs\.cloudflare\.com|cdn\.jsdelivr\.net/.test(url.hostname)) {
     e.respondWith(
       caches.match(req).then(m => m || fetch(req).then(res => {
-        const copy = res.clone();
-        caches.open(CACHE_VERSION).then(c => c.put(req, copy));
+        if (res && res.ok) {
+          const copy = res.clone();
+          caches.open(CACHE_VERSION).then(c => c.put(req, copy));
+        }
         return res;
       }))
     );
