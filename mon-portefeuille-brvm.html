@@ -56,6 +56,8 @@
   .twin .k{font-size:11.5px;opacity:.8} .twin .v{font-size:16px;font-weight:600;margin-top:2px}
 
   .sect-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:18px 4px 8px}
+  .acc-head{cursor:pointer;-webkit-user-select:none;user-select:none}
+  .acc-ch{display:inline-block;width:16px;color:var(--green)}
 
   /* Position rows */
   .row{display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--line)}
@@ -189,11 +191,13 @@
   <div class="card" id="positions"></div>
 
   <div class="topbar" style="margin-top:18px">
-    <div class="sect-title" style="margin:0">Historique des opérations</div>
+    <div class="sect-title acc-head" style="margin:0" onclick="toggleAcc('histo')"><span class="acc-ch" id="accch_histo">▸</span>Historique des opérations <span id="accn_histo" style="font-weight:500;text-transform:none;letter-spacing:0"></span></div>
   </div>
-  <input id="txSearch" placeholder="🔍 Rechercher (société, ticker, libellé, date…)" oninput="renderPortfolio()" style="margin-bottom:10px">
-  <div class="card" id="txList"></div>
-  <button class="btn" style="margin-top:6px" onclick="openTx()">＋ Ajouter une opération</button>
+  <div id="accbody_histo" style="display:none">
+    <input id="txSearch" placeholder="🔍 Rechercher (société, ticker, libellé, date…)" oninput="renderPortfolio()" style="margin-bottom:10px">
+    <div class="card" id="txList"></div>
+    <button class="btn" style="margin-top:6px" onclick="openTx()">＋ Ajouter une opération</button>
+  </div>
 </section>
 
 <!-- DIVIDENDES -->
@@ -797,6 +801,16 @@ function drawEvo(){
   });
 }
 
+/* --- Accordéons (état mémorisé sur l'appareil) --- */
+let accOpen={rapporte:false,histo:false};
+try{Object.assign(accOpen,JSON.parse(localStorage.getItem("brvm_acc")||"{}"));}catch(e){}
+function syncAcc(k){
+  const b=document.getElementById("accbody_"+k),c=document.getElementById("accch_"+k);
+  if(b)b.style.display=accOpen[k]?"block":"none";
+  if(c)c.textContent=accOpen[k]?"▾":"▸";
+}
+function toggleAcc(k){accOpen[k]=!accOpen[k];try{localStorage.setItem("brvm_acc",JSON.stringify(accOpen));}catch(e){}syncAcc(k);}
+
 function renderPortfolio(){
   const t=totals();
   document.getElementById("positions").innerHTML=t.ps.length?t.ps.map(p=>posRow(p,true)).join(""):`<div class="empty"><div class="ico">📊</div>Ton portefeuille est vide.</div>`;
@@ -815,6 +829,8 @@ function renderPortfolio(){
       <div class="right"><div class="val">${fmtShort(t.qty*t.price)}</div>
         <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:3px"><button class="del" style="color:var(--green)" onclick="openTx('${t.id}')">Modifier</button><button class="del" onclick="delTx('${t.id}')">Suppr.</button></div></div>
     </div>`;}).join(""):`<div class="empty" style="padding:18px">${q?"Aucun résultat pour « "+q+" ».":"Aucune opération."}</div>`;
+  const an=document.getElementById("accn_histo"); if(an)an.textContent="("+total+")";
+  syncAcc("histo");
 }
 
 function renderDiv(){
@@ -1044,7 +1060,8 @@ function drawFiscal(){
     .filter(l=>Math.abs(l.tot)>0.5).sort((a,b)=>b.tot-a.tot);
   const maxAbs=Math.max(1,...parTitre.map(l=>Math.abs(l.tot)));
   const medals=["🥇","🥈","🥉"];
-  html+='<div class="sect-title" style="margin:22px 0 4px">Ce que chaque titre m\'a rapporté</div>'
+  html+='<div class="sect-title acc-head" style="margin:22px 0 4px" onclick="toggleAcc(\'rapporte\')"><span class="acc-ch" id="accch_rapporte">'+(accOpen.rapporte?"▾":"▸")+'</span>Ce que chaque titre m\'a rapporté <span style="font-weight:500;text-transform:none;letter-spacing:0">('+parTitre.length+')</span></div>'
+    +'<div id="accbody_rapporte" style="display:'+(accOpen.rapporte?"block":"none")+'">'
     +'<div class="hint" style="margin-bottom:10px">Gains <b>réalisés</b> (ventes) + <b>dividendes</b> encaissés, sur toute la durée. Hors plus-value latente des titres encore détenus.</div>'
     +'<div class="card" style="padding:2px 14px">'
     +parTitre.map((l,i)=>{
@@ -1062,7 +1079,8 @@ function drawFiscal(){
         </div>`;
       }).join("")
     +'</div>'
-    +'<div class="hint" style="margin-top:10px">💡 La plus-value réalisée = gain encaissé à la vente (prix de vente − coût moyen). C\'est la base de l\'impôt sur les plus-values.</div>';
+    +'<div class="hint" style="margin-top:10px">💡 La plus-value réalisée = gain encaissé à la vente (prix de vente − coût moyen). C\'est la base de l\'impôt sur les plus-values.</div>'
+    +'</div>';
   wrap.innerHTML=html;
   if(!masked)drawFiscalChart(R.byYear);
 }
@@ -1473,11 +1491,27 @@ function drawTitleChart(ticker){
   wrap.innerHTML='<canvas id="titleChart" height="150"></canvas>';
   const cv=document.getElementById("titleChart"); if(!cv||typeof Chart==="undefined")return;
   if(titleChartObj)titleChartObj.destroy();
+  /* Marqueurs achats (▲ vert) / ventes (◆ rouge), placés sur la courbe au prix réel de l'opération */
+  const mkBuy=new Array(dates.length).fill(null), mkSell=new Array(dates.length).fill(null), mkTip={};
+  db.tx.filter(t=>t.ticker===ticker).sort((a,b)=>a.date.localeCompare(b.date)).forEach(t=>{
+    let i=dates.findIndex(d=>d>=t.date), note="";
+    if(i<0){i=dates.length-1;note=" (après la fin de la courbe)";}
+    else if(i===0&&t.date<dates[0]){note=" (avant le début de la courbe)";}
+    const buy=t.type==="achat", arr=buy?mkBuy:mkSell, key=(buy?"b":"s")+i;
+    if(arr[i]==null)arr[i]=+t.price||0;
+    (mkTip[key]=mkTip[key]||[]).push((buy?"▲ Achat ":"◆ Vente ")+t.qty+" × "+fmt(t.price)+" le "+frDate(t.date)+note);
+  });
+  const hasMk=mkBuy.some(v=>v!=null)||mkSell.some(v=>v!=null);
   titleChartObj=new Chart(cv,{
     type:"line",
-    data:{labels:dates.map(frDateShort),datasets:[{data:dates.map(d=>H[d]),borderColor:"#0B6B53",backgroundColor:"rgba(11,107,83,.12)",fill:true,tension:.3,pointRadius:2,borderWidth:2}]},
-    options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt(c.parsed.y)}}},scales:{y:{ticks:{callback:v=>fmtAxis(v),font:{size:10}}},x:{ticks:{maxTicksLimit:6,font:{size:9}}}}}
+    data:{labels:dates.map(frDateShort),datasets:[
+      {data:dates.map(d=>H[d]),borderColor:"#0B6B53",backgroundColor:"rgba(11,107,83,.12)",fill:true,tension:.3,pointRadius:2,borderWidth:2,order:2},
+      {data:mkBuy,mk:"b",showLine:false,pointStyle:"triangle",pointRadius:7,pointHoverRadius:9,pointBackgroundColor:"#13A36B",pointBorderColor:"#0B6B53",pointBorderWidth:1.5,order:1},
+      {data:mkSell,mk:"s",showLine:false,pointStyle:"rectRot",pointRadius:7,pointHoverRadius:9,pointBackgroundColor:"#E0533D",pointBorderColor:"#B03A28",pointBorderWidth:1.5,order:1}
+    ]},
+    options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.mk?(mkTip[c.dataset.mk+c.dataIndex]||[]):fmt(c.parsed.y)}}},scales:{y:{ticks:{callback:v=>fmtAxis(v),font:{size:10}}},x:{ticks:{maxTicksLimit:6,font:{size:9}}}}}
   });
+  if(hasMk)wrap.insertAdjacentHTML("beforeend",'<div class="hint" style="margin-top:4px">▲ <b style="color:#13A36B">achats</b> · ◆ <b style="color:var(--neg)">ventes</b> — posés sur la courbe au prix réel de ton opération. Touche un marqueur pour le détail.</div>');
 }
 
 /* --- Données d'exemple --- */
