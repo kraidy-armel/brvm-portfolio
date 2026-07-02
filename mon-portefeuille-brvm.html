@@ -606,12 +606,16 @@ function renderAll(){renderHome();renderPortfolio();renderDiv();renderAgenda();i
 
 function posRow(p,tappable){
   const c=p.pl>=0?"pos":"neg";
+  const dayPct=p.prev>0?(p.cur-p.prev)/p.prev*100:0;
+  const dArrow=dayPct>0?"▲":(dayPct<0?"▼":"▬");
+  const dCls=dayPct>0?"pos":(dayPct<0?"neg":"");
   return `<div class="row" ${tappable?`onclick="posDetail('${p.ticker}')"`:""}>
     <div class="tick">${p.ticker.slice(0,4)}</div>
     <div class="grow"><div class="nm">${stockMap[p.ticker]?.name||p.ticker}</div>
-      <div class="sub">${p.qty.toLocaleString("fr-FR")} titres · PRU ${fmtShort(p.pru)}</div></div>
+      <div class="sub">${p.qty.toLocaleString("fr-FR")} titres · PRU ${fmtShort(p.pru)} · cours ${fmtShort(p.cur)}</div></div>
     <div class="right"><div class="val">${fmtShort(p.value)}</div>
-      <div class="chg ${c}">${p.pl>=0?"+":""}${p.plPct.toFixed(1)}%</div></div>
+      <div class="chg ${c}">${p.pl>=0?"+":""}${p.plPct.toFixed(1)}%</div>
+      <div class="chg ${dCls}" style="font-size:11px;opacity:.85">${dArrow} ${(dayPct>=0?"+":"")+dayPct.toFixed(1)}% auj.</div></div>
   </div>`;
 }
 
