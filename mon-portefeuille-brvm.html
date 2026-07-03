@@ -72,7 +72,7 @@
 
   .btn{display:block;width:100%;background:var(--green);color:#fff;padding:14px;border-radius:14px;font-weight:600;font-size:15px;text-align:center}
   .btn.alt{background:var(--green-l);color:var(--green)}
-  .btn.ghost{background:#fff;color:var(--green);border:1.5px solid var(--green-l)}
+  .btn.ghost{background:var(--card);color:var(--green);border:1.5px solid var(--green-l)}
   .btn.sm{padding:10px;font-size:14px}
   .btn-row{display:flex;gap:10px}
   .btn-row .btn{margin:0}
@@ -87,7 +87,7 @@
   /* Bottom nav */
   nav{
     position:fixed;bottom:0;left:0;right:0;max-width:780px;margin:0 auto;
-    background:#fff;border-top:1px solid var(--line);display:flex;
+    background:var(--card);border-top:1px solid var(--line);display:flex;
     padding:8px 4px calc(8px + env(safe-area-inset-bottom));z-index:20;
   }
   nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);font-size:10.5px;font-weight:600;padding:4px}
@@ -97,16 +97,16 @@
   /* Modal */
   .scrim{position:fixed;inset:0;background:rgba(16,34,30,.5);display:none;z-index:40;align-items:flex-end;justify-content:center}
   .scrim.open{display:flex}
-  .sheet{background:#fff;width:100%;max-width:780px;border-radius:22px 22px 0 0;padding:18px 18px calc(20px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto;animation:up .28s ease}
+  .sheet{background:var(--card);width:100%;max-width:780px;border-radius:22px 22px 0 0;padding:18px 18px calc(20px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto;animation:up .28s ease}
   @keyframes up{from{transform:translateY(100%)}to{transform:none}}
   .sheet h3{font-size:18px;margin-bottom:4px}
   .grip{width:40px;height:4px;background:var(--line);border-radius:3px;margin:0 auto 14px}
   label{display:block;font-size:13px;font-weight:600;margin:12px 0 5px;color:var(--ink)}
   .hint{font-size:12px;color:var(--muted);font-weight:400;margin-top:3px}
-  input,select{width:100%;padding:13px;border:1.5px solid var(--line);border-radius:12px;font-size:16px;font-family:inherit;background:#fff;color:var(--ink)}
+  input,select{width:100%;padding:13px;border:1.5px solid var(--line);border-radius:12px;font-size:16px;font-family:inherit;background:var(--card);color:var(--ink)}
   input:focus,select:focus{outline:none;border-color:var(--green)}
   .combo{position:relative}
-  .combo-list{position:absolute;left:0;right:0;top:100%;z-index:10;background:#fff;border:1.5px solid var(--green);border-radius:12px;margin-top:5px;max-height:240px;overflow:auto;box-shadow:0 8px 24px rgba(16,40,33,.16);display:none}
+  .combo-list{position:absolute;left:0;right:0;top:100%;z-index:10;background:var(--card);border:1.5px solid var(--green);border-radius:12px;margin-top:5px;max-height:240px;overflow:auto;box-shadow:0 8px 24px rgba(16,40,33,.16);display:none}
   .combo-item{padding:12px 14px;font-size:14.5px;cursor:pointer;border-bottom:1px solid var(--line)}
   .combo-item:last-child{border-bottom:none}
   .combo-item:active,.combo-item:hover{background:var(--green-l)}
@@ -114,7 +114,7 @@
   .combo-item .tk{color:var(--muted);font-size:12.5px}
   .seg{display:flex;background:var(--bg);border-radius:12px;padding:4px;gap:4px}
   .seg button{flex:1;padding:10px;border-radius:9px;font-weight:600;color:var(--muted);font-size:14px}
-  .seg button.on{background:#fff;color:var(--green);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+  .seg button.on{background:var(--card);color:var(--green);box-shadow:0 1px 4px rgba(0,0,0,.08)}
 
   .kv{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
   .kv:last-child{border:none}
@@ -147,6 +147,22 @@
   .scard .hr .neg{color:#FFC2BD}
   .scard .hero-note{margin-top:12px;background:rgba(255,255,255,.14);border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.4}
   .scard .hero-link{display:inline-block;margin-top:12px;color:#fff;opacity:.92;font-size:13px;font-weight:600;text-decoration:underline}
+
+  /* ===== Mode sombre (activable dans Réglages) ===== */
+  body.dark{
+    --green:#2FB48D; --green-d:#0B6B53; --green-l:#17352C;
+    --pos:#3DDB9E; --neg:#FF7A66; --neg-l:#3A211D;
+    --bg:#0F1614; --card:#1A2420; --ink:#E8EFEC; --muted:#8FA39C;
+    --line:#2A3833; --gold:#E0B454;
+    --shadow:0 2px 14px rgba(0,0,0,.35);
+  }
+  body.dark .help{color:#BFE3D6}
+  body.dark .help b{color:#DFF3EA}
+  body.dark .tag.gray{background:#2A3833;color:var(--muted)}
+  body.dark .tag.gold{background:#3A311B}
+  body.dark .scrim{background:rgba(0,0,0,.65)}
+  body.dark .seg button.on{box-shadow:none;background:#243430}
+  body.dark .combo-item.add{background:var(--green-l)}
 </style>
 </head>
 <body>
@@ -175,6 +191,12 @@
   </div>
 
   <div id="trendBanner"></div>
+
+  <div class="card" style="padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;margin-top:14px" onclick="openWeekly()">
+    <span style="font-size:22px">🗞️</span>
+    <div class="grow"><b style="font-size:14.5px">Ta revue de la semaine</b><div class="hint" style="margin:0">Portefeuille, marché, dividendes — en 1 minute</div></div>
+    <span style="color:var(--muted);font-size:20px">›</span>
+  </div>
 
   <div class="sect-title">Évolution de la valeur</div>
   <div class="card" id="evoCard"><canvas id="evoChart" height="150"></canvas></div>
@@ -214,6 +236,7 @@
       <div><div class="k">Rendement moyen</div><div class="v" id="divYield">—</div></div>
     </div>
   </div>
+  <div id="divReminder"></div>
   <div class="card" id="divList"></div>
   <button class="btn" style="margin-top:6px" onclick="openDiv()">＋ Enregistrer un dividende</button>
 </section>
@@ -529,7 +552,7 @@ function renderMarket(sortBy){
       <div class="right"><div class="val">${fmtShort(s.cur)}</div>
         <div class="chg ${cls}" style="font-size:11.5px">${a2} ${(s.dp>=0?"+":"")+s.dp.toFixed(1)}% <span style="color:var(--muted);font-weight:400">1j</span></div></div>
     </div>`;}).join("");
-  const seg=v=>`<button onclick="renderMarket('${v}')" style="flex:1;padding:8px 4px;border-radius:9px;font-weight:600;font-size:12.5px;${sortBy===v?'background:#fff;color:var(--green);box-shadow:0 1px 4px rgba(0,0,0,.08)':'color:var(--muted)'}">${v==='nom'?'A→Z':v==='hausse'?'▲ 1j':v==='baisse'?'▼ 1j':'7 jours'}</button>`;
+  const seg=v=>`<button onclick="renderMarket('${v}')" style="flex:1;padding:8px 4px;border-radius:9px;font-weight:600;font-size:12.5px;${sortBy===v?'background:var(--card);color:var(--green);box-shadow:0 1px 4px rgba(0,0,0,.08)':'color:var(--muted)'}">${v==='nom'?'A→Z':v==='hausse'?'▲ 1j':v==='baisse'?'▼ 1j':'7 jours'}</button>`;
   const anyWv=(window._market||[]).some(s=>s.wv!=null);
   openSheet(`<h3>📊 Tous les cours BRVM <span class="hint" style="font-weight:400">(${(window._market||[]).length} titres)</span></h3>
     <div class="seg" style="margin:8px 0 4px">${seg('nom')}${seg('hausse')}${seg('baisse')}${seg('7j')}</div>
@@ -629,6 +652,72 @@ function openMarketAction(tk){
   window._market=window._market||[];
   window._market.push({tk,name:stockMap[tk]?.name||tk,cur,dp:prev>0?(cur-prev)/prev*100:0,wv:varPct(tk,cur,7),held});
   marketAction(tk);
+}
+
+/* --- Mode sombre (préférence mémorisée sur l'appareil) --- */
+function isDark(){try{return localStorage.getItem("brvm_dark")==="1";}catch(e){return false;}}
+function applyDark(){
+  const d=isDark();
+  document.body.classList.toggle("dark",d);
+  if(window.Chart){Chart.defaults.color=d?"#8FA39C":"#666";Chart.defaults.borderColor=d?"rgba(255,255,255,.10)":"rgba(0,0,0,.1)";}
+}
+function toggleDark(){try{localStorage.setItem("brvm_dark",isDark()?"0":"1");}catch(e){}applyDark();renderAll();openSettings();}
+
+/* --- Dividendes probablement oubliés : détachement passé (agenda) sans saisie --- */
+function missedDividends(){
+  const auj=today();
+  const start=new Date(Date.now()-60*86400000).toISOString().slice(0,10);
+  return (db.events||[]).filter(e=>e.type==="dividende"&&e.ticker&&e.date>=start&&e.date<=auj)
+    .filter(e=>!db.div.some(d=>d.ticker===e.ticker&&Math.abs(new Date(d.date+"T00:00")-new Date(e.date+"T00:00"))<45*86400000));
+}
+
+/* --- Revue hebdomadaire « Ta semaine » --- */
+function openWeekly(){
+  const t=totals();
+  const cut=new Date(Date.now()-7*86400000).toISOString().slice(0,10);
+  const cut14=new Date(Date.now()+14*86400000).toISOString().slice(0,10);
+  const auj=today();
+  /* valeur du portefeuille il y a ~7 jours (snapshot le plus proche) */
+  const hist=(db.history||[]).filter(h=>h.date<=cut);
+  const ref=hist.length?hist[hist.length-1]:null;
+  const dV=ref?t.value-ref.value:null;
+  const dP=ref&&ref.value>0?(t.value-ref.value)/ref.value*100:null;
+  /* comparaison à l'indice BRVM Composite */
+  const idxRef=ref&&ref.index?+ref.index:null;
+  const idxNow=db.brvmIndex?+db.brvmIndex:null;
+  const idxVar=idxRef&&idxNow?(idxNow-idxRef)/idxRef*100:null;
+  /* top / flop de tes titres sur 7 jours */
+  const movers=t.ps.map(p=>({p,w:varPct(p.ticker,p.cur,7)})).filter(x=>x.w!=null).sort((a,b)=>b.w-a.w);
+  const tops=movers.slice(0,2), flops=movers.slice(-2).filter(x=>tops.indexOf(x)<0);
+  const li=x=>`<div class="kv"><span class="k">${stockMap[x.p.ticker]?.name||x.p.ticker}</span><b class="${x.w>=0?'pos':'neg'}">${(x.w>=0?'+':'')+x.w.toFixed(1)}% 7j</b></div>`;
+  /* dividendes & opérations de la semaine */
+  const divs=db.div.filter(d=>d.date>=cut&&d.date<=auj), divTot=divs.reduce((s,d)=>s+(+d.montant||0),0);
+  const txs=db.tx.filter(x=>x.date>=cut&&x.date<=auj);
+  /* agenda des 14 prochains jours */
+  const evs=(db.events||[]).filter(e=>e.date>=auj&&e.date<=cut14).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
+  const evLbl={dividende:"💰 Dividende",resultats:"📊 Résultats",ago:"🏛️ AGO"};
+  const missed=missedDividends();
+  openSheet(`<h3>🗞️ Ta semaine</h3>
+    <div class="hint">Du ${frDate(cut)} au ${frDate(auj)}</div>
+    <div class="sect-title" style="margin:14px 0 4px">Ton portefeuille</div>
+    <div class="card" style="padding:4px 14px">
+      <div class="kv"><span class="k">Valeur actuelle</span><b>${fmt(t.value)}</b></div>
+      ${dV!=null?`<div class="kv"><span class="k">Variation sur 7 jours</span><b class="${dV>=0?'pos':'neg'}">${sign(dV)} (${(dP>=0?'+':'')+dP.toFixed(1)}%)</b></div>`:`<div class="kv"><span class="k">Variation sur 7 jours</span><b style="color:var(--muted);font-weight:400">encore un peu d'historique…</b></div>`}
+      ${idxVar!=null?`<div class="kv"><span class="k">BRVM Composite (7j)</span><b class="${idxVar>=0?'pos':'neg'}">${(idxVar>=0?'+':'')+idxVar.toFixed(1)}%</b></div>`:''}
+      ${dP!=null&&idxVar!=null?`<div class="kv"><span class="k">Verdict</span><b>${dP>=idxVar?'✅ Tu bats le marché':'📉 Le marché fait mieux cette semaine'}</b></div>`:''}
+    </div>
+    ${movers.length?`<div class="sect-title" style="margin:14px 0 4px">Tes titres — 7 jours</div>
+    <div class="card" style="padding:4px 14px">${tops.map(li).join("")}${flops.map(li).join("")}</div>`:''}
+    <div class="sect-title" style="margin:14px 0 4px">Cette semaine</div>
+    <div class="card" style="padding:4px 14px">
+      <div class="kv"><span class="k">Dividendes reçus</span><b>${divs.length?fmt(divTot):'—'}</b></div>
+      <div class="kv"><span class="k">Opérations passées</span><b>${txs.length||'—'}</b></div>
+    </div>
+    ${missed.length?`<div class="help" style="margin-top:14px">⚠️ <div>Dividende(s) peut-être oublié(s) : <b>${missed.map(m=>stockMap[m.ticker]?.name||m.ticker).join(", ")}</b> — détaché(s) d'après ton agenda, mais rien dans tes dividendes. <button class="del" style="color:var(--green)" onclick="closeSheet();go('dividendes')">Vérifier →</button></div></div>`:''}
+    ${evs.length?`<div class="sect-title" style="margin:14px 0 4px">À venir (14 jours)</div>
+    <div class="card" style="padding:4px 14px">${evs.map(e=>`<div class="kv"><span class="k">${frDateShort(e.date)} · ${evLbl[e.type]||"📌"} ${stockMap[e.ticker]?.name||e.ticker||""}</span><b></b></div>`).join("")}</div>`:''}
+    <button class="btn alt" style="margin-top:16px" onclick="openMarket()">📊 Voir tous les cours</button>
+    <div class="hint" style="margin-top:12px">⚖️ Un point d'étape pour t'informer, pas un conseil. Les variations 7 jours se construisent au fil de tes synchros.</div>`);
 }
 
 async function syncPrices(btn){
@@ -934,6 +1023,11 @@ function renderPortfolio(){
 }
 
 function renderDiv(){
+  const remEl=document.getElementById("divReminder");
+  if(remEl){
+    const rem=missedDividends();
+    remEl.innerHTML=rem.length?`<div class="help">⚠️ <div>D'après ton agenda, un dividende a été détaché récemment sur <b>${rem.map(e=>stockMap[e.ticker]?.name||e.ticker).join(", ")}</b> mais rien n'est saisi ici. Si tu l'as reçu sur ton compte SGI, enregistre-le ⤵</div></div>`:"";
+  }
   const tot=db.div.reduce((s,d)=>s+(+d.montant||0),0);
   const yr=new Date().getFullYear();
   const yrTot=db.div.filter(d=>d.date.startsWith(yr)).reduce((s,d)=>s+(+d.montant||0),0);
@@ -1393,6 +1487,7 @@ function openSettings(){
     <button class="btn ghost" style="margin-top:16px" onclick="openAccount()">☁️ Compte & synchronisation en ligne</button>
     <button class="btn ghost" style="margin-top:10px" onclick="openPortfolios()">📁 Gérer mes portefeuilles</button>
     <button class="btn ghost" style="margin-top:10px" onclick="setLock()">${store.lock?'🔒 Retirer le verrouillage (identifiant + mot de passe)':'🔒 Protéger par identifiant + mot de passe'}</button>
+    <button class="btn ghost" style="margin-top:10px" onclick="toggleDark()">${isDark()?'☀️ Repasser en mode clair':'🌙 Passer en mode sombre'}</button>
     <label style="margin-top:16px">Frais SGI — commission + taxes (%)</label>
     <input id="sgiRate" type="number" step="0.1" min="0" value="${store.sgiRate}" onchange="store.sgiRate=+this.value||0;save()">
     <div class="hint">Appliqué à la vente pour estimer ta plus-value <b>nette</b> (visible dans le détail d'un titre). Sur la BRVM, c'est souvent autour de 1,2 à 1,7 %.</div>
@@ -1763,6 +1858,7 @@ async function cloudSyncNow(btn){ btn.disabled=true; await pushCloud(); await pu
 
 /* --- Démarrage --- */
 load();
+applyDark();
 renderAll();
 if(store.lock){document.getElementById("lockScreen").style.display="flex";setTimeout(()=>document.getElementById("lockUser").focus(),150);}
 initCloud();
