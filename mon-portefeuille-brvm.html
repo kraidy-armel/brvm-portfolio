@@ -174,6 +174,8 @@
     <button class="btn alt" onclick="openPrices()">🔄 Cours / Sync BRVM</button>
   </div>
 
+  <div id="trendBanner"></div>
+
   <div class="sect-title">Évolution de la valeur</div>
   <div class="card" id="evoCard"><canvas id="evoChart" height="150"></canvas></div>
 
@@ -498,6 +500,7 @@ async function openMarket(){
   if(!got){openSheet(`<h3>📊 Tous les cours BRVM</h3><div class="empty" style="padding:20px">Cours indisponibles pour le moment. Réessaie dans un instant.</div><button class="btn alt" style="margin-top:12px" onclick="openMarket()">↻ Réessayer</button>`);return;}
   const data=got.data, meta=data._meta||{};
   recordPriceHist(data);
+  checkTrends();
   const heldSet=new Set(); positions().forEach(p=>{heldSet.add(p.ticker);heldSet.add(resolveTicker(p.ticker));});
   const list=Object.keys(data).filter(k=>k!=="_meta"&&data[k]&&+data[k].actuel>0).map(k=>{
     const r=data[k], cur=+r.actuel||0, prev=+r.veille||cur, dp=prev>0?(cur-prev)/prev*100:0;
@@ -507,6 +510,7 @@ async function openMarket(){
   renderMarket("nom");
 }
 function renderMarket(sortBy){
+  window._marketSort=sortBy;
   const list=window._market||[];
   let arr=[...list];
   const nn=v=>v==null?-Infinity:v;
@@ -517,10 +521,11 @@ function renderMarket(sortBy){
   const wvTxt=w=>w==null?'<span style="color:var(--muted)">7j —</span>':`7j <b class="${w>0?'pos':(w<0?'neg':'')}">${(w>0?'▲':(w<0?'▼':'▬'))}${(w>=0?'+':'')+w.toFixed(1)}%</b>`;
   const rows=arr.map(s=>{
     const cls=s.dp>0?"pos":(s.dp<0?"neg":""), a2=s.dp>0?"▲":(s.dp<0?"▼":"▬");
-    return `<div class="row" ${s.held?'style="background:var(--green-l)"':''}>
+    const badge=s.wv!=null&&Math.abs(s.wv)>=trendCfg().seuil?(s.wv>0?' 📈':' 📉'):'';
+    return `<div class="row" onclick="marketAction('${s.tk}')" style="cursor:pointer${s.held?';background:var(--green-l)':''}">
       <div class="tick" style="width:46px;height:34px;font-size:11px">${s.tk}</div>
       <div class="grow"><div class="nm" style="font-size:14px">${s.name}${s.held?' <span class="tag" style="font-size:9px">portefeuille</span>':''}</div>
-        <div class="sub" style="font-size:11px">${s.tk} · ${wvTxt(s.wv)}</div></div>
+        <div class="sub" style="font-size:11px">${s.tk} · ${wvTxt(s.wv)}${badge}</div></div>
       <div class="right"><div class="val">${fmtShort(s.cur)}</div>
         <div class="chg ${cls}" style="font-size:11.5px">${a2} ${(s.dp>=0?"+":"")+s.dp.toFixed(1)}% <span style="color:var(--muted);font-weight:400">1j</span></div></div>
     </div>`;}).join("");
@@ -528,9 +533,104 @@ function renderMarket(sortBy){
   const anyWv=(window._market||[]).some(s=>s.wv!=null);
   openSheet(`<h3>📊 Tous les cours BRVM <span class="hint" style="font-weight:400">(${(window._market||[]).length} titres)</span></h3>
     <div class="seg" style="margin:8px 0 4px">${seg('nom')}${seg('hausse')}${seg('baisse')}${seg('7j')}</div>
+    <div class="hint" style="margin:2px 0 4px">👆 Touche un titre pour <b>acheter</b>, <b>vendre</b> ou poser une <b>alerte</b>.</div>
+    <div class="hint" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 8px">
+      <input type="checkbox" ${trendCfg().on?'checked':''} onchange="setTrendCfg(this.checked,null)" style="width:auto;margin:0">
+      <span>🔔 Alerte auto si un titre varie de ±</span>
+      <input type="number" value="${trendCfg().seuil}" min="1" step="0.5" onchange="setTrendCfg(null,this.value)" style="width:64px;padding:4px 6px;margin:0"><span>% sur 7 jours</span>
+    </div>
     ${anyWv?'':'<div class="hint" style="margin:2px 0 8px">ℹ️ La variation <b>7 jours</b> se construit au fil de tes synchros — reviens dans quelques jours, elle se remplira toute seule.</div>'}
     <div class="card" style="padding:2px 14px;max-height:60vh;overflow:auto">${rows||'<div class="empty">Aucun cours.</div>'}</div>`);
 }
+/* --- Actions rapides depuis « Tous les cours » : acheter / vendre / alerte --- */
+function marketAction(tk){
+  const s=(window._market||[]).find(x=>x.tk===tk); if(!s)return;
+  const w=s.wv, wTxt=w==null?"":` · 7j <b class="${w>=0?'pos':'neg'}">${(w>=0?"+":"")+w.toFixed(1)}%</b>`;
+  openSheet(`<h3>${s.name}</h3>
+    <div class="hint">${tk} · cours actuel <b>${fmt(s.cur)}</b> · 1j ${(s.dp>=0?"+":"")+s.dp.toFixed(1)}%${wTxt}</div>
+    ${s.held?'<div class="hint" style="margin-top:2px">✅ Tu détiens ce titre dans ton portefeuille.</div>':''}
+    <button class="btn" style="margin-top:16px" onclick="openTxFor('${tk}','achat',${s.cur})">➕ Acheter — enregistrer un achat</button>
+    ${s.held?`<button class="btn" style="margin-top:10px;background:var(--neg)" onclick="openTxFor('${tk}','vente',${s.cur})">➖ Vendre — enregistrer une vente</button>`:''}
+    <button class="btn alt" style="margin-top:10px" onclick="openAlertFor('${tk}',${s.cur})">🔔 Créer une alerte de prix</button>
+    ${s.held?`<button class="btn ghost" style="margin-top:10px" onclick="posDetail('${tk}')">📊 Voir le détail de ma position</button>`:''}
+    <button class="btn ghost" style="margin-top:10px" onclick="renderMarket(window._marketSort||'nom')">← Retour aux cours</button>
+    <div class="hint" style="margin-top:14px">⚖️ L'appli enregistre tes opérations pour ton suivi — l'ordre réel se passe chez ta SGI. Ce n'est pas un conseil d'achat ou de vente.</div>`);
+}
+function openTxFor(tk,type,price){
+  openTx();
+  window.txType=type;
+  const seg=document.getElementById("txSeg");
+  if(seg){const bs=seg.querySelectorAll("button");bs.forEach(b=>b.classList.remove("on"));bs[type==="vente"?1:0].classList.add("on");}
+  document.getElementById("txTicker").value=tk;
+  document.getElementById("txTicker_q").value=stockMap[tk]?stockMap[tk].name+" ("+tk+")":tk;
+  if(price)document.getElementById("txPrice").value=price;
+}
+function openAlertFor(tk,cur){
+  openAlert();
+  document.getElementById("alTicker").value=tk;
+  document.getElementById("alTicker_q").value=stockMap[tk]?stockMap[tk].name+" ("+tk+")":tk;
+  if(cur)document.getElementById("alSeuil").value=cur;
+}
+
+/* --- Alertes automatiques de tendance sur 7 jours --- */
+function trendCfg(){ if(!store.trendCfg)store.trendCfg={on:false,seuil:5}; return store.trendCfg; }
+function setTrendCfg(on,seuil){
+  const c=trendCfg();
+  if(on!=null)c.on=!!on;
+  if(seuil!=null){const s=+seuil; if(s>0)c.seuil=s;}
+  localStorage.setItem(DB_KEY,JSON.stringify(store));
+  if(c.on)checkTrends();
+  renderTrendBanner();
+}
+/* Parcourt l'historique des cours (tous les titres BRVM) et signale ceux qui ont varié de ± seuil % sur 7 jours */
+function checkTrends(){
+  const c=trendCfg(); if(!c.on)return;
+  const PH=store.priceHist||{}; const auj=today();
+  store.trendHits=store.trendHits||[]; store.trendSeen=store.trendSeen||{};
+  let nouveau=false;
+  Object.keys(PH).forEach(k=>{
+    const ds=Object.keys(PH[k]).sort(); if(ds.length<2)return;
+    const cur=+PH[k][ds[ds.length-1]]; if(!(cur>0))return;
+    const w=varPct(k,cur,7); if(w==null||Math.abs(w)<c.seuil)return;
+    if(store.trendSeen[k]===auj)return;              /* déjà signalé aujourd'hui */
+    store.trendSeen[k]=auj;
+    store.trendHits.unshift({id:uid(),ticker:k,pct:+w.toFixed(1),cur,date:auj});
+    nouveau=true;
+  });
+  if(store.trendHits.length>20)store.trendHits=store.trendHits.slice(0,20);
+  if(nouveau){localStorage.setItem(DB_KEY,JSON.stringify(store));renderTrendBanner();}
+}
+function renderTrendBanner(){
+  const el=document.getElementById("trendBanner"); if(!el)return;
+  const c=trendCfg();
+  const cutoff=new Date(Date.now()-5*86400000).toISOString().slice(0,10);
+  const recent=(store.trendHits||[]).filter(h=>h.date>=cutoff);
+  if(!c.on||!recent.length){el.innerHTML="";return;}
+  el.innerHTML=`<div class="sect-title" style="margin-top:16px">🔔 Tendances 7 jours (±${c.seuil}%)</div>
+    <div class="card" style="padding:2px 14px">`+recent.map(h=>{
+      const up=h.pct>=0;
+      return `<div class="row" style="cursor:pointer" onclick="openMarketAction('${h.ticker}')">
+        <div class="tick" style="width:46px;height:34px;font-size:11px;background:${up?'var(--green-l)':'var(--neg-l)'};color:${up?'var(--green)':'var(--neg)'}">${h.ticker}</div>
+        <div class="grow"><div class="nm" style="font-size:14px">${up?'📈':'📉'} ${stockMap[h.ticker]?.name||h.ticker}</div>
+          <div class="sub">${(up?'+':'')+h.pct}% sur 7 jours · détecté le ${frDate(h.date)}</div></div>
+        <div class="right"><b class="${up?'pos':'neg'}">${fmtShort(h.cur)}</b><br>
+          <button class="del" onclick="event.stopPropagation();dismissTrend('${h.id}')">Ignorer</button></div>
+      </div>`;}).join("")+`</div>
+    <div class="hint" style="margin-top:6px">Touche un titre pour acheter, vendre ou poser une alerte. À toi de décider — ce n'est pas un conseil.</div>`;
+}
+function dismissTrend(id){store.trendHits=(store.trendHits||[]).filter(h=>h.id!==id);localStorage.setItem(DB_KEY,JSON.stringify(store));renderTrendBanner();}
+/* Ouvre la fiche action d'un titre même si « Tous les cours » n'a pas encore été ouvert */
+function openMarketAction(tk){
+  if((window._market||[]).find(x=>x.tk===tk)){marketAction(tk);return;}
+  const H=(store.priceHist||{})[tk]||{}; const ds=Object.keys(H).sort();
+  const cur=ds.length?+H[ds[ds.length-1]]:0;
+  const prev=ds.length>1?+H[ds[ds.length-2]]:cur;
+  const held=positions().some(p=>p.ticker===tk||resolveTicker(p.ticker)===tk);
+  window._market=window._market||[];
+  window._market.push({tk,name:stockMap[tk]?.name||tk,cur,dp:prev>0?(cur-prev)/prev*100:0,wv:varPct(tk,cur,7),held});
+  marketAction(tk);
+}
+
 async function syncPrices(btn){
   const held=positions(); if(!held.length){alert("Ajoute d'abord des positions.");return;}
   const orig=btn?btn.textContent:""; if(btn){btn.textContent="⏳ Synchronisation…";btn.disabled=true;}
@@ -550,7 +650,7 @@ async function syncPrices(btn){
       }else fail.push(p.ticker);
     }
     if(ok){store.lastSync=Date.now();store.lastSyncClock=new Date().toTimeString().slice(0,5);}
-    checkAlerts();save();setSyncStatus();
+    checkAlerts();checkTrends();save();setSyncStatus();
     const lastDate=dates.sort().slice(-1)[0]||"";
     let msg="✅ "+ok+" cours mis à jour.";
     if(lastDate)msg+="\n📅 Cours datés du "+lastDate;
@@ -588,7 +688,7 @@ async function autoSync(force){
     recordPriceHist(data);
     let ok=0;
     for(const p of held){ const row=data[p.ticker]||data[resolveTicker(p.ticker)]; if(row&&+row.actuel>0){db.prices[p.ticker]={actuel:+row.actuel,veille:+row.veille||+row.actuel,date:row.date||""};ok++;} }
-    if(ok){ store.lastSync=now; store.lastSyncClock=new Date().toTimeString().slice(0,5); checkAlerts(); save(); }
+    if(ok){ store.lastSync=now; store.lastSyncClock=new Date().toTimeString().slice(0,5); checkAlerts(); checkTrends(); save(); }
     setSyncStatus(ok?"":"off");
   }catch(e){ setSyncStatus("off"); }
 }
@@ -697,7 +797,7 @@ function go(s){
 }
 
 /* ================= RENDU ================= */
-function renderAll(){renderHome();renderPortfolio();renderDiv();renderAgenda();if(document.getElementById("s-analyse").classList.contains("active"))drawAnalyse();}
+function renderAll(){renderHome();renderPortfolio();renderDiv();renderAgenda();renderTrendBanner();if(document.getElementById("s-analyse").classList.contains("active"))drawAnalyse();}
 
 function posRow(p,tappable){
   const c=p.pl>=0?"pos":"neg";
