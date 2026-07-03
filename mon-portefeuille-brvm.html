@@ -682,6 +682,17 @@ function missedDividends(){
 function goalStats(g){
   const t=totals();
   const mois=g.echeance?Math.max(0,Math.round((new Date(g.echeance+"T00:00")-Date.now())/(30.44*86400000))):null;
+  if(g.type==="gains"){
+    const R=realized();
+    const rea=Object.values(R.byYear).reduce((s,x)=>s+x,0);
+    const divs=db.div.reduce((s,d)=>s+(+d.montant||0),0);
+    const lat=t.value-t.invested;
+    const tot=rea+divs+lat;
+    const pct=g.montant>0?Math.max(0,tot)/g.montant*100:0;
+    let msg=`Gains actuels : ${fmt(Math.round(tot))} — réalisé ${fmtShort(Math.round(rea))} · dividendes ${fmtShort(divs)} · latent ${lat>=0?'+':''}${fmtShort(Math.round(lat))}.`;
+    if(pct>=100)msg="🎉 Objectif atteint ! "+msg;
+    return {pct,msg};
+  }
   if(g.type==="dividendes"){
     const cutoff=new Date(Date.now()-365*86400000).toISOString().slice(0,10);
     const recus=db.div.filter(d=>d.date>=cutoff).reduce((s,d)=>s+(+d.montant||0),0);
@@ -716,7 +727,7 @@ function renderGoals(){
   el.innerHTML=gs.map(g=>{const s=goalStats(g);
     return `<div class="card" style="padding:14px 16px;cursor:pointer;margin-bottom:10px" onclick="openGoals()">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-        <b style="font-size:14px">🎯 ${g.note?escAttr(g.note):(g.type==='dividendes'?'Dividendes annuels':'Patrimoine')} : ${fmtShort(g.montant)}</b>
+        <b style="font-size:14px">🎯 ${g.note?escAttr(g.note):(g.type==='dividendes'?'Dividendes annuels':g.type==='gains'?'Gains totaux':'Patrimoine')} : ${fmtShort(g.montant)}</b>
         <b class="${s.pct>=100?'pos':''}" style="font-size:14px">${Math.min(999,Math.round(s.pct))}%</b>
       </div>
       <div class="bar" style="margin-top:8px"><span style="width:${Math.min(100,Math.max(2,Math.round(s.pct)))}%;background:${s.pct>=100?'var(--pos)':'var(--green)'}"></span></div>
@@ -728,7 +739,7 @@ function openGoals(){
   openSheet(`<h3>🎯 Mes objectifs</h3>
     <div class="hint">Un objectif clair aide à investir avec régularité. Ta progression s'affiche sur l'accueil.</div>
     ${gs.map(g=>{const s=goalStats(g);return `<div class="card" style="padding:12px 14px;margin:12px 0 0">
-      <div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:14px">${g.type==='dividendes'?'💰':'🏦'} ${g.note?escAttr(g.note):(g.type==='dividendes'?'Dividendes / an':'Patrimoine')} : ${fmtShort(g.montant)}</b><b>${Math.min(999,Math.round(s.pct))}%</b></div>
+      <div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:14px">${g.type==='dividendes'?'💰':g.type==='gains'?'📈':'🏦'} ${g.note?escAttr(g.note):(g.type==='dividendes'?'Dividendes / an':g.type==='gains'?'Gains totaux':'Patrimoine')} : ${fmtShort(g.montant)}</b><b>${Math.min(999,Math.round(s.pct))}%</b></div>
       <div class="bar" style="margin-top:7px"><span style="width:${Math.min(100,Math.max(2,Math.round(s.pct)))}%"></span></div>
       <div class="hint" style="margin-top:6px">${s.msg}</div>
       <div style="display:flex;gap:14px;justify-content:flex-end;margin-top:6px">
@@ -743,7 +754,7 @@ function editGoal(id){
   const defDate=(new Date().getFullYear()+2)+"-12-31";
   openSheet(`<h3>${g?'Modifier l\'objectif':'Nouvel objectif'}</h3>
     <label>Type</label>
-    <select id="goType"><option value="valeur" ${!g||g.type==='valeur'?'selected':''}>🏦 Patrimoine total (titres + liquidités)</option><option value="dividendes" ${g&&g.type==='dividendes'?'selected':''}>💰 Dividendes reçus par an</option></select>
+    <select id="goType"><option value="valeur" ${!g||g.type==='valeur'?'selected':''}>🏦 Patrimoine total (titres + liquidités)</option><option value="dividendes" ${g&&g.type==='dividendes'?'selected':''}>💰 Dividendes reçus par an</option><option value="gains" ${g&&g.type==='gains'?'selected':''}>📈 Gains totaux (réalisé + dividendes + latent)</option></select>
     <label>Montant cible (FCFA)</label><input id="goAmt" type="number" inputmode="numeric" placeholder="ex : 5000000" value="${g?g.montant:''}">
     <label>Échéance <span class="hint">Optionnelle — permet de calculer l'effort mensuel</span></label><input id="goDate" type="date" value="${g?(g.echeance||''):defDate}">
     <label>Nom <span class="hint">Optionnel — ex : « Retraite », « Projet immobilier »</span></label><input id="goNote" placeholder="ex : Liberté financière" value="${g?escAttr(g.note||''):''}">
