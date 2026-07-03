@@ -198,6 +198,8 @@
     <span style="color:var(--muted);font-size:20px">›</span>
   </div>
 
+  <div id="goalsCard" style="margin-top:14px"></div>
+
   <div class="sect-title">Évolution de la valeur</div>
   <div class="card" id="evoCard"><canvas id="evoChart" height="150"></canvas></div>
 
@@ -266,6 +268,11 @@
     <h3 style="font-size:15px;margin-bottom:4px">📋 Compte de résultat</h3>
     <div class="muted" style="font-size:12.5px;margin-bottom:10px">Synthèse de TES résultats sur ce portefeuille.</div>
     <div id="compteWrap"></div>
+  </div>
+  <div class="card">
+    <h3 style="font-size:15px;margin-bottom:4px">🚀 Intérêts composés</h3>
+    <div class="muted" style="font-size:12.5px;margin-bottom:10px">Projette ton patrimoine si tu investis régulièrement et réinvestis tes gains — la vraie force du long terme.</div>
+    <button class="btn alt sm" onclick="openCompound()">Ouvrir le simulateur</button>
   </div>
   <div class="card">
     <h3 style="font-size:15px;margin-bottom:4px">Répartition par titre</h3>
@@ -671,6 +678,132 @@ function missedDividends(){
     .filter(e=>!db.div.some(d=>d.ticker===e.ticker&&Math.abs(new Date(d.date+"T00:00")-new Date(e.date+"T00:00"))<45*86400000));
 }
 
+/* --- Objectifs d'investissement --- */
+function goalStats(g){
+  const t=totals();
+  const mois=g.echeance?Math.max(0,Math.round((new Date(g.echeance+"T00:00")-Date.now())/(30.44*86400000))):null;
+  if(g.type==="dividendes"){
+    const cutoff=new Date(Date.now()-365*86400000).toISOString().slice(0,10);
+    const recus=db.div.filter(d=>d.date>=cutoff).reduce((s,d)=>s+(+d.montant||0),0);
+    const pct=g.montant>0?recus/g.montant*100:0;
+    let msg=`Reçus sur 12 mois : ${fmt(recus)}.`;
+    if(pct>=100)msg="🎉 Objectif atteint ! "+msg;
+    else{
+      const inv=t.invested||0, y=inv>0?recus/inv*100:0;
+      if(y>0)msg+=` À ton rendement actuel (${y.toFixed(1)}%), il faudrait ≈ ${fmt(Math.round(g.montant/(y/100)))} investis.`;
+      else msg+=" Enregistre tes dividendes pour suivre ta progression.";
+    }
+    return {pct,msg};
+  }
+  const patrimoine=t.value+cashBalance();
+  const pct=g.montant>0?patrimoine/g.montant*100:0;
+  let msg=`Patrimoine actuel : ${fmt(patrimoine)}.`;
+  if(pct>=100)msg="🎉 Objectif atteint ! "+msg;
+  else if(mois!=null&&mois>0)msg+=` Il reste ${fmt(g.montant-patrimoine)} d'ici ${frDate(g.echeance)} — soit ≈ ${fmt(Math.ceil((g.montant-patrimoine)/mois))}/mois (hors croissance des cours).`;
+  else if(mois===0)msg+=` Échéance ce mois-ci — il reste ${fmt(g.montant-patrimoine)}.`;
+  return {pct,msg};
+}
+function renderGoals(){
+  const el=document.getElementById("goalsCard"); if(!el)return;
+  const gs=db.goals||[];
+  if(!gs.length){
+    el.innerHTML=`<div class="card" style="padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;margin-bottom:0" onclick="openGoals()">
+      <span style="font-size:22px">🎯</span>
+      <div class="grow"><b style="font-size:14.5px">Fixe-toi un objectif</b><div class="hint" style="margin:0">« 5 millions en 2028 » — et suis ta progression ici</div></div>
+      <span style="color:var(--muted);font-size:20px">›</span></div>`;
+    return;
+  }
+  el.innerHTML=gs.map(g=>{const s=goalStats(g);
+    return `<div class="card" style="padding:14px 16px;cursor:pointer;margin-bottom:10px" onclick="openGoals()">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+        <b style="font-size:14px">🎯 ${g.note?escAttr(g.note):(g.type==='dividendes'?'Dividendes annuels':'Patrimoine')} : ${fmtShort(g.montant)}</b>
+        <b class="${s.pct>=100?'pos':''}" style="font-size:14px">${Math.min(999,Math.round(s.pct))}%</b>
+      </div>
+      <div class="bar" style="margin-top:8px"><span style="width:${Math.min(100,Math.max(2,Math.round(s.pct)))}%;background:${s.pct>=100?'var(--pos)':'var(--green)'}"></span></div>
+      <div class="hint" style="margin-top:6px">${s.msg}</div>
+    </div>`;}).join("");
+}
+function openGoals(){
+  const gs=db.goals||[];
+  openSheet(`<h3>🎯 Mes objectifs</h3>
+    <div class="hint">Un objectif clair aide à investir avec régularité. Ta progression s'affiche sur l'accueil.</div>
+    ${gs.map(g=>{const s=goalStats(g);return `<div class="card" style="padding:12px 14px;margin:12px 0 0">
+      <div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:14px">${g.type==='dividendes'?'💰':'🏦'} ${g.note?escAttr(g.note):(g.type==='dividendes'?'Dividendes / an':'Patrimoine')} : ${fmtShort(g.montant)}</b><b>${Math.min(999,Math.round(s.pct))}%</b></div>
+      <div class="bar" style="margin-top:7px"><span style="width:${Math.min(100,Math.max(2,Math.round(s.pct)))}%"></span></div>
+      <div class="hint" style="margin-top:6px">${s.msg}</div>
+      <div style="display:flex;gap:14px;justify-content:flex-end;margin-top:6px">
+        <button class="del" style="color:var(--green)" onclick="editGoal('${g.id}')">Modifier</button>
+        <button class="del" onclick="delGoal('${g.id}')">Suppr.</button></div>
+    </div>`;}).join("")}
+    <button class="btn" style="margin-top:16px" onclick="editGoal()">＋ ${gs.length?'Ajouter un objectif':'Créer mon premier objectif'}</button>
+    <button class="btn alt" style="margin-top:10px" onclick="openCompound()">🚀 Simulateur d'intérêts composés</button>`);
+}
+function editGoal(id){
+  const g=id?(db.goals||[]).find(x=>x.id===id):null;
+  const defDate=(new Date().getFullYear()+2)+"-12-31";
+  openSheet(`<h3>${g?'Modifier l\'objectif':'Nouvel objectif'}</h3>
+    <label>Type</label>
+    <select id="goType"><option value="valeur" ${!g||g.type==='valeur'?'selected':''}>🏦 Patrimoine total (titres + liquidités)</option><option value="dividendes" ${g&&g.type==='dividendes'?'selected':''}>💰 Dividendes reçus par an</option></select>
+    <label>Montant cible (FCFA)</label><input id="goAmt" type="number" inputmode="numeric" placeholder="ex : 5000000" value="${g?g.montant:''}">
+    <label>Échéance <span class="hint">Optionnelle — permet de calculer l'effort mensuel</span></label><input id="goDate" type="date" value="${g?(g.echeance||''):defDate}">
+    <label>Nom <span class="hint">Optionnel — ex : « Retraite », « Projet immobilier »</span></label><input id="goNote" placeholder="ex : Liberté financière" value="${g?escAttr(g.note||''):''}">
+    <button class="btn" style="margin-top:18px" onclick="saveGoal(${g?`'${g.id}'`:''})">Enregistrer</button>`);
+}
+function saveGoal(id){
+  const montant=+document.getElementById("goAmt").value;
+  if(!montant){alert("Renseigne un montant cible.");return;}
+  const rec={type:document.getElementById("goType").value,montant,echeance:document.getElementById("goDate").value||"",note:(document.getElementById("goNote").value||"").trim()};
+  if(!db.goals)db.goals=[];
+  if(id){const g=db.goals.find(x=>x.id===id);if(g)Object.assign(g,rec);}
+  else{rec.id=uid();db.goals.push(rec);}
+  closeSheet();save();
+}
+function delGoal(id){if(confirm("Supprimer cet objectif ?")){db.goals=(db.goals||[]).filter(g=>g.id!==id);save();openGoals();}}
+
+/* --- Simulateur d'intérêts composés --- */
+let compoundChartObj=null;
+function openCompound(){
+  const t=totals();
+  const start=Math.max(0,Math.round(t.value+cashBalance()));
+  const cutoff=new Date(Date.now()-365*86400000).toISOString().slice(0,10);
+  const div12=db.div.filter(d=>d.date>=cutoff).reduce((s,d)=>s+(+d.montant||0),0);
+  const yEst=t.invested>0?Math.round(div12/t.invested*1000)/10:0;
+  openSheet(`<h3>🚀 Intérêts composés</h3>
+    <div class="hint">La force du long terme : tes gains produisent eux-mêmes des gains. Projette ton patrimoine si tu investis chaque mois et réinvestis tout.</div>
+    <label>Point de départ (FCFA)</label><input id="cpStart" type="number" inputmode="numeric" value="${start}" oninput="drawCompound()">
+    <label>Apport mensuel (FCFA)</label><input id="cpMonthly" type="number" inputmode="numeric" value="50000" oninput="drawCompound()">
+    <label>Rendement annuel total (%) <span class="hint">${yEst>0?`Ton rendement dividende 12 mois : ${yEst}% — ajoute la croissance espérée des cours.`:'Dividendes + croissance des cours. Reste prudent.'}</span></label>
+    <input id="cpRate" type="number" step="0.5" value="${Math.max(6,Math.round(yEst+3))}" oninput="drawCompound()">
+    <label>Durée (années)</label><input id="cpYears" type="number" min="1" max="40" value="10" oninput="drawCompound()">
+    <div id="cpOut" style="margin-top:14px"></div>
+    <div style="margin-top:10px"><canvas id="cpChart" height="170"></canvas></div>
+    <div class="hint" style="margin-top:10px">⚖️ Simulation théorique (rendement constant, frais et impôts non déduits) — un repère, pas une promesse ni un conseil.</div>`);
+  drawCompound();
+}
+function drawCompound(){
+  const S=+document.getElementById("cpStart").value||0;
+  const M=+document.getElementById("cpMonthly").value||0;
+  const R=(+document.getElementById("cpRate").value||0)/100;
+  const Y=Math.min(40,Math.max(1,+document.getElementById("cpYears").value||10));
+  const rm=Math.pow(1+R,1/12)-1;
+  let v=S; const vals=[S];
+  for(let y=1;y<=Y;y++){for(let m=0;m<12;m++){v=v*(1+rm)+M;}vals.push(Math.round(v));}
+  const verse=S+M*12*Y, gains=Math.round(v)-verse;
+  document.getElementById("cpOut").innerHTML=`<div class="card" style="padding:4px 14px;margin:0">
+    <div class="kv"><span class="k">Dans ${Y} ans</span><b>${fmt(Math.round(v))}</b></div>
+    <div class="kv"><span class="k">Total versé</span><b>${fmt(verse)}</b></div>
+    <div class="kv"><span class="k">Gains générés</span><b class="${gains>=0?'pos':'neg'}">${fmt(gains)}</b></div>
+    <div class="kv"><span class="k">Part des gains</span><b>${v>0?Math.round(gains/v*100):0}%</b></div></div>`;
+  const cv=document.getElementById("cpChart"); if(!cv||typeof Chart==="undefined")return;
+  if(compoundChartObj)compoundChartObj.destroy();
+  const y0=new Date().getFullYear();
+  const verseArr=vals.map((_,i)=>S+M*12*i);
+  compoundChartObj=new Chart(cv,{type:"line",data:{labels:vals.map((_,i)=>String(y0+i)),datasets:[
+    {data:vals,borderColor:"#0B6B53",backgroundColor:"rgba(11,107,83,.12)",fill:true,tension:.25,pointRadius:0,borderWidth:2},
+    {data:verseArr,borderColor:"#C9962E",borderDash:[5,4],fill:false,tension:0,pointRadius:0,borderWidth:1.5}
+  ]},options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.datasetIndex?"versé : ":"patrimoine : ")+fmt(c.parsed.y)}}},scales:{y:{ticks:{callback:v2=>fmtAxis(v2),font:{size:10}}},x:{ticks:{maxTicksLimit:6,font:{size:9}}}}}});
+}
+
 /* --- Revue hebdomadaire « Ta semaine » --- */
 function openWeekly(){
   const t=totals();
@@ -886,7 +1019,7 @@ function go(s){
 }
 
 /* ================= RENDU ================= */
-function renderAll(){renderHome();renderPortfolio();renderDiv();renderAgenda();renderTrendBanner();if(document.getElementById("s-analyse").classList.contains("active"))drawAnalyse();}
+function renderAll(){renderHome();renderPortfolio();renderDiv();renderAgenda();renderTrendBanner();renderGoals();if(document.getElementById("s-analyse").classList.contains("active"))drawAnalyse();}
 
 function posRow(p,tappable){
   const c=p.pl>=0?"pos":"neg";
@@ -1488,6 +1621,7 @@ function openSettings(){
     <button class="btn ghost" style="margin-top:10px" onclick="openPortfolios()">📁 Gérer mes portefeuilles</button>
     <button class="btn ghost" style="margin-top:10px" onclick="setLock()">${store.lock?'🔒 Retirer le verrouillage (identifiant + mot de passe)':'🔒 Protéger par identifiant + mot de passe'}</button>
     <button class="btn ghost" style="margin-top:10px" onclick="toggleDark()">${isDark()?'☀️ Repasser en mode clair':'🌙 Passer en mode sombre'}</button>
+    <button class="btn ghost" style="margin-top:10px" onclick="openGoals()">🎯 Mes objectifs</button>
     <label style="margin-top:16px">Frais SGI — commission + taxes (%)</label>
     <input id="sgiRate" type="number" step="0.1" min="0" value="${store.sgiRate}" onchange="store.sgiRate=+this.value||0;save()">
     <div class="hint">Appliqué à la vente pour estimer ta plus-value <b>nette</b> (visible dans le détail d'un titre). Sur la BRVM, c'est souvent autour de 1,2 à 1,7 %.</div>
