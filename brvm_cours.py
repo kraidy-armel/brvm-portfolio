@@ -18,6 +18,10 @@ clairement si une donnee est fraiche ou perimee. Le fichier contient aussi un
 bloc "_meta" de diagnostic (ce qui a marche / echoue), visible en cas de
 probleme.
 
+NOUVEAU : le robot envoie aussi une notification push sur ton telephone
+(via ntfy.sh) quand un titre bouge fortement - voir le bloc NOTIFICATIONS
+plus bas. Maximum une notification par jour.
+
 Aucune cle API, aucun service payant. Tourne dans GitHub Actions.
 """
 
@@ -242,12 +246,128 @@ def scrape_fredy():
     return data
 
 
+# ==========================================================================
+# NOTIFICATIONS PUSH (ntfy.sh)
+# ==========================================================================
+# Le robot garde un petit historique des cours dans cours.json (bloc "_histo",
+# ignore par l'appli) et t'envoie une notification sur ton telephone quand un
+# titre sort de l'ordinaire :
+#   - variation de +/- SEUIL_7J % sur 7 jours (tendance), ou
+#   - variation de +/- SEUIL_1J % sur la journee (gros mouvement).
+# Maximum UNE notification par jour (un "digest"), pour ne pas te spammer.
+#
+# Pour recevoir les notifications : installe l'appli gratuite "ntfy" sur ton
+# telephone et abonne-toi au sujet NTFY_TOPIC ci-dessous (voir le guide).
+# Pour couper les notifications : mets NTFY_TOPIC = ""  (chaine vide).
+
+NTFY_TOPIC = "brvm-kraidy-sxoyc6rst1"   # ton canal secret - ne le partage pas
+SEUIL_7J = 5.0                           # seuil en % sur 7 jours
+SEUIL_1J = 4.0                           # seuil en % sur 1 jour
+HISTO_MAX_POINTS = 20                    # points de cours gardes par titre
+
+
+def notifier(merged, ancien_histo):
+    """Historise les cours et envoie au besoin la notification du jour.
+    Renvoie le bloc _histo a ecrire dans cours.json."""
+    today = datetime.date.today().isoformat()
+    state = {"points": {}, "derniere_notif": ""}
+    if isinstance(ancien_histo, dict):
+        state["points"] = ancien_histo.get("points", {}) or {}
+        state["derniere_notif"] = ancien_histo.get("derniere_notif", "") or ""
+    points = state["points"]
+
+    # 1) Historise le cours du jour (1 point par date de cours)
+    for sym, row in merged.items():
+        cur = row.get("actuel")
+        if not cur or cur <= 0:
+            continue
+        d = (row.get("date") or today)[:10]
+        h = points.setdefault(sym, {})
+        h[d] = cur
+        for old in sorted(h)[:-HISTO_MAX_POINTS]:
+            del h[old]
+
+    if not NTFY_TOPIC:
+        return state
+
+    # 2) Detection des mouvements
+    cutoff = (datetime.date.today() - datetime.timedelta(days=7)).isoformat()
+    hits7, hits1 = [], []
+    for sym, row in merged.items():
+        cur = row.get("actuel") or 0
+        if not cur or cur <= 0:
+            continue
+        prev = row.get("veille") or cur
+        if prev > 0:
+            v1 = (cur - prev) / prev * 100
+            if abs(v1) >= SEUIL_1J:
+                hits1.append((sym, v1, cur))
+        h = points.get(sym, {})
+        refs = sorted(d for d in h if d <= cutoff)
+        if refs:
+            ref = h[refs[-1]]
+            if ref and ref > 0:
+                v7 = (cur - ref) / ref * 100
+                if abs(v7) >= SEUIL_7J:
+                    hits7.append((sym, v7, cur))
+
+    # 3) Une seule notification par jour maximum
+    if state["derniere_notif"] == today:
+        return state
+
+    def fcfa(x):
+        return f"{x:,.0f}".replace(",", " ")
+
+    lines, vus = [], set()
+    for sym, v, cur in sorted(hits7, key=lambda x: -abs(x[1])):
+        vus.add(sym)
+        ico = "\U0001F4C8" if v > 0 else "\U0001F4C9"
+        lines.append(f"{ico} {sym} {v:+.1f}% sur 7 jours ({fcfa(cur)} F)")
+    for sym, v, cur in sorted(hits1, key=lambda x: -abs(x[1])):
+        if sym in vus:
+            continue
+        ico = "▲" if v > 0 else "▼"
+        lines.append(f"{ico} {sym} {v:+.1f}% aujourd'hui ({fcfa(cur)} F)")
+
+    if not lines:
+        return state
+
+    msg = "\n".join(lines[:8])
+    if len(lines) > 8:
+        msg += f"\n... et {len(lines) - 8} autre(s) titre(s)"
+    msg += "\n\nOuvre l'appli pour voir et agir. A toi de decider."
+    try:
+        r = requests.post(
+            "https://ntfy.sh/" + NTFY_TOPIC,
+            data=msg.encode("utf-8"),
+            headers={"Title": "BRVM - mouvements a surveiller",
+                     "Priority": "default",
+                     "Tags": "bell"},
+            timeout=20)
+        if r.status_code == 200:
+            state["derniere_notif"] = today
+            print(f"  notification ntfy envoyee ({min(len(lines), 8)} titre(s))")
+        else:
+            print(f"  ntfy a repondu HTTP {r.status_code} (on reessaiera)")
+    except Exception as e:
+        print(f"  notification ntfy impossible : {e}")
+    return state
+
+
 # --------------------------------------------------------------------------
 # Programme principal : fusion des sources, ecriture de cours.json
 # --------------------------------------------------------------------------
 def main():
     now = datetime.datetime.now(datetime.timezone.utc)
     diag = {}
+
+    # Historique precedent (garde dans cours.json, bloc "_histo")
+    ancien_histo = {}
+    try:
+        with open("cours.json", encoding="utf-8") as f:
+            ancien_histo = (json.load(f) or {}).get("_histo", {})
+    except Exception:
+        pass
 
     official, msg1 = scrape_brvm_official()
     diag["brvm_officiel"] = msg1
@@ -264,6 +384,10 @@ def main():
     for src in (fredy, official):  # official ecrase fredy si present (plus frais)
         for sym, row in src.items():
             merged[sym] = row
+
+    # Notifications + historique (avant l'ajout des codes alternatifs,
+    # pour ne pas signaler deux fois le meme titre)
+    histo = notifier(merged, ancien_histo)
 
     # Codes alternatifs : certains portefeuilles utilisent un code different du
     # code officiel. On duplique l'entree sous l'autre code pour que l'appli
@@ -289,6 +413,7 @@ def main():
         "diagnostic": diag,
     }}
     out.update(merged)
+    out["_histo"] = histo
 
     with open("cours.json", "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=1)
