@@ -1,13 +1,14 @@
 {
  "_meta": {
-  "updated": "2026-07-04T09:56:42+00:00",
-  "updated_human": "04/07/2026 09:56 UTC",
+  "updated": "2026-07-04T18:20:32+00:00",
+  "updated_human": "04/07/2026 18:20 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
    "github_secours": "non utilise (officiel suffisant)",
    "resultat": "48 titres",
-   "dates_couvertes": "2026-07-04 -> 2026-07-04"
+   "dates_couvertes": "2026-07-04 -> 2026-07-04",
+   "indice_composite": "460.55 (https://www.brvm.org/fr/indices/0)"
   }
  },
  "ABJC": {
@@ -489,6 +490,16 @@
     "2026-07-04": 1535.0
    }
   },
-  "derniere_notif": ""
+  "derniere_notif": "",
+  "_indice_prec": {
+   "composite": 460.55,
+   "date": "2026-07-04",
+   "source": "https://www.brvm.org/fr/indices/0"
+  }
+ },
+ "_indice": {
+  "composite": 460.55,
+  "date": "2026-07-04",
+  "source": "https://www.brvm.org/fr/indices/0"
  }
 }
