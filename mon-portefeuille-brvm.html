@@ -266,10 +266,10 @@
 <!-- AGENDA -->
 <section class="screen" id="s-agenda">
   <h2 style="margin:6px 4px 4px">Agenda BRVM</h2>
-  <div class="help">💡 <div>Les dates importantes : <b>AGO</b> (assemblée des actionnaires), publication des <b>résultats</b>, et <b>détachement du dividende</b> (date où il faut détenir l'action pour toucher le dividende).</div></div>
+  <div class="help">💡 <div>Les dates importantes : <b>AGO</b> (assemblée des actionnaires), publication des <b>résultats</b>, et <b>détachement du dividende</b>. Les annonces officielles des titres que tu suis s'ajoutent <b>automatiquement</b> à chaque synchro (marquées 🤖).</div></div>
   <div class="card" id="agendaList"></div>
   <button class="btn" style="margin-top:6px" onclick="openEvent()">＋ Ajouter un événement</button>
-  <button class="btn ghost" style="margin-top:10px" onclick="window.open('https://www.brvm.org/fr/agenda-evenements/0','_blank')">📅 Publications officielles BRVM ↗</button>
+  <button class="btn ghost" style="margin-top:10px" onclick="window.open('https://www.brvm.org/fr/emetteurs/type-annonces/convocations-assemblees-generales','_blank')">📅 Annonces officielles BRVM ↗</button>
 
   <div class="sect-title">🔔 Alertes de prix</div>
   <div class="card" id="alertsList"></div>
@@ -543,6 +543,8 @@ function recordPriceHist(data){
     const ks=Object.keys(store.idxHist);
     if(ks.length>400){ks.sort();ks.slice(0,ks.length-400).forEach(x=>delete store.idxHist[x]);}
   }
+  /* Annonces émetteurs (AG, dividendes, résultats) -> agenda automatique */
+  if(Array.isArray(data._annonces))mergeAnnonces(data._annonces);
   if(!store.priceHist)store.priceHist={};
   const H=store.priceHist;
   const prevDay=d=>{const x=new Date(d+"T00:00");x.setDate(x.getDate()-1);return x.toISOString().slice(0,10);};
@@ -864,6 +866,96 @@ function drawCompound(){
     {data:vals,borderColor:"#0B6B53",backgroundColor:"rgba(11,107,83,.12)",fill:true,tension:.25,pointRadius:0,borderWidth:2},
     {data:verseArr,borderColor:"#C9962E",borderDash:[5,4],fill:false,tension:0,pointRadius:0,borderWidth:1.5}
   ]},options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.datasetIndex?"versé : ":"patrimoine : ")+fmt(c.parsed.y)}}},scales:{y:{ticks:{callback:v2=>fmtAxis(v2),font:{size:10}}},x:{ticks:{maxTicksLimit:6,font:{size:9}}}}}});
+}
+
+/* --- Agenda automatique : annonces émetteurs BRVM -> événements --- */
+/* Dénominations usuelles dans les annonces (souvent abrégées) -> ticker.
+   L'ordre compte : les motifs les plus spécifiques d'abord. */
+const ANN_ALIAS=[
+  [/(BANK OF AFRICA|\bBOA\b).*BENIN/,"BOAB"],
+  [/(BANK OF AFRICA|\bBOA\b).*BURKINA/,"BOABF"],
+  [/(BANK OF AFRICA|\bBOA\b).*(IVOIRE|\bCI\b)/,"BOAC"],
+  [/(BANK OF AFRICA|\bBOA\b).*MALI/,"BOAM"],
+  [/(BANK OF AFRICA|\bBOA\b).*NIGER/,"BOAN"],
+  [/(BANK OF AFRICA|\bBOA\b).*SENEGAL/,"BOAS"],
+  [/SONATEL/,"SNTS"],
+  [/(SOCIETE GENERALE|\bSGB\b|SGBCI)/,"SGBC"],
+  [/ECOBANK TRANSNATIONAL|\bETI\b/,"ETIT"],
+  [/ECOBANK.*(IVOIRE|\bCI\b)/,"ECOC"],
+  [/ONATEL/,"ONTBF"],
+  [/ORANGE/,"ORAC"],
+  [/NSIA/,"NSBC"],
+  [/CORIS/,"CBIBF"],
+  [/NESTLE/,"NTLC"],
+  [/UNILEVER/,"UNLC"],
+  [/UNIWAX/,"UNXC"],
+  [/SOLIBRA/,"SLBC"],
+  [/PALM\s?CI|\bPALM\b/,"PALC"],
+  [/\bSAPH\b/,"SPHC"],
+  [/SUCRIVOIRE/,"SCRC"],
+  [/FILTISAC/,"FTSC"],
+  [/BERNABE/,"BNBC"],
+  [/CFAO/,"CFAC"],
+  [/VIVO/,"SVOC"],
+  [/TOTAL.*SENEGAL/,"TTLS"],
+  [/TOTAL/,"TTLC"],
+  [/SODECI/,"SDCC"],
+  [/\bCIE\b|COMPAGNIE IVOIRIENNE D ELECTRICITE/,"CIEC"],
+  [/\bBICI\b|\bBICC\b/,"BICC"],
+  [/SITAB/,"STBC"],
+  [/\bAGL\b|AFRICA GLOBAL LOGISTICS|BOLLORE/,"SDSC"],
+  [/SAFCA/,"SAFC"],
+  [/SICABLE/,"CABC"],
+  [/SETAO/,"STAC"],
+  [/\bSMB\b/,"SMBC"],
+  [/\bSICOR\b/,"SICC"],
+  [/AIR LIQUIDE/,"SIVC"],
+  [/SERVAIR|ABIDJAN CATERING/,"ABJC"],
+  [/\bSHELL\b|\bSHEC\b/,"SHEC"],
+  [/TRACTAFRIC|SODE\b/,"SOGC"],
+  [/\bSIB\b|INTERNATIONALE DE BANQUE/,"SIBC"],
+  [/\bPRSC\b|TROPICALE.*PRESSING|SICTA/,"PRSC"],
+  [/LOTERIE|LONACI/,"LNBB"],
+  [/\bSEMC\b|EAU MINERALE|CRISTAL/,"SEMC"],
+  [/\bNEI\b|CEDA/,"NEIC"],
+  [/BURKINA.*(ONAT|TELECOM)/,"ONTBF"]
+];
+function mergeAnnonces(list){
+  if(!Array.isArray(list)||!list.length)return;
+  if(!store.annSeen)store.annSeen={};
+  const norm=s=>(s||"").toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Z0-9 ]/g," ").replace(/\s+/g," ").trim();
+  /* uniquement les titres que TU suis (positions + alertes) pour ne pas noyer l'agenda */
+  const mine=new Set();
+  positions().forEach(p=>{mine.add(p.ticker);mine.add(resolveTicker(p.ticker));});
+  (db.alerts||[]).forEach(a=>{if(a.ticker)mine.add(a.ticker);});
+  if(!mine.size)return;
+  const byName={}; Object.keys(stockMap).forEach(tk=>{byName[norm(stockMap[tk].name)]=tk;});
+  const MOIS={JANVIER:1,FEVRIER:2,MARS:3,AVRIL:4,MAI:5,JUIN:6,JUILLET:7,AOUT:8,SEPTEMBRE:9,OCTOBRE:10,NOVEMBRE:11,DECEMBRE:12};
+  let added=0;
+  list.forEach(a=>{
+    if(!a||!a.societe||!a.type)return;
+    const key=(a.date||"")+"|"+norm(a.societe)+"|"+a.type;
+    if(store.annSeen[key])return;
+    store.annSeen[key]=a.date||today();
+    /* société -> ticker : nom exact, puis alias usuels, puis inclusion */
+    const ns=norm(a.societe); let tk=byName[ns]||null;
+    if(!tk){for(const al of ANN_ALIAS){if(al[0].test(ns)){tk=al[1];break;}}}
+    if(!tk&&ns.length>=5){for(const n in byName){if(n.indexOf(ns)>=0||ns.indexOf(n)>=0){tk=byName[n];break;}}}
+    if(!tk||!(mine.has(tk)))return;
+    /* date de l'événement : « du 12 août 2026 » ou « 12/08/2026 » dans le titre, sinon date de publication */
+    let d=a.date||today();
+    let m=(a.titre||"").match(/(\d{1,2})(?:er)?\s+(janvier|f[ée]vrier|mars|avril|mai|juin|juillet|ao[ûu]t|septembre|octobre|novembre|d[ée]cembre)\s+(\d{4})/i);
+    if(m){const mo=MOIS[norm(m[2])];if(mo)d=m[3]+"-"+String(mo).padStart(2,"0")+"-"+String(+m[1]).padStart(2,"0");}
+    else{m=(a.titre||"").match(/(\d{2})\/(\d{2})\/(\d{4})/);if(m)d=m[3]+"-"+m[2]+"-"+m[1];}
+    /* pas de doublon si un événement similaire existe déjà à ±15 jours */
+    if((db.events||[]).some(e=>e.ticker===tk&&e.type===a.type&&Math.abs(new Date(e.date+"T00:00")-new Date(d+"T00:00"))<15*86400000))return;
+    db.events.push({id:uid(),type:a.type,ticker:tk,date:d,note:("🤖 "+(a.titre||"Annonce BRVM")).slice(0,90),auto:true});
+    added++;
+  });
+  /* nettoyage des clés vues > 1 an */
+  const lim=new Date(Date.now()-365*86400000).toISOString().slice(0,10);
+  Object.keys(store.annSeen).forEach(k=>{if((store.annSeen[k]||"")<lim)delete store.annSeen[k];});
+  if(added)try{localStorage.setItem(DB_KEY,JSON.stringify(store));}catch(e){}
 }
 
 /* --- Profil de risque : volatilité, bêta, Sharpe, Treynor, VaR, TRI --- */

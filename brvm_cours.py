@@ -256,6 +256,55 @@ INDICE_URLS = [
 ]
 
 
+ANNONCE_PAGES = [
+    ("https://www.brvm.org/fr/emetteurs/type-annonces/convocations-assemblees-generales", "ago"),
+    ("https://www.brvm.org/fr/emetteurs/type-annonces/communiques", "communique"),
+]
+
+
+def scrape_annonces():
+    """Lit les dernieres annonces emetteurs (AG, dividendes, resultats) sur
+    brvm.org. L'appli les transforme en evenements d'agenda pour les titres
+    que l'utilisateur suit. Renvoie une liste (max 40)."""
+    out = []
+    if not HAS_BS4:
+        return out
+    for url, typ in ANNONCE_PAGES:
+        try:
+            r = http_get(url, timeout=30)
+            if r.status_code != 200 or not r.text:
+                continue
+            soup = BeautifulSoup(r.text, "html.parser")
+            for table in soup.find_all("table"):
+                heads = " ".join(th.get_text(" ", strip=True).lower()
+                                 for th in table.find_all("th"))
+                if "annonce" not in heads:
+                    continue
+                for tr in table.find_all("tr"):
+                    tds = [td.get_text(" ", strip=True) for td in tr.find_all("td")]
+                    if len(tds) < 3:
+                        continue
+                    dm = re.match(r"(\d{2})/(\d{2})/(\d{4})", tds[0].strip())
+                    if not dm:
+                        continue
+                    date = f"{dm.group(3)}-{dm.group(2)}-{dm.group(1)}"
+                    societe, titre = tds[1].strip(), tds[2].strip()
+                    t = typ
+                    low = titre.lower()
+                    if typ == "communique":
+                        if "dividende" in low:
+                            t = "dividende"
+                        elif "sultat" in low:      # resultat(s), avec ou sans accent
+                            t = "resultats"
+                        else:
+                            continue
+                    out.append({"date": date, "societe": societe,
+                                "titre": titre[:120], "type": t})
+        except Exception:
+            pass
+    return out[:40]
+
+
 def scrape_indice():
     """Cherche la valeur de l'indice BRVM Composite sur le site officiel.
     Renvoie (valeur, source) ou (None, message)."""
@@ -465,6 +514,18 @@ def main():
         diag["indice_composite"] = f"non recupere ({idx_src})"
     if out.get("_indice"):
         histo["_indice_prec"] = out["_indice"]
+
+    # Annonces emetteurs (AG, dividendes, resultats) -> agenda de l'appli
+    ann = scrape_annonces()
+    if ann:
+        out["_annonces"] = ann
+        diag["annonces"] = f"{len(ann)} annonce(s)"
+    else:
+        if isinstance(ancien_histo, dict) and ancien_histo.get("_annonces_prec"):
+            out["_annonces"] = ancien_histo["_annonces_prec"]
+        diag["annonces"] = "non recuperees"
+    if out.get("_annonces"):
+        histo["_annonces_prec"] = out["_annonces"]
 
     with open("cours.json", "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=1)
