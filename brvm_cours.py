@@ -246,6 +246,41 @@ def scrape_fredy():
     return data
 
 
+# --------------------------------------------------------------------------
+# Indice BRVM Composite (pour comparer le portefeuille au marche)
+# --------------------------------------------------------------------------
+INDICE_URLS = [
+    "https://www.brvm.org/fr",
+    "https://www.brvm.org/fr/indices/0",
+    "https://www.brvm.org/en",
+]
+
+
+def scrape_indice():
+    """Cherche la valeur de l'indice BRVM Composite sur le site officiel.
+    Renvoie (valeur, source) ou (None, message)."""
+    last = "introuvable"
+    for url in INDICE_URLS:
+        try:
+            r = http_get(url, timeout=30)
+            if r.status_code != 200 or not r.text:
+                last = f"{url} -> HTTP {r.status_code}"
+                continue
+            # texte brut sans balises, pour un motif robuste
+            txt = re.sub(r"<[^>]+>", " ", r.text)
+            m = re.search(
+                r"BRVM[\s\-]*C(?:omposite|OMPOSITE)\D{0,40}?(\d{2,3}(?:[.,]\d{1,2})?)",
+                txt)
+            if m:
+                val = to_number_fr(m.group(1))
+                if val and 50 < val < 2000:   # garde-fou de vraisemblance
+                    return val, url
+            last = f"{url} -> motif non trouve"
+        except Exception as e:  # noqa
+            last = f"{url} -> {e}"
+    return None, last
+
+
 # ==========================================================================
 # NOTIFICATIONS PUSH (ntfy.sh)
 # ==========================================================================
@@ -414,6 +449,22 @@ def main():
     }}
     out.update(merged)
     out["_histo"] = histo
+
+    # Indice BRVM Composite (l'appli le recupere automatiquement a la synchro)
+    idx, idx_src = scrape_indice()
+    if idx:
+        out["_indice"] = {"composite": idx,
+                          "date": datetime.date.today().isoformat(),
+                          "source": idx_src}
+        diag["indice_composite"] = f"{idx} ({idx_src})"
+    else:
+        # site injoignable : on ressert la derniere valeur connue (marquee du jour
+        # de sa collecte) plutot que de perdre l'info
+        if isinstance(ancien_histo, dict) and ancien_histo.get("_indice_prec"):
+            out["_indice"] = ancien_histo["_indice_prec"]
+        diag["indice_composite"] = f"non recupere ({idx_src})"
+    if out.get("_indice"):
+        histo["_indice_prec"] = out["_indice"]
 
     with open("cours.json", "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=1)

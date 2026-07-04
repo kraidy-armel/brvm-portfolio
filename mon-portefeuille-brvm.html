@@ -218,6 +218,8 @@
 
   <div id="goalsCard" style="margin-top:14px"></div>
 
+  <div id="riskCard" style="margin-top:14px"></div>
+
   <div class="sect-title">Évolution de la valeur</div>
   <div class="card" id="evoCard"><canvas id="evoChart" height="150"></canvas></div>
 
@@ -439,7 +441,10 @@ function resolveTicker(x){
 /* ================= ÉTAT (multi-portefeuilles) ================= */
 const DB_KEY="brvm_portfolio_v2";
 const OLD_KEY="brvm_portfolio_v1";
-function blankPortfolio(name){return {id:uid(),name:name||"Mon portefeuille",tx:[],div:[],events:[],prices:{},history:[],brvmIndex:null,cash:[],alerts:[]};}
+function blankPortfolio(name){return {id:uid(),name:name||"Mon portefeuille",tx:[],div:[],events:[],prices:{},history:[],brvmIndex:null,cash:[],alerts:[],sgiRate:1.5};}
+/* Frais SGI propres à CHAQUE portefeuille (BSIC, NSIA... appliquent des taux différents) */
+function sgiRate(){return (db&&db.sgiRate!=null)?+db.sgiRate:(store.sgiRate!=null?+store.sgiRate:1.5);}
+function setSgiRate(v){db.sgiRate=+v||0;save();}
 let store={portfolios:[],activeId:null,lock:null};
 let db; /* pointe vers le portefeuille actif */
 function activate(id){const p=store.portfolios.find(x=>x.id===id)||store.portfolios[0];store.activeId=p.id;db=p;}
@@ -530,6 +535,14 @@ async function fetchCours(){
 /* Mémorise le cours de clôture de chaque titre (construit l'historique au fil du temps) */
 function recordPriceHist(data){
   if(!data)return;
+  /* Indice BRVM Composite automatique (fourni par le robot dans cours.json) */
+  if(data._indice&&+data._indice.composite>0){
+    db.brvmIndex=+data._indice.composite;
+    if(!store.idxHist)store.idxHist={};
+    store.idxHist[(data._indice.date||today()).slice(0,10)]=+data._indice.composite;
+    const ks=Object.keys(store.idxHist);
+    if(ks.length>400){ks.sort();ks.slice(0,ks.length-400).forEach(x=>delete store.idxHist[x]);}
+  }
   if(!store.priceHist)store.priceHist={};
   const H=store.priceHist;
   const prevDay=d=>{const x=new Date(d+"T00:00");x.setDate(x.getDate()-1);return x.toISOString().slice(0,10);};
@@ -851,6 +864,142 @@ function drawCompound(){
     {data:vals,borderColor:"#0B6B53",backgroundColor:"rgba(11,107,83,.12)",fill:true,tension:.25,pointRadius:0,borderWidth:2},
     {data:verseArr,borderColor:"#C9962E",borderDash:[5,4],fill:false,tension:0,pointRadius:0,borderWidth:1.5}
   ]},options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.datasetIndex?"versé : ":"patrimoine : ")+fmt(c.parsed.y)}}},scales:{y:{ticks:{callback:v2=>fmtAxis(v2),font:{size:10}}},x:{ticks:{maxTicksLimit:6,font:{size:9}}}}}});
+}
+
+/* --- Profil de risque : volatilité, bêta, Sharpe, Treynor, VaR, TRI --- */
+const RF_UEMOA=5.5; /* taux « sans risque » indicatif (bons du Trésor UEMOA, %) */
+function portfolioReturns(days){
+  const ps=totals().ps; if(!ps.length)return null;
+  const tot=ps.reduce((s,p)=>s+p.value,0); if(tot<=0)return null;
+  const w={}; ps.forEach(p=>w[p.ticker]=p.value/tot);
+  const PH=store.priceHist||{}, idx=store.idxHist||{};
+  const dset=new Set(); ps.forEach(p=>Object.keys(PH[p.ticker]||{}).forEach(d=>dset.add(d)));
+  const dates=[...dset].sort().slice(-(days||120));
+  const rp=[],rm=[];
+  for(let i=1;i<dates.length;i++){
+    let r=0,ws=0;
+    ps.forEach(p=>{const H=PH[p.ticker]||{};const a=+H[dates[i-1]],b=+H[dates[i]];if(a>0&&b>0){r+=w[p.ticker]*(b/a-1);ws+=w[p.ticker];}});
+    if(ws>0.5){
+      rp.push(r/ws);
+      const ia=+idx[dates[i-1]],ib=+idx[dates[i]];
+      rm.push(ia>0&&ib>0?ib/ia-1:null);
+    }
+  }
+  return {rp,rm};
+}
+function computeTRI(){
+  const flows=[];
+  db.tx.forEach(x=>{const m=x.qty*x.price+(x.type==='achat'?1:-1)*(+x.frais||0);flows.push({d:x.date,v:x.type==='achat'?-m:m});});
+  db.div.forEach(d=>{if(+d.montant)flows.push({d:d.date,v:+d.montant});});
+  const val=totals().value;
+  if(flows.length<1||val<=0)return null;
+  flows.push({d:today(),v:val});
+  flows.sort((a,b)=>a.d.localeCompare(b.d));
+  const t0=new Date(flows[0].d+"T00:00").getTime();
+  const yrs=f=>(new Date(f.d+"T00:00").getTime()-t0)/(365.25*86400000);
+  if(yrs(flows[flows.length-1])<0.15)return null; /* trop récent pour annualiser honnêtement */
+  const npv=r=>flows.reduce((s,f)=>s+f.v/Math.pow(1+r,yrs(f)),0);
+  let lo=-0.95,hi=9;
+  if(npv(lo)*npv(hi)>0)return null;
+  for(let i=0;i<80;i++){const mid=(lo+hi)/2;if(npv(lo)*npv(mid)<=0)hi=mid;else lo=mid;}
+  return (lo+hi)/2*100;
+}
+function riskMetrics(){
+  const t=totals(), bal=Math.max(0,cashBalance()), pat=t.value+bal;
+  const out={actions:t.value,liquid:bal,pat,alloc:pat>0?t.value/pat*100:0,
+    lignes:t.ps.length,top:t.ps.length?Math.max(...t.ps.map(p=>p.value))/(t.value||1)*100:0,
+    vol:null,ret:null,beta:null,sharpe:null,treynor:null,var95:null,n:0,nIdx:0,tri:computeTRI()};
+  const pr=portfolioReturns(120);
+  if(pr&&pr.rp.length>=10){
+    out.n=pr.rp.length;
+    const m=pr.rp.reduce((s,x)=>s+x,0)/pr.rp.length;
+    const va=pr.rp.reduce((s,x)=>s+(x-m)*(x-m),0)/(pr.rp.length-1);
+    out.vol=Math.sqrt(va)*Math.sqrt(252)*100;
+    out.ret=m*252*100;
+    if(out.vol>0)out.sharpe=(out.ret-RF_UEMOA)/out.vol;
+    if(pat>0&&out.vol!=null)out.var95=pat*1.65*(out.vol/100)/Math.sqrt(12);
+    const pairs=pr.rp.map((x,i)=>[x,pr.rm[i]]).filter(p=>p[1]!=null);
+    out.nIdx=pairs.length;
+    if(pairs.length>=10){
+      const mp=pairs.reduce((s,p)=>s+p[0],0)/pairs.length;
+      const mm=pairs.reduce((s,p)=>s+p[1],0)/pairs.length;
+      let cov=0,vm=0;
+      pairs.forEach(p=>{cov+=(p[0]-mp)*(p[1]-mm);vm+=(p[1]-mm)*(p[1]-mm);});
+      if(vm>0){out.beta=cov/vm;if(Math.abs(out.beta)>0.05)out.treynor=(out.ret-RF_UEMOA)/out.beta;}
+    }
+  }
+  return out;
+}
+function riskProfile(r){
+  let score=0;
+  if(r.alloc>=85)score+=2;else if(r.alloc>=60)score+=1;
+  if(r.vol!=null){if(r.vol>=25)score+=2;else if(r.vol>=15)score+=1;}
+  if(r.top>=40)score+=2;else if(r.top>=25)score+=1;
+  if(r.lignes>0&&r.lignes<4)score+=1;
+  const label=score>=5?"Agressif 🔥":score>=3?"Dynamique 📈":score>=1?"Équilibré ⚖️":"Prudent 🛡️";
+  const bits=[];
+  if(r.vol!=null)bits.push("volatilité "+r.vol.toFixed(0)+" %/an");
+  bits.push(r.alloc.toFixed(0)+" % actions");
+  bits.push(r.lignes+" ligne"+(r.lignes>1?"s":""));
+  if(r.tri!=null)bits.push("TRI "+(r.tri>=0?"+":"")+r.tri.toFixed(1)+" %/an");
+  return {label,score,short:bits.join(" · ")};
+}
+function renderRisk(){
+  const el=document.getElementById("riskCard"); if(!el)return;
+  if(!totals().ps.length){el.innerHTML="";return;}
+  const r=riskMetrics(), p=riskProfile(r);
+  el.innerHTML=`<div class="card" style="padding:14px 16px;cursor:pointer;margin-bottom:0" onclick="openRisk()">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+      <b style="font-size:14px">🧭 Profil de risque : ${p.label}</b><span style="color:var(--muted);font-size:20px">›</span></div>
+    <div class="hint" style="margin-top:5px">${masked?"Détails masqués (œil actif) — touche pour l'analyse":p.short}</div>
+  </div>`;
+}
+function openRisk(){
+  const r=riskMetrics(), p=riskProfile(r);
+  const kv=(k,v)=>`<div class="kv"><span class="k">${k}</span><b>${v}</b></div>`;
+  const exp=t=>`<div class="hint" style="padding:9px 0 2px;border-bottom:none">${t}</div>`;
+  const na='<span style="color:var(--muted);font-weight:400">— (encore un peu d\'historique)</span>';
+  /* recommandations honnêtes, choisies selon TES chiffres */
+  const recos=[];
+  if(r.top>=40)recos.push("🎯 <b>Réduis ta concentration.</b> Ta plus grosse ligne pèse "+r.top.toFixed(0)+" % : si elle chute, tout ton portefeuille plonge. Vise moins de 25-30 % par titre en renforçant d'autres valeurs (pas forcément en vendant).");
+  else if(r.lignes<4&&r.lignes>0)recos.push("🧺 <b>Élargis ton panier.</b> Avec "+r.lignes+" ligne"+(r.lignes>1?"s":"")+", un seul accident d'entreprise te fait très mal. 5 à 8 valeurs de secteurs différents amortissent les chocs.");
+  if(r.alloc>=95)recos.push("💧 <b>Garde un coussin de liquidités.</b> Tu es investi à "+r.alloc.toFixed(0)+" % : sans réserve, tu ne peux pas saisir une opportunité (ou faire face à un imprévu) sans vendre au mauvais moment. 5-15 % de liquidités, c'est confortable.");
+  else if(r.alloc<50&&r.pat>0)recos.push("💤 <b>Ton argent dort.</b> Plus de la moitié de ton patrimoine est en liquidités qui ne rapportent rien face à l'inflation. Investis progressivement (chaque mois, par exemple) plutôt que d'un coup.");
+  if(r.beta!=null&&r.beta>1.2)recos.push("🌊 <b>Ton portefeuille amplifie le marché</b> (bêta "+r.beta.toFixed(2)+"). Quand la BRVM baisse de 10 %, tu tends à perdre davantage. Assure-toi que ton horizon (plusieurs années) le permet.");
+  if(r.tri!=null&&r.tri<RF_UEMOA&&r.n>=20)recos.push("🏦 <b>Compare-toi au sans-risque.</b> Ton TRI ("+r.tri.toFixed(1)+" %/an) est sous les ~"+RF_UEMOA+" % des bons du Trésor UEMOA. Pas de panique sur une courte période, mais si ça dure, questionne tes choix de titres.");
+  if(recos.length<2)recos.push("📆 <b>La régularité bat le timing.</b> Verser un montant fixe chaque mois lisse tes prix d'achat et enlève l'émotion de l'équation.");
+  if(recos.length<3)recos.push("💰 <b>Réinvestis tes dividendes.</b> C'est le moteur des intérêts composés — vois le simulateur dans l'onglet Analyse.");
+  openSheet(`<h3>🧭 Ton profil de risque</h3>
+    <div class="hint">Calculé sur tes données réelles (${r.n>0?r.n+" points de synchro":"historique en construction"}). Mis à jour à chaque synchro.</div>
+    <div class="card" style="padding:14px;margin:14px 0 0;text-align:center">
+      <div style="font-size:26px;font-weight:700">${p.label}</div>
+      <div class="hint" style="margin-top:4px">${p.score>=5?"Rendement potentiel élevé, secousses fortes — il faut des nerfs et du temps devant toi.":p.score>=3?"Tu cherches la croissance en acceptant des variations sensibles.":p.score>=1?"Un compromis raisonnable entre croissance et stabilité.":"Priorité à la stabilité — ton portefeuille bouge peu."}</div>
+    </div>
+    <div class="sect-title" style="margin:16px 0 4px">Tes actifs</div>
+    <div class="card" style="padding:4px 14px">
+      ${kv("Actions BRVM",fmt(r.actions)+" ("+r.alloc.toFixed(0)+" %)")}
+      ${kv("Liquidités",fmt(r.liquid))}
+      ${kv("Plus grosse ligne",r.top?r.top.toFixed(0)+" % du portefeuille":"—")}
+      <div class="hint" style="padding:8px 0">ℹ️ L'appli suit tes <b>actions</b>. La BRVM cote aussi des obligations (rendement fixe, moins de secousses) — si tu en détiens via ta SGI, elles n'apparaissent pas ici.</div>
+    </div>
+    <div class="sect-title" style="margin:16px 0 4px">Tes indicateurs, en clair</div>
+    <div class="card" style="padding:4px 14px">
+      ${exp("<b>TRI — ta vraie performance.</b> Le rendement annualisé de TON argent, en tenant compte de <b>quand</b> tu as investi. C'est LE chiffre comparable à un placement bancaire.")}
+      ${kv("→ Ton TRI",r.tri!=null?`<span class="${r.tri>=RF_UEMOA?'pos':(r.tri<0?'neg':'')}">${(r.tri>=0?"+":"")+r.tri.toFixed(1)} %/an</span>`:na)}
+      ${exp("<b>Volatilité.</b> L'amplitude des secousses. 10 % = tranquille, 25 % et plus = montagnes russes.")}
+      ${kv("→ La tienne",r.vol!=null?r.vol.toFixed(1)+" %/an":na)}
+      ${exp("<b>Bêta vs BRVM Composite.</b> Ta sensibilité au marché : 1 = tu bouges comme lui, 1,5 = tu amplifies, 0,5 = tu amortis.")}
+      ${kv("→ Le tien",r.beta!=null?r.beta.toFixed(2):na)}
+      ${exp("<b>Ratio de Sharpe.</b> Le rendement gagné par unité de risque pris, au-dessus du taux sans risque (~"+RF_UEMOA+" %). Au-dessus de 1 : très bien. Négatif : le risque n'a pas payé.")}
+      ${kv("→ Le tien",r.sharpe!=null?r.sharpe.toFixed(2):na)}
+      ${exp("<b>Ratio de Treynor.</b> Comme Sharpe, mais rapporté au seul risque de marché (le bêta).")}
+      ${kv("→ Le tien",r.treynor!=null?r.treynor.toFixed(1):na)}
+      ${exp("<b>VaR 95 % (1 mois).</b> La perte plausible dans un mauvais mois — 1 mois sur 20 fera pire. Un repère, pas une limite garantie.")}
+      ${kv("→ La tienne",r.var95!=null?"jusqu'à ≈ "+fmt(Math.round(r.var95)):na)}
+    </div>
+    <div class="sect-title" style="margin:16px 0 4px">Mes recommandations</div>
+    ${recos.slice(0,3).map(x=>`<div class="help" style="margin-bottom:8px">💡 <div>${x}</div></div>`).join("")}
+    <div class="hint" style="margin-top:10px">⚖️ Ces indicateurs se basent sur ton historique de synchros${r.n<30?" — encore jeune, ils vont s'affiner de semaine en semaine":""}. Lecture éducative et honnête de TES chiffres, pas un conseil d'investissement.</div>`);
 }
 
 /* --- Comparateur de titres --- */
@@ -1179,7 +1328,7 @@ function go(s){
 }
 
 /* ================= RENDU ================= */
-function renderAll(){renderHome();renderPortfolio();renderDiv();renderAgenda();renderTrendBanner();renderGoals();if(document.getElementById("s-analyse").classList.contains("active"))drawAnalyse();}
+function renderAll(){renderHome();renderPortfolio();renderDiv();renderAgenda();renderTrendBanner();renderGoals();renderRisk();if(document.getElementById("s-analyse").classList.contains("active"))drawAnalyse();}
 
 function posRow(p,tappable){
   const c=p.pl>=0?"pos":"neg";
@@ -1667,7 +1816,7 @@ function openTx(id){
     <label>Société <span class="hint">Tape pour chercher, ou ajoute un titre non listé</span></label>${combo('txTicker','Ex : Sonatel, SNTS, BOA...')}
     <label>Nombre de titres</label><input id="txQty" type="number" inputmode="numeric" placeholder="ex : 10" value="${ed?ed.qty:''}" oninput="txAutoFrais()">
     <label>Prix par action (FCFA)</label><input id="txPrice" type="number" inputmode="decimal" placeholder="ex : 15000" value="${ed?ed.price:''}" oninput="txAutoFrais()">
-    <label>Frais / commission (FCFA)<span class="hint">Calculés auto depuis ton taux SGI (${store.sgiRate||0} %) — modifiable à la main</span></label><input id="txFrais" type="number" inputmode="decimal" placeholder="0" value="${ed&&ed.frais?ed.frais:''}" oninput="window.txFraisManual=true">
+    <label>Frais / commission (FCFA)<span class="hint">Calculés auto depuis le taux SGI de ce portefeuille (${sgiRate()} %) — modifiable à la main</span></label><input id="txFrais" type="number" inputmode="decimal" placeholder="0" value="${ed&&ed.frais?ed.frais:''}" oninput="window.txFraisManual=true">
     <label>Date</label><input id="txDate" type="date" value="${ed?ed.date:today()}">
     <label>Libellé <span class="hint">Optionnel — une note pour reconnaître l'opération</span></label><input id="txLib" placeholder="ex : PEA long terme, ordre via SGI X..." value="${ed?escAttr(ed.libelle):''}">
     <label>📝 Pourquoi cette opération ? <span class="hint">Journal de décision — tu la reliras avant de vendre</span></label><textarea id="txThese" rows="2" placeholder="ex : rendement dividende solide, résultats en hausse, valorisation raisonnable...">${ed?escHtml(ed.these||''):''}</textarea>
@@ -1685,7 +1834,7 @@ function txAutoFrais(){
   if(window.txFraisManual)return;
   const qty=+document.getElementById("txQty").value, price=+document.getElementById("txPrice").value;
   const f=document.getElementById("txFrais");
-  if(f&&qty>0&&price>0)f.value=Math.round(qty*price*(store.sgiRate||0)/100);
+  if(f&&qty>0&&price>0)f.value=Math.round(qty*price*sgiRate()/100);
 }
 function saveTx(id){
   const ticker=comboValue("txTicker");
@@ -1784,9 +1933,9 @@ function openSettings(){
     <button class="btn ghost" style="margin-top:10px" onclick="toggleDark()">${isDark()?'☀️ Repasser en mode clair':'🌙 Passer en mode sombre'}</button>
     <button class="btn ghost" style="margin-top:10px" onclick="openGoals()">🎯 Mes objectifs</button>
     <button class="btn ghost" style="margin-top:10px" onclick="closeSheet();openReport()">📄 Rapport de portefeuille (PDF)</button>
-    <label style="margin-top:16px">Frais SGI — commission + taxes (%)</label>
-    <input id="sgiRate" type="number" step="0.1" min="0" value="${store.sgiRate}" onchange="store.sgiRate=+this.value||0;save()">
-    <div class="hint">Appliqué à la vente pour estimer ta plus-value <b>nette</b> (visible dans le détail d'un titre). Sur la BRVM, c'est souvent autour de 1,2 à 1,7 %.</div>
+    <label style="margin-top:16px">Frais SGI de <b>ce portefeuille</b> — commission + taxes (%)</label>
+    <input id="sgiRate" type="number" step="0.01" min="0" value="${sgiRate()}" onchange="setSgiRate(this.value)">
+    <div class="hint">Chaque portefeuille a son taux selon sa SGI (ex : BSIC ≈ 1,18 %, NSIA ≈ 1,40 %). Ce réglage s'applique au portefeuille actif : <b>${escHtml(db.name||"")}</b>. Utilisé pour les frais auto et la plus-value nette.</div>
     <label style="margin-top:16px">🔴 Service de cours en direct <span class="hint">URL de ton Worker Cloudflare — « Synchroniser » ira chercher les cours du jour à la demande. Laisse vide pour utiliser le robot GitHub.</span></label>
     <input id="liveUrl" type="url" placeholder="https://brvm-cours.xxxx.workers.dev" value="${escAttr(store.liveUrl||'')}" onchange="store.liveUrl=(this.value||'').trim();save()">
     <button class="btn ghost" style="margin-top:10px" onclick="openImportOps()">📥 Importer des opérations (CSV / Excel)</button>
@@ -1958,7 +2107,7 @@ function posDetail(ticker){
       <div class="kv"><span class="k">Montant investi</span><b>${fmt(p.invested)}</b></div>
       <div class="kv"><span class="k">Valeur actuelle</span><b>${fmt(p.value)}</b></div>
       <div class="kv"><span class="k">Plus/Moins-value (brute)</span><b class="${c}">${sign(p.pl)} (${p.pl>=0?"+":""}${p.plPct.toFixed(1)}%)</b></div>
-      ${(()=>{const rate=(store.sgiRate||0)/100;const net=p.value*(1-rate)-p.invested;const nc=net>=0?"pos":"neg";return `<div class="kv"><span class="k">Plus-value <b>nette</b> si je vends<br><span style="font-weight:400;font-size:12px">(après frais SGI de ${store.sgiRate}%)</span></span><b class="${nc}">${sign(net)}</b></div>`;})()}
+      ${(()=>{const rate=sgiRate()/100;const net=p.value*(1-rate)-p.invested;const nc=net>=0?"pos":"neg";return `<div class="kv"><span class="k">Plus-value <b>nette</b> si je vends<br><span style="font-weight:400;font-size:12px">(après frais SGI de ${sgiRate()}%)</span></span><b class="${nc}">${sign(net)}</b></div>`;})()}
     </div>
     <div class="sect-title" style="margin:18px 4px 6px">📈 Évolution du cours</div>
     <div id="titleChartWrap" style="min-height:40px"><canvas id="titleChart" height="150"></canvas></div>
