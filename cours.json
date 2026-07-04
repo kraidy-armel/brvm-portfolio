@@ -1,14 +1,15 @@
 {
  "_meta": {
-  "updated": "2026-07-04T18:20:32+00:00",
-  "updated_human": "04/07/2026 18:20 UTC",
+  "updated": "2026-07-04T19:46:35+00:00",
+  "updated_human": "04/07/2026 19:46 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
    "github_secours": "non utilise (officiel suffisant)",
    "resultat": "48 titres",
    "dates_couvertes": "2026-07-04 -> 2026-07-04",
-   "indice_composite": "460.55 (https://www.brvm.org/fr/indices/0)"
+   "indice_composite": "460.55 (https://www.brvm.org/fr/indices/0)",
+   "annonces": "16 annonce(s)"
   }
  },
  "ABJC": {
@@ -495,11 +496,207 @@
    "composite": 460.55,
    "date": "2026-07-04",
    "source": "https://www.brvm.org/fr/indices/0"
-  }
+  },
+  "_annonces_prec": [
+   {
+    "date": "2026-06-30",
+    "societe": "UNIWAX CI",
+    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-30",
+    "societe": "UNIWAX CI",
+    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-29",
+    "societe": "LNB",
+    "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-29",
+    "societe": "AIR LIQUIDE CI",
+    "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "SITAB",
+    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "SITAB",
+    "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "SITAB",
+    "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "AIR LIQUIDE CI",
+    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-15",
+    "societe": "TRACTAFRIC CI",
+    "titre": "TRACTAFRIC MOTORS CI : Avis de convocation - Assemblée Générale Mixte",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-13",
+    "societe": "BIIC",
+    "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-13",
+    "societe": "LNB",
+    "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-12",
+    "societe": "NSBC",
+    "titre": "NSIA BANQUE CI : Avis de convocation et Projet de résolutions - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-08",
+    "societe": "SODECI",
+    "titre": "SODE CI : Avis de convocation - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-07",
+    "societe": "SMB",
+    "titre": "SMB CI : Avis de convocation - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-07",
+    "societe": "SMB",
+    "titre": "SMB CI : Pouvoir - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2025-12-23",
+    "societe": "BANK OF AFRICA NG",
+    "titre": "Communiqué – Alerte sur résultats - BOA NIGER",
+    "type": "resultats"
+   }
+  ]
  },
  "_indice": {
   "composite": 460.55,
   "date": "2026-07-04",
   "source": "https://www.brvm.org/fr/indices/0"
- }
+ },
+ "_annonces": [
+  {
+   "date": "2026-06-30",
+   "societe": "UNIWAX CI",
+   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-30",
+   "societe": "UNIWAX CI",
+   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-29",
+   "societe": "LNB",
+   "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-29",
+   "societe": "AIR LIQUIDE CI",
+   "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "SITAB",
+   "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "SITAB",
+   "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "SITAB",
+   "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "AIR LIQUIDE CI",
+   "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-15",
+   "societe": "TRACTAFRIC CI",
+   "titre": "TRACTAFRIC MOTORS CI : Avis de convocation - Assemblée Générale Mixte",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-13",
+   "societe": "BIIC",
+   "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-13",
+   "societe": "LNB",
+   "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-12",
+   "societe": "NSBC",
+   "titre": "NSIA BANQUE CI : Avis de convocation et Projet de résolutions - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-08",
+   "societe": "SODECI",
+   "titre": "SODE CI : Avis de convocation - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-07",
+   "societe": "SMB",
+   "titre": "SMB CI : Avis de convocation - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-07",
+   "societe": "SMB",
+   "titre": "SMB CI : Pouvoir - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2025-12-23",
+   "societe": "BANK OF AFRICA NG",
+   "titre": "Communiqué – Alerte sur résultats - BOA NIGER",
+   "type": "resultats"
+  }
+ ]
 }
