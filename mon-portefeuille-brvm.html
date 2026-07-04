@@ -103,8 +103,8 @@
   .grip{width:40px;height:4px;background:var(--line);border-radius:3px;margin:0 auto 14px}
   label{display:block;font-size:13px;font-weight:600;margin:12px 0 5px;color:var(--ink)}
   .hint{font-size:12px;color:var(--muted);font-weight:400;margin-top:3px}
-  input,select{width:100%;padding:13px;border:1.5px solid var(--line);border-radius:12px;font-size:16px;font-family:inherit;background:var(--card);color:var(--ink)}
-  input:focus,select:focus{outline:none;border-color:var(--green)}
+  input,select,textarea{width:100%;padding:13px;border:1.5px solid var(--line);border-radius:12px;font-size:16px;font-family:inherit;background:var(--card);color:var(--ink);resize:vertical}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--green)}
   .combo{position:relative}
   .combo-list{position:absolute;left:0;right:0;top:100%;z-index:10;background:var(--card);border:1.5px solid var(--green);border-radius:12px;margin-top:5px;max-height:240px;overflow:auto;box-shadow:0 8px 24px rgba(16,40,33,.16);display:none}
   .combo-item{padding:12px 14px;font-size:14.5px;cursor:pointer;border-bottom:1px solid var(--line)}
@@ -163,6 +163,24 @@
   body.dark .scrim{background:rgba(0,0,0,.65)}
   body.dark .seg button.on{box-shadow:none;background:#243430}
   body.dark .combo-item.add{background:var(--green-l)}
+
+  /* ===== Rapport imprimable ===== */
+  #reportView{position:fixed;inset:0;background:#fff;color:#111;z-index:200;overflow:auto;display:none;padding:22px 20px 60px;max-width:820px;margin:0 auto}
+  #reportView.open{display:block}
+  #reportView h1{font-size:20px;margin-bottom:2px;color:#0B6B53}
+  #reportView h2{font-size:15px;margin:22px 0 8px;border-bottom:2px solid #0B6B53;padding-bottom:4px;color:#0B6B53}
+  #reportView table{width:100%;border-collapse:collapse;font-size:12.5px;color:#111}
+  #reportView th,#reportView td{border:1px solid #D5DBD8;padding:6px 8px;text-align:right}
+  #reportView th:first-child,#reportView td:first-child{text-align:left}
+  #reportView th{background:#EFF4F2;font-size:11.5px}
+  #reportView .rpos{color:#0B6B53;font-weight:600}
+  #reportView .rneg{color:#C0392B;font-weight:600}
+  @media print{
+    body.report-open>*:not(#reportView){display:none!important}
+    nav{display:none!important}
+    #reportView{position:static;padding:0;max-width:none;overflow:visible}
+    #reportView .noprint{display:none!important}
+  }
 </style>
 </head>
 <body>
@@ -275,6 +293,16 @@
     <button class="btn alt sm" onclick="openCompound()">Ouvrir le simulateur</button>
   </div>
   <div class="card">
+    <h3 style="font-size:15px;margin-bottom:4px">⚖️ Comparateur de titres</h3>
+    <div class="muted" style="font-size:12.5px;margin-bottom:10px">Deux valeurs côte à côte — cours, tendance, rendement, ta position — avant de choisir.</div>
+    <button class="btn alt sm" onclick="openCompare()">Comparer deux titres</button>
+  </div>
+  <div class="card">
+    <h3 style="font-size:15px;margin-bottom:4px">📄 Rapport de portefeuille</h3>
+    <div class="muted" style="font-size:12.5px;margin-bottom:10px">Un document propre à imprimer ou enregistrer en PDF — pour tes archives, ta SGI ou le fiscal.</div>
+    <button class="btn alt sm" onclick="openReport()">Générer le rapport</button>
+  </div>
+  <div class="card">
     <h3 style="font-size:15px;margin-bottom:4px">Répartition par titre</h3>
     <div class="muted" style="font-size:12.5px;margin-bottom:8px">Poids de chaque ligne dans ton portefeuille. Bien répartir réduit le risque.</div>
     <div id="sectorWrap"><canvas id="sectorChart" height="200"></canvas></div>
@@ -315,6 +343,8 @@
 </div>
 
 <!-- VERROUILLAGE -->
+<div id="reportView"></div>
+
 <div id="lockScreen" style="display:none;position:fixed;inset:0;background:linear-gradient(135deg,var(--green),var(--green-d));z-index:100;color:#fff;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center">
   <div style="font-size:44px">🔒</div>
   <h2 style="margin:12px 0 2px">Mon Portefeuille</h2>
@@ -569,6 +599,7 @@ function renderMarket(sortBy){
       <span>🔔 Alerte auto si un titre varie de ±</span>
       <input type="number" value="${trendCfg().seuil}" min="1" step="0.5" onchange="setTrendCfg(null,this.value)" style="width:64px;padding:4px 6px;margin:0"><span>% sur 7 jours</span>
     </div>
+    <button class="btn ghost sm" style="margin:0 0 8px" onclick="openCompare()">⚖️ Comparer deux titres</button>
     ${anyWv?'':'<div class="hint" style="margin:2px 0 8px">ℹ️ La variation <b>7 jours</b> se construit au fil de tes synchros — reviens dans quelques jours, elle se remplira toute seule.</div>'}
     <div class="card" style="padding:2px 14px;max-height:60vh;overflow:auto">${rows||'<div class="empty">Aucun cours.</div>'}</div>`);
 }
@@ -594,6 +625,13 @@ function openTxFor(tk,type,price){
   document.getElementById("txTicker").value=tk;
   document.getElementById("txTicker_q").value=stockMap[tk]?stockMap[tk].name+" ("+tk+")":tk;
   if(price)document.getElementById("txPrice").value=price;
+  if(type==="vente"){
+    const th=db.tx.filter(x=>x.ticker===tk&&x.type==="achat"&&(x.these||"").trim()).sort((a,b)=>a.date.localeCompare(b.date));
+    if(th.length){
+      const btn=document.querySelector(".sheet .btn");
+      if(btn)btn.insertAdjacentHTML("beforebegin",'<div class="help" style="margin-top:14px">📝 <div><b>Relis ta thèse d\'achat avant de vendre :</b><br>'+th.map(x=>frDateShort(x.date)+" — « "+escHtml(x.these)+" »").join("<br>")+'</div></div>');
+    }
+  }
 }
 function openAlertFor(tk,cur){
   openAlert();
@@ -815,6 +853,116 @@ function drawCompound(){
   ]},options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.datasetIndex?"versé : ":"patrimoine : ")+fmt(c.parsed.y)}}},scales:{y:{ticks:{callback:v2=>fmtAxis(v2),font:{size:10}}},x:{ticks:{maxTicksLimit:6,font:{size:9}}}}}});
 }
 
+/* --- Comparateur de titres --- */
+let compareChartObj=null;
+function openCompare(){
+  openSheet(`<h3>⚖️ Comparer deux titres</h3>
+    <div class="hint">Choisis deux valeurs — cours, tendance, rendement et ta position, côte à côte.</div>
+    <label>Titre A</label>${combo('cmpA','Ex : Sonatel, SNTS...')}
+    <label>Titre B</label>${combo('cmpB','Ex : BOA CI, BOAC...')}
+    <button class="btn" style="margin-top:16px" onclick="renderCompare()">Comparer</button>
+    <div id="cmpOut" style="margin-top:14px"></div>`);
+}
+function cmpInfo(tk){
+  const H=(store.priceHist||{})[tk]||{};
+  const ds=Object.keys(H).sort();
+  const cur=ds.length?+H[ds[ds.length-1]]:(+(db.prices[tk]||{}).actuel||0);
+  const prev=ds.length>1?+H[ds[ds.length-2]]:cur;
+  const p=positions().find(x=>x.ticker===tk||resolveTicker(x.ticker)===tk)||null;
+  const R=realized();
+  const divs=db.div.filter(d=>d.ticker===tk).reduce((s,d)=>s+(+d.montant||0),0);
+  return {tk,name:stockMap[tk]?.name||tk,sector:stockMap[tk]?.sector||"—",cur,
+    d1:cur&&prev>0?(cur-prev)/prev*100:null,d7:cur?varPct(tk,cur,7):null,d30:cur?varPct(tk,cur,30):null,
+    held:p,yld:p?tickerYield(tk,p.value):null,rea:R.byTicker[tk]||0,divs,H,ds};
+}
+function renderCompare(){
+  const a=comboValue('cmpA'), b=comboValue('cmpB');
+  const out=document.getElementById('cmpOut'); if(!out)return;
+  if(!a||!b){out.innerHTML='<div class="hint">Choisis les deux titres à comparer.</div>';return;}
+  if(a===b){out.innerHTML='<div class="hint">Choisis deux titres différents. 😉</div>';return;}
+  const A=cmpInfo(a),B=cmpInfo(b);
+  const v=x=>x==null?'<span style="color:var(--muted)">—</span>':`<b class="${x>0.05?'pos':x<-0.05?'neg':''}">${(x>=0?'+':'')+x.toFixed(1)}%</b>`;
+  const line=(lbl,va,vb)=>`<div style="display:flex;border-bottom:1px solid var(--line);padding:8px 0;font-size:13px;align-items:center"><div style="flex:1.2;color:var(--muted)">${lbl}</div><div style="flex:1;text-align:right">${va}</div><div style="flex:1;text-align:right">${vb}</div></div>`;
+  out.innerHTML=`<div class="card" style="padding:6px 14px;margin:0">
+    <div style="display:flex;font-weight:700;font-size:13px;padding:8px 0;border-bottom:2px solid var(--green)"><div style="flex:1.2"></div><div style="flex:1;text-align:right">${A.tk}</div><div style="flex:1;text-align:right">${B.tk}</div></div>`
+   +line("Cours",A.cur?fmtShort(A.cur):"—",B.cur?fmtShort(B.cur):"—")
+   +line("1 jour",v(A.d1),v(B.d1))
+   +line("7 jours",v(A.d7),v(B.d7))
+   +line("30 jours",v(A.d30),v(B.d30))
+   +line("Secteur",`<span style="font-size:11.5px">${A.sector}</span>`,`<span style="font-size:11.5px">${B.sector}</span>`)
+   +line("Tu détiens",A.held?A.held.qty+" titres":"—",B.held?B.held.qty+" titres":"—")
+   +line("Ta plus-value",A.held?`<b class="${A.held.pl>=0?'pos':'neg'}">${sign(A.held.pl)}</b>`:"—",B.held?`<b class="${B.held.pl>=0?'pos':'neg'}">${sign(B.held.pl)}</b>`:"—")
+   +line("Rendement div. 12m",A.yld?A.yld.toFixed(1)+"%":"—",B.yld?B.yld.toFixed(1)+"%":"—")
+   +line("Dividendes reçus",A.divs?fmtShort(A.divs):"—",B.divs?fmtShort(B.divs):"—")
+   +line("Réalisé (ventes)",A.rea?`<b class="${A.rea>=0?'pos':'neg'}">${sign(A.rea)}</b>`:"—",B.rea?`<b class="${B.rea>=0?'pos':'neg'}">${sign(B.rea)}</b>`:"—")
+   +`</div><div id="cmpChartWrap" style="margin-top:14px"></div>
+    <div class="hint" style="margin-top:10px">⚖️ Des chiffres pour t'éclairer, pas un conseil — le passé ne garantit pas l'avenir.</div>`;
+  drawCompare(A,B);
+}
+function drawCompare(A,B){
+  const wrap=document.getElementById("cmpChartWrap"); if(!wrap)return;
+  const common=A.ds.filter(d=>B.H[d]!=null);
+  if(masked){wrap.innerHTML="";return;}
+  if(common.length<2){wrap.innerHTML='<div class="hint">📈 La courbe comparée (base 100) apparaîtra quand les deux titres auront un historique commun de synchros.</div>';return;}
+  wrap.innerHTML='<div class="sect-title" style="margin:0 0 6px">Évolution comparée (base 100)</div><canvas id="cmpChart" height="150"></canvas><div class="hint" style="margin-top:4px"><b style="color:#0B6B53">■ '+A.tk+'</b> · <b style="color:#1E78C8">■ '+B.tk+'</b></div>';
+  const cv=document.getElementById("cmpChart"); if(!cv||typeof Chart==="undefined")return;
+  if(compareChartObj)compareChartObj.destroy();
+  const a0=+A.H[common[0]], b0=+B.H[common[0]];
+  if(!(a0>0&&b0>0))return;
+  compareChartObj=new Chart(cv,{type:"line",data:{labels:common.map(frDateShort),datasets:[
+    {data:common.map(d=>+A.H[d]/a0*100),borderColor:"#0B6B53",fill:false,tension:.3,pointRadius:0,borderWidth:2},
+    {data:common.map(d=>+B.H[d]/b0*100),borderColor:"#1E78C8",fill:false,tension:.3,pointRadius:0,borderWidth:2}
+  ]},options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.datasetIndex?B.tk:A.tk)+" : "+c.parsed.y.toFixed(1)}}},scales:{y:{ticks:{font:{size:10}}},x:{ticks:{maxTicksLimit:6,font:{size:9}}}}}});
+}
+
+/* --- Rapport de portefeuille imprimable (PDF via impression native) --- */
+function openReport(){
+  const t=totals(), bal=cashBalance(), R=realized();
+  const now=new Date();
+  const divByYear={}; db.div.forEach(d=>{const y=d.date.slice(0,4);divByYear[y]=(divByYear[y]||0)+(+d.montant||0);});
+  const years=[...new Set([...Object.keys(divByYear),...Object.keys(R.byYear)])].sort();
+  const cls=n=>n>=0?'rpos':'rneg';
+  const el=document.getElementById("reportView"); if(!el)return;
+  el.innerHTML=`
+    <div class="noprint" style="display:flex;gap:10px;margin-bottom:16px">
+      <button class="btn" style="flex:1;margin:0" onclick="window.print()">🖨️ Imprimer / PDF</button>
+      <button class="btn ghost" style="flex:1;margin:0" onclick="closeReport()">✕ Fermer</button>
+    </div>
+    ${masked?'<div class="noprint" style="background:#FCEBE7;color:#7A2E20;border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:12px">👁 Les montants sont masqués — désactive l\'œil (en haut de l\'accueil) puis régénère le rapport.</div>':''}
+    <h1>Rapport de portefeuille — ${escHtml(db.name||"Mon portefeuille")}</h1>
+    <div style="font-size:12.5px;color:#555">Généré le ${now.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"})} · Mon Portefeuille BRVM</div>
+    <h2>Synthèse</h2>
+    <table><tbody>
+      <tr><td>Valeur des titres</td><td>${fmt(t.value)}</td></tr>
+      <tr><td>Liquidités estimées</td><td>${fmt(bal)}</td></tr>
+      <tr><td>Patrimoine total</td><td><b>${fmt(t.value+bal)}</b></td></tr>
+      <tr><td>Montant investi (positions ouvertes)</td><td>${fmt(t.invested)}</td></tr>
+      <tr><td>Plus/moins-value latente</td><td class="${cls(t.pl)}">${sign(t.pl)} (${t.plPct>=0?"+":""}${t.plPct.toFixed(1)}%)</td></tr>
+      <tr><td>Total dividendes reçus (toute période)</td><td>${fmt(db.div.reduce((s,d)=>s+(+d.montant||0),0))}</td></tr>
+    </tbody></table>
+    <h2>Positions au ${now.toLocaleDateString("fr-FR")}</h2>
+    ${t.ps.length?`<table><thead><tr><th>Titre</th><th>Qté</th><th>PRU</th><th>Cours</th><th>Valeur</th><th>+/− value</th></tr></thead><tbody>
+      ${t.ps.map(p=>`<tr><td>${escHtml(stockMap[p.ticker]?.name||p.ticker)} (${p.ticker})</td><td>${p.qty}</td><td>${fmtShort(p.pru)}</td><td>${fmtShort(p.cur)}</td><td>${fmtShort(p.value)}</td><td class="${cls(p.pl)}">${sign(p.pl)} (${p.plPct>=0?"+":""}${p.plPct.toFixed(1)}%)</td></tr>`).join("")}
+    </tbody></table>`:'<div style="font-size:13px;color:#666">Aucune position ouverte.</div>'}
+    <h2>Dividendes et plus-values réalisées, par année</h2>
+    <table><thead><tr><th>Année</th><th>Dividendes reçus</th><th>Plus-values réalisées (base fiscale)</th></tr></thead><tbody>
+      ${years.length?years.map(y=>`<tr><td>${y}</td><td>${divByYear[y]?fmt(divByYear[y]):"—"}</td><td class="${cls(R.byYear[y]||0)}">${R.byYear[y]!=null?sign(R.byYear[y]):"—"}</td></tr>`).join(""):'<tr><td colspan="3">Rien à afficher pour l\'instant.</td></tr>'}
+    </tbody></table>
+    <h2>Historique des opérations (${db.tx.length})</h2>
+    ${db.tx.length?`<table><thead><tr><th>Date</th><th>Type</th><th>Titre</th><th>Qté</th><th>Prix</th><th>Frais</th><th>Montant</th></tr></thead><tbody>
+      ${[...db.tx].sort((a,b)=>a.date.localeCompare(b.date)).map(x=>`<tr><td>${x.date}</td><td>${x.type==="achat"?"Achat":"Vente"}</td><td>${x.ticker}</td><td>${x.qty}</td><td>${fmtShort(x.price)}</td><td>${x.frais?fmtShort(x.frais):"—"}</td><td>${fmtShort(x.qty*x.price)}</td></tr>`).join("")}
+    </tbody></table>`:'<div style="font-size:13px;color:#666">Aucune opération.</div>'}
+    <div style="margin-top:22px;font-size:11px;color:#777">Document généré par l'application « Mon Portefeuille BRVM » à partir des données saisies par l'utilisateur. Cours indicatifs, hors temps réel. Ce document ne constitue ni un conseil en investissement ni un document contractuel — vérifie les chiffres avec les relevés officiels de ta SGI.</div>`;
+  el.classList.add("open");
+  document.body.classList.add("report-open");
+  el.scrollTop=0;
+}
+function closeReport(){
+  const el=document.getElementById("reportView");
+  if(el)el.classList.remove("open");
+  document.body.classList.remove("report-open");
+}
+
 /* --- Revue hebdomadaire « Ta semaine » --- */
 function openWeekly(){
   const t=totals();
@@ -936,6 +1084,7 @@ const fmtShort=n=>masked?MASK:Math.round(n).toLocaleString("fr-FR");
 const fmtAxis=n=>{if(masked)return"";const a=Math.abs(n);return a>=1e6?(n/1e6).toFixed(1).replace(".",",")+" M":a>=1e3?Math.round(n/1e3)+" k":Math.round(n);};
 /* Échappe les guillemets pour un usage sûr dans value="..." */
 const escAttr=s=>(s||"").replace(/"/g,"&quot;");
+const escHtml=s=>(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const today=()=>new Date().toISOString().slice(0,10);
 const frDate=d=>{const o=new Date(d+"T00:00");return o.toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"})};
@@ -1521,6 +1670,7 @@ function openTx(id){
     <label>Frais / commission (FCFA)<span class="hint">Calculés auto depuis ton taux SGI (${store.sgiRate||0} %) — modifiable à la main</span></label><input id="txFrais" type="number" inputmode="decimal" placeholder="0" value="${ed&&ed.frais?ed.frais:''}" oninput="window.txFraisManual=true">
     <label>Date</label><input id="txDate" type="date" value="${ed?ed.date:today()}">
     <label>Libellé <span class="hint">Optionnel — une note pour reconnaître l'opération</span></label><input id="txLib" placeholder="ex : PEA long terme, ordre via SGI X..." value="${ed?escAttr(ed.libelle):''}">
+    <label>📝 Pourquoi cette opération ? <span class="hint">Journal de décision — tu la reliras avant de vendre</span></label><textarea id="txThese" rows="2" placeholder="ex : rendement dividende solide, résultats en hausse, valorisation raisonnable...">${ed?escHtml(ed.these||''):''}</textarea>
     <button class="btn" style="margin-top:18px" onclick="saveTx(${ed?`'${id}'`:''})">${ed?'Enregistrer les modifications':'Enregistrer'}</button>
     ${ed?`<button class="del" style="display:block;margin:12px auto 0" onclick="delTx('${id}')">Supprimer cette opération</button>`:''}`);
   window.txType=ed?ed.type:"achat";
@@ -1542,7 +1692,7 @@ function saveTx(id){
   const qty=+document.getElementById("txQty").value, price=+document.getElementById("txPrice").value;
   if(!ticker){alert("Choisis ou tape une société.");return;}
   if(!qty||!price){alert("Renseigne le nombre de titres et le prix.");return;}
-  const rec={type:window.txType,ticker,qty,price,frais:+document.getElementById("txFrais").value||0,date:document.getElementById("txDate").value||today(),libelle:(document.getElementById("txLib").value||"").trim()};
+  const rec={type:window.txType,ticker,qty,price,frais:+document.getElementById("txFrais").value||0,date:document.getElementById("txDate").value||today(),libelle:(document.getElementById("txLib").value||"").trim(),these:(document.getElementById("txThese").value||"").trim()};
   if(id){const t=db.tx.find(x=>x.id===id); if(t)Object.assign(t,rec);}
   else{rec.id=uid();db.tx.push(rec);}
   if(!db.prices[ticker])db.prices[ticker]={actuel:price,veille:price};
@@ -1633,6 +1783,7 @@ function openSettings(){
     <button class="btn ghost" style="margin-top:10px" onclick="setLock()">${store.lock?'🔒 Retirer le verrouillage (identifiant + mot de passe)':'🔒 Protéger par identifiant + mot de passe'}</button>
     <button class="btn ghost" style="margin-top:10px" onclick="toggleDark()">${isDark()?'☀️ Repasser en mode clair':'🌙 Passer en mode sombre'}</button>
     <button class="btn ghost" style="margin-top:10px" onclick="openGoals()">🎯 Mes objectifs</button>
+    <button class="btn ghost" style="margin-top:10px" onclick="closeSheet();openReport()">📄 Rapport de portefeuille (PDF)</button>
     <label style="margin-top:16px">Frais SGI — commission + taxes (%)</label>
     <input id="sgiRate" type="number" step="0.1" min="0" value="${store.sgiRate}" onchange="store.sgiRate=+this.value||0;save()">
     <div class="hint">Appliqué à la vente pour estimer ta plus-value <b>nette</b> (visible dans le détail d'un titre). Sur la BRVM, c'est souvent autour de 1,2 à 1,7 %.</div>
@@ -1814,6 +1965,7 @@ function posDetail(ticker){
     <div class="sect-title" style="margin:18px 4px 6px">Simulateur « et si... »</div>
     <div class="hint" style="margin:0 0 6px">Si le cours de cette action variait, voici l'effet sur ta ligne :</div>
     <div>${[-10,-5,5,10].map(pct=>{const nv=p.value*(1+pct/100),npl=nv-p.invested;return `<div class="kv"><span class="k">Cours ${pct>0?'+':''}${pct}%</span><b class="${npl>=0?'pos':'neg'}">${fmt(nv)} <span style="font-weight:400;color:var(--muted)">(${sign(npl)})</span></b></div>`;}).join("")}</div>
+    ${(()=>{const th=db.tx.filter(x=>x.ticker===ticker&&(x.these||"").trim()).sort((a,b)=>a.date.localeCompare(b.date));return th.length?`<div class="sect-title" style="margin:18px 4px 6px">📝 Ton journal de décision</div>`+th.map(x=>`<div class="help" style="margin-bottom:8px">${x.type==='achat'?'🟢':'🔴'} <div><b>${x.type==='achat'?'Achat':'Vente'} · ${frDateShort(x.date)}</b><br>« ${escHtml(x.these)} »</div></div>`).join(""):"";})()}
     <div class="sect-title" style="margin:18px 4px 6px">Analyse éducative</div>
     ${eduNotes(p).map(n=>`<div class="help" style="margin-bottom:8px">💡 <div>${n}</div></div>`).join("")}
     <div class="hint" style="margin-top:4px">⚖️ Aide pédagogique, <b>pas</b> un conseil d'achat ou de vente. Je ne suis pas un conseiller financier agréé — les décisions et leurs conséquences t'appartiennent.</div>
