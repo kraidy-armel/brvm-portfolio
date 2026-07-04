@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-07-04T19:46:35+00:00",
-  "updated_human": "04/07/2026 19:46 UTC",
+  "updated": "2026-07-04T20:03:53+00:00",
+  "updated_human": "04/07/2026 20:03 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -9,7 +9,7 @@
    "resultat": "48 titres",
    "dates_couvertes": "2026-07-04 -> 2026-07-04",
    "indice_composite": "460.55 (https://www.brvm.org/fr/indices/0)",
-   "annonces": "16 annonce(s)"
+   "annonces": "26 annonce(s)"
   }
  },
  "ABJC": {
@@ -499,6 +499,66 @@
   },
   "_annonces_prec": [
    {
+    "date": "2026-09-29",
+    "societe": "SERVAIR ABIDJAN CI",
+    "titre": "Dividende net 124 FCFA/action - detachement 29/09, paiement 30/09",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-29",
+    "societe": "ECOBANK TG",
+    "titre": "Dividende net 0,9 FCFA/action - detachement 29/06, paiement 30/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-07-16",
+    "societe": "TOTAL SENEGAL S.A.",
+    "titre": "Dividende net 176,65 FCFA/action - detachement 16/07, paiement 17/07",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-07-30",
+    "societe": "SIB",
+    "titre": "Dividende net 425 F CFA/action - detachement 30/07, paiement 31/07",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-07-03",
+    "societe": "BICI CI",
+    "titre": "Dividende net 1 315 FCFA/action - detachement 03/07, paiement 06/07",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-29",
+    "societe": "ECOBANK TG",
+    "titre": "Dividende net 0,16 cents de dollars/action - detachement 29/06, paiement 30/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "PALM CI",
+    "titre": "Dividende net 501,596 FCFA/action - detachement 26/06, paiement 29/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-18",
+    "societe": "CORIS BANK INTERNATIONAL",
+    "titre": "Dividende net 900 FCFA/action - detachement 18/06, paiement 19/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-05",
+    "societe": "ORANGE CI",
+    "titre": "Dividende net 800 FCFA/action - detachement 05/06, paiement 08/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-12",
+    "societe": "ONATEL BF",
+    "titre": "Dividende net 145,3214 FCFA/action - detachement 12/06, paiement 15/06",
+    "type": "dividende"
+   },
+   {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
     "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
@@ -524,6 +584,12 @@
    },
    {
     "date": "2026-06-26",
+    "societe": "AIR LIQUIDE CI",
+    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
     "societe": "SITAB",
     "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
@@ -538,12 +604,6 @@
     "date": "2026-06-26",
     "societe": "SITAB",
     "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "AIR LIQUIDE CI",
-    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
     "type": "ago"
    },
    {
@@ -603,6 +663,66 @@
  },
  "_annonces": [
   {
+   "date": "2026-09-29",
+   "societe": "SERVAIR ABIDJAN CI",
+   "titre": "Dividende net 124 FCFA/action - detachement 29/09, paiement 30/09",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-29",
+   "societe": "ECOBANK TG",
+   "titre": "Dividende net 0,9 FCFA/action - detachement 29/06, paiement 30/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-07-16",
+   "societe": "TOTAL SENEGAL S.A.",
+   "titre": "Dividende net 176,65 FCFA/action - detachement 16/07, paiement 17/07",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-07-30",
+   "societe": "SIB",
+   "titre": "Dividende net 425 F CFA/action - detachement 30/07, paiement 31/07",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-07-03",
+   "societe": "BICI CI",
+   "titre": "Dividende net 1 315 FCFA/action - detachement 03/07, paiement 06/07",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-29",
+   "societe": "ECOBANK TG",
+   "titre": "Dividende net 0,16 cents de dollars/action - detachement 29/06, paiement 30/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "PALM CI",
+   "titre": "Dividende net 501,596 FCFA/action - detachement 26/06, paiement 29/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-18",
+   "societe": "CORIS BANK INTERNATIONAL",
+   "titre": "Dividende net 900 FCFA/action - detachement 18/06, paiement 19/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-05",
+   "societe": "ORANGE CI",
+   "titre": "Dividende net 800 FCFA/action - detachement 05/06, paiement 08/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-12",
+   "societe": "ONATEL BF",
+   "titre": "Dividende net 145,3214 FCFA/action - detachement 12/06, paiement 15/06",
+   "type": "dividende"
+  },
+  {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
@@ -628,6 +748,12 @@
   },
   {
    "date": "2026-06-26",
+   "societe": "AIR LIQUIDE CI",
+   "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
    "societe": "SITAB",
    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
@@ -642,12 +768,6 @@
    "date": "2026-06-26",
    "societe": "SITAB",
    "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "AIR LIQUIDE CI",
-   "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
    "type": "ago"
   },
   {
