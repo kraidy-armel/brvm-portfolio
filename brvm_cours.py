@@ -305,6 +305,75 @@ def scrape_annonces():
     return out[:40]
 
 
+MOIS_FR = {"janvier": 1, "fevrier": 2, "février": 2, "mars": 3, "avril": 4,
+           "mai": 5, "juin": 6, "juillet": 7, "aout": 8, "août": 8,
+           "septembre": 9, "octobre": 10, "novembre": 11,
+           "decembre": 12, "décembre": 12}
+
+
+def parse_date_fr(s):
+    """'30 septembre 2026' ou '30/09/2026' -> '2026-09-30' (sinon None)."""
+    s = (s or "").strip().lower()
+    m = re.match(r"(\d{1,2})(?:er)?\s+([a-zéûà]+)\s+(\d{4})", s)
+    if m and m.group(2) in MOIS_FR:
+        return f"{m.group(3)}-{MOIS_FR[m.group(2)]:02d}-{int(m.group(1)):02d}"
+    m = re.match(r"(\d{2})/(\d{2})/(\d{4})", s)
+    if m:
+        return f"{m.group(3)}-{m.group(2)}-{m.group(1)}"
+    return None
+
+
+def scrape_dividendes():
+    """Page officielle « Paiement de dividendes » : emetteur, date ex-dividende,
+    date de paiement, montant net. C'est LA source fiable pour l'agenda."""
+    out = []
+    if not HAS_BS4:
+        return out
+    try:
+        r = http_get("https://www.brvm.org/fr/esv/paiement-de-dividendes", timeout=30)
+        if r.status_code != 200 or not r.text:
+            return out
+        soup = BeautifulSoup(r.text, "html.parser")
+        for table in soup.find_all("table"):
+            ths = [th.get_text(" ", strip=True).lower() for th in table.find_all("th")]
+            heads = " ".join(ths)
+            if "dividende" not in heads or "emetteur" not in heads:
+                continue
+
+            def col(k):
+                for i, h in enumerate(ths):
+                    if k in h:
+                        return i
+                return None
+
+            i_em, i_pay = col("emetteur"), col("paiement")
+            i_ex, i_mt = col("ex-dividende"), col("montant")
+            for tr in table.find_all("tr"):
+                tds = [td.get_text(" ", strip=True) for td in tr.find_all("td")]
+                if len(tds) < 5:
+                    continue
+                em = tds[i_em] if (i_em is not None and i_em < len(tds)) else ""
+                if not em:
+                    continue
+                dex = parse_date_fr(tds[i_ex]) if (i_ex is not None and i_ex < len(tds)) else None
+                dpay = parse_date_fr(tds[i_pay]) if (i_pay is not None and i_pay < len(tds)) else None
+                d = dex or dpay
+                if not d:
+                    continue
+                mt = tds[i_mt] if (i_mt is not None and i_mt < len(tds)) else ""
+
+                def jm(x):
+                    return (x[8:10] + "/" + x[5:7]) if x else "?"
+                # dates volontairement en JJ/MM (sans annee) dans le titre :
+                # l'appli garde ainsi la date ex-dividende comme date d'evenement
+                titre = f"Dividende net {mt}/action - detachement {jm(dex)}, paiement {jm(dpay)}"
+                out.append({"date": d, "societe": em,
+                            "titre": titre[:120], "type": "dividende"})
+    except Exception:
+        pass
+    return out[:20]
+
+
 def scrape_indice():
     """Cherche la valeur de l'indice BRVM Composite sur le site officiel.
     Renvoie (valeur, source) ou (None, message)."""
@@ -515,8 +584,8 @@ def main():
     if out.get("_indice"):
         histo["_indice_prec"] = out["_indice"]
 
-    # Annonces emetteurs (AG, dividendes, resultats) -> agenda de l'appli
-    ann = scrape_annonces()
+    # Annonces emetteurs (AG, resultats) + calendrier officiel des dividendes
+    ann = (scrape_dividendes() + scrape_annonces())[:50]
     if ann:
         out["_annonces"] = ann
         diag["annonces"] = f"{len(ann)} annonce(s)"
