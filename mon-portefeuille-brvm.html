@@ -1130,6 +1130,50 @@ function sellReview(){
   });
   return {items,mieuxGarder,bienVendu,ecartNet,sansCours,total:ventes.length};
 }
+/* Composition du portefeuille à une date donnée (quantités par titre) */
+function holdingsAt(dateX){
+  const h={};
+  [...db.tx].filter(t=>t.date<=dateX).forEach(t=>{h[t.ticker]=(h[t.ticker]||0)+(t.type==="achat"?t.qty:-t.qty);});
+  Object.keys(h).forEach(k=>{if(h[k]<=0.0001)delete h[k];});
+  return h;
+}
+/* Gestion active vs « je ne touche plus à rien » depuis une date X.
+   Identité exacte : écart = gains des achats post-X + (produits − valeur si gardés) des ventes post-X */
+function activeReview(dateX){
+  const hX=holdingsAt(dateX);
+  let fige=0; const sansCours=new Set();
+  Object.keys(hX).forEach(k=>{const c=prixActuel(k); if(c>0)fige+=hX[k]*c; else sansCours.add(k);});
+  let gAch=0,gVen=0,nA=0,nV=0; const ops=[];
+  db.tx.filter(t=>t.date>dateX).forEach(t=>{
+    const c=prixActuel(t.ticker); if(!(c>0)){sansCours.add(t.ticker);return;}
+    if(t.type==="achat"){const cost=t.qty*t.price+(+t.frais||0);const imp=t.qty*c-cost;gAch+=imp;nA++;ops.push({t,imp});}
+    else{const prod=t.qty*t.price-(+t.frais||0);const imp=prod-t.qty*c;gVen+=imp;nV++;ops.push({t,imp});}
+  });
+  ops.sort((a,b)=>Math.abs(b.imp)-Math.abs(a.imp));
+  return {dateX,fige,reel:totals().value,gAch,gVen,nA,nV,ecart:gAch+gVen,ops,sansCours:[...sansCours]};
+}
+function runActiveReview(){
+  const d=(document.getElementById("arDate")||{}).value; const el=document.getElementById("arOut");
+  if(!d||!el)return;
+  const R=activeReview(d);
+  const imp=x=>`<b class="${x>=0?'pos':'neg'}">${x>=0?'+':''}${fmtShort(Math.round(x))}</b>`;
+  el.innerHTML=`
+    <div class="scard" style="margin:12px 0">
+      <div class="hr"><span>Titres « figés » au ${frDateShort(d)}, valorisés aujourd'hui</span><b>${fmt(Math.round(R.fige))}</b></div>
+      <div class="hr"><span>Tes titres réels aujourd'hui</span><b>${fmt(Math.round(R.reel))}</b></div>
+      <div class="hr total"><span>Impact de ta gestion active</span><b class="${R.ecart>=0?'pos':'neg'}">${R.ecart>=0?'+':''}${fmtShort(Math.round(R.ecart))}</b></div>
+    </div>
+    <div class="card" style="padding:4px 14px">
+      <div class="kv"><span class="k">dont tes ${R.nA} achat(s) depuis cette date</span>${imp(R.gAch)}</div>
+      <div class="kv"><span class="k">dont tes ${R.nV} vente(s) depuis cette date</span>${imp(R.gVen)}</div>
+    </div>
+    <div class="help" style="margin-top:10px">💡 <div>${R.ecart>=0
+      ?"✅ Depuis cette date, tes décisions ont fait <b>mieux</b> que « ne plus rien toucher ». C'est rare et ça se salue — reste lucide : vérifie que ce ne sont pas un ou deux coups de chance qui portent tout (regarde la liste ci-dessous)."
+      :"⚠️ Depuis cette date, « ne plus rien toucher » aurait fait <b>mieux</b> que tes opérations. Pas de honte : c'est le cas de la majorité des investisseurs actifs du monde entier. La liste ci-dessous te montre quelles décisions ont le plus pesé — et ton journal te dit pourquoi tu les as prises."}</div></div>
+    ${R.ops.length?`<div class="sect-title" style="margin:12px 0 4px">Tes opérations depuis cette date, par impact</div>
+    <div class="card" style="padding:2px 14px">${R.ops.slice(0,12).map(o=>`<div class="kv"><span class="k">${o.t.type==="achat"?"🟢 Achat":"🔴 Vente"} ${stockMap[o.t.ticker]?.name||o.t.ticker} · ${frDateShort(o.t.date)}${(o.t.these||"").trim()?`<br><span style="font-size:11px">📝 ${escHtml(o.t.these)}</span>`:""}</span>${imp(o.imp)}</div>`).join("")}${R.ops.length>12?`<div class="hint" style="padding:8px 0">… et ${R.ops.length-12} autre(s) de moindre impact.</div>`:""}</div>`:'<div class="hint" style="margin-top:8px">Aucune opération après cette date — les deux scénarios sont identiques.</div>'}
+    <div class="hint" style="margin-top:8px">⚖️ Comparaison aux cours actuels. Apports et retraits d'argent sont neutralisés, et les dividendes comptés à l'identique des deux côtés (si tu as vendu des titres à dividendes, le scénario « garder » serait en réalité encore un peu meilleur).${R.sansCours.length?" Titres ignorés faute de cours connu : "+R.sansCours.join(", ")+".":""}</div>`;
+}
 function openSellReview(){
   const R=sellReview();
   if(!R.total){openSheet(`<h3>🔄 Mes ventes, avec le recul</h3><div class="empty" style="padding:26px">Tu n'as encore vendu aucun titre.<br><br>C'est souvent bon signe. 😉</div>`);return;}
@@ -1151,6 +1195,13 @@ function openSellReview(){
     </div>
     <div class="help">💡 <div>${lecon}</div></div>
     ${avecThese<R.items.length?`<div class="hint" style="margin-bottom:8px">📝 ${avecThese} vente(s) sur ${R.items.length} ont une raison notée au journal. Plus tu notes, plus cette analyse t'apprendra des choses sur toi.</div>`:''}
+    <div class="sect-title" style="margin:16px 0 4px">📆 Depuis une date de ton choix</div>
+    <div class="hint">Choisis une date : je compare ta situation réelle à « je ne touche plus à rien à partir de là », et je juge l'ensemble de tes opérations d'après — ventes <b>et</b> rachats.</div>
+    <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+      <input id="arDate" type="date" value="${(()=>{const f=db.tx.length?[...db.tx].map(t=>t.date).sort()[0]:today();const m6=new Date(Date.now()-182*86400000).toISOString().slice(0,10);return m6>f?m6:f;})()}" style="flex:1;margin:0">
+      <button class="btn sm" style="width:auto;margin:0;padding:12px 18px" onclick="runActiveReview()">Comparer</button>
+    </div>
+    <div id="arOut"></div>
     <div class="sect-title" style="margin:14px 0 4px">Le détail, vente par vente</div>
     ${R.items.map(x=>{const mieux=x.ec>0;
       return `<div class="card" style="padding:12px 14px;margin-bottom:10px">
