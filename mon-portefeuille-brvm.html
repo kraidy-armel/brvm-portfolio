@@ -1202,7 +1202,8 @@ function openSellReview(){
       <button class="btn sm" style="width:auto;margin:0;padding:12px 18px" onclick="runActiveReview()">Comparer</button>
     </div>
     <div id="arOut"></div>
-    <div class="sect-title" style="margin:14px 0 4px">Le détail, vente par vente</div>
+    <div class="sect-title acc-head" style="margin:14px 0 4px" onclick="toggleAcc('ventes')"><span class="acc-ch" id="accch_ventes">${accOpen.ventes?'▾':'▸'}</span>Le détail, vente par vente <span style="font-weight:500;text-transform:none;letter-spacing:0">(${R.items.length})</span></div>
+    <div id="accbody_ventes" style="display:${accOpen.ventes?'block':'none'}">
     ${R.items.map(x=>{const mieux=x.ec>0;
       return `<div class="card" style="padding:12px 14px;margin-bottom:10px">
       <div style="display:flex;justify-content:space-between;gap:8px;font-size:13.5px">
@@ -1212,6 +1213,7 @@ function openSellReview(){
       ${x.rem?`<div class="sub" style="margin-top:4px">↪ Remploi (achats sous 15 j : ${x.rem.tks}) : <b class="${x.rem.pct>=0?'pos':'neg'}">${x.rem.pct>=0?'+':''}${x.rem.pct.toFixed(1)}%</b> depuis — ${x.rem.pct>x.ecPct?"ton remplacement a fait mieux que garder 👍":"le remplacement n'a pas (encore) rattrapé"}</div>`:''}
       ${(x.v.these||"").trim()?`<div class="sub" style="margin-top:4px">📝 Ta raison : « ${escHtml(x.v.these)} »</div>`:''}
     </div>`;}).join("")}
+    </div>
     <div class="hint" style="margin-top:6px">⚖️ Comparaison sur les cours uniquement — les dividendes que les titres vendus auraient versés ne sont pas comptés (l'écart réel penche donc un peu plus vers « garder »). Le recul ne prédit pas l'avenir : une bonne décision peut mal tourner, et inversement.</div>`);
 }
 
