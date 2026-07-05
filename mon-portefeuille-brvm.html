@@ -1107,8 +1107,8 @@ function prixActuel(tk){
   const H=(store.priceHist||{})[tk]||{}; const ds=Object.keys(H).sort();
   return ds.length?+H[ds[ds.length-1]]:0;
 }
-function sellReview(){
-  const ventes=[...db.tx].filter(t=>t.type==="vente").sort((a,b)=>b.date.localeCompare(a.date));
+function sellReview(depuis){
+  const ventes=[...db.tx].filter(t=>t.type==="vente"&&(!depuis||t.date>depuis)).sort((a,b)=>b.date.localeCompare(a.date));
   const items=[]; let mieuxGarder=0,bienVendu=0,ecartNet=0,sansCours=0;
   ventes.forEach(v=>{
     const cur=prixActuel(v.ticker);
@@ -1171,8 +1171,22 @@ function runActiveReview(){
       ?"✅ Depuis cette date, tes décisions ont fait <b>mieux</b> que « ne plus rien toucher ». C'est rare et ça se salue — reste lucide : vérifie que ce ne sont pas un ou deux coups de chance qui portent tout (regarde la liste ci-dessous)."
       :"⚠️ Depuis cette date, « ne plus rien toucher » aurait fait <b>mieux</b> que tes opérations. Pas de honte : c'est le cas de la majorité des investisseurs actifs du monde entier. La liste ci-dessous te montre quelles décisions ont le plus pesé — et ton journal te dit pourquoi tu les as prises."}</div></div>
     ${R.ops.length?`<div class="sect-title" style="margin:12px 0 4px">Tes opérations depuis cette date, par impact</div>
-    <div class="card" style="padding:2px 14px">${R.ops.slice(0,12).map(o=>`<div class="kv"><span class="k">${o.t.type==="achat"?"🟢 Achat":"🔴 Vente"} ${stockMap[o.t.ticker]?.name||o.t.ticker} · ${frDateShort(o.t.date)}${(o.t.these||"").trim()?`<br><span style="font-size:11px">📝 ${escHtml(o.t.these)}</span>`:""}</span>${imp(o.imp)}</div>`).join("")}${R.ops.length>12?`<div class="hint" style="padding:8px 0">… et ${R.ops.length-12} autre(s) de moindre impact.</div>`:""}</div>`:'<div class="hint" style="margin-top:8px">Aucune opération après cette date — les deux scénarios sont identiques.</div>'}
+    <div class="card" style="padding:2px 14px">${R.ops.slice(0,12).map(o=>`<div class="kv"><span class="k">${o.t.type==="achat"?"🟢 Achat":"🔴 Vente"} ${stockMap[o.t.ticker]?.name||o.t.ticker}${(o.t.these||"").trim()?`<br><span style="font-size:11px">📝 ${escHtml(o.t.these)}</span>`:""}<br><span style="font-size:11px;color:var(--muted)">${frDate(o.t.date)}</span></span>${imp(o.imp)}</div>`).join("")}${R.ops.length>12?`<div class="hint" style="padding:8px 0">… et ${R.ops.length-12} autre(s) de moindre impact.</div>`:""}</div>`:'<div class="hint" style="margin-top:8px">Aucune opération après cette date — les deux scénarios sont identiques.</div>'}
+    ${(()=>{const SV=sellReview(d);return SV.items.length?`<div class="sect-title acc-head" style="margin:12px 0 4px" onclick="toggleAcc('ventes')"><span class="acc-ch" id="accch_ventes">${accOpen.ventes?'▾':'▸'}</span>Le détail des ventes depuis cette date <span style="font-weight:500;text-transform:none;letter-spacing:0">(${SV.items.length})</span></div>
+    <div id="accbody_ventes" style="display:${accOpen.ventes?'block':'none'}">${SV.items.map(venteCardHtml).join("")}</div>`:"";})()}
     <div class="hint" style="margin-top:8px">⚖️ Comparaison aux cours actuels. Apports et retraits d'argent sont neutralisés, et les dividendes comptés à l'identique des deux côtés (si tu as vendu des titres à dividendes, le scénario « garder » serait en réalité encore un peu meilleur).${R.sansCours.length?" Titres ignorés faute de cours connu : "+R.sansCours.join(", ")+".":""}</div>`;
+}
+/* Carte détaillée d'une vente (contrefactuel + remploi + journal) */
+function venteCardHtml(x){
+  const mieux=x.ec>0;
+  return `<div class="card" style="padding:12px 14px;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;gap:8px;font-size:13.5px">
+      <b>${stockMap[x.v.ticker]?.name||x.v.ticker}</b><span class="sub">${frDate(x.v.date)}</span></div>
+    <div class="sub" style="margin-top:3px">Vendu ${x.v.qty.toLocaleString('fr-FR')} × ${fmtShort(x.v.price)} = ${fmtShort(x.proceeds)} · cours actuel ${fmtShort(x.cur)}</div>
+    <div style="font-size:13px;margin-top:6px">${mieux?'⚠️':'✅'} Si gardés : <b>${fmtShort(x.siGarde)}</b> — <b class="${mieux?'neg':'pos'}">${mieux?'+':''}${fmtShort(Math.round(x.ec))} (${x.ecPct>=0?'+':''}${x.ecPct.toFixed(1)}%)</b> ${mieux?'· garder aurait été mieux':'· tu as bien fait de vendre'}</div>
+    ${x.rem?`<div class="sub" style="margin-top:4px">↪ Remploi (achats sous 15 j : ${x.rem.tks}) : <b class="${x.rem.pct>=0?'pos':'neg'}">${x.rem.pct>=0?'+':''}${x.rem.pct.toFixed(1)}%</b> depuis — ${x.rem.pct>x.ecPct?"ton remplacement a fait mieux que garder 👍":"le remplacement n'a pas (encore) rattrapé"}</div>`:''}
+    ${(x.v.these||"").trim()?`<div class="sub" style="margin-top:4px">📝 Ta raison : « ${escHtml(x.v.these)} »</div>`:''}
+  </div>`;
 }
 function openSellReview(){
   const R=sellReview();
@@ -1202,18 +1216,6 @@ function openSellReview(){
       <button class="btn sm" style="width:auto;margin:0;padding:12px 18px" onclick="runActiveReview()">Comparer</button>
     </div>
     <div id="arOut"></div>
-    <div class="sect-title acc-head" style="margin:14px 0 4px" onclick="toggleAcc('ventes')"><span class="acc-ch" id="accch_ventes">${accOpen.ventes?'▾':'▸'}</span>Le détail, vente par vente <span style="font-weight:500;text-transform:none;letter-spacing:0">(${R.items.length})</span></div>
-    <div id="accbody_ventes" style="display:${accOpen.ventes?'block':'none'}">
-    ${R.items.map(x=>{const mieux=x.ec>0;
-      return `<div class="card" style="padding:12px 14px;margin-bottom:10px">
-      <div style="display:flex;justify-content:space-between;gap:8px;font-size:13.5px">
-        <b>${stockMap[x.v.ticker]?.name||x.v.ticker}</b><span class="sub">${frDateShort(x.v.date)}</span></div>
-      <div class="sub" style="margin-top:3px">Vendu ${x.v.qty.toLocaleString('fr-FR')} × ${fmtShort(x.v.price)} = ${fmtShort(x.proceeds)} · cours actuel ${fmtShort(x.cur)}</div>
-      <div style="font-size:13px;margin-top:6px">${mieux?'⚠️':'✅'} Si gardés : <b>${fmtShort(x.siGarde)}</b> — <b class="${mieux?'neg':'pos'}">${mieux?'+':''}${fmtShort(Math.round(x.ec))} (${x.ecPct>=0?'+':''}${x.ecPct.toFixed(1)}%)</b> ${mieux?'· garder aurait été mieux':'· tu as bien fait de vendre'}</div>
-      ${x.rem?`<div class="sub" style="margin-top:4px">↪ Remploi (achats sous 15 j : ${x.rem.tks}) : <b class="${x.rem.pct>=0?'pos':'neg'}">${x.rem.pct>=0?'+':''}${x.rem.pct.toFixed(1)}%</b> depuis — ${x.rem.pct>x.ecPct?"ton remplacement a fait mieux que garder 👍":"le remplacement n'a pas (encore) rattrapé"}</div>`:''}
-      ${(x.v.these||"").trim()?`<div class="sub" style="margin-top:4px">📝 Ta raison : « ${escHtml(x.v.these)} »</div>`:''}
-    </div>`;}).join("")}
-    </div>
     <div class="hint" style="margin-top:6px">⚖️ Comparaison sur les cours uniquement — les dividendes que les titres vendus auraient versés ne sont pas comptés (l'écart réel penche donc un peu plus vers « garder »). Le recul ne prédit pas l'avenir : une bonne décision peut mal tourner, et inversement.</div>`);
 }
 
