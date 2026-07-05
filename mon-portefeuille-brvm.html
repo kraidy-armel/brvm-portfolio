@@ -300,6 +300,11 @@
     <button class="btn alt sm" onclick="openCompare()">Comparer deux titres</button>
   </div>
   <div class="card">
+    <h3 style="font-size:15px;margin-bottom:4px">🔄 Mes ventes, avec le recul</h3>
+    <div class="muted" style="font-size:12.5px;margin-bottom:10px">Et si tu avais gardé ? Chaque vente comparée à aujourd'hui, croisée avec ton journal — pour apprendre, pas pour regretter.</div>
+    <button class="btn alt sm" onclick="openSellReview()">Analyser mes ventes</button>
+  </div>
+  <div class="card">
     <h3 style="font-size:15px;margin-bottom:4px">📄 Rapport de portefeuille</h3>
     <div class="muted" style="font-size:12.5px;margin-bottom:10px">Un document propre à imprimer ou enregistrer en PDF — pour tes archives, ta SGI ou le fiscal.</div>
     <button class="btn alt sm" onclick="openReport()">Générer le rapport</button>
@@ -1096,6 +1101,69 @@ function openRisk(){
     <div class="hint" style="margin-top:10px">⚖️ Ces indicateurs se basent sur ton historique de synchros${r.n<30?" — encore jeune, ils vont s'affiner de semaine en semaine":""}. Lecture éducative et honnête de TES chiffres, pas un conseil d'investissement.</div>`);
 }
 
+/* --- « Et si j'avais gardé ? » : analyse contrefactuelle des ventes --- */
+function prixActuel(tk){
+  const p=db.prices[tk]; if(p&&+p.actuel>0)return +p.actuel;
+  const H=(store.priceHist||{})[tk]||{}; const ds=Object.keys(H).sort();
+  return ds.length?+H[ds[ds.length-1]]:0;
+}
+function sellReview(){
+  const ventes=[...db.tx].filter(t=>t.type==="vente").sort((a,b)=>b.date.localeCompare(a.date));
+  const items=[]; let mieuxGarder=0,bienVendu=0,ecartNet=0,sansCours=0;
+  ventes.forEach(v=>{
+    const cur=prixActuel(v.ticker);
+    if(!(cur>0)){sansCours++;return;}
+    const proceeds=v.qty*v.price-(+v.frais||0);
+    const siGarde=v.qty*cur;
+    const ec=siGarde-proceeds; ecartNet+=ec;
+    if(ec>0)mieuxGarder++;else bienVendu++;
+    /* remploi : achats d'autres titres dans les 15 jours suivant la vente */
+    const lim=new Date(new Date(v.date+"T00:00").getTime()+15*86400000).toISOString().slice(0,10);
+    const remplois=db.tx.filter(x=>x.type==="achat"&&x.date>=v.date&&x.date<=lim&&x.ticker!==v.ticker);
+    let rem=null;
+    if(remplois.length){
+      let cost=0,val=0;
+      remplois.forEach(a=>{const c2=prixActuel(a.ticker);if(c2>0){cost+=a.qty*a.price+(+a.frais||0);val+=a.qty*c2;}});
+      if(cost>0)rem={cost,val,pct:(val-cost)/cost*100,tks:[...new Set(remplois.map(a=>a.ticker))].join(", ")};
+    }
+    items.push({v,cur,proceeds,siGarde,ec,ecPct:proceeds>0?ec/proceeds*100:0,rem});
+  });
+  return {items,mieuxGarder,bienVendu,ecartNet,sansCours,total:ventes.length};
+}
+function openSellReview(){
+  const R=sellReview();
+  if(!R.total){openSheet(`<h3>🔄 Mes ventes, avec le recul</h3><div class="empty" style="padding:26px">Tu n'as encore vendu aucun titre.<br><br>C'est souvent bon signe. 😉</div>`);return;}
+  const avecThese=R.items.filter(x=>(x.v.these||"").trim()).length;
+  let lecon;
+  if(R.mieuxGarder>R.bienVendu&&R.ecartNet>0)
+    lecon=`Avec le recul, la patience t'aurait rapporté <b>${fmt(Math.round(R.ecartNet))}</b> de plus. Ce n'est pas un reproche — c'est une information : avant ta prochaine vente, relis ta thèse d'achat et demande-toi si les <b>raisons</b> ont changé, ou juste le cours.`;
+  else if(R.bienVendu>=R.mieuxGarder&&R.ecartNet<0)
+    lecon=`Tes ventes ont plutôt été bien senties : elles t'ont évité <b>${fmt(Math.round(-R.ecartNet))}</b> de pertes supplémentaires. Continue de décider sur des raisons, pas des émotions — ça semble te réussir.`;
+  else
+    lecon=`Bilan partagé : certaines ventes t'ont protégé, d'autres t'ont coûté. La clé est dans ton journal — compare les <b>raisons</b> de tes bonnes et mauvaises ventes pour repérer ton schéma.`;
+  openSheet(`<h3>🔄 Mes ventes, avec le recul</h3>
+    <div class="hint">Chaque vente comparée au cours actuel. Pour apprendre, pas pour regretter — le recul est un professeur, pas un juge.</div>
+    <div class="scard" style="margin:14px 0">
+      <div class="hr"><span>Ventes analysées</span><b>${R.items.length}${R.sansCours?` <span style="opacity:.7;font-size:12px">(+${R.sansCours} sans cours connu)</span>`:''}</b></div>
+      <div class="hr"><span>⚠️ Garder aurait été mieux</span><b>${R.mieuxGarder}</b></div>
+      <div class="hr"><span>✅ Bien vendu</span><b>${R.bienVendu}</b></div>
+      <div class="hr total"><span>Écart net « si tout gardé »</span><b class="${R.ecartNet>0?'neg':'pos'}">${R.ecartNet>0?'+':''}${fmtShort(Math.round(R.ecartNet))}</b></div>
+    </div>
+    <div class="help">💡 <div>${lecon}</div></div>
+    ${avecThese<R.items.length?`<div class="hint" style="margin-bottom:8px">📝 ${avecThese} vente(s) sur ${R.items.length} ont une raison notée au journal. Plus tu notes, plus cette analyse t'apprendra des choses sur toi.</div>`:''}
+    <div class="sect-title" style="margin:14px 0 4px">Le détail, vente par vente</div>
+    ${R.items.map(x=>{const mieux=x.ec>0;
+      return `<div class="card" style="padding:12px 14px;margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;gap:8px;font-size:13.5px">
+        <b>${stockMap[x.v.ticker]?.name||x.v.ticker}</b><span class="sub">${frDateShort(x.v.date)}</span></div>
+      <div class="sub" style="margin-top:3px">Vendu ${x.v.qty.toLocaleString('fr-FR')} × ${fmtShort(x.v.price)} = ${fmtShort(x.proceeds)} · cours actuel ${fmtShort(x.cur)}</div>
+      <div style="font-size:13px;margin-top:6px">${mieux?'⚠️':'✅'} Si gardés : <b>${fmtShort(x.siGarde)}</b> — <b class="${mieux?'neg':'pos'}">${mieux?'+':''}${fmtShort(Math.round(x.ec))} (${x.ecPct>=0?'+':''}${x.ecPct.toFixed(1)}%)</b> ${mieux?'· garder aurait été mieux':'· tu as bien fait de vendre'}</div>
+      ${x.rem?`<div class="sub" style="margin-top:4px">↪ Remploi (achats sous 15 j : ${x.rem.tks}) : <b class="${x.rem.pct>=0?'pos':'neg'}">${x.rem.pct>=0?'+':''}${x.rem.pct.toFixed(1)}%</b> depuis — ${x.rem.pct>x.ecPct?"ton remplacement a fait mieux que garder 👍":"le remplacement n'a pas (encore) rattrapé"}</div>`:''}
+      ${(x.v.these||"").trim()?`<div class="sub" style="margin-top:4px">📝 Ta raison : « ${escHtml(x.v.these)} »</div>`:''}
+    </div>`;}).join("")}
+    <div class="hint" style="margin-top:6px">⚖️ Comparaison sur les cours uniquement — les dividendes que les titres vendus auraient versés ne sont pas comptés (l'écart réel penche donc un peu plus vers « garder »). Le recul ne prédit pas l'avenir : une bonne décision peut mal tourner, et inversement.</div>`);
+}
+
 /* --- Comparateur de titres --- */
 let compareChartObj=null;
 function openCompare(){
@@ -1827,7 +1895,8 @@ function gainDetail(ticker){
     }else{
       const avg=qty>0?cost/qty:0, proceeds=t.qty*t.price-(+t.frais||0), gain=t.qty*(t.price-avg)-(+t.frais||0);
       realized+=gain; soldQ+=t.qty; soldNet+=proceeds; cost-=avg*Math.min(t.qty,qty); qty-=t.qty;
-      rows.push({date:t.date,html:`<div style="padding:9px 0;border-bottom:1px solid var(--line)"><div style="font-size:13px">🔴 <b>Vente</b> — ${t.qty.toLocaleString('fr-FR')} × ${fmtShort(t.price)} = <b>${fmtShort(proceeds)}</b> · <b class="${gain>=0?'pos':'neg'}">${sign(gain)}</b></div><div class="sub" style="font-size:11px">${frDate(t.date)} · coût moyen ${fmtShort(avg)}${t.libelle?' · '+t.libelle:''}</div></div>`});
+      const curP=prixActuel(ticker), siG=curP>0?t.qty*curP:null, ecG=siG!=null?siG-proceeds:null;
+      rows.push({date:t.date,html:`<div style="padding:9px 0;border-bottom:1px solid var(--line)"><div style="font-size:13px">🔴 <b>Vente</b> — ${t.qty.toLocaleString('fr-FR')} × ${fmtShort(t.price)} = <b>${fmtShort(proceeds)}</b> · <b class="${gain>=0?'pos':'neg'}">${sign(gain)}</b></div><div class="sub" style="font-size:11px">${frDate(t.date)} · coût moyen ${fmtShort(avg)}${t.libelle?' · '+t.libelle:''}</div>${siG!=null?`<div class="sub" style="font-size:11px;margin-top:2px">🔄 Si gardés : <b>${fmtShort(siG)}</b> aujourd'hui — <b class="${ecG>0?'neg':'pos'}">${ecG>0?'+':''}${fmtShort(Math.round(ecG))}</b> ${ecG>0?'(garder aurait été mieux)':'(bien vendu)'}</div>`:''}</div>`});
     }
   });
   const divs=(db.div||[]).filter(d=>d.ticker===ticker);
