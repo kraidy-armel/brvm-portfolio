@@ -1159,7 +1159,7 @@ function runActiveReview(){
   const imp=x=>`<b class="${x>=0?'pos':'neg'}">${x>=0?'+':''}${fmtShort(Math.round(x))}</b>`;
   el.innerHTML=`
     <div class="scard" style="margin:12px 0">
-      <div class="hr"><span>Titres « figés » au ${frDateShort(d)}, valorisés aujourd'hui</span><b>${fmt(Math.round(R.fige))}</b></div>
+      <div class="hr"><span>Titres « figés » au ${frDate(d)}, valorisés aujourd'hui</span><b>${fmt(Math.round(R.fige))}</b></div>
       <div class="hr"><span>Tes titres réels aujourd'hui</span><b>${fmt(Math.round(R.reel))}</b></div>
       <div class="hr total"><span>Impact de ta gestion active</span><b class="${R.ecart>=0?'pos':'neg'}">${R.ecart>=0?'+':''}${fmtShort(Math.round(R.ecart))}</b></div>
     </div>
