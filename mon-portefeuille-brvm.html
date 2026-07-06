@@ -1417,10 +1417,22 @@ async function syncPrices(btn){
 }
 function save(){recordSnapshot();localStorage.setItem(DB_KEY,JSON.stringify(store));renderAll();if(typeof cloudPushDebounced==="function")cloudPushDebounced();}
 /* Indicateur discret de fraîcheur des cours */
+function joursBourseRetard(d){
+  /* nombre de jours de bourse (lun-ven) écoulés entre la date des cours et aujourd'hui */
+  if(!d)return 0;
+  let n=0; const cur=new Date(d+"T00:00"), end=new Date(today()+"T00:00");
+  while(cur<end){cur.setDate(cur.getDate()+1);const wd=cur.getDay();if(wd>=1&&wd<=5)n++;}
+  return n;
+}
 function setSyncStatus(state){
   const el=document.getElementById("syncStatus"); if(!el)return;
   if(state==="maj"){el.textContent="⏳ mise à jour des cours…";return;}
-  el.textContent=store.lastSyncClock?((state==="off"?"⚪ ":"🟢 ")+"cours à jour à "+store.lastSyncClock):(state==="off"?"⚪ hors-ligne":"");
+  const base=store.lastSyncClock?((state==="off"?"⚪ ":"🟢 ")+"cours à jour à "+store.lastSyncClock):(state==="off"?"⚪ hors-ligne":"");
+  /* alerte uniquement si les données ont au moins 1 jour de bourse de retard */
+  let d=""; for(const k in db.prices){const x=((db.prices[k]||{}).date||"").slice(0,10); if(x>d)d=x;}
+  const retard=d?joursBourseRetard(d):0;
+  if(retard>=1&&base)el.innerHTML=base+' · <span style="color:var(--gold);font-weight:700">⚠️ cours du '+frDateShort(d)+'</span>';
+  else el.textContent=base;
 }
 /* Synchro silencieuse en arrière-plan (à l'ouverture) — sans pop-up */
 async function autoSync(force){
