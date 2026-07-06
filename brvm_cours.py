@@ -430,11 +430,17 @@ def notifier(merged, ancien_histo):
     points = state["points"]
 
     # 1) Historise le cours du jour (1 point par date de cours)
+    #    -> jamais les samedis/dimanches : marche ferme, ce serait un point plat
     for sym, row in merged.items():
         cur = row.get("actuel")
         if not cur or cur <= 0:
             continue
         d = (row.get("date") or today)[:10]
+        try:
+            if datetime.date.fromisoformat(d).weekday() >= 5:
+                continue
+        except ValueError:
+            pass
         h = points.setdefault(sym, {})
         h[d] = cur
         for old in sorted(h)[:-HISTO_MAX_POINTS]:
