@@ -929,7 +929,9 @@ const ANN_ALIAS=[
 ];
 function mergeAnnonces(list){
   if(!Array.isArray(list)||!list.length)return;
-  if(!store.annSeen)store.annSeen={};
+  /* v2 (annVus) : on ne marque « vu » qu'APRÈS import réussi — l'ancien annSeen
+     grillait les annonces des titres non suivis, les rendant inimportables ensuite */
+  if(!store.annVus)store.annVus={};
   const norm=s=>(s||"").toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Z0-9 ]/g," ").replace(/\s+/g," ").trim();
   /* uniquement les titres que TU suis (positions + alertes) pour ne pas noyer l'agenda */
   const mine=new Set();
@@ -942,12 +944,12 @@ function mergeAnnonces(list){
   list.forEach(a=>{
     if(!a||!a.societe||!a.type)return;
     const key=(a.date||"")+"|"+norm(a.societe)+"|"+a.type;
-    if(store.annSeen[key])return;
-    store.annSeen[key]=a.date||today();
+    if(store.annVus[key])return;
     /* société -> ticker : nom exact, puis alias usuels, puis inclusion */
     const ns=norm(a.societe); let tk=byName[ns]||null;
     if(!tk){for(const al of ANN_ALIAS){if(al[0].test(ns)){tk=al[1];break;}}}
     if(!tk&&ns.length>=5){for(const n in byName){if(n.indexOf(ns)>=0||ns.indexOf(n)>=0){tk=byName[n];break;}}}
+    /* titre non suivi : on ne marque PAS « vu » — si tu le suis plus tard, l'annonce sera importée */
     if(!tk||!(mine.has(tk)))return;
     /* date de l'événement : « du 12 août 2026 » ou « 12/08/2026 » dans le titre, sinon date de publication */
     let d=a.date||today();
@@ -955,13 +957,14 @@ function mergeAnnonces(list){
     if(m){const mo=MOIS[norm(m[2])];if(mo)d=m[3]+"-"+String(mo).padStart(2,"0")+"-"+String(+m[1]).padStart(2,"0");}
     else{m=(a.titre||"").match(/(\d{2})\/(\d{2})\/(\d{4})/);if(m)d=m[3]+"-"+m[2]+"-"+m[1];}
     /* pas de doublon si un événement similaire existe déjà à ±15 jours */
-    if((db.events||[]).some(e=>e.ticker===tk&&e.type===a.type&&Math.abs(new Date(e.date+"T00:00")-new Date(d+"T00:00"))<15*86400000))return;
+    if((db.events||[]).some(e=>e.ticker===tk&&e.type===a.type&&Math.abs(new Date(e.date+"T00:00")-new Date(d+"T00:00"))<15*86400000)){store.annVus[key]=a.date||today();return;}
     db.events.push({id:uid(),type:a.type,ticker:tk,date:d,note:("🤖 "+(a.titre||"Annonce BRVM")).slice(0,90),auto:true});
+    store.annVus[key]=a.date||today();
     added++;
   });
   /* nettoyage des clés vues > 1 an */
   const lim=new Date(Date.now()-365*86400000).toISOString().slice(0,10);
-  Object.keys(store.annSeen).forEach(k=>{if((store.annSeen[k]||"")<lim)delete store.annSeen[k];});
+  Object.keys(store.annVus).forEach(k=>{if((store.annVus[k]||"")<lim)delete store.annVus[k];});
   if(added)try{localStorage.setItem(DB_KEY,JSON.stringify(store));}catch(e){}
 }
 
