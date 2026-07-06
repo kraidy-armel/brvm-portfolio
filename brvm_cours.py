@@ -173,6 +173,7 @@ def parse_any_price_table(soup):
         i_cur = col("clôture", "cloture", "cours du jour", "dernier cours",
                     "dernier", "cours")
         i_prev = col("veille", "précédent", "precedent", "ouverture")
+        i_var = col("variation")
         if i_prev == i_cur:
             i_prev = None
 
@@ -194,8 +195,18 @@ def parse_any_price_table(soup):
                 continue
             cur = to_number_fr(cells[i_cur]) if (i_cur is not None
                                                  and i_cur < len(cells)) else None
-            prev = to_number_fr(cells[i_prev]) if (i_prev is not None
-                                                   and i_prev < len(cells)) else None
+            # La colonne « Cours veille » du site est PARFOIS fausse (elle repete
+            # le cours du jour), alors que la colonne « Variation (%) » est fiable.
+            # On reconstruit donc la veille a partir de la variation officielle :
+            # veille = cloture / (1 + variation/100). Repli : colonne veille.
+            prev = None
+            if cur and cur > 0 and i_var is not None and i_var < len(cells):
+                v = to_number_fr(cells[i_var])
+                if v is not None and abs(v) < 50 and (1 + v / 100.0) > 0:
+                    prev = round(cur / (1 + v / 100.0))
+            if not prev or prev <= 0:
+                prev = to_number_fr(cells[i_prev]) if (i_prev is not None
+                                                       and i_prev < len(cells)) else None
             if cur and cur > 0:
                 local[sym] = {
                     "actuel": cur,
