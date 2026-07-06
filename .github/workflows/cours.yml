@@ -2,7 +2,7 @@ name: Mise a jour des cours BRVM
 
 on:
   schedule:
-    - cron: "11,26,41,56 * * 1-5"
+    - cron: "11,26,41,56 9-16 * * 1-5"
   workflow_dispatch:
 
 permissions:
