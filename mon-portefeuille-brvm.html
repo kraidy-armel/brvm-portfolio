@@ -1317,10 +1317,11 @@ function openReport(){
     <h2>Positions au ${now.toLocaleDateString("fr-FR")}</h2>
     ${t.ps.length?`<table><thead><tr><th>Titre</th><th>Qté</th><th>PRU</th><th>Cours</th><th>Valeur</th><th>+/− value</th></tr></thead><tbody>
       ${t.ps.map(p=>`<tr><td>${escHtml(stockMap[p.ticker]?.name||p.ticker)} (${p.ticker})</td><td>${p.qty}</td><td>${fmtShort(p.pru)}</td><td>${fmtShort(p.cur)}</td><td>${fmtShort(p.value)}</td><td class="${cls(p.pl)}">${sign(p.pl)} (${p.plPct>=0?"+":""}${p.plPct.toFixed(1)}%)</td></tr>`).join("")}
+      <tr style="background:#EFF4F2;font-weight:700"><td>TOTAL</td><td></td><td></td><td></td><td>${fmtShort(t.value)}</td><td class="${cls(t.pl)}">${sign(t.pl)} (${t.plPct>=0?"+":""}${t.plPct.toFixed(1)}%)</td></tr>
     </tbody></table>`:'<div style="font-size:13px;color:#666">Aucune position ouverte.</div>'}
     <h2>Dividendes et plus-values réalisées, par année</h2>
     <table><thead><tr><th>Année</th><th>Dividendes reçus</th><th>Plus-values réalisées (base fiscale)</th></tr></thead><tbody>
-      ${years.length?years.map(y=>`<tr><td>${y}</td><td>${divByYear[y]?fmt(divByYear[y]):"—"}</td><td class="${cls(R.byYear[y]||0)}">${R.byYear[y]!=null?sign(R.byYear[y]):"—"}</td></tr>`).join(""):'<tr><td colspan="3">Rien à afficher pour l\'instant.</td></tr>'}
+      ${years.length?years.map(y=>`<tr><td>${y}</td><td>${divByYear[y]?fmt(divByYear[y]):"—"}</td><td class="${cls(R.byYear[y]||0)}">${R.byYear[y]!=null?sign(R.byYear[y]):"—"}</td></tr>`).join("")+(()=>{const tD=Object.values(divByYear).reduce((s,x)=>s+x,0),tP=Object.values(R.byYear).reduce((s,x)=>s+x,0);return `<tr style="background:#EFF4F2;font-weight:700"><td>TOTAL</td><td>${fmt(tD)}</td><td class="${cls(tP)}">${sign(tP)}</td></tr>`;})():'<tr><td colspan="3">Rien à afficher pour l\'instant.</td></tr>'}
     </tbody></table>
     <h2>Historique des opérations (${db.tx.length})</h2>
     ${db.tx.length?`<table><thead><tr><th>Date</th><th>Type</th><th>Titre</th><th>Qté</th><th>Prix</th><th>Frais</th><th>Montant</th></tr></thead><tbody>
