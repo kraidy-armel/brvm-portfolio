@@ -549,10 +549,13 @@ def check_alertes_perso(merged, state):
         base = SB_ENV_URL.rstrip("/")
         if base.endswith("/rest/v1"):          # tolere une URL collee avec /rest/v1
             base = base[:-8].rstrip("/")
-        headers = {"apikey": SB_ENV_KEY}
+        headers = {"apikey": SB_ENV_KEY,
+                   # PAS le User-Agent navigateur de SESSION : Supabase refuse
+                   # (a juste titre) les cles secretes aux "navigateurs"
+                   "User-Agent": "brvm-robot/1.0"}
         if not SB_ENV_KEY.startswith("sb_"):
             headers["Authorization"] = "Bearer " + SB_ENV_KEY
-        r = SESSION.get(
+        r = requests.get(
             base + "/rest/v1/brvm_app_store?select=data",
             headers=headers,
             timeout=20)
