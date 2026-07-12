@@ -544,10 +544,17 @@ def check_alertes_perso(merged, state):
     today = datetime.date.today().isoformat()
     vus = state.setdefault("alertes_notifiees", {})
     try:
+        # Nouvelles cles Supabase (sb_secret_...) : en-tete "apikey" SEULEMENT.
+        # Anciennes cles JWT (eyJ...) : apikey + Authorization Bearer.
+        base = SB_ENV_URL.rstrip("/")
+        if base.endswith("/rest/v1"):          # tolere une URL collee avec /rest/v1
+            base = base[:-8].rstrip("/")
+        headers = {"apikey": SB_ENV_KEY}
+        if not SB_ENV_KEY.startswith("sb_"):
+            headers["Authorization"] = "Bearer " + SB_ENV_KEY
         r = SESSION.get(
-            SB_ENV_URL.rstrip("/") + "/rest/v1/brvm_app_store?select=data",
-            headers={"apikey": SB_ENV_KEY,
-                     "Authorization": "Bearer " + SB_ENV_KEY},
+            base + "/rest/v1/brvm_app_store?select=data",
+            headers=headers,
             timeout=20)
         if r.status_code != 200:
             return f"lecture impossible (HTTP {r.status_code})"
