@@ -557,7 +557,11 @@ def check_alertes_perso(merged, state):
             headers=headers,
             timeout=20)
         if r.status_code != 200:
-            return f"lecture impossible (HTTP {r.status_code})"
+            # message d'erreur du serveur + indices SANS DANGER sur la cle recue
+            # (prefixe generique et longueur seulement — jamais son contenu)
+            detail = (r.text or "")[:90].replace("\n", " ")
+            return (f"lecture impossible (HTTP {r.status_code} | serveur: {detail} | "
+                    f"cle recue: {SB_ENV_KEY[:10]}... longueur {len(SB_ENV_KEY)})")
         rows = r.json()
     except Exception as e:
         return f"lecture impossible ({e})"
