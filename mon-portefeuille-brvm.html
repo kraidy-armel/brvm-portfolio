@@ -1866,6 +1866,7 @@ function drawCompte(){
   const apports=depots-retraits, titres=t.value, liquid=cashBalance(), patrimoine=titres+liquid;
   const latent=t.pl, realise=Object.values(realized().byYear).reduce((s,v)=>s+v,0);
   const divs=db.div.reduce((s,d)=>s+(+d.montant||0),0), frais=db.tx.reduce((s,x)=>s+(+x.frais||0),0);
+  const garde=(db.cash||[]).filter(m=>m.type==='frais').reduce((s,m)=>s+(+m.montant||0),0);
   const resultat=patrimoine-apports, rPct=apports>0?resultat/apports*100:0;
   const kv=(k,v,b)=>`<div class="kv"><span class="k">${k}</span><b ${b?'class="'+b+'"':''}>${v}</b></div>`;
   w.innerHTML=
@@ -1880,7 +1881,8 @@ function drawCompte(){
     +kv("Plus-value latente",sign(latent),latent>=0?'pos':'neg')
     +kv("Plus-values réalisées",sign(realise),realise>=0?'pos':'neg')
     +kv("Dividendes reçus","+"+fmtShort(divs)+" FCFA",'pos')
-    +kv("Frais payés","−"+fmtShort(frais)+" FCFA",'neg')
+    +kv("Frais de courtage","−"+fmtShort(frais)+" FCFA",'neg')
+    +kv("Frais de garde SGI"+(garde?"":" <span class='hint'>(à saisir via Liquidités → 🏦)</span>"),garde?"−"+fmtShort(garde)+" FCFA":"—",garde?'neg':'')
     +`<div class="kv" style="border-top:2px solid var(--line);margin-top:6px;padding-top:12px"><span class="k" style="font-weight:700;color:var(--ink)">RÉSULTAT GLOBAL</span><b style="font-size:17px" class="${resultat>=0?'pos':'neg'}">${sign(resultat)}${apports>0?` (${resultat>=0?'+':''}${rPct.toFixed(1)}%)`:''}</b></div>`
     +`<div class="hint" style="margin-top:8px">Résultat global = patrimoine actuel − apports nets (intègre plus-values latentes + réalisées + dividendes − frais).</div>`;
 }
