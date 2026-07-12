@@ -3,7 +3,7 @@
    - Librairies CDN : cache d'abord -> chargement rapide + hors-ligne.
    - Cours en direct (relais, github) : NON interceptés -> données toujours fraîches.
    Change CACHE_VERSION pour forcer une mise à jour du cache. */
-const CACHE_VERSION = "brvm-v2";
+const CACHE_VERSION = "brvm-v3";
 const CORE = ["./", "./index.html", "./mon-portefeuille-brvm.html",
               "./icon-192.png", "./icon-512.png", "./manifest.webmanifest"];
 
@@ -28,10 +28,12 @@ self.addEventListener("fetch", e => {
   if (req.method !== "GET") return;
   const url = new URL(req.url);
 
-  // Fichiers de l'app (même origine) : réseau d'abord, repli cache
+  // Fichiers de l'app (même origine) : réseau d'abord AVEC revalidation forcée
+  // ({cache:"no-cache"} contourne les 10 min de cache HTTP de GitHub Pages :
+  // les mises à jour apparaissent dès le déploiement, plus d'attente)
   if (url.origin === location.origin) {
     e.respondWith(
-      fetch(req).then(res => {
+      fetch(req, { cache: "no-cache" }).then(res => {
         if (res && res.ok) {                       // ne cache QUE les réponses valides
           const copy = res.clone();
           caches.open(CACHE_VERSION).then(c => c.put(req, copy));
