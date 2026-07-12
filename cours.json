@@ -1,12 +1,12 @@
 {
  "_meta": {
-  "updated": "2026-07-12T21:08:30+00:00",
-  "updated_human": "12/07/2026 21:08 UTC",
+  "updated": "2026-07-12T21:15:44+00:00",
+  "updated_human": "12/07/2026 21:15 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
    "github_secours": "non utilise (officiel suffisant)",
-   "alertes_perso": "lecture impossible (HTTP 401 | serveur: {\"message\":\"Forbidden use of secret API key in browser\",\"hint\":\"Secret API keys can only b | cle recue: sb_secret_... longueur 41)",
+   "alertes_perso": "aucun seuil franchi",
    "resultat": "48 titres",
    "dates_couvertes": "2026-07-12 -> 2026-07-12",
    "indice_composite": "470.47 (https://www.brvm.org/fr/indices/0)",
@@ -875,6 +875,12 @@
    {
     "date": "2026-06-26",
     "societe": "SITAB",
+    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "SITAB",
     "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
     "type": "ago"
    },
@@ -888,12 +894,6 @@
     "date": "2026-06-26",
     "societe": "AIR LIQUIDE CI",
     "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "SITAB",
-    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -1039,6 +1039,12 @@
   {
    "date": "2026-06-26",
    "societe": "SITAB",
+   "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "SITAB",
    "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
    "type": "ago"
   },
@@ -1052,12 +1058,6 @@
    "date": "2026-06-26",
    "societe": "AIR LIQUIDE CI",
    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "SITAB",
-   "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
