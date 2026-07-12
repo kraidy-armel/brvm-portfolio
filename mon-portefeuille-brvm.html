@@ -290,6 +290,16 @@
     <div id="compteWrap"></div>
   </div>
   <div class="card">
+    <h3 style="font-size:15px;margin-bottom:4px">🏦 Ce que ta SGI te coûte</h3>
+    <div class="muted" style="font-size:12.5px;margin-bottom:8px">Courtages + frais de garde saisis — le chiffre que personne ne calcule jamais.</div>
+    <div id="sgiCostWrap"></div>
+  </div>
+  <div class="card">
+    <h3 style="font-size:15px;margin-bottom:4px">🏅 Score de discipline</h3>
+    <div class="muted" style="font-size:12.5px;margin-bottom:8px">Il mesure tes <b>habitudes</b>, pas ta chance : régularité, journal, diversification, patience.</div>
+    <div id="discWrap"></div>
+  </div>
+  <div class="card">
     <h3 style="font-size:15px;margin-bottom:4px">🚀 Intérêts composés</h3>
     <div class="muted" style="font-size:12.5px;margin-bottom:10px">Projette ton patrimoine si tu investis régulièrement et réinvestis tes gains — la vraie force du long terme.</div>
     <button class="btn alt sm" onclick="openCompound()">Ouvrir le simulateur</button>
@@ -998,6 +1008,8 @@ function computeTRI(){
   const flows=[];
   db.tx.forEach(x=>{const m=x.qty*x.price+(x.type==='achat'?1:-1)*(+x.frais||0);flows.push({d:x.date,v:x.type==='achat'?-m:m});});
   db.div.forEach(d=>{if(+d.montant)flows.push({d:d.date,v:+d.montant});});
+  /* frais de garde SGI : ils réduisent ta vraie performance */
+  (db.cash||[]).forEach(m=>{if(m.type==='frais'&&+m.montant)flows.push({d:m.date,v:-m.montant});});
   const val=totals().value;
   if(flows.length<1||val<=0)return null;
   flows.push({d:today(),v:val});
@@ -1668,12 +1680,12 @@ function renderCash(){renderHome();}
 function openCash(type,id){
   const ed=id?(db.cash||[]).find(m=>m.id===id):null;
   if(ed)type=ed.type;
-  const dep=type==='depot';
-  openSheet(`<h3>${ed?(dep?'Modifier le dépôt':'Modifier le retrait'):(dep?'💰 Dépôt de liquidités':'🏧 Retrait de liquidités')}</h3>
-    <div class="hint">${dep?'Argent que tu ajoutes sur ton compte titres.':'Argent que tu retires de ton compte titres.'}</div>
-    <label>Montant (FCFA)</label><input id="csAmt" type="number" inputmode="decimal" placeholder="ex : 500000" value="${ed?ed.montant:''}">
+  const dep=type==='depot', fr=type==='frais';
+  openSheet(`<h3>${ed?'Modifier ce mouvement':(dep?'💰 Dépôt de liquidités':fr?'🏦 Frais SGI':'🏧 Retrait de liquidités')}</h3>
+    <div class="hint">${dep?'Argent que tu ajoutes sur ton compte titres.':fr?'Frais prélevés par ta SGI sur ton solde (droits de garde, tenue de compte, valorisation...). Recopie les lignes « Retenues » de ton relevé trimestriel. Ton solde peut devenir négatif — comme en vrai.':'Argent que tu retires de ton compte titres.'}</div>
+    <label>Montant (FCFA)</label><input id="csAmt" type="number" inputmode="decimal" placeholder="${fr?'ex : 90658':'ex : 500000'}" value="${ed?ed.montant:''}">
     <label>Date</label><input id="csDate" type="date" value="${ed?ed.date:today()}">
-    <label>Libellé <span class="hint">Optionnel</span></label><input id="csLib" placeholder="ex : virement bancaire, salaire..." value="${ed?escAttr(ed.libelle):''}">
+    <label>Libellé <span class="hint">Optionnel</span></label><input id="csLib" placeholder="${fr?'ex : Valorisation & DDG T2 2026':'ex : virement bancaire, salaire...'}" value="${ed?escAttr(ed.libelle):''}">
     <button class="btn" style="margin-top:18px" onclick="saveCash('${type}'${ed?`,'${id}'`:''})">${ed?'Enregistrer les modifications':'Enregistrer'}</button>
     ${ed?`<button class="del" style="display:block;margin:12px auto 0" onclick="delCash('${id}')">Supprimer ce mouvement</button>`:''}`);
 }
@@ -1691,12 +1703,12 @@ function openCashList(){
   const ms=[...(db.cash||[])].sort((a,b)=>b.date.localeCompare(a.date));
   openSheet(`<h3>Mouvements de trésorerie</h3>
     <div class="kv"><span class="k">Disponible</span><b class="${cashBalance()>=0?'pos':'neg'}">${fmt(cashBalance())}</b></div>
-    <div style="margin-top:10px">${ms.length?ms.map(m=>{const dep=m.type==='depot';return `<div class="row">
-      <div class="tick" style="background:${dep?'var(--green-l)':'var(--neg-l)'};color:${dep?'var(--green)':'var(--neg)'}">${dep?'DÉP':'RET'}</div>
-      <div class="grow"><div class="nm">${dep?'Dépôt':'Retrait'}${m.libelle?` <span class="tag gray" style="font-weight:500">${m.libelle}</span>`:""}</div><div class="sub">${frDate(m.date)}</div></div>
+    <div style="margin-top:10px">${ms.length?ms.map(m=>{const dep=m.type==='depot',fr=m.type==='frais';return `<div class="row">
+      <div class="tick" style="background:${dep?'var(--green-l)':'var(--neg-l)'};color:${dep?'var(--green)':'var(--neg)'};font-size:${fr?'10px':'13px'}">${dep?'DÉP':fr?'SGI':'RET'}</div>
+      <div class="grow"><div class="nm">${dep?'Dépôt':fr?'🏦 Frais SGI':'Retrait'}${m.libelle?` <span class="tag gray" style="font-weight:500">${m.libelle}</span>`:""}</div><div class="sub">${frDate(m.date)}</div></div>
       <div class="right"><div class="val ${dep?'pos':'neg'}">${dep?'+':'−'}${fmtShort(m.montant)}</div><div style="display:flex;gap:10px;justify-content:flex-end;margin-top:3px"><button class="del" style="color:var(--green)" onclick="openCash('${m.type}','${m.id}')">Modifier</button><button class="del" onclick="delCash('${m.id}')">Suppr.</button></div></div>
     </div>`;}).join(""):'<div class="empty" style="padding:18px">Aucun mouvement.</div>'}</div>
-    <div class="btn-row" style="margin-top:14px"><button class="btn alt sm" onclick="closeSheet();openCash('depot')">＋ Dépôt</button><button class="btn alt sm" onclick="closeSheet();openCash('retrait')">− Retrait</button></div>`);
+    <div class="btn-row" style="margin-top:14px"><button class="btn alt sm" onclick="closeSheet();openCash('depot')">＋ Dépôt</button><button class="btn alt sm" onclick="closeSheet();openCash('retrait')">− Retrait</button><button class="btn alt sm" onclick="closeSheet();openCash('frais')">🏦 Frais SGI</button></div>`);
 }
 
 let evoChartObj=null;
@@ -1768,7 +1780,7 @@ function renderDiv(){
 }
 
 function evRow(e){
-  const labels={ago:["AGO","gold"],resultats:["Résultats","gray"],dividende:["Détachement dividende","gold"],autre:["Événement","gray"]};
+  const labels={ago:["AGO","gold"],resultats:["Résultats","gray"],dividende:["Détachement dividende","gold"],frais:["🏦 Frais SGI","gray"],autre:["Événement","gray"]};
   const [lab,cls]=labels[e.type]||labels.autre;
   const past=e.date<today();
   return `<div class="row" style="${past?"opacity:.5":""}">
@@ -1874,9 +1886,78 @@ function drawCompte(){
 }
 
 let sectorChartObj=null;
+/* --- Coût annuel de la SGI : courtages + frais de garde saisis --- */
+function drawSgiCost(){
+  const el=document.getElementById("sgiCostWrap"); if(!el)return;
+  const an=String(new Date().getFullYear());
+  const courtage=db.tx.filter(t=>t.date.startsWith(an)).reduce((s,t)=>s+(+t.frais||0),0);
+  const garde=(db.cash||[]).filter(m=>m.type==="frais"&&m.date.startsWith(an)).reduce((s,m)=>s+(+m.montant||0),0);
+  const tot=courtage+garde, val=totals().value;
+  el.innerHTML=`<div class="kv"><span class="k">Courtages ${an} (frais d'opérations)</span><b>${courtage?fmt(courtage):"—"}</b></div>
+    <div class="kv"><span class="k">Frais de garde saisis en ${an}</span><b>${garde?fmt(garde):"—"}</b></div>
+    <div class="kv"><span class="k"><b>Total ${an}</b>${val>0&&tot>0?` <span class="hint">(${(tot/val*100).toFixed(2)} % du portefeuille)</span>`:""}</span><b class="${tot>0?'neg':''}">${tot?fmt(tot):"—"}</b></div>
+    ${garde===0?'<div class="hint" style="padding:6px 0">💡 Saisis les « Retenues » de tes relevés trimestriels via Liquidités → 🏦 Frais SGI — un rappel apparaît dans ton agenda à chaque fin de trimestre.</div>':''}`;
+}
+/* --- Score de discipline : mesure tes habitudes, pas ta chance --- */
+function disciplineScore(){
+  const cut=new Date(Date.now()-365*86400000).toISOString().slice(0,10);
+  /* 1. Régularité des apports : mois investis sur les 6 derniers */
+  let mois=0;
+  for(let i=0;i<6;i++){
+    const d1=new Date();d1.setMonth(d1.getMonth()-i);
+    const d0=new Date();d0.setMonth(d0.getMonth()-i-1);
+    const a=d0.toISOString().slice(0,10),b=d1.toISOString().slice(0,10);
+    if(db.tx.some(t=>t.type==="achat"&&t.date>a&&t.date<=b)||(db.cash||[]).some(m=>m.type==="depot"&&m.date>a&&m.date<=b))mois++;
+  }
+  const regul=Math.round(mois/6*25);
+  /* 2. Journal tenu : part des opérations (12 mois) avec un « pourquoi » */
+  const ops=db.tx.filter(t=>t.date>=cut);
+  const avecT=ops.filter(t=>(t.these||"").trim()).length;
+  const journal=ops.length?Math.round(avecT/ops.length*25):13;
+  /* 3. Diversification : nombre de lignes + poids de la plus grosse */
+  const t=totals(); let diver=0;
+  if(t.ps.length){
+    const top=Math.max(...t.ps.map(p=>p.value))/(t.value||1)*100;
+    diver=(t.ps.length>=8?13:t.ps.length>=5?10:t.ps.length>=3?6:2)+(top<=25?12:top<=35?8:top<=50?4:0);
+  }
+  /* 4. Patience : durée moyenne de détention avant les ventes (12 mois) */
+  const ventes=db.tx.filter(x=>x.type==="vente"&&x.date>=cut);
+  let pat=25, jours=null;
+  if(ventes.length){
+    let tot2=0,n=0;
+    ventes.forEach(v=>{
+      const achats=db.tx.filter(a2=>a2.type==="achat"&&a2.ticker===v.ticker&&a2.date<=v.date).sort((x,y)=>x.date.localeCompare(y.date));
+      if(achats.length){tot2+=(new Date(v.date+"T00:00")-new Date(achats[0].date+"T00:00"))/86400000;n++;}
+    });
+    jours=n?Math.round(tot2/n):365;
+    pat=jours>=365?25:jours>=180?18:jours>=90?10:jours>=30?5:2;
+  }
+  return {total:regul+journal+diver+pat, piliers:[
+    {nom:"Régularité des apports",pts:regul,max:25,tip:mois>=5?"Tu investis presque chaque mois — la meilleure habitude qui existe.":"Investis un montant fixe chaque mois, même petit : la régularité bat le timing."},
+    {nom:"Journal de décision",pts:journal,max:25,tip:ops.length&&avecT/Math.max(1,ops.length)>=0.7?"Tes décisions sont documentées — tu apprends de toi-même.":"Note le « pourquoi » de chaque opération : c'est ton meilleur professeur."},
+    {nom:"Diversification",pts:diver,max:25,tip:diver>=18?"Ton panier est bien réparti.":"Vise 5 à 8 lignes de secteurs différents, aucune au-dessus de ~30 %."},
+    {nom:"Patience",pts:pat,max:25,tip:pat>=18?"Tu laisses le temps travailler pour toi.":"Les ventes rapides coûtent cher (frais + occasions manquées) — allonge tes détentions."}
+  ]};
+}
+function drawDiscipline(){
+  const el=document.getElementById("discWrap"); if(!el)return;
+  const s=disciplineScore();
+  const label=s.total>=80?"Maître 🏆":s.total>=60?"Discipliné 💪":s.total>=40?"En progrès 📈":"Apprenti 🌱";
+  el.innerHTML=`<div style="display:flex;align-items:center;gap:14px;margin-bottom:8px">
+      <div style="font-size:30px;font-weight:800;color:var(--green)">${s.total}<span style="font-size:14px;color:var(--muted)">/100</span></div>
+      <div><b>${label}</b><div class="hint" style="margin:0">Ton score évolue avec tes habitudes, pas avec le marché.</div></div></div>
+    ${s.piliers.map(p=>`<div style="margin-bottom:9px">
+      <div style="display:flex;justify-content:space-between;font-size:12.5px"><span>${p.nom}</span><b>${p.pts}/${p.max}</b></div>
+      <div class="bar"><span style="width:${Math.max(3,p.pts/p.max*100)}%;background:${p.pts/p.max>=0.7?'var(--green)':p.pts/p.max>=0.4?'var(--gold)':'var(--neg)'}"></span></div>
+      ${p.pts/p.max<0.7?`<div class="hint" style="margin-top:2px">${p.tip}</div>`:""}
+    </div>`).join("")}`;
+}
+
 function drawAnalyse(){
   drawExpert();
   drawCompte();
+  drawSgiCost();
+  drawDiscipline();
   const t=totals();
   const ps=[...t.ps].sort((a,b)=>b.value-a.value);
   const labels=ps.map(p=>stockMap[p.ticker]?.name||p.ticker);
@@ -2524,8 +2605,8 @@ function tryUnlock(){
 }
 
 /* ================= SYNCHRONISATION CLOUD (Supabase) ================= */
-const SB_URL="https://agjyamnfcbwjjtupuwwx.supabase.co";
-const SB_KEY="sb_publishable_m2-lV2xzKpddJWm4MXcXGw_CHc8G2_j";
+const SB_URL="https://szzionsxkrasgcjnksjn.supabase.co";   /* ton projet, ta maison */
+const SB_KEY="sb_publishable_OQbsCE5Q9yVkegRm3uNReQ_kLKAxpAk";
 let sb=null, cloudUserEmail=null, _pushT=null;
 try{ if(window.supabase) sb=window.supabase.createClient(SB_URL,SB_KEY); }catch(e){}
 
@@ -2586,8 +2667,22 @@ async function cloudSignIn(btn){
 async function cloudSignOut(){ try{await sb.auth.signOut();}catch(e){} cloudUserEmail=null; closeSheet(); renderAll(); alert("Déconnecté. Tes données restent sur cet appareil."); }
 async function cloudSyncNow(btn){ btn.disabled=true; await pushCloud(); await pullCloud(); btn.disabled=false; alert("🔄 Synchronisé."); }
 
+/* Rappel automatique : saisir les frais SGI à chaque fin de trimestre */
+function ensureFraisReminder(){
+  const n=new Date();
+  const qEndMonth=[2,5,8,11][Math.floor(n.getMonth()/3)];
+  const qEnd=new Date(n.getFullYear(),qEndMonth+1,0);
+  const d=qEnd.toISOString().slice(0,10);
+  /* on crée le rappel dans les 10 derniers jours du trimestre */
+  if((qEnd-n)/86400000>10)return;
+  if((db.events||[]).some(e=>e.type==="frais"&&Math.abs(new Date(e.date+"T00:00")-qEnd)<20*86400000))return;
+  db.events.push({id:uid(),type:"frais",ticker:"",date:d,note:"🤖 Saisis les frais SGI du relevé trimestriel (Liquidités → 🏦 Frais SGI)",auto:true});
+  try{localStorage.setItem(DB_KEY,JSON.stringify(store));}catch(e){}
+}
+
 /* --- Démarrage --- */
 load();
+ensureFraisReminder();
 applyDark();
 renderAll();
 if(store.lock){document.getElementById("lockScreen").style.display="flex";setTimeout(()=>document.getElementById("lockUser").focus(),150);}

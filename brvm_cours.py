@@ -26,6 +26,7 @@ Aucune cle API, aucun service payant. Tourne dans GitHub Actions.
 """
 
 import json
+import os
 import sys
 import datetime
 import re
@@ -524,6 +525,89 @@ def notifier(merged, ancien_histo):
     return state
 
 
+# ==========================================================================
+# ALERTES DE PRIX PERSONNELLES (en push, appli fermee)
+# ==========================================================================
+# Le robot lit TES alertes de prix (synchronisees par l'appli dans Supabase)
+# et t'envoie une notification ntfy quand un seuil est franchi.
+# Necessite 2 secrets GitHub (jamais dans le code) : SUPABASE_URL et
+# SUPABASE_SERVICE_KEY. S'ils sont absents, cette fonction ne fait rien.
+# Max 1 notification par alerte et par jour. Ne modifie JAMAIS tes donnees.
+
+SB_ENV_URL = os.environ.get("SUPABASE_URL", "").strip()
+SB_ENV_KEY = os.environ.get("SUPABASE_SERVICE_KEY", "").strip()
+
+
+def check_alertes_perso(merged, state):
+    if not (SB_ENV_URL and SB_ENV_KEY and NTFY_TOPIC):
+        return None                      # non configure : silence total
+    today = datetime.date.today().isoformat()
+    vus = state.setdefault("alertes_notifiees", {})
+    try:
+        r = SESSION.get(
+            SB_ENV_URL.rstrip("/") + "/rest/v1/brvm_app_store?select=data",
+            headers={"apikey": SB_ENV_KEY,
+                     "Authorization": "Bearer " + SB_ENV_KEY},
+            timeout=20)
+        if r.status_code != 200:
+            return f"lecture impossible (HTTP {r.status_code})"
+        rows = r.json()
+    except Exception as e:
+        return f"lecture impossible ({e})"
+
+    def fcfa(x):
+        return f"{x:,.0f}".replace(",", " ")
+
+    lignes = []
+    for row in rows or []:
+        data = (row or {}).get("data") or {}
+        for pf in (data.get("portfolios") or []):
+            for a in (pf.get("alerts") or []):
+                if not a or a.get("statut") != "active":
+                    continue
+                tk = (a.get("ticker") or "").upper().strip()
+                try:
+                    seuil = float(a.get("seuil"))
+                except (TypeError, ValueError):
+                    continue
+                cond = a.get("condition") or ""
+                cur = (merged.get(tk) or {}).get("actuel")
+                if not tk or not seuil or not cur:
+                    continue
+                ok = (cond == ">=" and cur >= seuil) or (cond == "<=" and cur <= seuil)
+                if not ok:
+                    continue
+                key = str(a.get("id") or (tk + cond + str(seuil)))
+                if vus.get(key) == today:
+                    continue             # deja notifiee aujourd'hui
+                vus[key] = today
+                sens = "au-dessus de" if cond == ">=" else "en-dessous de"
+                note = (" — " + str(a.get("note"))) if a.get("note") else ""
+                lignes.append(f"🎯 {tk} : {fcfa(cur)} F, {sens} ton seuil de {fcfa(seuil)} F{note}")
+    # purge des cles de plus de 7 jours
+    lim = (datetime.date.today() - datetime.timedelta(days=7)).isoformat()
+    for k in [k for k, v in vus.items() if v < lim]:
+        del vus[k]
+    if not lignes:
+        return "aucun seuil franchi"
+    msg = "\n".join(lignes[:6])
+    if len(lignes) > 6:
+        msg += f"\n... et {len(lignes) - 6} autre(s)"
+    msg += "\n\nOuvre l'appli pour agir. A toi de decider."
+    try:
+        rp = requests.post("https://ntfy.sh/" + NTFY_TOPIC,
+                           data=msg.encode("utf-8"),
+                           headers={"Title": "BRVM - TES alertes de prix",
+                                    "Priority": "high", "Tags": "dart"},
+                           timeout=20)
+        if rp.status_code == 200:
+            print(f"  alertes perso : {len(lignes)} notifiee(s)")
+            return f"{len(lignes)} notifiee(s)"
+    except Exception as e:
+        return f"envoi impossible ({e})"
+    return "envoi refuse par ntfy"
+
+
 # --------------------------------------------------------------------------
 # Programme principal : fusion des sources, ecriture de cours.json
 # --------------------------------------------------------------------------
@@ -558,6 +642,11 @@ def main():
     # Notifications + historique (avant l'ajout des codes alternatifs,
     # pour ne pas signaler deux fois le meme titre)
     histo = notifier(merged, ancien_histo)
+
+    # Tes alertes de prix personnelles (si les secrets GitHub sont configures)
+    res_alertes = check_alertes_perso(merged, histo)
+    if res_alertes is not None:
+        diag["alertes_perso"] = res_alertes
 
     # Codes alternatifs : certains portefeuilles utilisent un code different du
     # code officiel. On duplique l'entree sous l'autre code pour que l'appli
