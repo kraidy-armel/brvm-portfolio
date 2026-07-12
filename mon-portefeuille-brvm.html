@@ -1000,6 +1000,26 @@ function mergeAnnonces(list){
   if(added)try{localStorage.setItem(DB_KEY,JSON.stringify(store));}catch(e){}
 }
 
+/* Prépare la demande de brief analyste complet et la copie — à coller chez ton assistant */
+function copierBrief(tk){
+  tk=resolveTicker(tk);
+  const nom=stockMap[tk]?.name||tk;
+  const p=positions().find(x=>x.ticker===tk||resolveTicker(x.ticker)===tk)||null;
+  const cur=prixActuel(tk);
+  const auj=new Date().toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+  const txt="Fais-moi le brief analyste complet sur "+nom+" ("+tk+", BRVM), au "+auj+" :\n"
+    +"- actualité récente et annonces officielles (résultats, dividendes, AG),\n"
+    +"- derniers résultats financiers publiés et valorisation (PER, rendement),\n"
+    +"- contexte du secteur et du marché BRVM,\n"
+    +"- arguments POUR garder/acheter et arguments POUR alléger/attendre,\n"
+    +"- les questions que je devrais me poser.\n"
+    +(p?("Ma position : "+p.qty+" titres, PRU "+Math.round(p.pru)+" FCFA, cours actuel "+(cur||"?")+" FCFA ("+(p.plPct>=0?"+":"")+p.plPct.toFixed(1)+"% latent), poids "+(p.value/(totals().value||1)*100).toFixed(1)+"% de mon portefeuille.\n")
+        :("Je ne détiens pas ce titre — angle acheteur. Cours actuel : "+(cur||"?")+" FCFA.\n"))
+    +"Pas de recommandation ferme : les faits et les deux plaidoiries, je décide.";
+  const done=()=>alert("🧠 Demande copiée !\n\nOuvre Claude et colle-la dans la conversation : ton brief complet arrive en ~2 minutes.");
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done).catch(()=>prompt("Copie ce texte :",txt));
+  else prompt("Copie ce texte :",txt);
+}
 /* --- Fiche « 📋 Le point sur ce titre » : les faits, puis TA décision --- */
 function openPoint(tk){
   tk=resolveTicker(tk);
@@ -1040,8 +1060,10 @@ function openPoint(tk){
     ${theses.map(x=>`<div class="help" style="margin-bottom:8px">${x.type==='achat'?'🟢':'🔴'} <div><b>${frDateShort(x.date)}</b> — « ${escHtml(x.these)} »</div></div>`).join('')}`:''}
     <div class="sect-title" style="margin:14px 0 4px">Les 3 questions avant d'agir</div>
     <div class="card" style="padding:12px 14px;font-size:13.5px;line-height:1.5">${questions}</div>
-    <div class="hint" style="margin-top:10px">⚖️ Un dossier de faits, pas un conseil. Pour un brief d'actualité approfondi (résultats, presse, contexte), demande-le à ton assistant. 😉</div>
-    ${p?`<button class="btn alt" style="margin-top:14px" onclick="posDetail('${tk}')">📊 Détail complet de ma position</button>`:`<button class="btn" style="margin-top:14px" onclick="openTxFor('${tk}','achat',${cur||0})">➕ Acheter — enregistrer un achat</button>`}`);
+    <div class="hint" style="margin-top:10px">⚖️ Un dossier de faits, pas un conseil.</div>
+    <button class="btn" style="margin-top:14px" onclick="copierBrief('${tk}')">🧠 Demander le brief analyste complet</button>
+    <div class="hint" style="margin-top:4px;text-align:center">Prépare et copie la demande — colle-la chez Claude, le dossier arrive en ~2 min.</div>
+    ${p?`<button class="btn alt" style="margin-top:10px" onclick="posDetail('${tk}')">📊 Détail complet de ma position</button>`:`<button class="btn alt" style="margin-top:10px" onclick="openTxFor('${tk}','achat',${cur||0})">➕ Acheter — enregistrer un achat</button>`}`);
 }
 
 /* --- Profil de risque : volatilité, bêta, Sharpe, Treynor, VaR, TRI --- */
