@@ -832,7 +832,7 @@ function saveGoal(id){
   else{rec.id=uid();db.goals.push(rec);}
   closeSheet();save();
 }
-function delGoal(id){if(confirm("Supprimer cet objectif ?")){db.goals=(db.goals||[]).filter(g=>g.id!==id);save();openGoals();}}
+function delGoal(id){if(confirmDel("Supprimer cet objectif ?")){db.goals=(db.goals||[]).filter(g=>g.id!==id);save();openGoals();}}
 
 /* --- Simulateur d'intérêts composés --- */
 let compoundChartObj=null;
@@ -1472,6 +1472,22 @@ const fmtAxis=n=>{if(masked)return"";const a=Math.abs(n);return a>=1e6?(n/1e6).t
 /* Échappe les guillemets pour un usage sûr dans value="..." */
 const escAttr=s=>(s||"").replace(/"/g,"&quot;");
 const escHtml=s=>(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+/* Confirmation forte pour TOUTE suppression : mot de passe si l'appli est
+   verrouillée, sinon saisie du mot SUPPRIMER — fini les suppressions par mégarde */
+function confirmDel(msg){
+  if(store.lock){
+    const p=prompt((msg||"Suppression")+"\n\n🔒 Mot de passe requis pour supprimer :");
+    if(p===null)return false;
+    if(lockHash((store.lockUser||"")+"\n"+p.trim())===store.lock)return true;
+    alert("Mot de passe incorrect — suppression annulée.");
+    return false;
+  }
+  const t=prompt((msg||"Suppression")+"\n\n⚠️ Tape SUPPRIMER pour confirmer :");
+  if(t===null)return false;
+  if((t||"").trim().toUpperCase()==="SUPPRIMER")return true;
+  alert("Confirmation incorrecte — suppression annulée.");
+  return false;
+}
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const today=()=>new Date().toISOString().slice(0,10);
 const frDate=d=>{const o=new Date(d+"T00:00");return o.toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"})};
@@ -1642,7 +1658,7 @@ function saveCash(type,id){
   else db.cash.push({id:uid(),type,montant,date:document.getElementById("csDate").value||today(),libelle:(document.getElementById("csLib").value||"").trim()});
   closeSheet();save();
 }
-function delCash(id){if(confirm("Supprimer ce mouvement ?")){db.cash=(db.cash||[]).filter(m=>m.id!==id);save();openCashList();}}
+function delCash(id){if(confirmDel("Supprimer ce mouvement d'espèces ?")){db.cash=(db.cash||[]).filter(m=>m.id!==id);save();openCashList();}}
 function openCashList(){
   const ms=[...(db.cash||[])].sort((a,b)=>b.date.localeCompare(a.date));
   openSheet(`<h3>Mouvements de trésorerie</h3>
@@ -1768,7 +1784,7 @@ function saveAlert(){
   db.alerts.push({id:uid(),ticker,condition:document.getElementById('alCond').value,seuil,note:(document.getElementById('alNote').value||'').trim(),statut:'active'});
   closeSheet();save();
 }
-function delAlert(id){db.alerts=(db.alerts||[]).filter(a=>a.id!==id);save();}
+function delAlert(id){if(!confirmDel("Supprimer cette alerte de prix ?"))return;db.alerts=(db.alerts||[]).filter(a=>a.id!==id);save();}
 function rearmAlert(id){const a=(db.alerts||[]).find(x=>x.id===id);if(a){a.statut='active';save();}}
 /* Vérifie les alertes après mise à jour des cours */
 function checkAlerts(){
@@ -2086,7 +2102,7 @@ function saveTx(id){
   if(!db.prices[ticker])db.prices[ticker]={actuel:price,veille:price};
   closeSheet();save();
 }
-function delTx(id){if(confirm("Supprimer cette opération ?")){db.tx=db.tx.filter(t=>t.id!==id);closeSheet();save();}}
+function delTx(id){if(confirmDel("Supprimer cette opération ?")){db.tx=db.tx.filter(t=>t.id!==id);closeSheet();save();}}
 
 /* --- Dividende --- */
 function openDiv(id){
@@ -2114,7 +2130,7 @@ function saveDiv(id){
   else{rec.id=uid();db.div.push(rec);}
   closeSheet();save();
 }
-function delDiv(id){if(confirm("Supprimer ?")){db.div=db.div.filter(d=>d.id!==id);closeSheet();save();}}
+function delDiv(id){if(confirmDel("Supprimer ce dividende ?")){db.div=db.div.filter(d=>d.id!==id);closeSheet();save();}}
 
 /* --- Événement agenda --- */
 function openEvent(){
@@ -2133,7 +2149,7 @@ function saveEvent(){
   db.events.push({id:uid(),type:document.getElementById("evType").value,ticker:comboValue("evTicker"),date:document.getElementById("evDate").value||today(),note:document.getElementById("evNote").value.trim()});
   closeSheet();save();
 }
-function delEvent(id){db.events=db.events.filter(e=>e.id!==id);save();}
+function delEvent(id){if(!confirmDel("Supprimer cet événement de l'agenda ?"))return;db.events=db.events.filter(e=>e.id!==id);save();}
 
 /* --- Cours du jour --- */
 function openPrices(){
@@ -2203,7 +2219,7 @@ function importData(input){
   }catch(x){alert("Fichier invalide.");}};
   r.readAsText(f);
 }
-function resetData(){if(confirm("Effacer le contenu de ce portefeuille ? Cette action est irréversible.")){Object.assign(db,{tx:[],div:[],events:[],prices:{},history:[],brvmIndex:null,cash:[],alerts:[]});save();closeSheet();}}
+function resetData(){if(confirmDel("EFFACER TOUT le contenu de ce portefeuille ? Cette action est irréversible.")){Object.assign(db,{tx:[],div:[],events:[],prices:{},history:[],brvmIndex:null,cash:[],alerts:[]});save();closeSheet();}}
 
 /* --- Import d'opérations (CSV / Excel) --- */
 function openImportOps(){
@@ -2452,7 +2468,7 @@ function openPortfolios(){
 function switchPf(id){activate(id);save();closeSheet();go("accueil");}
 function addPf(){const n=prompt("Nom du nouveau portefeuille :","Nouveau portefeuille");if(n&&n.trim()){const p=blankPortfolio(n.trim());store.portfolios.push(p);activate(p.id);save();closeSheet();go("accueil");}}
 function renamePf(id){const p=store.portfolios.find(x=>x.id===id);if(!p)return;const n=prompt("Nouveau nom :",p.name);if(n&&n.trim()){p.name=n.trim();save();openPortfolios();}}
-function deletePf(id){if(store.portfolios.length<=1)return;if(confirm("Supprimer ce portefeuille et toutes ses données ?")){store.portfolios=store.portfolios.filter(x=>x.id!==id);if(store.activeId===id)activate(store.portfolios[0].id);save();openPortfolios();}}
+function deletePf(id){if(store.portfolios.length<=1)return;if(confirmDel("Supprimer ce PORTEFEUILLE ENTIER et toutes ses données ?")){store.portfolios=store.portfolios.filter(x=>x.id!==id);if(store.activeId===id)activate(store.portfolios[0].id);save();openPortfolios();}}
 
 /* --- Verrouillage par code (local) --- */
 function lockHash(s){return btoa(unescape(encodeURIComponent("brvm:"+s)));}
