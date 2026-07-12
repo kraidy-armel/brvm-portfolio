@@ -205,7 +205,8 @@
 
   <div class="btn-row">
     <button class="btn" onclick="openTx()">＋ Opération</button>
-    <button class="btn alt" onclick="openPrices()">🔄 Cours / Sync BRVM</button>
+    <button class="btn alt" onclick="openMarket()">📊 Cours BRVM</button>
+    <button class="btn alt" style="flex:0 0 56px;font-size:19px" onclick="autoSync(true)" title="Synchroniser maintenant">🔄</button>
   </div>
 
   <div id="trendBanner"></div>
@@ -552,7 +553,8 @@ function recordPriceHist(data){
   if(!data)return;
   /* Indice BRVM Composite automatique (fourni par le robot dans cours.json) */
   if(data._indice&&+data._indice.composite>0){
-    db.brvmIndex=+data._indice.composite;
+    /* indice global : mis à jour dans TOUS les portefeuilles (plus d'indice périmé en basculant) */
+    store.portfolios.forEach(p=>p.brvmIndex=+data._indice.composite);
     if(!store.idxHist)store.idxHist={};
     store.idxHist[(data._indice.date||today()).slice(0,10)]=+data._indice.composite;
     const ks=Object.keys(store.idxHist);
@@ -635,6 +637,7 @@ function renderMarket(sortBy){
       <input type="number" value="${trendCfg().seuil}" min="1" step="0.5" onchange="setTrendCfg(null,this.value)" style="width:64px;padding:4px 6px;margin:0"><span>% sur 7 jours</span>
     </div>
     <button class="btn ghost sm" style="margin:0 0 8px" onclick="openCompare()">⚖️ Comparer deux titres</button>
+    <button class="btn ghost sm" style="margin:0 0 8px" onclick="openPrices()">✍️ Saisie manuelle / options de synchro</button>
     ${anyWv?'':'<div class="hint" style="margin:2px 0 8px">ℹ️ La variation <b>7 jours</b> se construit au fil de tes synchros — reviens dans quelques jours, elle se remplira toute seule.</div>'}
     <div class="card" style="padding:2px 14px;max-height:60vh;overflow:auto">${rows||'<div class="empty">Aucun cours.</div>'}</div>`);
 }
@@ -1452,8 +1455,17 @@ function setSyncStatus(state){
   /* alerte uniquement si les données ont au moins 1 jour de bourse de retard */
   let d=""; for(const k in db.prices){const x=((db.prices[k]||{}).date||"").slice(0,10); if(x>d)d=x;}
   const retard=d?joursBourseRetard(d):0;
-  if(retard>=1&&base)el.innerHTML=base+' · <span style="color:var(--gold);font-weight:700">⚠️ cours du '+frDateShort(d)+'</span>';
-  else el.textContent=base;
+  /* pouls du marché : indice BRVM Composite + variation du jour, visible en permanence */
+  let idx="";
+  const IH=store.idxHist||{}; const ks=Object.keys(IH).sort();
+  if(ks.length){
+    const cur=+IH[ks[ks.length-1]];
+    const prev=ks.length>1?+IH[ks[ks.length-2]]:cur;
+    const v=prev>0?(cur-prev)/prev*100:0;
+    idx=' · BRVM-C <b>'+cur.toFixed(2).replace(".",",")+'</b> <span class="'+(v>0.005?'pos':v<-0.005?'neg':'')+'">'+(v>0.005?'▲':v<-0.005?'▼':'▬')+(v>=0?'+':'')+v.toFixed(2).replace(".",",")+'%</span>';
+  }
+  if(retard>=1&&base)el.innerHTML=base+' · <span style="color:var(--gold);font-weight:700">⚠️ cours du '+frDateShort(d)+'</span>'+idx;
+  else el.innerHTML=base+idx;
 }
 /* Synchro silencieuse en arrière-plan (à l'ouverture) — sans pop-up */
 async function autoSync(force){
@@ -1660,6 +1672,7 @@ function renderHome(){
     <div class="btn-row" style="margin-top:14px">
       <button class="btn alt sm" onclick="openCash('depot')">＋ Dépôt</button>
       <button class="btn alt sm" onclick="openCash('retrait')">− Retrait</button>
+      <button class="btn alt sm" onclick="openCash('frais')">🏦 Frais SGI</button>
     </div>
     ${bal<0?`<div class="hero-note">ℹ️ Solde négatif : tes achats sont enregistrés mais pas les dépôts qui les ont financés. Ajoute un <b>dépôt</b> ≈ au total investi pour équilibrer.</div>`:""}
     ${(db.cash&&db.cash.length)?`<button class="hero-link" onclick="openCashList()">Voir les mouvements (${db.cash.length}) →</button>`:""}`;
@@ -2271,7 +2284,7 @@ function openPrices(){
     <button class="btn alt" style="margin-top:8px" onclick="openMarket()">📊 Voir tous les cours de la BRVM</button>
     <div class="hint" style="text-align:center;margin:8px 0 2px">Le robot installé sur ton dépôt récupère les cours du marché et les met à jour tout seul en séance. Ici tu importes simplement le dernier cours connu (avec sa date).</div>
     <div class="hint" style="text-align:center;margin:10px 0">— ou saisir / corriger manuellement —</div>
-    <label>Indice BRVM Composite <span class="hint">Optionnel — pour te comparer au marché (visible sur brvm.org)</span></label>
+    <label>Indice BRVM Composite <span class="hint">🤖 Rempli automatiquement à chaque synchro — saisie manuelle en secours uniquement</span></label>
     <input id="brvmIdx" type="number" inputmode="decimal" value="${db.brvmIndex||''}" placeholder="ex : 290,50">
     <div style="margin-top:14px">${held.map(p=>`
       <div class="price-line"><div class="grow"><div class="nm" style="font-size:14px">${stockMap[p.ticker]?.name||p.ticker}</div>
