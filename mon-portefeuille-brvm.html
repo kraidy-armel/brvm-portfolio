@@ -1472,9 +1472,18 @@ const fmtAxis=n=>{if(masked)return"";const a=Math.abs(n);return a>=1e6?(n/1e6).t
 /* Échappe les guillemets pour un usage sûr dans value="..." */
 const escAttr=s=>(s||"").replace(/"/g,"&quot;");
 const escHtml=s=>(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-/* Confirmation forte pour TOUTE suppression : mot de passe si l'appli est
-   verrouillée, sinon saisie du mot SUPPRIMER — fini les suppressions par mégarde */
+/* Confirmation forte pour TOUTE suppression, en cascade :
+   1) TON code de suppression personnel (Réglages), sinon
+   2) le mot de passe de verrouillage de l'appli, sinon
+   3) la saisie du mot SUPPRIMER. Fini les suppressions par mégarde. */
 function confirmDel(msg){
+  if(store.delCode){
+    const p=prompt((msg||"Suppression")+"\n\n🔒 Ton code de suppression :");
+    if(p===null)return false;
+    if(lockHash("del:"+p.trim())===store.delCode)return true;
+    alert("Code incorrect — suppression annulée.");
+    return false;
+  }
   if(store.lock){
     const p=prompt((msg||"Suppression")+"\n\n🔒 Mot de passe requis pour supprimer :");
     if(p===null)return false;
@@ -1487,6 +1496,25 @@ function confirmDel(msg){
   if((t||"").trim().toUpperCase()==="SUPPRIMER")return true;
   alert("Confirmation incorrecte — suppression annulée.");
   return false;
+}
+/* Créer / modifier / retirer son code de suppression personnel */
+function setDelCode(){
+  if(store.delCode){
+    const cur=prompt("Code de suppression actuel :");
+    if(cur===null)return;
+    if(lockHash("del:"+cur.trim())!==store.delCode){alert("Code incorrect.");return;}
+    const n=prompt("Nouveau code (4 caractères minimum) — ou laisse vide pour RETIRER le code :");
+    if(n===null)return;
+    if(!n.trim()){store.delCode=null;save();alert("Code retiré — les suppressions demanderont le mot SUPPRIMER (ou ton mot de passe de verrouillage).");return;}
+    if(n.trim().length<4){alert("4 caractères minimum.");return;}
+    store.delCode=lockHash("del:"+n.trim());save();alert("Code de suppression modifié ✔");
+    return;
+  }
+  const n=prompt("Choisis ton code de suppression (4 caractères minimum) :\n\nIl sera demandé avant TOUTE suppression.");
+  if(n===null)return;
+  if(n.trim().length<4){alert("4 caractères minimum.");return;}
+  store.delCode=lockHash("del:"+n.trim());save();
+  alert("Code de suppression activé ✔\n\n⚠️ Retiens-le bien : sans lui, impossible de supprimer quoi que ce soit.");
 }
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const today=()=>new Date().toISOString().slice(0,10);
@@ -2187,6 +2215,7 @@ function openSettings(){
     <button class="btn ghost" style="margin-top:10px" onclick="setLock()">${store.lock?'🔒 Retirer le verrouillage (identifiant + mot de passe)':'🔒 Protéger par identifiant + mot de passe'}</button>
     <button class="btn ghost" style="margin-top:10px" onclick="toggleDark()">${isDark()?'☀️ Repasser en mode clair':'🌙 Passer en mode sombre'}</button>
     <button class="btn ghost" style="margin-top:10px" onclick="openGoals()">🎯 Mes objectifs</button>
+    <button class="btn ghost" style="margin-top:10px" onclick="setDelCode()">🗑️ ${store.delCode?'Modifier / retirer mon code de suppression':'Créer mon code de suppression'}</button>
     <button class="btn ghost" style="margin-top:10px" onclick="closeSheet();openReport()">📄 Rapport de portefeuille (PDF)</button>
     <label style="margin-top:16px">Frais SGI de <b>ce portefeuille</b> — commission + taxes (%)</label>
     <input id="sgiRate" type="number" step="0.01" min="0" value="${sgiRate()}" onchange="setSgiRate(this.value)">
