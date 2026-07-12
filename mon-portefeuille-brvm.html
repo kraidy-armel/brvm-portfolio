@@ -272,6 +272,10 @@
   <button class="btn" style="margin-top:6px" onclick="openEvent()">＋ Ajouter un événement</button>
   <button class="btn ghost" style="margin-top:10px" onclick="window.open('https://www.brvm.org/fr/emetteurs/type-annonces/convocations-assemblees-generales','_blank')">📅 Annonces officielles BRVM ↗</button>
 
+  <div class="sect-title">📋 Le point sur tes titres</div>
+  <div class="help">💡 <div>La fiche complète d'un titre : ta position, les tendances face au marché, les <b>annonces officielles</b>, tes raisons du journal — et les bonnes questions avant d'agir. Marche aussi pour les 47 titres de la cote, via « Tous les cours ».</div></div>
+  <div class="card" id="pointList"></div>
+
   <div class="sect-title">🔔 Alertes de prix</div>
   <div class="card" id="alertsList"></div>
   <button class="btn alt" style="margin-top:6px" onclick="openAlert()">＋ Nouvelle alerte</button>
@@ -560,8 +564,8 @@ function recordPriceHist(data){
     const ks=Object.keys(store.idxHist);
     if(ks.length>400){ks.sort();ks.slice(0,ks.length-400).forEach(x=>delete store.idxHist[x]);}
   }
-  /* Annonces émetteurs (AG, dividendes, résultats) -> agenda automatique */
-  if(Array.isArray(data._annonces))mergeAnnonces(data._annonces);
+  /* Annonces émetteurs (AG, dividendes, résultats) -> agenda automatique + fiche « Le point » */
+  if(Array.isArray(data._annonces)){store.annonces=data._annonces;mergeAnnonces(data._annonces);}
   if(!store.priceHist)store.priceHist={};
   const H=store.priceHist;
   const prevDay=d=>{const x=new Date(d+"T00:00");x.setDate(x.getDate()-1);return x.toISOString().slice(0,10);};
@@ -650,6 +654,7 @@ function marketAction(tk){
     ${s.held?'<div class="hint" style="margin-top:2px">✅ Tu détiens ce titre dans ton portefeuille.</div>':''}
     <button class="btn" style="margin-top:16px" onclick="openTxFor('${tk}','achat',${s.cur})">➕ Acheter — enregistrer un achat</button>
     ${s.held?`<button class="btn" style="margin-top:10px;background:var(--neg)" onclick="openTxFor('${tk}','vente',${s.cur})">➖ Vendre — enregistrer une vente</button>`:''}
+    <button class="btn alt" style="margin-top:10px" onclick="openPoint('${tk}')">📋 Le point sur ce titre</button>
     <button class="btn alt" style="margin-top:10px" onclick="openAlertFor('${tk}',${s.cur})">🔔 Créer une alerte de prix</button>
     ${s.held?`<button class="btn ghost" style="margin-top:10px" onclick="posDetail('${tk}')">📊 Voir le détail de ma position</button>`:''}
     <button class="btn ghost" style="margin-top:10px" onclick="renderMarket(window._marketSort||'nom')">← Retour aux cours</button>
@@ -945,6 +950,17 @@ const ANN_ALIAS=[
   [/\bNEI\b|CEDA/,"NEIC"],
   [/BURKINA.*(ONAT|TELECOM)/,"ONTBF"]
 ];
+/* Société (nom libre des annonces BRVM) -> ticker officiel */
+function annToTicker(societe){
+  if(!societe)return null;
+  const norm=s=>(s||"").toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Z0-9 ]/g," ").replace(/\s+/g," ").trim();
+  const ns=norm(societe); if(!ns)return null;
+  const byName={}; Object.keys(stockMap).forEach(k=>{byName[norm(stockMap[k].name)]=k;});
+  let tk=byName[ns]||null;
+  if(!tk){for(const al of ANN_ALIAS){if(al[0].test(ns)){tk=al[1];break;}}}
+  if(!tk&&ns.length>=5){for(const n in byName){if(n.indexOf(ns)>=0||ns.indexOf(n)>=0){tk=byName[n];break;}}}
+  return tk;
+}
 function mergeAnnonces(list){
   if(!Array.isArray(list)||!list.length)return;
   /* v2 (annVus) : on ne marque « vu » qu'APRÈS import réussi — l'ancien annSeen
@@ -963,10 +979,8 @@ function mergeAnnonces(list){
     if(!a||!a.societe||!a.type)return;
     const key=(a.date||"")+"|"+norm(a.societe)+"|"+a.type;
     if(store.annVus[key])return;
-    /* société -> ticker : nom exact, puis alias usuels, puis inclusion */
-    const ns=norm(a.societe); let tk=byName[ns]||null;
-    if(!tk){for(const al of ANN_ALIAS){if(al[0].test(ns)){tk=al[1];break;}}}
-    if(!tk&&ns.length>=5){for(const n in byName){if(n.indexOf(ns)>=0||ns.indexOf(n)>=0){tk=byName[n];break;}}}
+    /* société -> ticker (helper partagé avec la fiche « Le point ») */
+    const tk=annToTicker(a.societe);
     /* titre non suivi : on ne marque PAS « vu » — si tu le suis plus tard, l'annonce sera importée */
     if(!tk||!(mine.has(tk)))return;
     /* date de l'événement : « du 12 août 2026 » ou « 12/08/2026 » dans le titre, sinon date de publication */
@@ -984,6 +998,50 @@ function mergeAnnonces(list){
   const lim=new Date(Date.now()-365*86400000).toISOString().slice(0,10);
   Object.keys(store.annVus).forEach(k=>{if((store.annVus[k]||"")<lim)delete store.annVus[k];});
   if(added)try{localStorage.setItem(DB_KEY,JSON.stringify(store));}catch(e){}
+}
+
+/* --- Fiche « 📋 Le point sur ce titre » : les faits, puis TA décision --- */
+function openPoint(tk){
+  tk=resolveTicker(tk);
+  const nom=stockMap[tk]?.name||tk, sec=stockMap[tk]?.sector||"";
+  const p=positions().find(x=>x.ticker===tk||resolveTicker(x.ticker)===tk)||null;
+  const cur=prixActuel(tk);
+  const H=(store.priceHist||{})[tk]||{}; const ds=Object.keys(H).sort();
+  const d1=ds.length>=2&&+H[ds[ds.length-2]]>0?(+H[ds[ds.length-1]]/+H[ds[ds.length-2]]-1)*100:null;
+  const d7=cur?varPct(tk,cur,7):null, d30=cur?varPct(tk,cur,30):null;
+  const iv=(()=>{const IH=store.idxHist||{};const ks=Object.keys(IH).sort();if(ks.length<2)return null;
+    const cutoff=new Date(Date.now()-30*86400000).toISOString().slice(0,10);
+    const refs=ks.filter(k=>k<=cutoff);const ref=refs.length?+IH[refs[refs.length-1]]:+IH[ks[0]];
+    return ref>0?(+IH[ks[ks.length-1]]/ref-1)*100:null;})();
+  const theses=db.tx.filter(x=>x.ticker===tk&&(x.these||"").trim()).sort((a,b)=>a.date.localeCompare(b.date));
+  const anns=(store.annonces||[]).filter(a=>annToTicker(a.societe)===tk);
+  const v=x=>x==null?'<span style="color:var(--muted)">—</span>':`<b class="${x>0.05?'pos':x<-0.05?'neg':''}">${(x>=0?'+':'')+x.toFixed(1)}%</b>`;
+  const questions=p
+    ?`① Les <b>raisons</b> de ton achat ont-elles changé — ou seulement le cours ?<br><br>② Si tu ne détenais pas ce titre, l'achèterais-tu <b>aujourd'hui, à ce prix</b> ?<br><br>③ Ta décision sert-elle ton <b>objectif</b> — ou une émotion du moment ?`
+    :`① Pourquoi ce titre te tente-t-il : <b>l'entreprise</b>… ou juste son cours qui monte ?<br><br>② Quel <b>poids maximum</b> lui donnerais-tu dans ton portefeuille (pense à ta concentration) ?<br><br>③ Quelle est ta <b>thèse</b> ? Note-la dans le journal au moment de l'achat — tu la reliras avant de vendre.`;
+  openSheet(`<h3>📋 Le point — ${nom}</h3>
+    <div class="hint">${tk}${sec?' · '+sec:''} · Données officielles BRVM + tes données. Les faits d'abord, ta décision ensuite.</div>
+    ${p?`<div class="sect-title" style="margin:14px 0 4px">Ta position</div>
+    <div class="card" style="padding:4px 14px">
+      <div class="kv"><span class="k">Titres · PRU</span><b>${p.qty.toLocaleString('fr-FR')} · ${fmtShort(p.pru)}</b></div>
+      <div class="kv"><span class="k">Plus/moins-value</span><b class="${p.pl>=0?'pos':'neg'}">${sign(p.pl)} (${p.plPct>=0?'+':''}${p.plPct.toFixed(1)}%)</b></div>
+      <div class="kv"><span class="k">Poids dans ton portefeuille</span><b>${(p.value/(totals().value||1)*100).toFixed(1)} %</b></div>
+      <div class="kv"><span class="k">Rendement dividende (12 m)</span><b>${(()=>{const y=tickerYield(tk,p.value);return y>0?y.toFixed(1)+" %":"—";})()}</b></div>
+    </div>`:`<div class="hint" style="margin-top:10px">Tu ne détiens pas ce titre — fiche en mode <b>acheteur</b>.</div>`}
+    <div class="sect-title" style="margin:14px 0 4px">Le marché</div>
+    <div class="card" style="padding:4px 14px">
+      <div class="kv"><span class="k">Cours actuel</span><b>${cur?fmtShort(cur):'—'}</b></div>
+      <div class="kv"><span class="k">1 j · 7 j · 30 j</span><b>${v(d1)} · ${v(d7)} · ${v(d30)}</b></div>
+      ${iv!=null&&d30!=null?`<div class="kv"><span class="k">Sur 30 j, face au BRVM Composite (${(iv>=0?'+':'')+iv.toFixed(1)}%)</span><b>${d30>=iv?'✅ fait mieux':'📉 fait moins bien'}</b></div>`:''}
+    </div>
+    ${anns.length?`<div class="sect-title" style="margin:14px 0 4px">Annonces officielles récentes</div>
+    <div class="card" style="padding:4px 14px">${anns.slice(0,6).map(a=>`<div style="padding:8px 0;border-bottom:1px solid var(--line);font-size:13px">${a.type==='dividende'?'💰':a.type==='ago'?'🏛️':'📊'} <b>${frDateShort(a.date)}</b> — ${escHtml((a.titre||'').slice(0,95))}</div>`).join('')}</div>`:`<div class="hint" style="margin-top:8px">Aucune annonce officielle récente pour ce titre dans le flux BRVM.</div>`}
+    ${theses.length?`<div class="sect-title" style="margin:14px 0 4px">📝 Tes raisons (journal)</div>
+    ${theses.map(x=>`<div class="help" style="margin-bottom:8px">${x.type==='achat'?'🟢':'🔴'} <div><b>${frDateShort(x.date)}</b> — « ${escHtml(x.these)} »</div></div>`).join('')}`:''}
+    <div class="sect-title" style="margin:14px 0 4px">Les 3 questions avant d'agir</div>
+    <div class="card" style="padding:12px 14px;font-size:13.5px;line-height:1.5">${questions}</div>
+    <div class="hint" style="margin-top:10px">⚖️ Un dossier de faits, pas un conseil. Pour un brief d'actualité approfondi (résultats, presse, contexte), demande-le à ton assistant. 😉</div>
+    ${p?`<button class="btn alt" style="margin-top:14px" onclick="posDetail('${tk}')">📊 Détail complet de ma position</button>`:`<button class="btn" style="margin-top:14px" onclick="openTxFor('${tk}','achat',${cur||0})">➕ Acheter — enregistrer un achat</button>`}`);
 }
 
 /* --- Profil de risque : volatilité, bêta, Sharpe, Treynor, VaR, TRI --- */
@@ -1808,6 +1866,17 @@ function evRow(e){
 function renderAgenda(){
   const evs=[...db.events].sort((a,b)=>a.date.localeCompare(b.date));
   document.getElementById("agendaList").innerHTML=evs.length?evs.map(evRow).join(""):`<div class="empty"><div class="ico">📅</div>Aucun événement.<br><br><button class="del" style="color:var(--green)" onclick="loadDemoEvents()">Charger des exemples</button></div>`;
+  /* rubrique « Le point sur tes titres » : positions + titres sous alerte */
+  const pl=document.getElementById("pointList");
+  if(pl){
+    const rows=positions().map(p=>({tk:p.ticker,extra:(p.plPct>=0?'+':'')+p.plPct.toFixed(1)+'%',cls:p.plPct>=0?'pos':'neg'}));
+    (db.alerts||[]).forEach(a=>{if(a.ticker&&!rows.some(r=>r.tk===a.ticker))rows.push({tk:a.ticker,extra:'suivi 🔔',cls:''});});
+    pl.innerHTML=rows.length?rows.map(r=>`<div class="row" style="cursor:pointer" onclick="openPoint('${r.tk}')">
+      <div class="tick" style="width:46px;height:34px;font-size:11px">${r.tk}</div>
+      <div class="grow"><div class="nm" style="font-size:14px">${stockMap[r.tk]?.name||r.tk}</div><div class="sub">📋 voir le point complet</div></div>
+      <b class="${r.cls}" style="font-size:12.5px">${r.extra}</b>
+    </div>`).join(''):'<div class="empty" style="padding:16px">Tes positions et titres sous alerte apparaîtront ici.</div>';
+  }
   renderAlerts();
 }
 function renderAlerts(){
@@ -2498,7 +2567,8 @@ function posDetail(ticker){
     <div class="sect-title" style="margin:18px 4px 6px">Analyse éducative</div>
     ${eduNotes(p).map(n=>`<div class="help" style="margin-bottom:8px">💡 <div>${n}</div></div>`).join("")}
     <div class="hint" style="margin-top:4px">⚖️ Aide pédagogique, <b>pas</b> un conseil d'achat ou de vente. Je ne suis pas un conseiller financier agréé — les décisions et leurs conséquences t'appartiennent.</div>
-    <button class="btn alt" style="margin-top:18px" onclick="closeSheet();openTx()">＋ Nouvelle opération</button>`);
+    <button class="btn ghost" style="margin-top:18px" onclick="openPoint('${ticker}')">📋 Le point sur ce titre</button>
+    <button class="btn alt" style="margin-top:10px" onclick="closeSheet();openTx()">＋ Nouvelle opération</button>`);
   drawTitleChart(ticker);
 }
 let titleChartObj=null;
