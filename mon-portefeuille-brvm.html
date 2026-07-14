@@ -1521,7 +1521,7 @@ async function syncPrices(btn){
     if(btn){btn.textContent=orig;btn.disabled=false;}
   }
 }
-function save(){recordSnapshot();localStorage.setItem(DB_KEY,JSON.stringify(store));renderAll();if(typeof cloudPushDebounced==="function")cloudPushDebounced();}
+function save(){recordSnapshot();if(db)db._ts=Date.now();localStorage.setItem(DB_KEY,JSON.stringify(store));renderAll();if(typeof cloudPushDebounced==="function")cloudPushDebounced();}
 /* Indicateur discret de fraîcheur des cours */
 function joursBourseRetard(d){
   /* nombre de jours de bourse (lun-ven) écoulés entre la date des cours et aujourd'hui */
@@ -2687,7 +2687,7 @@ function openPortfolios(){
 function switchPf(id){activate(id);save();closeSheet();go("accueil");}
 function addPf(){const n=prompt("Nom du nouveau portefeuille :","Nouveau portefeuille");if(n&&n.trim()){const p=blankPortfolio(n.trim());store.portfolios.push(p);activate(p.id);save();closeSheet();go("accueil");}}
 function renamePf(id){const p=store.portfolios.find(x=>x.id===id);if(!p)return;const n=prompt("Nouveau nom :",p.name);if(n&&n.trim()){p.name=n.trim();save();openPortfolios();}}
-function deletePf(id){if(store.portfolios.length<=1)return;if(confirmDel("Supprimer ce PORTEFEUILLE ENTIER et toutes ses données ?")){store.portfolios=store.portfolios.filter(x=>x.id!==id);if(store.activeId===id)activate(store.portfolios[0].id);save();openPortfolios();}}
+function deletePf(id){if(store.portfolios.length<=1)return;if(confirmDel("Supprimer ce PORTEFEUILLE ENTIER et toutes ses données ?")){store.tombstones=[...(store.tombstones||[]),id];store.portfolios=store.portfolios.filter(x=>x.id!==id);if(store.activeId===id)activate(store.portfolios[0].id);save();openPortfolios();}}
 
 /* --- Verrouillage par code (local) --- */
 function lockHash(s){return btoa(unescape(encodeURIComponent("brvm:"+s)));}
@@ -2732,8 +2732,30 @@ async function pullCloud(){
   try{
     const {data,error}=await sb.from('brvm_app_store').select('data').eq('user_id',user.id).maybeSingle();
     if(!error && data && data.data && data.data.portfolios && data.data.portfolios.length){
-      store=data.data; if(store.sgiRate==null)store.sgiRate=1.5; activate(store.activeId);
+      const cloud=data.data, local=store;
+      /* FUSION PROTECTRICE : on ne perd JAMAIS un portefeuille présent d'un seul côté.
+         - union des portefeuilles du nuage et de l'appareil ;
+         - en cas de doublon, la version modifiée le plus récemment (_ts) gagne ;
+         - les portefeuilles supprimés volontairement (tombstones) ne reviennent pas. */
+      const tomb=new Set([...(cloud.tombstones||[]),...(local&&local.tombstones||[])]);
+      const byId={};
+      (cloud.portfolios||[]).forEach(p=>{if(p&&p.id&&!tomb.has(p.id))byId[p.id]=p;});
+      let needPush=false;
+      ((local&&local.portfolios)||[]).forEach(p=>{
+        if(!p||!p.id||tomb.has(p.id))return;
+        const c=byId[p.id];
+        if(!c){byId[p.id]=p;needPush=true;}
+        else if((+p._ts||0)>(+c._ts||0)){byId[p.id]=p;needPush=true;}
+      });
+      const merged=Object.values(byId);
+      if(!merged.length){ await pushCloud(); renderAll(); return; }
+      cloud.portfolios=merged;
+      cloud.tombstones=[...tomb];
+      store=cloud; if(store.sgiRate==null)store.sgiRate=1.5;
+      if(!store.portfolios.some(p=>p.id===store.activeId))store.activeId=store.portfolios[0].id;
+      activate(store.activeId);
       localStorage.setItem(DB_KEY,JSON.stringify(store));
+      if(needPush)pushCloud();
     } else { await pushCloud(); }
   }catch(e){}
   renderAll();
@@ -2795,9 +2817,9 @@ ensureFraisReminder();
 applyDark();
 renderAll();
 if(store.lock){document.getElementById("lockScreen").style.display="flex";setTimeout(()=>document.getElementById("lockUser").focus(),150);}
-initCloud();
-setSyncStatus();
-setTimeout(autoSync,700);   /* synchro auto silencieuse à l'ouverture */
+/* Ordre important : d'abord récupérer/fusionner le nuage, ENSUITE rafraîchir les cours
+   (sinon un appareil en retard pouvait renvoyer ses vieilles données avant d'avoir lu le nuage). */
+initCloud().finally(()=>{ setSyncStatus(); setTimeout(autoSync,300); });
 </script>
 </body>
 </html>
