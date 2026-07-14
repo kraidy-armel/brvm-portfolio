@@ -1389,7 +1389,8 @@ function openReport(){
   const t=totals(), bal=cashBalance(), R=realized();
   const now=new Date();
   const divByYear={}; db.div.forEach(d=>{const y=d.date.slice(0,4);divByYear[y]=(divByYear[y]||0)+(+d.montant||0);});
-  const years=[...new Set([...Object.keys(divByYear),...Object.keys(R.byYear)])].sort();
+  const fraisByYear={}; (db.cash||[]).filter(m=>m.type==="frais").forEach(m=>{const y=(m.date||"").slice(0,4);if(y)fraisByYear[y]=(fraisByYear[y]||0)+(+m.montant||0);});
+  const years=[...new Set([...Object.keys(divByYear),...Object.keys(R.byYear),...Object.keys(fraisByYear)])].sort();
   const cls=n=>n>=0?'rpos':'rneg';
   const el=document.getElementById("reportView"); if(!el)return;
   el.innerHTML=`
@@ -1415,9 +1416,10 @@ function openReport(){
       <tr style="background:#EFF4F2;font-weight:700"><td>TOTAL</td><td></td><td></td><td></td><td>${fmtShort(t.value)}</td><td class="${cls(t.pl)}">${sign(t.pl)} (${t.plPct>=0?"+":""}${t.plPct.toFixed(1)}%)</td></tr>
     </tbody></table>`:'<div style="font-size:13px;color:#666">Aucune position ouverte.</div>'}
     <h2>Dividendes et plus-values réalisées, par année</h2>
-    <table><thead><tr><th>Année</th><th>Dividendes reçus</th><th>Plus-values réalisées (base fiscale)</th></tr></thead><tbody>
-      ${years.length?years.map(y=>`<tr><td>${y}</td><td>${divByYear[y]?fmt(divByYear[y]):"—"}</td><td class="${cls(R.byYear[y]||0)}">${R.byYear[y]!=null?sign(R.byYear[y]):"—"}</td></tr>`).join("")+(()=>{const tD=Object.values(divByYear).reduce((s,x)=>s+x,0),tP=Object.values(R.byYear).reduce((s,x)=>s+x,0);return `<tr style="background:#EFF4F2;font-weight:700"><td>TOTAL</td><td>${fmt(tD)}</td><td class="${cls(tP)}">${sign(tP)}</td></tr>`;})():'<tr><td colspan="3">Rien à afficher pour l\'instant.</td></tr>'}
+    <table><thead><tr><th>Année</th><th>Dividendes reçus</th><th>Plus-values réalisées (nettes de courtage)</th><th>Frais SGI (garde, tenue)</th><th>Résultat net</th></tr></thead><tbody>
+      ${years.length?years.map(y=>{const net=(divByYear[y]||0)+(R.byYear[y]||0)-(fraisByYear[y]||0);return `<tr><td>${y}</td><td>${divByYear[y]?fmt(divByYear[y]):"—"}</td><td class="${cls(R.byYear[y]||0)}">${R.byYear[y]!=null?sign(R.byYear[y]):"—"}</td><td class="rneg">${fraisByYear[y]?"−"+fmt(fraisByYear[y]):"—"}</td><td class="${cls(net)}"><b>${sign(net)}</b></td></tr>`;}).join("")+(()=>{const tD=Object.values(divByYear).reduce((s,x)=>s+x,0),tP=Object.values(R.byYear).reduce((s,x)=>s+x,0),tF=Object.values(fraisByYear).reduce((s,x)=>s+x,0);return `<tr style="background:#EFF4F2;font-weight:700"><td>TOTAL</td><td>${fmt(tD)}</td><td class="${cls(tP)}">${sign(tP)}</td><td class="rneg">${tF?"−"+fmt(tF):"—"}</td><td class="${cls(tD+tP-tF)}">${sign(tD+tP-tF)}</td></tr>`;})():'<tr><td colspan="5">Rien à afficher pour l\'instant.</td></tr>'}
     </tbody></table>
+    <div style="font-size:11px;color:#777;margin-top:4px">Les frais de courtage sont déjà déduits des plus-values (inclus au prix d'achat et retranchés à la vente). Les frais SGI correspondent aux retenues saisies via Liquidités → 🏦 (droits de garde, tenue de compte, valorisation). Résultat net = dividendes + plus-values − frais SGI.</div>
     <h2>Historique des opérations (${db.tx.length})</h2>
     ${db.tx.length?`<table><thead><tr><th>Date</th><th>Type</th><th>Titre</th><th>Qté</th><th>Prix</th><th>Frais</th><th>Montant</th></tr></thead><tbody>
       ${[...db.tx].sort((a,b)=>a.date.localeCompare(b.date)).map(x=>`<tr><td>${x.date}</td><td>${x.type==="achat"?"Achat":"Vente"}</td><td>${x.ticker}</td><td>${x.qty}</td><td>${fmtShort(x.price)}</td><td>${x.frais?fmtShort(x.frais):"—"}</td><td>${fmtShort(x.qty*x.price)}</td></tr>`).join("")}
