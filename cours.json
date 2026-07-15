@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-07-15T15:59:32+00:00",
-  "updated_human": "15/07/2026 15:59 UTC",
+  "updated": "2026-07-15T17:35:37+00:00",
+  "updated_human": "15/07/2026 17:35 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -1045,14 +1045,14 @@
    },
    {
     "date": "2026-06-13",
-    "societe": "LNB",
-    "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
+    "societe": "BIIC",
+    "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-13",
-    "societe": "BIIC",
-    "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
+    "societe": "LNB",
+    "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -1203,14 +1203,14 @@
   },
   {
    "date": "2026-06-13",
-   "societe": "LNB",
-   "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
+   "societe": "BIIC",
+   "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-13",
-   "societe": "BIIC",
-   "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
+   "societe": "LNB",
+   "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
