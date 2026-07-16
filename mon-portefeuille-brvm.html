@@ -963,40 +963,42 @@ function annToTicker(societe){
 }
 function mergeAnnonces(list){
   if(!Array.isArray(list)||!list.length)return;
-  /* v2 (annVus) : on ne marque « vu » qu'APRÈS import réussi — l'ancien annSeen
-     grillait les annonces des titres non suivis, les rendant inimportables ensuite */
-  if(!store.annVus)store.annVus={};
+  /* v3 : chaque annonce va dans TOUS les portefeuilles qui détiennent le titre (positions
+     ou alertes), pas seulement le portefeuille actif. L'anti-doublon se fait PAR portefeuille
+     (±15 jours) — plus de registre global « vu » qui empêchait un portefeuille restauré
+     ou créé après coup de recevoir les annonces déjà importées ailleurs. Auto-réparateur :
+     à chaque synchro, les agendas manquants se remplissent. */
   const norm=s=>(s||"").toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Z0-9 ]/g," ").replace(/\s+/g," ").trim();
-  /* uniquement les titres que TU suis (positions + alertes) pour ne pas noyer l'agenda */
-  const mine=new Set();
-  positions().forEach(p=>{mine.add(p.ticker);mine.add(resolveTicker(p.ticker));});
-  (db.alerts||[]).forEach(a=>{if(a.ticker)mine.add(a.ticker);});
-  if(!mine.size)return;
-  const byName={}; Object.keys(stockMap).forEach(tk=>{byName[norm(stockMap[tk].name)]=tk;});
+  /* titres suivis, portefeuille par portefeuille */
+  const follows=(store.portfolios||[]).map(p=>{
+    const q={};(p.tx||[]).forEach(t=>{q[t.ticker]=(q[t.ticker]||0)+(t.type==="achat"?+t.qty:-+t.qty);});
+    const s=new Set(Object.keys(q).filter(k=>q[k]>0));
+    [...s].forEach(k=>{const r=resolveTicker(k);if(r)s.add(r);});
+    (p.alerts||[]).forEach(a=>{if(a.ticker)s.add(a.ticker);});
+    return {p,s};
+  }).filter(f=>f.s.size);
+  if(!follows.length)return;
   const MOIS={JANVIER:1,FEVRIER:2,MARS:3,AVRIL:4,MAI:5,JUIN:6,JUILLET:7,AOUT:8,SEPTEMBRE:9,OCTOBRE:10,NOVEMBRE:11,DECEMBRE:12};
   let added=0;
   list.forEach(a=>{
     if(!a||!a.societe||!a.type)return;
-    const key=(a.date||"")+"|"+norm(a.societe)+"|"+a.type;
-    if(store.annVus[key])return;
     /* société -> ticker (helper partagé avec la fiche « Le point ») */
     const tk=annToTicker(a.societe);
-    /* titre non suivi : on ne marque PAS « vu » — si tu le suis plus tard, l'annonce sera importée */
-    if(!tk||!(mine.has(tk)))return;
+    if(!tk)return;
     /* date de l'événement : « du 12 août 2026 » ou « 12/08/2026 » dans le titre, sinon date de publication */
     let d=a.date||today();
     let m=(a.titre||"").match(/(\d{1,2})(?:er)?\s+(janvier|f[ée]vrier|mars|avril|mai|juin|juillet|ao[ûu]t|septembre|octobre|novembre|d[ée]cembre)\s+(\d{4})/i);
     if(m){const mo=MOIS[norm(m[2])];if(mo)d=m[3]+"-"+String(mo).padStart(2,"0")+"-"+String(+m[1]).padStart(2,"0");}
     else{m=(a.titre||"").match(/(\d{2})\/(\d{2})\/(\d{4})/);if(m)d=m[3]+"-"+m[2]+"-"+m[1];}
-    /* pas de doublon si un événement similaire existe déjà à ±15 jours */
-    if((db.events||[]).some(e=>e.ticker===tk&&e.type===a.type&&Math.abs(new Date(e.date+"T00:00")-new Date(d+"T00:00"))<15*86400000)){store.annVus[key]=a.date||today();return;}
-    db.events.push({id:uid(),type:a.type,ticker:tk,date:d,note:("🤖 "+(a.titre||"Annonce BRVM")).slice(0,90),auto:true});
-    store.annVus[key]=a.date||today();
-    added++;
+    follows.forEach(f=>{
+      if(!f.s.has(tk))return;
+      if(!f.p.events)f.p.events=[];
+      /* pas de doublon si un événement similaire existe déjà à ±15 jours DANS CE portefeuille */
+      if(f.p.events.some(e=>e.ticker===tk&&e.type===a.type&&Math.abs(new Date(e.date+"T00:00")-new Date(d+"T00:00"))<15*86400000))return;
+      f.p.events.push({id:uid(),type:a.type,ticker:tk,date:d,note:("🤖 "+(a.titre||"Annonce BRVM")).slice(0,90),auto:true});
+      added++;
+    });
   });
-  /* nettoyage des clés vues > 1 an */
-  const lim=new Date(Date.now()-365*86400000).toISOString().slice(0,10);
-  Object.keys(store.annVus).forEach(k=>{if((store.annVus[k]||"")<lim)delete store.annVus[k];});
   if(added)try{localStorage.setItem(DB_KEY,JSON.stringify(store));}catch(e){}
 }
 
