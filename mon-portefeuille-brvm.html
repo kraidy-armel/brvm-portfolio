@@ -955,6 +955,8 @@ function annToTicker(societe){
   if(!societe)return null;
   const norm=s=>(s||"").toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Z0-9 ]/g," ").replace(/\s+/g," ").trim();
   const ns=norm(societe); if(!ns)return null;
+  /* la BRVM utilise parfois directement le sigle du titre (ex : « NSBC », « SMB ») */
+  if(stockMap[ns])return ns;
   const byName={}; Object.keys(stockMap).forEach(k=>{byName[norm(stockMap[k].name)]=k;});
   let tk=byName[ns]||null;
   if(!tk){for(const al of ANN_ALIAS){if(al[0].test(ns)){tk=al[1];break;}}}
@@ -996,10 +998,17 @@ function mergeAnnonces(list){
       /* pas de doublon si un événement similaire existe déjà à ±15 jours DANS CE portefeuille */
       if(f.p.events.some(e=>e.ticker===tk&&e.type===a.type&&Math.abs(new Date(e.date+"T00:00")-new Date(d+"T00:00"))<15*86400000))return;
       f.p.events.push({id:uid(),type:a.type,ticker:tk,date:d,note:("🤖 "+(a.titre||"Annonce BRVM")).slice(0,90),auto:true});
+      f.modified=true;
       added++;
     });
   });
-  if(added)try{localStorage.setItem(DB_KEY,JSON.stringify(store));}catch(e){}
+  if(added){
+    /* horodater les portefeuilles modifiés + envoyer au nuage, sinon la fusion
+       de synchro reprendrait la version du nuage (sans ces événements) */
+    follows.forEach(f=>{if(f.modified)f.p._ts=Date.now();});
+    try{localStorage.setItem(DB_KEY,JSON.stringify(store));}catch(e){}
+    if(typeof cloudPushDebounced==="function")cloudPushDebounced();
+  }
 }
 
 /* Prépare la demande de brief analyste complet et la copie — à coller chez ton assistant */
