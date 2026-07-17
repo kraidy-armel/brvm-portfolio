@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-07-17T16:44:19+00:00",
-  "updated_human": "17/07/2026 16:44 UTC",
+  "updated": "2026-07-17T17:53:53+00:00",
+  "updated_human": "17/07/2026 17:53 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -1164,7 +1164,7 @@
    {
     "date": "2026-06-07",
     "societe": "SMB",
-    "titre": "SMB CI : Avis de convocation - Assemblée Générale Ordinaire",
+    "titre": "SMB CI : Pouvoir - Assemblée Générale Ordinaire",
     "type": "ago"
    }
   ]
@@ -1322,7 +1322,7 @@
   {
    "date": "2026-06-07",
    "societe": "SMB",
-   "titre": "SMB CI : Avis de convocation - Assemblée Générale Ordinaire",
+   "titre": "SMB CI : Pouvoir - Assemblée Générale Ordinaire",
    "type": "ago"
   }
  ]
