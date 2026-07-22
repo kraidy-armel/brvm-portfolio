@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-07-22T10:52:54+00:00",
-  "updated_human": "22/07/2026 10:52 UTC",
+  "updated": "2026-07-22T11:17:09+00:00",
+  "updated_human": "22/07/2026 11:17 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -14,13 +14,13 @@
   }
  },
  "ABJC": {
-  "actuel": 2915.0,
+  "actuel": 2920.0,
   "veille": 2960,
   "date": "2026-07-22",
   "source": "brvm.org"
  },
  "BICB": {
-  "actuel": 6630.0,
+  "actuel": 6600.0,
   "veille": 6600,
   "date": "2026-07-22",
   "source": "brvm.org"
@@ -32,7 +32,7 @@
   "source": "brvm.org"
  },
  "BNBC": {
-  "actuel": 1985.0,
+  "actuel": 1980.0,
   "veille": 1985,
   "date": "2026-07-22",
   "source": "brvm.org"
@@ -50,19 +50,19 @@
   "source": "brvm.org"
  },
  "BOAC": {
-  "actuel": 9805.0,
+  "actuel": 9900.0,
   "veille": 9885,
   "date": "2026-07-22",
   "source": "brvm.org"
  },
  "BOAM": {
-  "actuel": 5600.0,
+  "actuel": 5640.0,
   "veille": 5665,
   "date": "2026-07-22",
   "source": "brvm.org"
  },
  "BOAN": {
-  "actuel": 5100.0,
+  "actuel": 5050.0,
   "veille": 5195,
   "date": "2026-07-22",
   "source": "brvm.org"
@@ -86,13 +86,13 @@
   "source": "brvm.org"
  },
  "CFAC": {
-  "actuel": 1680.0,
+  "actuel": 1690.0,
   "veille": 1605,
   "date": "2026-07-22",
   "source": "brvm.org"
  },
  "CIEC": {
-  "actuel": 5195.0,
+  "actuel": 5200.0,
   "veille": 5190,
   "date": "2026-07-22",
   "source": "brvm.org"
@@ -128,8 +128,8 @@
   "source": "brvm.org"
  },
  "NSBC": {
-  "actuel": 22900.0,
-  "veille": 22000,
+  "actuel": 22600.0,
+  "veille": 21999,
   "date": "2026-07-22",
   "source": "brvm.org"
  },
@@ -164,7 +164,7 @@
   "source": "brvm.org"
  },
  "PRSC": {
-  "actuel": 4640.0,
+  "actuel": 4635.0,
   "veille": 4645,
   "date": "2026-07-22",
   "source": "brvm.org"
@@ -176,7 +176,7 @@
   "source": "brvm.org"
  },
  "SCRC": {
-  "actuel": 3525.0,
+  "actuel": 3535.0,
   "veille": 3525,
   "date": "2026-07-22",
   "source": "brvm.org"
@@ -188,13 +188,13 @@
   "source": "brvm.org"
  },
  "SDSC": {
-  "actuel": 2720.0,
+  "actuel": 2790.0,
   "veille": 2790,
   "date": "2026-07-22",
   "source": "brvm.org"
  },
  "SEMC": {
-  "actuel": 1450.0,
+  "actuel": 1440.0,
   "veille": 1430,
   "date": "2026-07-22",
   "source": "brvm.org"
@@ -224,7 +224,7 @@
   "source": "brvm.org"
  },
  "SIVC": {
-  "actuel": 2290.0,
+  "actuel": 2250.0,
   "veille": 2160,
   "date": "2026-07-22",
   "source": "brvm.org"
@@ -242,13 +242,13 @@
   "source": "brvm.org"
  },
  "SNTS": {
-  "actuel": 31500.0,
-  "veille": 31500,
+  "actuel": 31480.0,
+  "veille": 31499,
   "date": "2026-07-22",
   "source": "brvm.org"
  },
  "SOGC": {
-  "actuel": 8100.0,
+  "actuel": 8150.0,
   "veille": 8150,
   "date": "2026-07-22",
   "source": "brvm.org"
@@ -266,8 +266,8 @@
   "source": "brvm.org"
  },
  "STBC": {
-  "actuel": 23450.0,
-  "veille": 23499,
+  "actuel": 23000.0,
+  "veille": 23501,
   "date": "2026-07-22",
   "source": "brvm.org"
  },
@@ -290,7 +290,7 @@
   "source": "brvm.org"
  },
  "UNXC": {
-  "actuel": 1875.0,
+  "actuel": 1890.0,
   "veille": 1875,
   "date": "2026-07-22",
   "source": "brvm.org"
@@ -319,7 +319,7 @@
     "2026-07-17": 2990.0,
     "2026-07-20": 2950.0,
     "2026-07-21": 2960.0,
-    "2026-07-22": 2915.0
+    "2026-07-22": 2920.0
    },
    "BICB": {
     "2026-07-03": 6275.0,
@@ -337,7 +337,7 @@
     "2026-07-17": 6300.0,
     "2026-07-20": 6450.0,
     "2026-07-21": 6600.0,
-    "2026-07-22": 6630.0
+    "2026-07-22": 6600.0
    },
    "BICC": {
     "2026-07-03": 29380.0,
@@ -373,7 +373,7 @@
     "2026-07-17": 1875.0,
     "2026-07-20": 1990.0,
     "2026-07-21": 1985.0,
-    "2026-07-22": 1985.0
+    "2026-07-22": 1980.0
    },
    "BOAB": {
     "2026-07-03": 9100.0,
@@ -427,7 +427,7 @@
     "2026-07-17": 9745.0,
     "2026-07-20": 9790.0,
     "2026-07-21": 9885.0,
-    "2026-07-22": 9805.0
+    "2026-07-22": 9900.0
    },
    "BOAM": {
     "2026-07-03": 4970.0,
@@ -445,7 +445,7 @@
     "2026-07-17": 5755.0,
     "2026-07-20": 5700.0,
     "2026-07-21": 5665.0,
-    "2026-07-22": 5600.0
+    "2026-07-22": 5640.0
    },
    "BOAN": {
     "2026-07-03": 4240.0,
@@ -463,7 +463,7 @@
     "2026-07-17": 5350.0,
     "2026-07-20": 5385.0,
     "2026-07-21": 5195.0,
-    "2026-07-22": 5100.0
+    "2026-07-22": 5050.0
    },
    "BOAS": {
     "2026-07-03": 7350.0,
@@ -535,7 +535,7 @@
     "2026-07-17": 1600.0,
     "2026-07-20": 1700.0,
     "2026-07-21": 1605.0,
-    "2026-07-22": 1680.0
+    "2026-07-22": 1690.0
    },
    "CIEC": {
     "2026-07-03": 5300.0,
@@ -553,7 +553,7 @@
     "2026-07-17": 5195.0,
     "2026-07-20": 5190.0,
     "2026-07-21": 5190.0,
-    "2026-07-22": 5195.0
+    "2026-07-22": 5200.0
    },
    "ECOC": {
     "2026-07-03": 17270.0,
@@ -661,7 +661,7 @@
     "2026-07-17": 23650.0,
     "2026-07-20": 22560.0,
     "2026-07-21": 22000.0,
-    "2026-07-22": 22900.0
+    "2026-07-22": 22600.0
    },
    "NTLC": {
     "2026-07-03": 16500.0,
@@ -769,7 +769,7 @@
     "2026-07-17": 4500.0,
     "2026-07-20": 4600.0,
     "2026-07-21": 4645.0,
-    "2026-07-22": 4640.0
+    "2026-07-22": 4635.0
    },
    "SAFC": {
     "2026-07-03": 4580.0,
@@ -805,7 +805,7 @@
     "2026-07-17": 3705.0,
     "2026-07-20": 3720.0,
     "2026-07-21": 3525.0,
-    "2026-07-22": 3525.0
+    "2026-07-22": 3535.0
    },
    "SDCC": {
     "2026-07-03": 12045.0,
@@ -841,7 +841,7 @@
     "2026-07-17": 2720.0,
     "2026-07-20": 2820.0,
     "2026-07-21": 2790.0,
-    "2026-07-22": 2720.0
+    "2026-07-22": 2790.0
    },
    "SEMC": {
     "2026-07-03": 1500.0,
@@ -859,7 +859,7 @@
     "2026-07-17": 1500.0,
     "2026-07-20": 1410.0,
     "2026-07-21": 1430.0,
-    "2026-07-22": 1450.0
+    "2026-07-22": 1440.0
    },
    "SGBC": {
     "2026-07-03": 37000.0,
@@ -949,7 +949,7 @@
     "2026-07-17": 2400.0,
     "2026-07-20": 2300.0,
     "2026-07-21": 2160.0,
-    "2026-07-22": 2290.0
+    "2026-07-22": 2250.0
    },
    "SLBC": {
     "2026-07-03": 39200.0,
@@ -1003,7 +1003,7 @@
     "2026-07-17": 32000.0,
     "2026-07-20": 32000.0,
     "2026-07-21": 31500.0,
-    "2026-07-22": 31500.0
+    "2026-07-22": 31480.0
    },
    "SOGC": {
     "2026-07-03": 8450.0,
@@ -1021,7 +1021,7 @@
     "2026-07-17": 8010.0,
     "2026-07-20": 8000.0,
     "2026-07-21": 8150.0,
-    "2026-07-22": 8100.0
+    "2026-07-22": 8150.0
    },
    "SPHC": {
     "2026-07-03": 7675.0,
@@ -1075,7 +1075,7 @@
     "2026-07-17": 23900.0,
     "2026-07-20": 23495.0,
     "2026-07-21": 23500.0,
-    "2026-07-22": 23450.0
+    "2026-07-22": 23000.0
    },
    "TTLC": {
     "2026-07-03": 2925.0,
@@ -1147,7 +1147,7 @@
     "2026-07-17": 1845.0,
     "2026-07-20": 1870.0,
     "2026-07-21": 1875.0,
-    "2026-07-22": 1875.0
+    "2026-07-22": 1890.0
    }
   },
   "derniere_notif": "2026-07-22",
@@ -1251,12 +1251,6 @@
    {
     "date": "2026-06-26",
     "societe": "SITAB",
-    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "SITAB",
     "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
     "type": "ago"
    },
@@ -1273,6 +1267,12 @@
     "type": "ago"
    },
    {
+    "date": "2026-06-26",
+    "societe": "SITAB",
+    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
     "date": "2026-06-15",
     "societe": "TRACTAFRIC CI",
     "titre": "TRACTAFRIC MOTORS CI : Avis de convocation - Assemblée Générale Mixte",
@@ -1280,14 +1280,14 @@
    },
    {
     "date": "2026-06-13",
-    "societe": "LNB",
-    "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
+    "societe": "BIIC",
+    "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-13",
-    "societe": "BIIC",
-    "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
+    "societe": "LNB",
+    "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -1409,12 +1409,6 @@
   {
    "date": "2026-06-26",
    "societe": "SITAB",
-   "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "SITAB",
    "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
    "type": "ago"
   },
@@ -1431,6 +1425,12 @@
    "type": "ago"
   },
   {
+   "date": "2026-06-26",
+   "societe": "SITAB",
+   "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
    "date": "2026-06-15",
    "societe": "TRACTAFRIC CI",
    "titre": "TRACTAFRIC MOTORS CI : Avis de convocation - Assemblée Générale Mixte",
@@ -1438,14 +1438,14 @@
   },
   {
    "date": "2026-06-13",
-   "societe": "LNB",
-   "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
+   "societe": "BIIC",
+   "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-13",
-   "societe": "BIIC",
-   "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
+   "societe": "LNB",
+   "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
