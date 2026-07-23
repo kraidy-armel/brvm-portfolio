@@ -543,8 +543,7 @@ async function liveScrape(){
 }
 /* Récupère les cours — le fichier du robot EN PREMIER. Pourquoi : le site BRVM affiche
    une colonne « cours veille » fausse (égale au cours du jour), donc le scrape direct
-   produit des variations fantaisistes (ex : +0,4 % au lieu de +7,4 %) et ne contient
-   ni annonces, ni indice, ni historique. Le robot corrige tout ça toutes les 15 min.
+   produit des variations fantaisistes et ne contient ni annonces, ni indice.
    Le scrape direct ne sert plus que de secours si le fichier du robot est inaccessible. */
 async function fetchCours(){
   let data=null, via="robot";
@@ -1035,6 +1034,41 @@ function copierBrief(tk){
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done).catch(()=>prompt("Copie ce texte :",txt));
   else prompt("Copie ce texte :",txt);
 }
+/* --- ⚡ Analyse IA immédiate : passe par ton relais gratuit (Render), qui essaie
+   GitHub Models puis OpenRouter puis Groq. La clé IA reste sur le serveur. --- */
+const IA_PROXY="https://arkad-bible-proxy.onrender.com/api/messages";
+async function analyseIA(tk){
+  tk=resolveTicker(tk);
+  const out=document.getElementById("iaOut"); if(!out)return;
+  out.innerHTML="⏳ Analyse en cours… (jusqu'à 1 minute si le serveur gratuit se réveille)";
+  const nom=stockMap[tk]?.name||tk, sec=stockMap[tk]?.sector||"";
+  const p=positions().find(x=>x.ticker===tk||resolveTicker(x.ticker)===tk)||null;
+  const cur=prixActuel(tk);
+  const d7=cur?varPct(tk,cur,7):null, d30=cur?varPct(tk,cur,30):null;
+  const NL=String.fromCharCode(10);
+  const anns=(store.annonces||[]).filter(a=>annToTicker(a.societe)===tk).slice(0,6)
+    .map(a=>"- "+(a.date||"")+" ["+a.type+"] "+(a.titre||"")).join(NL);
+  const vtxt=x=>x==null?"inconnue":(x>=0?"+":"")+x.toFixed(1)+"%";
+  const brief="Titre : "+nom+" ("+tk+")"+(sec?", secteur "+sec:"")+", BRVM."+NL
+    +"Cours actuel : "+(cur||"inconnu")+" FCFA. Variation 7 jours : "+vtxt(d7)+". Variation 30 jours : "+vtxt(d30)+"."+NL
+    +(p?("Ma position : "+p.qty+" titres, PRU "+Math.round(p.pru)+" FCFA, plus/moins-value latente "+(p.plPct>=0?"+":"")+p.plPct.toFixed(1)+"%, poids "+(p.value/(totals().value||1)*100).toFixed(1)+"% de mon portefeuille."+NL)
+        :("Je ne détiens pas ce titre (angle acheteur)."+NL))
+    +(anns?("Annonces officielles récentes :"+NL+anns+NL):("Aucune annonce officielle récente."+NL))
+    +"Fais le point sur ce titre.";
+  const sys="Tu es un analyste financier prudent, spécialiste de la BRVM (bourse régionale de l'UEMOA, Afrique de l'Ouest). Tu t'adresses à un investisseur particulier, en français simple. Structure ta réponse en 4 parties courtes : 1) La situation (résume les données fournies) ; 2) Arguments pour garder/acheter ; 3) Points de vigilance ; 4) Ce que je vérifierais avant de décider. 220 mots maximum. Tu n'as pas accès à l'actualité du jour : appuie-toi uniquement sur les données fournies et tes connaissances générales, sans inventer de chiffres précis. Termine par : « Ceci est un éclairage automatique, pas un conseil en investissement. »";
+  try{
+    const r=await fetch(IA_PROXY,{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({system:sys,max_tokens:900,messages:[{role:"user",content:brief}]})});
+    const j=await r.json();
+    const txt=j&&j.content&&j.content[0]&&j.content[0].text;
+    if(!txt)throw new Error((j&&j.error&&j.error.message)||"réponse vide");
+    out.innerHTML='<div class="card" style="padding:12px 14px;font-size:13.5px;line-height:1.55;color:var(--ink)">'
+      +escHtml(txt).replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>").split(NL).join("<br>")+'</div>'
+      +'<div class="hint" style="margin-top:4px">Modèle gratuit via ton relais — pour un vrai dossier, utilise le brief Claude ci-dessous.</div>';
+  }catch(e){
+    out.innerHTML="⚠️ Analyse indisponible pour le moment ("+escHtml((e&&e.message)||String(e)).slice(0,120)+"). Réessaie dans une minute — le serveur gratuit se réveille parfois lentement.";
+  }
+}
 /* --- Fiche « 📋 Le point sur ce titre » : les faits, puis TA décision --- */
 function openPoint(tk){
   tk=resolveTicker(tk);
@@ -1076,8 +1110,10 @@ function openPoint(tk){
     <div class="sect-title" style="margin:14px 0 4px">Les 3 questions avant d'agir</div>
     <div class="card" style="padding:12px 14px;font-size:13.5px;line-height:1.5">${questions}</div>
     <div class="hint" style="margin-top:10px">⚖️ Un dossier de faits, pas un conseil.</div>
-    <button class="btn" style="margin-top:14px" onclick="copierBrief('${tk}')">🧠 Demander le brief analyste complet</button>
-    <div class="hint" style="margin-top:4px;text-align:center">Prépare et copie la demande — colle-la chez Claude, le dossier arrive en ~2 min.</div>
+    <button class="btn" style="margin-top:14px" onclick="analyseIA('${tk}')">⚡ Analyse IA immédiate (gratuite)</button>
+    <div id="iaOut" style="margin-top:6px;font-size:12.5px;color:var(--muted)"></div>
+    <button class="btn alt" style="margin-top:10px" onclick="copierBrief('${tk}')">🧠 Demander le brief analyste complet (Claude)</button>
+    <div class="hint" style="margin-top:4px;text-align:center">L'analyse immédiate donne un premier avis automatique en ~30 s ; le brief chez Claude reste le plus complet.</div>
     ${p?`<button class="btn alt" style="margin-top:10px" onclick="posDetail('${tk}')">📊 Détail complet de ma position</button>`:`<button class="btn alt" style="margin-top:10px" onclick="openTxFor('${tk}','achat',${cur||0})">➕ Acheter — enregistrer un achat</button>`}`);
 }
 
