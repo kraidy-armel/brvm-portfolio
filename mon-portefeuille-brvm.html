@@ -468,10 +468,21 @@ function blankPortfolio(name){return {id:uid(),name:name||"Mon portefeuille",col
 const PF_COLORS=["#0B6B53","#1E5AA8","#7A3E9D","#B4552D","#8A6D1C","#2C6E77","#A83259","#3F4A46"];
 function pfColor(p){return (p&&p.color)||"#0B6B53";}
 function shade(hex,f){const c=parseInt(hex.slice(1),16);const r=Math.max(0,Math.min(255,(c>>16)+f)),g=Math.max(0,Math.min(255,((c>>8)&255)+f)),b=Math.max(0,Math.min(255,(c&255)+f));return "#"+((r<<16)|(g<<8)|b).toString(16).padStart(6,"0");}
+function tint(hex,f){ /* mélange la couleur avec du blanc (f = part de blanc, 0..1) */
+  const c=parseInt(hex.slice(1),16);const r=(c>>16),g=((c>>8)&255),b=(c&255);
+  const m=x=>Math.round(x+(255-x)*f);
+  return "#"+((m(r)<<16)|(m(g)<<8)|m(b)).toString(16).padStart(6,"0");
+}
+function rgbaOf(hex,a){const c=parseInt(hex.slice(1),16);return "rgba("+(c>>16)+","+((c>>8)&255)+","+(c&255)+","+a+")";}
 function applyPfColor(){
-  const el=document.getElementById("heroCard"); if(!el)return;
+  /* la couleur du portefeuille habille TOUTE l'appli : boutons, titres, tableaux, graphiques */
   const c=pfColor(db);
-  el.style.background="linear-gradient(135deg,"+c+","+shade(c,-24)+")";
+  const rs=document.documentElement.style;
+  rs.setProperty("--green",c);
+  rs.setProperty("--green-d",shade(c,-24));
+  rs.setProperty("--green-l",tint(c,0.88));
+  const el=document.getElementById("heroCard");
+  if(el)el.style.background="linear-gradient(135deg,"+c+","+shade(c,-24)+")";
 }
 function openColorPick(id){
   const p=store.portfolios.find(x=>x.id===id); if(!p)return;
@@ -1905,7 +1916,7 @@ function drawEvo(){
   evoChartObj=new Chart(document.getElementById("evoChart"),{
     type:"line",
     data:{labels:h.map(p=>frDateShort(p.date)),datasets:[
-      {label:"Patrimoine (titres + liquidités)",data:pat,borderColor:"#0B6B53",backgroundColor:"rgba(11,107,83,.12)",fill:true,tension:.3,pointRadius:2,borderWidth:2},
+      {label:"Patrimoine (titres + liquidités)",data:pat,borderColor:pfColor(db),backgroundColor:rgbaOf(pfColor(db),.12),fill:true,tension:.3,pointRadius:2,borderWidth:2},
       {label:"Titres seuls",data:h.map(p=>p.value),borderColor:"#9BB7AE",fill:false,tension:.3,pointRadius:0,borderWidth:1.5,borderDash:[5,4]}
     ]},
     options:{plugins:{legend:{display:true,labels:{font:{size:10},boxWidth:14}},tooltip:{callbacks:{label:c=>(c.dataset.label||"")+" : "+fmt(c.parsed.y)}}},
