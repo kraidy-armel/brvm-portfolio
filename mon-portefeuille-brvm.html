@@ -2327,6 +2327,7 @@ function comboPick(id,ticker){
   document.getElementById(id).value=ticker;
   document.getElementById(id+'_q').value=(stockMap[ticker]?stockMap[ticker].name+' ('+ticker+')':ticker);
   document.getElementById(id+'_list').style.display='none';
+  if(id==='txTicker')txInfo();
 }
 function comboPickCustom(id){
   const raw=document.getElementById(id+'_q').value.trim();
@@ -2335,6 +2336,7 @@ function comboPickCustom(id){
   document.getElementById(id).value=known?r:raw.toUpperCase();
   document.getElementById(id+'_q').value=known?(stockMap[r].name+' ('+r+')'):raw.toUpperCase();
   document.getElementById(id+'_list').style.display='none';
+  if(id==='txTicker')txInfo();
 }
 /* Récupère le ticker choisi (liste ou saisie libre), normalisé si possible */
 function comboValue(id){
@@ -2350,9 +2352,10 @@ function openTx(id){
   openSheet(`<h3>${ed?"Modifier l'opération":"Nouvelle opération"}</h3>
     <div class="hint">Enregistre un achat ou une vente d'actions.</div>
     <div class="seg" style="margin-top:14px" id="txSeg">
-      <button class="${(!ed||ed.type==='achat')?'on':''}" onclick="txType='achat';this.parentNode.querySelectorAll('button').forEach(b=>b.classList.remove('on'));this.classList.add('on')">Achat</button>
-      <button class="${ed&&ed.type==='vente'?'on':''}" onclick="txType='vente';this.parentNode.querySelectorAll('button').forEach(b=>b.classList.remove('on'));this.classList.add('on')">Vente</button>
+      <button class="${(!ed||ed.type==='achat')?'on':''}" onclick="txType='achat';this.parentNode.querySelectorAll('button').forEach(b=>b.classList.remove('on'));this.classList.add('on');txInfo()">Achat</button>
+      <button class="${ed&&ed.type==='vente'?'on':''}" onclick="txType='vente';this.parentNode.querySelectorAll('button').forEach(b=>b.classList.remove('on'));this.classList.add('on');txInfo()">Vente</button>
     </div>
+    <div id="txInfo" class="help" style="margin-top:10px;font-size:12.5px"></div>
     <label>Société <span class="hint">Tape pour chercher, ou ajoute un titre non listé</span></label>${combo('txTicker','Ex : Sonatel, SNTS, BOA...')}
     <label>Nombre de titres</label><input id="txQty" type="number" inputmode="numeric" placeholder="ex : 10" value="${ed?ed.qty:''}" oninput="txAutoFrais()">
     <label>Prix par action (FCFA)</label><input id="txPrice" type="number" inputmode="decimal" placeholder="ex : 15000" value="${ed?ed.price:''}" oninput="txAutoFrais()">
@@ -2368,13 +2371,34 @@ function openTx(id){
     document.getElementById('txTicker').value=ed.ticker;
     document.getElementById('txTicker_q').value=stockMap[ed.ticker]?stockMap[ed.ticker].name+' ('+ed.ticker+')':ed.ticker;
   }
+  txInfo();
+}
+/* 💰 Guide d'opération : liquidités disponibles + nombre d'actions possibles */
+function txInfo(){
+  const el=document.getElementById("txInfo"); if(!el)return;
+  const bal=cashBalance();
+  const price=+(document.getElementById("txPrice")?.value)||0;
+  const tk=comboValue("txTicker");
+  let extra="";
+  if((window.txType||"achat")==="achat"&&price>0){
+    const cout=price*(1+sgiRate()/100);
+    const max=Math.floor(Math.max(0,bal)/cout);
+    extra=" — à "+fmtShort(price)+" F l'action (frais "+sgiRate()+" % inclus), tu peux acheter au plus <b>"+max.toLocaleString("fr-FR")+" titres</b>.";
+  }
+  if((window.txType||"achat")==="vente"&&tk){
+    const pos=positions().find(p=>p.ticker===tk||resolveTicker(p.ticker)===tk);
+    extra=pos?" — tu détiens <b>"+pos.qty.toLocaleString("fr-FR")+" titres "+tk+"</b> vendables.":" — tu ne détiens pas "+tk+".";
+  }
+  el.innerHTML="💰 <div>Liquidités disponibles : <b>"+fmt(bal)+"</b>"+extra+"</div>";
 }
 /* Calcule les frais SGI automatiquement (qty × prix × taux %), sauf si saisis à la main */
 function txAutoFrais(){
-  if(window.txFraisManual)return;
   const qty=+document.getElementById("txQty").value, price=+document.getElementById("txPrice").value;
-  const f=document.getElementById("txFrais");
-  if(f&&qty>0&&price>0)f.value=Math.round(qty*price*sgiRate()/100);
+  if(!window.txFraisManual){
+    const f=document.getElementById("txFrais");
+    if(f&&qty>0&&price>0)f.value=Math.round(qty*price*sgiRate()/100);
+  }
+  txInfo();
 }
 function saveTx(id){
   const ticker=comboValue("txTicker");
@@ -2879,6 +2903,7 @@ function openClubMv(type){
       ${sous?'<option value="__new">➕ Nouveau membre…</option>':''}
     </select>
     <div id="cmNouveauWrap" style="display:none"><label>Nom du nouveau membre</label><input id="cmNouveau" placeholder="ex : Gekkof"></div>
+    <label style="margin-top:12px">Date du mouvement</label><input id="cmDate" type="date" value="${today()}">
     <label style="margin-top:12px">${sous?"Montant apporté (FCFA)":"Nombre de parts à racheter"}</label>
     <input id="cmVal" type="number" oninput="clubMvPreview('${type}')" placeholder="${sous?'ex : 1000000':'ex : 500'}">
     <div id="cmPrev" class="help" style="margin-top:12px;display:none"></div>
@@ -2904,7 +2929,7 @@ function clubMvValider(type){
   const vl=clubVL(); if(vl==null)return;
   const v=+document.getElementById("cmVal").value||0;
   if(v<=0){alert("⚠️ Saisis une valeur positive.");return;}
-  const d=today();
+  const d=document.getElementById("cmDate")?.value||today();
   if(type==="souscription"){
     const sel=document.getElementById("cmMembre").value;
     let m;
