@@ -1604,6 +1604,10 @@ async function syncPrices(btn){
   }
 }
 function save(){recordSnapshot();if(db)db._ts=Date.now();localStorage.setItem(DB_KEY,JSON.stringify(store));renderAll();if(typeof cloudPushDebounced==="function")cloudPushDebounced();if(typeof publishClubDebounced==="function")publishClubDebounced();}
+/* Sauvegarde « silencieuse » pour les mises à jour automatiques (cours, historique) :
+   ne marque PAS le portefeuille comme modifié (_ts), pour qu'un appareil resté ouvert
+   ne puisse plus écraser les vraies saisies d'un autre appareil dans la fusion. */
+function saveQuiet(){recordSnapshot();localStorage.setItem(DB_KEY,JSON.stringify(store));renderAll();if(typeof cloudPushDebounced==="function")cloudPushDebounced();if(typeof publishClubDebounced==="function")publishClubDebounced();}
 /* Indicateur discret de fraîcheur des cours */
 function joursBourseRetard(d){
   /* nombre de jours de bourse (lun-ven) écoulés entre la date des cours et aujourd'hui */
@@ -1644,7 +1648,7 @@ async function autoSync(force){
     recordPriceHist(data);
     let ok=0;
     for(const p of held){ const row=data[p.ticker]||data[resolveTicker(p.ticker)]; if(row&&+row.actuel>0){db.prices[p.ticker]={actuel:+row.actuel,veille:+row.veille||+row.actuel,date:row.date||""};ok++;} }
-    if(ok){ store.lastSync=now; store.lastSyncClock=new Date().toTimeString().slice(0,5); checkAlerts(); checkTrends(); save(); }
+    if(ok){ store.lastSync=now; store.lastSyncClock=new Date().toTimeString().slice(0,5); checkAlerts(); checkTrends(); saveQuiet(); }
     setSyncStatus(ok?"":"off");
   }catch(e){ setSyncStatus("off"); }
 }
