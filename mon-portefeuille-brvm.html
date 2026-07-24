@@ -1723,6 +1723,14 @@ function cashBalance(){
   db.div.forEach(d=>bal+=(+d.montant||0));
   return bal;
 }
+/* Liquidités reconstituées à une date donnée (tous les flux datés jusqu'à cette date) */
+function cashAt(dt){
+  let bal=0;
+  (db.cash||[]).forEach(m=>{if((m.date||"")<=dt)bal+=(m.type==='depot'?1:-1)*(+m.montant||0);});
+  db.tx.forEach(t=>{if(t.date<=dt){const brut=t.qty*t.price; bal+=t.type==='achat'?-(brut+(+t.frais||0)):(brut-(+t.frais||0));}});
+  db.div.forEach(d=>{if((d.date||"")<=dt)bal+=(+d.montant||0);});
+  return bal;
+}
 
 /* Enregistre la valeur du portefeuille (1 point max par jour) */
 function recordSnapshot(){
@@ -1864,10 +1872,17 @@ function drawEvo(){
   if(h.length<2){card.innerHTML='<div class="empty" style="padding:20px">📉<br>Le graphique s\'affichera dès que tu auras mis à jour tes cours sur au moins 2 jours différents.</div>';return;}
   if(!card.querySelector("canvas"))card.innerHTML='<canvas id="evoChart" height="150"></canvas>';
   if(evoChartObj)evoChartObj.destroy();
+  /* Patrimoine total = titres (enregistrés chaque jour) + liquidités reconstituées à la même
+     date. Ainsi une vente (titres -> liquidités) ne fait plus « chuter » la courbe : l'argent
+     change de poche, pas de valeur. La ligne pointillée montre les titres seuls. */
+  const pat=h.map(p=>p.value+cashAt(p.date));
   evoChartObj=new Chart(document.getElementById("evoChart"),{
     type:"line",
-    data:{labels:h.map(p=>frDateShort(p.date)),datasets:[{data:h.map(p=>p.value),borderColor:"#0B6B53",backgroundColor:"rgba(11,107,83,.12)",fill:true,tension:.3,pointRadius:2,borderWidth:2}]},
-    options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt(c.parsed.y)}}},
+    data:{labels:h.map(p=>frDateShort(p.date)),datasets:[
+      {label:"Patrimoine (titres + liquidités)",data:pat,borderColor:"#0B6B53",backgroundColor:"rgba(11,107,83,.12)",fill:true,tension:.3,pointRadius:2,borderWidth:2},
+      {label:"Titres seuls",data:h.map(p=>p.value),borderColor:"#9BB7AE",fill:false,tension:.3,pointRadius:0,borderWidth:1.5,borderDash:[5,4]}
+    ]},
+    options:{plugins:{legend:{display:true,labels:{font:{size:10},boxWidth:14}},tooltip:{callbacks:{label:c=>(c.dataset.label||"")+" : "+fmt(c.parsed.y)}}},
       scales:{y:{ticks:{callback:v=>fmtAxis(v),font:{size:10}}},x:{ticks:{maxTicksLimit:6,font:{size:10}}}}}
   });
 }
