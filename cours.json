@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-07-24T14:05:14+00:00",
-  "updated_human": "24/07/2026 14:05 UTC",
+  "updated": "2026-07-24T14:20:11+00:00",
+  "updated_human": "24/07/2026 14:20 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -32,7 +32,7 @@
   "source": "brvm.org"
  },
  "BNBC": {
-  "actuel": 1900.0,
+  "actuel": 1985.0,
   "veille": 1990,
   "date": "2026-07-24",
   "source": "brvm.org"
@@ -381,7 +381,7 @@
     "2026-07-21": 1985.0,
     "2026-07-22": 1975.0,
     "2026-07-23": 1990.0,
-    "2026-07-24": 1900.0
+    "2026-07-24": 1985.0
    },
    "BOAB": {
     "2026-07-03": 9100.0,
@@ -1354,12 +1354,6 @@
    {
     "date": "2026-06-26",
     "societe": "SITAB",
-    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "SITAB",
     "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
     "type": "ago"
    },
@@ -1373,6 +1367,12 @@
     "date": "2026-06-26",
     "societe": "AIR LIQUIDE CI",
     "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "SITAB",
+    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -1512,12 +1512,6 @@
   {
    "date": "2026-06-26",
    "societe": "SITAB",
-   "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "SITAB",
    "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
    "type": "ago"
   },
@@ -1531,6 +1525,12 @@
    "date": "2026-06-26",
    "societe": "AIR LIQUIDE CI",
    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "SITAB",
+   "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
