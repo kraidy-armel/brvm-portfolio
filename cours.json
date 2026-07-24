@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-07-24T12:35:14+00:00",
-  "updated_human": "24/07/2026 12:35 UTC",
+  "updated": "2026-07-24T12:43:11+00:00",
+  "updated_human": "24/07/2026 12:43 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -1341,26 +1341,14 @@
    },
    {
     "date": "2026-06-29",
-    "societe": "AIR LIQUIDE CI",
-    "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-29",
     "societe": "LNB",
     "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
-    "date": "2026-06-26",
-    "societe": "SITAB",
-    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "SITAB",
-    "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
+    "date": "2026-06-29",
+    "societe": "AIR LIQUIDE CI",
+    "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -1373,6 +1361,18 @@
     "date": "2026-06-26",
     "societe": "AIR LIQUIDE CI",
     "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "SITAB",
+    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "SITAB",
+    "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -1499,26 +1499,14 @@
   },
   {
    "date": "2026-06-29",
-   "societe": "AIR LIQUIDE CI",
-   "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-29",
    "societe": "LNB",
    "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
-   "date": "2026-06-26",
-   "societe": "SITAB",
-   "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "SITAB",
-   "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
+   "date": "2026-06-29",
+   "societe": "AIR LIQUIDE CI",
+   "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
@@ -1531,6 +1519,18 @@
    "date": "2026-06-26",
    "societe": "AIR LIQUIDE CI",
    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "SITAB",
+   "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "SITAB",
+   "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
