@@ -2766,7 +2766,7 @@ function deletePf(id){if(store.portfolios.length<=1)return;if(confirmDel("Suppri
    Chaque souscription/rachat crée AUSSI le dépôt/retrait de liquidités
    correspondant : la comptabilité du portefeuille reste exacte au franc près.
    Le journal des mouvements est immuable (pas de suppression) : zéro palabre. */
-const CLUB_VL0=1000;
+const CLUB_VL0=10000; /* valeur par défaut de la part à la fondation (modifiable au moment de fonder) */
 function clubOn(){return !!(db&&db.club&&db.club.actif);}
 function clubParts(){return clubOn()?db.club.membres.reduce((s,m)=>s+(+m.parts||0),0):0;}
 function clubVL(){const n=clubParts();if(n<=0)return null;return (totals().value+cashBalance())/n;}
@@ -2774,8 +2774,10 @@ const pfmt=x=>(+x||0).toLocaleString("fr-FR",{maximumFractionDigits:2});
 
 function openClubIntro(){
   openSheet(`<h3>🤝 Fonder un club d'investissement</h3>
-    <div class="hint">Un nouveau portefeuille sera créé pour le club. Chaque membre apporte sa mise de départ et reçoit ses parts à ${CLUB_VL0.toLocaleString("fr-FR")} F la part. Ensuite, tout entrant ou sortant passe par la valeur de la part du jour — l'équité est automatique.</div>
+    <div class="hint">Un nouveau portefeuille sera créé pour le club. Chaque membre apporte sa mise de départ et reçoit ses parts au prix de fondation choisi ci-dessous. Ensuite, tout entrant ou sortant passe par la valeur de la part du jour — l'équité est automatique.</div>
     <label>Nom du club</label><input id="cfNom" placeholder="ex : Club Éburnie">
+    <label style="margin-top:12px">Valeur d'une part à la fondation (FCFA)</label>
+    <input id="cfVL0" type="number" value="10000" oninput="clubCfTotal()">
     <label style="margin-top:12px">Membres fondateurs et apports (FCFA)</label>
     <div id="cfRows"></div>
     <button class="btn ghost" style="margin-top:8px" onclick="clubAddRow()">＋ Ajouter un membre</button>
@@ -2792,8 +2794,9 @@ function clubAddRow(){
 }
 function clubCfTotal(){
   const t=[...document.querySelectorAll(".cf-apport")].reduce((s,i)=>s+(+i.value||0),0);
+  const vl0=+document.getElementById("cfVL0")?.value||CLUB_VL0;
   const el=document.getElementById("cfTotal");
-  if(el)el.innerHTML=t>0?("Mise de départ totale : <b>"+fmt(t)+"</b> → <b>"+pfmt(t/CLUB_VL0)+" parts</b> à "+CLUB_VL0.toLocaleString("fr-FR")+" F"):"";
+  if(el)el.innerHTML=t>0?("Mise de départ totale : <b>"+fmt(t)+"</b> → <b>"+pfmt(t/vl0)+" parts</b> à "+vl0.toLocaleString("fr-FR")+" F"):"";
 }
 function clubFonder(){
   const nom=(document.getElementById("cfNom").value||"").trim()||"Mon club";
@@ -2806,14 +2809,16 @@ function clubFonder(){
     membres.push({nom:noms[i],apport:apports[i]});
   }
   if(membres.length<2){alert("⚠️ Il faut au moins 2 membres pour fonder un club.");return;}
+  const vl0=+document.getElementById("cfVL0").value||CLUB_VL0;
+  if(vl0<100){alert("⚠️ La part de fondation doit valoir au moins 100 F.");return;}
   const p=blankPortfolio(nom);
   const d=today();
-  p.club={actif:true,membres:[],mouvements:[]};
+  p.club={actif:true,vl0:vl0,membres:[],mouvements:[]};
   membres.forEach(m=>{
-    const parts=m.apport/CLUB_VL0;
+    const parts=m.apport/vl0;
     p.club.membres.push({id:uid(),nom:m.nom,parts:parts});
     p.cash.push({id:uid(),type:"depot",date:d,montant:m.apport,libelle:"Club — apport de "+m.nom});
-    p.club.mouvements.push({id:uid(),date:d,type:"fondation",membre:m.nom,montant:m.apport,vl:CLUB_VL0,parts:parts});
+    p.club.mouvements.push({id:uid(),date:d,type:"fondation",membre:m.nom,montant:m.apport,vl:vl0,parts:parts});
   });
   store.portfolios.push(p);activate(p.id);save();closeSheet();go("accueil");
   setTimeout(()=>openClub(),200);
@@ -2834,7 +2839,7 @@ function openClub(){
   if(!clubOn())return;
   const vl=clubVL(), n=clubParts(), pat=totals().value+cashBalance();
   const ms=[...db.club.membres].sort((a,b)=>b.parts-a.parts);
-  const perf=vl!=null?((vl/CLUB_VL0-1)*100):null;
+  const perf=vl!=null?((vl/(db.club.vl0||CLUB_VL0)-1)*100):null;
   const mvs=[...db.club.mouvements].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,12);
   const ICO={fondation:"🏁",souscription:"🟢",rachat:"🔴"};
   openSheet(`<h3>🤝 ${escHtml(db.name)}</h3>
