@@ -80,7 +80,8 @@ function afficher(d, upd){
   const pe=document.getElementById("perf");
   pe.textContent=pf!=null?((pf>=0?"+":"")+pf.toFixed(1)+" %"):"—";
   pe.style.color=pf==null?"":(pf>=0?"#9BE7C4":"#FFC2BD");
-  const ICO={fondation:"🏁",souscription:"🟢",rachat:"🔴"};
+  const ICO={fondation:"🏁",souscription:"🟢",rachat:"🔴",cession:"🔄",annulation:"↩️"};
+  const LBL={fondation:"Fondation",souscription:"Souscription",rachat:"Rachat",cession:"Cession",annulation:"Annulation"};
   let h='<div class="sect">👥 Les membres</div><div class="card"><table>'
     +'<tr><th>Membre</th><th class="r">Parts</th><th class="r">%</th><th class="r">Valeur</th></tr>'
     +(d.membres||[]).filter(m=>m.parts>0.005).sort((a,b)=>b.parts-a.parts).map(m=>
@@ -95,9 +96,9 @@ function afficher(d, upd){
   h+='<div class="hint" style="margin-top:8px">Liquidités du club : <b>'+fmt(d.liquidites)+'</b> · Titres : <b>'+fmt(d.titres)+'</b></div></div>';
   h+='<div class="sect">📜 Journal du club</div><div class="card">'
     +((d.mouvements||[]).length?d.mouvements.map(x=>
-      '<div style="padding:9px 0;border-bottom:1px solid var(--line)">'+(ICO[x.type]||"•")+' <b>'
-      +(x.type==="fondation"?"Fondation":x.type==="souscription"?"Souscription":"Rachat")+'</b> — '+esc(x.membre)
-      +'<div class="hint">'+frD(x.date)+' · '+fmt(x.montant)+' · '+(x.type==="rachat"?"−":"+")+pfmt(x.parts)+' parts à '+fmt(x.vl)+'</div></div>').join("")
+      '<div style="padding:9px 0;border-bottom:1px solid var(--line)'+(x.annule?';opacity:.45':'')+'">'+(ICO[x.type]||"•")+' <b>'
+      +(LBL[x.type]||x.type)+'</b> — '+esc(x.membre)+(x.annule?' <span class="hint">(annulée)</span>':'')
+      +'<div class="hint">'+frD(x.date)+' · '+fmt(x.montant)+' · '+(x.type==="rachat"?"−":x.type==="cession"?"":"+")+pfmt(x.parts)+' parts à '+fmt(x.vl)+(x.note?' · '+esc(x.note):'')+'</div></div>').join("")
       :'<div class="hint">Aucun mouvement.</div>')
     +'</div>';
   h+='<button class="btn" onclick="charger()">🔄 Actualiser</button>'

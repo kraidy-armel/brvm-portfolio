@@ -463,7 +463,25 @@ function resolveTicker(x){
 /* ================= ÉTAT (multi-portefeuilles) ================= */
 const DB_KEY="brvm_portfolio_v2";
 const OLD_KEY="brvm_portfolio_v1";
-function blankPortfolio(name){return {id:uid(),name:name||"Mon portefeuille",tx:[],div:[],events:[],prices:{},history:[],brvmIndex:null,cash:[],alerts:[],sgiRate:1.5};}
+function blankPortfolio(name){return {id:uid(),name:name||"Mon portefeuille",color:null,tx:[],div:[],events:[],prices:{},history:[],brvmIndex:null,cash:[],alerts:[],sgiRate:1.5};}
+/* Couleurs de portefeuille : chacun choisit la sienne pour les reconnaître d'un coup d'œil */
+const PF_COLORS=["#0B6B53","#1E5AA8","#7A3E9D","#B4552D","#8A6D1C","#2C6E77","#A83259","#3F4A46"];
+function pfColor(p){return (p&&p.color)||"#0B6B53";}
+function shade(hex,f){const c=parseInt(hex.slice(1),16);const r=Math.max(0,Math.min(255,(c>>16)+f)),g=Math.max(0,Math.min(255,((c>>8)&255)+f)),b=Math.max(0,Math.min(255,(c&255)+f));return "#"+((r<<16)|(g<<8)|b).toString(16).padStart(6,"0");}
+function applyPfColor(){
+  const el=document.getElementById("heroCard"); if(!el)return;
+  const c=pfColor(db);
+  el.style.background="linear-gradient(135deg,"+c+","+shade(c,-24)+")";
+}
+function openColorPick(id){
+  const p=store.portfolios.find(x=>x.id===id); if(!p)return;
+  openSheet(`<h3>🎨 Couleur — ${escHtml(p.name)}</h3>
+    <div class="hint">Choisis la couleur de ce portefeuille : elle s'affiche sur l'accueil pour le reconnaître immédiatement.</div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:16px">
+      ${PF_COLORS.map(c=>`<div onclick="setPfColor('${id}','${c}')" style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,${c},${shade(c,-24)});cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;border:3px solid ${pfColor(p)===c?'var(--gold)':'transparent'}">${pfColor(p)===c?"✓":""}</div>`).join("")}
+    </div>`);
+}
+function setPfColor(id,c){const p=store.portfolios.find(x=>x.id===id);if(!p)return;p.color=c;p._ts=Date.now();save();openPortfolios();}
 /* Frais SGI propres à CHAQUE portefeuille (BSIC, NSIA... appliquent des taux différents) */
 function sgiRate(){return (db&&db.sgiRate!=null)?+db.sgiRate:(store.sgiRate!=null?+store.sgiRate:1.5);}
 function setSgiRate(v){db.sgiRate=+v||0;save();}
@@ -1800,6 +1818,7 @@ function renderHome(){
   document.getElementById("greet").textContent=(h<12?"Bonjour":h<18?"Bon après-midi":"Bonsoir")+" 👋";
   {const eb=document.getElementById("eyeBtn");if(eb)eb.textContent=masked?"🙈":"👁";}
   document.getElementById("pfName").textContent=db.name||"Mon Portefeuille";
+  applyPfColor();
   const bal=cashBalance(), titres=t.value, patrimoine=titres+bal;
   const dayUp=t.day>=0;
   document.getElementById("heroCard").innerHTML=`
@@ -1850,11 +1869,16 @@ function saveCash(type,id){
   if(!montant||montant<=0){alert("Renseigne un montant valide.");return;}
   if(!id&&type==='retrait'&&montant>cashBalance()){if(!confirm("Ce retrait dépasse ta trésorerie disponible. Enregistrer quand même ?"))return;}
   if(!db.cash)db.cash=[];
-  if(id){const m=db.cash.find(x=>x.id===id); if(m){m.montant=montant;m.date=document.getElementById("csDate").value||today();m.libelle=(document.getElementById("csLib").value||"").trim();}}
+  if(id){const m=db.cash.find(x=>x.id===id);
+    if(m&&(m.libelle||"").startsWith("Club —")){alert("🔒 Cette écriture appartient au journal du club et ne se modifie pas ici. Utilise ↩️ (Annuler) dans l'écran 🤝 Club puis ressaisis le bon mouvement.");return;}
+    if(m){m.montant=montant;m.date=document.getElementById("csDate").value||today();m.libelle=(document.getElementById("csLib").value||"").trim();}}
   else db.cash.push({id:uid(),type,montant,date:document.getElementById("csDate").value||today(),libelle:(document.getElementById("csLib").value||"").trim()});
   closeSheet();save();
 }
-function delCash(id){if(confirmDel("Supprimer ce mouvement d'espèces ?")){db.cash=(db.cash||[]).filter(m=>m.id!==id);save();openCashList();}}
+function delCash(id){
+  const m=(db.cash||[]).find(x=>x.id===id);
+  if(m&&(m.libelle||"").startsWith("Club —")){alert("🔒 Cette écriture appartient au journal du club.\nElle ne se supprime pas ici : utilise ↩️ (Annuler) dans l'écran 🤝 Club — une écriture inverse sera créée, comme en banque.");return;}
+  if(confirmDel("Supprimer ce mouvement d'espèces ?")){db.cash=(db.cash||[]).filter(m=>m.id!==id);save();openCashList();}}
 function openCashList(){
   const ms=[...(db.cash||[])].sort((a,b)=>b.date.localeCompare(a.date));
   openSheet(`<h3>Mouvements de trésorerie</h3>
@@ -2769,8 +2793,9 @@ function openPortfolios(){
     <div class="hint">Touche un portefeuille pour l'activer.</div>
     <div style="margin-top:12px">${store.portfolios.map(p=>`
       <div class="row" style="cursor:pointer" onclick="switchPf('${p.id}')">
-        <div class="tick" style="${p.id===store.activeId?'':'background:#EEF1F0;color:var(--muted)'}">${p.id===store.activeId?'✓':'•'}</div>
+        <div class="tick" style="background:${pfColor(p)};color:#fff">${p.id===store.activeId?'✓':'•'}</div>
         <div class="grow"><div class="nm">${p.name}</div><div class="sub">${p.tx.length} opération(s)</div></div>
+        <button class="del" style="font-size:16px" onclick="event.stopPropagation();openColorPick('${p.id}')">🎨</button>
         <button class="del" style="color:var(--green)" onclick="event.stopPropagation();renamePf('${p.id}')">Renommer</button>
         ${store.portfolios.length>1?`<button class="del" onclick="event.stopPropagation();deletePf('${p.id}')">Suppr.</button>`:''}
       </div>`).join("")}</div>
@@ -2867,7 +2892,8 @@ function openClub(){
   const ms=[...db.club.membres].sort((a,b)=>b.parts-a.parts);
   const perf=vl!=null?((vl/(db.club.vl0||CLUB_VL0)-1)*100):null;
   const mvs=[...db.club.mouvements].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,12);
-  const ICO={fondation:"🏁",souscription:"🟢",rachat:"🔴"};
+  const ICO={fondation:"🏁",souscription:"🟢",rachat:"🔴",cession:"🔄",annulation:"↩️"};
+  const LBL={fondation:"Fondation",souscription:"Souscription",rachat:"Rachat",cession:"Cession",annulation:"Annulation"};
   openSheet(`<h3>🤝 ${escHtml(db.name)}</h3>
     <div class="card" style="padding:4px 14px;margin-top:10px">
       <div class="kv"><span class="k">Patrimoine du club (titres + liquidités)</span><b>${fmt(pat)}</b></div>
@@ -2884,11 +2910,13 @@ function openClub(){
       <button class="btn" style="flex:1;margin:0" onclick="openClubMv('souscription')">🟢 Souscription</button>
       <button class="btn alt" style="flex:1;margin:0" onclick="openClubMv('rachat')">🔴 Rachat</button>
     </div>
+    <button class="btn alt" style="margin-top:10px" onclick="openClubCession()">🔄 Cession — un membre rachète les parts d'un autre</button>
     <button class="btn alt" style="margin-top:10px" onclick="clubInviter()">🔗 Inviter les membres (lien de consultation)</button>
     <div class="sect-title" style="margin:16px 0 4px">📜 Journal du club (immuable)</div>
-    ${mvs.length?mvs.map(x=>`<div class="row"><div class="tick">${ICO[x.type]||"•"}</div>
-      <div class="grow"><div class="nm">${x.type==="fondation"?"Fondation":x.type==="souscription"?"Souscription":"Rachat"} — ${escHtml(x.membre)}</div>
-      <div class="sub">${frDate(x.date)} · ${fmt(x.montant)} · ${x.type==="rachat"?"−":"+"}${pfmt(x.parts)} parts à ${fmt(x.vl)}</div></div></div>`).join(""):'<div class="hint">Aucun mouvement.</div>'}
+    ${mvs.length?mvs.map(x=>`<div class="row"${x.annule?' style="opacity:.45"':''}><div class="tick">${ICO[x.type]||"•"}</div>
+      <div class="grow"><div class="nm">${LBL[x.type]||x.type} — ${escHtml(x.membre)}${x.annule?' <span class="tag gray">annulée</span>':''}</div>
+      <div class="sub">${frDate(x.date)} · ${fmt(x.montant)} · ${x.type==="rachat"?"−":x.type==="cession"?"":"+"}${pfmt(x.parts)} parts à ${fmt(x.vl)}${x.note?' · '+escHtml(x.note):''}</div></div>
+      ${(!x.annule&&(x.type==="souscription"||x.type==="rachat"||x.type==="cession"))?`<button class="del" onclick="clubAnnuler('${x.id}')">↩️</button>`:''}</div>`).join(""):'<div class="hint">Aucun mouvement.</div>'}
     <div class="hint" style="margin-top:10px">⚖️ La VL est calculée sur les cours BRVM du jour et les liquidités réelles. Chaque mouvement est daté et définitif — c'est la garantie de tous.</div>`);
 }
 
@@ -2911,6 +2939,84 @@ function openClubMv(type){
     <input id="cmVal" type="number" oninput="clubMvPreview('${type}')" placeholder="${sous?'ex : 1000000':'ex : 500'}">
     <div id="cmPrev" class="help" style="margin-top:12px;display:none"></div>
     <button class="btn" style="margin-top:14px" onclick="clubMvValider('${type}')">Valider ${sous?"la souscription":"le rachat"}</button>`);
+}
+function clubAnnuler(mvId){
+  const x=db.club.mouvements.find(m=>m.id===mvId); if(!x||x.annule)return;
+  if(!confirm("↩️ Annuler ce mouvement ?\n\nLe journal ne s'efface jamais : une écriture INVERSE sera ajoutée (comme en banque), et les parts/liquidités seront remises comme avant. L'original restera visible, marqué « annulée »."))return;
+  const d=today();
+  if(x.type==="souscription"){
+    const m=db.club.membres.find(z=>z.nom===x.membre);
+    if(!m){alert("Membre introuvable.");return;}
+    if(x.parts>m.parts+0.005){alert("⚠️ Impossible : "+x.membre+" n'a plus que "+pfmt(m.parts)+" parts (mouvements postérieurs). Annule d'abord les mouvements plus récents.");return;}
+    m.parts=Math.max(0,m.parts-x.parts); if(m.parts<0.005)m.parts=0;
+    db.cash.push({id:uid(),type:"retrait",date:d,montant:x.montant,libelle:"Club — annulation souscription "+x.membre});
+  }else if(x.type==="rachat"){
+    const m=db.club.membres.find(z=>z.nom===x.membre);
+    if(!m){alert("Membre introuvable.");return;}
+    m.parts+=x.parts;
+    db.cash.push({id:uid(),type:"depot",date:d,montant:x.montant,libelle:"Club — annulation rachat "+x.membre});
+  }else if(x.type==="cession"){
+    const noms=x.membre.split(" → ");
+    const vend=db.club.membres.find(z=>z.nom===noms[0]), ach=db.club.membres.find(z=>z.nom===noms[1]);
+    if(!vend||!ach){alert("Membres introuvables.");return;}
+    if(x.parts>ach.parts+0.005){alert("⚠️ Impossible : "+ach.nom+" n'a plus assez de parts.");return;}
+    ach.parts=Math.max(0,ach.parts-x.parts); if(ach.parts<0.005)ach.parts=0;
+    vend.parts+=x.parts;
+  }else return;
+  x.annule=true;
+  db.club.mouvements.push({id:uid(),date:d,type:"annulation",membre:x.membre,montant:x.montant,vl:x.vl,parts:x.parts,note:"annule le mouvement du "+frDateShort(x.date)});
+  save();openClub();
+}
+function openClubCession(){
+  if(!clubOn())return;
+  const vl=clubVL(); if(vl==null){alert("⚠️ Aucune part en circulation.");return;}
+  const vendeurs=db.club.membres.filter(m=>m.parts>0.005);
+  openSheet(`<h3>🔄 Cession de parts entre membres</h3>
+    <div class="hint">Un membre vend ses parts directement à un autre : <b>l'argent se règle entre eux, hors caisse du club</b>. Le club ne fait qu'enregistrer le transfert de parts. Valeur indicative du jour : <b>${fmt(vl)}</b> la part.</div>
+    <label>Vendeur</label>
+    <select id="ceVendeur" onchange="clubCessionPreview()">${vendeurs.map(m=>`<option value="${m.id}">${escHtml(m.nom)} — ${pfmt(m.parts)} parts</option>`).join("")}</select>
+    <label style="margin-top:12px">Acheteur</label>
+    <select id="ceAcheteur" onchange="document.getElementById('ceNouveauWrap').style.display=this.value==='__new'?'block':'none';clubCessionPreview()">
+      ${db.club.membres.map(m=>`<option value="${m.id}">${escHtml(m.nom)}</option>`).join("")}
+      <option value="__new">➕ Nouveau membre…</option>
+    </select>
+    <div id="ceNouveauWrap" style="display:none"><label>Nom du nouveau membre</label><input id="ceNouveau" placeholder="ex : Gekkof"></div>
+    <label style="margin-top:12px">Nombre de parts cédées</label>
+    <input id="ceParts" type="number" oninput="clubCessionPreview()" placeholder="ex : 100">
+    <label style="margin-top:12px">Date de la cession</label><input id="ceDate" type="date" value="${today()}">
+    <div id="cePrev" class="help" style="margin-top:12px;display:none"></div>
+    <button class="btn" style="margin-top:14px" onclick="clubCessionValider()">Valider la cession</button>`);
+}
+function clubCessionPreview(){
+  const vl=clubVL(); if(vl==null)return;
+  const v=+document.getElementById("ceParts").value||0;
+  const el=document.getElementById("cePrev"); if(!el)return;
+  if(v<=0){el.style.display="none";return;}
+  const m=db.club.membres.find(x=>x.id===document.getElementById("ceVendeur").value);
+  el.style.display="block";
+  el.innerHTML=`🧮 <div>${pfmt(v)} parts × ${fmt(vl)} = <b>${fmt(v*vl)}</b> à régler entre eux (prix indicatif du jour — libre à eux de négocier). Le patrimoine et la VL du club ne bougent pas.${m&&v>m.parts?'<br>⚠️ Le vendeur ne détient que '+pfmt(m.parts)+' parts.':''}</div>`;
+}
+function clubCessionValider(){
+  const vl=clubVL(); if(vl==null)return;
+  const v=+document.getElementById("ceParts").value||0;
+  if(v<=0){alert("⚠️ Saisis un nombre de parts positif.");return;}
+  const vend=db.club.membres.find(x=>x.id===document.getElementById("ceVendeur").value);
+  if(!vend){return;}
+  if(v>vend.parts+0.005){alert("⚠️ "+vend.nom+" ne détient que "+pfmt(vend.parts)+" parts.");return;}
+  let ach;
+  const sel=document.getElementById("ceAcheteur").value;
+  if(sel==="__new"){
+    const nom=(document.getElementById("ceNouveau").value||"").trim();
+    if(!nom){alert("⚠️ Donne le nom du nouveau membre.");return;}
+    if(db.club.membres.some(x=>x.nom.toLowerCase()===nom.toLowerCase())){alert("⚠️ Ce nom existe déjà — choisis-le dans la liste.");return;}
+    ach={id:uid(),nom:nom,parts:0};db.club.membres.push(ach);
+  }else{ach=db.club.membres.find(x=>x.id===sel);if(!ach)return;}
+  if(ach.id===vend.id){alert("⚠️ Le vendeur et l'acheteur doivent être différents.");return;}
+  const d=document.getElementById("ceDate")?.value||today();
+  vend.parts=Math.max(0,vend.parts-v); if(vend.parts<0.005)vend.parts=0;
+  ach.parts+=v;
+  db.club.mouvements.push({id:uid(),date:d,type:"cession",membre:vend.nom+" → "+ach.nom,montant:v*vl,vl:vl,parts:v});
+  save();openClub();
 }
 function clubMvPreview(type){
   const vl=clubVL(); if(vl==null)return;
@@ -2951,7 +3057,7 @@ function clubMvValider(type){
     const m=db.club.membres.find(x=>x.id===document.getElementById("cmMembre").value); if(!m)return;
     if(v>m.parts+0.005){alert("⚠️ "+m.nom+" ne détient que "+pfmt(m.parts)+" parts.");return;}
     const montant=v*vl;
-    if(montant>cashBalance()&&!confirm("Liquidités du club : "+fmt(cashBalance())+".\nLe rachat coûte "+fmt(montant)+" — il faudra vendre des titres pour payer.\nEnregistrer quand même ?"))return;
+    if(montant>cashBalance()){alert("⛔ Rachat impossible : le club n'a que "+fmt(cashBalance())+" de liquidités et ce rachat coûte "+fmt(montant)+".\n\nVends d'abord des titres pour dégager les liquidités, ou propose une CESSION de parts à un autre membre (bouton 🔄 Cession).");return;}
     m.parts=Math.max(0,m.parts-v);
     if(m.parts<0.005)m.parts=0;
     db.cash.push({id:uid(),type:"retrait",date:d,montant:montant,libelle:"Club — rachat "+m.nom});
