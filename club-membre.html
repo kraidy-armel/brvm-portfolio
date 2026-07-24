@@ -46,6 +46,7 @@
 </header>
 <div class="wrap" id="main"><div class="empty">⏳ Chargement du club…</div></div>
 <footer>« Mon Portefeuille BRVM » — mode Club · Le trésorier saisit, tout le monde voit, personne ne conteste.</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
 const SB_URL="https://szzionsxkrasgcjnksjn.supabase.co";
 const SB_KEY="sb_publishable_OQbsCE5Q9yVkegRm3uNReQ_kLKAxpAk";
@@ -87,6 +88,8 @@ function afficher(d, upd){
     +(d.membres||[]).filter(m=>m.parts>0.005).sort((a,b)=>b.parts-a.parts).map(m=>
       '<tr><td>'+esc(m.nom)+'</td><td class="r">'+pfmt(m.parts)+'</td><td class="r">'+(+m.pct).toFixed(1)+' %</td><td class="r"><b>'+fmt(m.valeur)+'</b></td></tr>').join("")
     +'</table></div>';
+  const vh=d.vlHist||{}, vds=Object.keys(vh).sort();
+  if(vds.length>=2)h+='<div class="sect">📈 Évolution de la part</div><div class="card"><canvas id="vlChart" height="140"></canvas></div>';
   h+='<div class="sect">📊 Le portefeuille du club</div><div class="card">';
   if((d.positions||[]).length){
     h+='<table><tr><th>Titre</th><th class="r">Qté</th><th class="r">Cours</th><th class="r">Valeur</th></tr>'
@@ -104,6 +107,17 @@ function afficher(d, upd){
   h+='<button class="btn" onclick="charger()">🔄 Actualiser</button>'
     +'<div class="hint" style="margin-top:10px;text-align:center">Ta part de gain suit tes parts, automatiquement. Ce lien est en lecture seule : personne ne peut modifier quoi que ce soit ici.</div>';
   document.getElementById("main").innerHTML=h;
+  if(vds.length>=2&&window.Chart){
+    if(window._vlChart)window._vlChart.destroy();
+    const frS=x=>{try{const t=new Date(x+"T00:00");return t.getDate()+"/"+(t.getMonth()+1);}catch(e){return x;}};
+    window._vlChart=new Chart(document.getElementById("vlChart"),{type:"line",
+      data:{labels:vds.map(frS),datasets:[
+        {label:"Valeur de la part",data:vds.map(k=>+vh[k]),borderColor:"#0B6B53",backgroundColor:"rgba(11,107,83,.12)",fill:true,tension:.3,pointRadius:2,borderWidth:2},
+        {label:"Prix de fondation",data:vds.map(()=>+d.vl0||10000),borderColor:"#C9962E",borderDash:[6,5],fill:false,pointRadius:0,borderWidth:1.5}
+      ]},
+      options:{plugins:{legend:{display:true,labels:{font:{size:10},boxWidth:14}},tooltip:{callbacks:{label:x=>(x.dataset.label||"")+" : "+fmt(x.parsed.y)}}},
+        scales:{y:{ticks:{font:{size:10}}},x:{ticks:{maxTicksLimit:6,font:{size:9}}}}}});
+  }
 }
 charger();
 setInterval(charger, 5*60*1000); /* rafraîchissement toutes les 5 minutes */

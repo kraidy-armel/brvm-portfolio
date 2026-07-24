@@ -1772,6 +1772,11 @@ function recordSnapshot(){
   const last=db.history[db.history.length-1];
   if(last&&last.date===d)db.history[db.history.length-1]=pt;
   else db.history.push(pt);
+  /* club : mémorise la valeur de la part du jour (courbe de VL) */
+  if(clubOn()){
+    const vl=clubVL();
+    if(vl!=null){ if(!db.club.vlHist)db.club.vlHist={}; db.club.vlHist[d]=Math.round(vl*100)/100; }
+  }
 }
 
 /* Plus-values réalisées (lors des ventes), par année — méthode coût moyen */
@@ -2875,7 +2880,8 @@ function clubFonder(){
   if(vl0<100){alert("⚠️ La part de fondation doit valoir au moins 100 F.");return;}
   const p=blankPortfolio(nom);
   const d=document.getElementById("cfDate")?.value||today();
-  p.club={actif:true,vl0:vl0,shareId:uid()+Math.random().toString(36).slice(2,10)+Math.random().toString(36).slice(2,10),membres:[],mouvements:[]};
+  p.club={actif:true,vl0:vl0,shareId:uid()+Math.random().toString(36).slice(2,10)+Math.random().toString(36).slice(2,10),membres:[],mouvements:[],vlHist:{}};
+  p.club.vlHist[d]=vl0;
   membres.forEach(m=>{
     const parts=m.apport/vl0;
     p.club.membres.push({id:uid(),nom:m.nom,parts:parts});
@@ -2912,6 +2918,8 @@ function openClub(){
       <div class="kv"><span class="k">Parts en circulation</span><b>${pfmt(n)}</b></div>
       ${perf!=null?`<div class="kv"><span class="k">Performance depuis la fondation</span><b class="${perf>=0?'pos':'neg'}">${perf>=0?'+':''}${perf.toFixed(1)} %</b></div>`:''}
     </div>
+    ${Object.keys(db.club.vlHist||{}).length>=2?`<div class="sect-title" style="margin:14px 0 4px">📈 Évolution de la part</div>
+    <div class="card" style="padding:10px"><canvas id="clubVLChart" height="130"></canvas></div>`:''}
     <div class="sect-title" style="margin:14px 0 4px">Les membres</div>
     <div class="card" style="padding:4px 14px">
       ${ms.map(m=>{const v=vl!=null?m.parts*vl:0;const pc=n>0?m.parts/n*100:0;
@@ -2923,12 +2931,73 @@ function openClub(){
     </div>
     <button class="btn alt" style="margin-top:10px" onclick="openClubCession()">🔄 Cession — un membre rachète les parts d'un autre</button>
     <button class="btn alt" style="margin-top:10px" onclick="clubInviter()">🔗 Inviter les membres (lien de consultation)</button>
+    <button class="btn alt" style="margin-top:10px" onclick="openClubReport()">📄 Rapport de réunion (imprimable)</button>
     <div class="sect-title" style="margin:16px 0 4px">📜 Journal du club (immuable)</div>
     ${mvs.length?mvs.map(x=>`<div class="row"${x.annule?' style="opacity:.45"':''}><div class="tick">${ICO[x.type]||"•"}</div>
       <div class="grow"><div class="nm">${LBL[x.type]||x.type} — ${escHtml(x.membre)}${x.annule?' <span class="tag gray">annulée</span>':''}</div>
       <div class="sub">${frDate(x.date)} · ${fmt(x.montant)} · ${x.type==="rachat"?"−":x.type==="cession"?"":"+"}${pfmt(x.parts)} parts à ${fmt(x.vl)}${x.note?' · '+escHtml(x.note):''}</div></div>
       ${(!x.annule&&(x.type==="souscription"||x.type==="rachat"||x.type==="cession"))?`<button class="del" onclick="clubAnnuler('${x.id}')">↩️</button>`:''}</div>`).join(""):'<div class="hint">Aucun mouvement.</div>'}
     <div class="hint" style="margin-top:10px">⚖️ La VL est calculée sur les cours BRVM du jour et les liquidités réelles. Chaque mouvement est daté et définitif — c'est la garantie de tous.</div>`);
+  setTimeout(drawClubVL,60);
+}
+let clubVLChartObj=null;
+function drawClubVL(){
+  const cv=document.getElementById("clubVLChart"); if(!cv||!clubOn())return;
+  const H=db.club.vlHist||{}; const ds=Object.keys(H).sort(); if(ds.length<2)return;
+  if(clubVLChartObj)clubVLChartObj.destroy();
+  const c=pfColor(db);
+  clubVLChartObj=new Chart(cv,{type:"line",
+    data:{labels:ds.map(frDateShort),datasets:[
+      {label:"Valeur de la part",data:ds.map(d=>+H[d]),borderColor:c,backgroundColor:rgbaOf(c,.12),fill:true,tension:.3,pointRadius:2,borderWidth:2},
+      {label:"Prix de fondation",data:ds.map(()=>db.club.vl0||CLUB_VL0),borderColor:"#C9962E",borderDash:[6,5],fill:false,pointRadius:0,borderWidth:1.5}
+    ]},
+    options:{plugins:{legend:{display:true,labels:{font:{size:10},boxWidth:14}},tooltip:{callbacks:{label:x=>(x.dataset.label||"")+" : "+fmt(x.parsed.y)}}},
+      scales:{y:{ticks:{callback:v=>fmtAxis(v),font:{size:10}}},x:{ticks:{maxTicksLimit:6,font:{size:9}}}}}});
+}
+/* --- 📄 Rapport de réunion du club (impression native) --- */
+function openClubReport(){
+  if(!clubOn())return;
+  const t=totals(), bal=cashBalance(), vl=clubVL(), n=clubParts(), pat=t.value+bal;
+  const vl0=db.club.vl0||CLUB_VL0;
+  const now=new Date();
+  const ms=[...db.club.membres].filter(m=>m.parts>0.005).sort((a,b)=>b.parts-a.parts);
+  const mvs=[...db.club.mouvements].sort((a,b)=>b.date.localeCompare(a.date));
+  const LBL={fondation:"Fondation",souscription:"Souscription",rachat:"Rachat",cession:"Cession",annulation:"Annulation"};
+  const el=document.getElementById("reportView"); if(!el)return;
+  el.innerHTML=`
+    <div class="noprint" style="display:flex;gap:10px;margin-bottom:16px">
+      <button class="btn" style="flex:1;margin:0" onclick="window.print()">🖨️ Imprimer / PDF</button>
+      <button class="btn ghost" style="flex:1;margin:0" onclick="closeReport()">✕ Fermer</button>
+    </div>
+    <h1>Rapport de réunion — ${escHtml(db.name)}</h1>
+    <div style="font-size:12.5px;color:#555">Établi le ${now.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"})} · Mode Club, « Mon Portefeuille BRVM »</div>
+    <h2>Synthèse</h2>
+    <table><tbody>
+      <tr><td>Patrimoine du club (titres + liquidités)</td><td><b>${fmt(pat)}</b></td></tr>
+      <tr><td>— dont titres</td><td>${fmt(t.value)}</td></tr>
+      <tr><td>— dont liquidités</td><td>${fmt(bal)}</td></tr>
+      <tr><td>Valeur de la part (VL)</td><td><b>${vl!=null?fmt(vl):"—"}</b></td></tr>
+      <tr><td>Parts en circulation</td><td>${pfmt(n)}</td></tr>
+      <tr><td>Performance depuis la fondation (part à ${fmt(vl0)})</td><td class="${vl!=null&&vl>=vl0?'rpos':'rneg'}">${vl!=null?((vl/vl0-1)*100>=0?"+":"")+((vl/vl0-1)*100).toFixed(1)+" %":"—"}</td></tr>
+    </tbody></table>
+    <h2>Les membres</h2>
+    <table><thead><tr><th>Membre</th><th>Parts</th><th>% du club</th><th>Valeur</th></tr></thead><tbody>
+      ${ms.map(m=>`<tr><td>${escHtml(m.nom)}</td><td>${pfmt(m.parts)}</td><td>${n>0?(m.parts/n*100).toFixed(1):0} %</td><td>${vl!=null?fmt(m.parts*vl):"—"}</td></tr>`).join("")}
+      <tr style="background:#EFF4F2;font-weight:700"><td>TOTAL</td><td>${pfmt(n)}</td><td>100 %</td><td>${fmt(pat)}</td></tr>
+    </tbody></table>
+    <h2>Le portefeuille du club</h2>
+    ${t.ps.length?`<table><thead><tr><th>Titre</th><th>Qté</th><th>PRU</th><th>Cours</th><th>Valeur</th><th>+/− value</th></tr></thead><tbody>
+      ${t.ps.map(p=>`<tr><td>${escHtml(stockMap[p.ticker]?.name||p.ticker)} (${p.ticker})</td><td>${p.qty}</td><td>${fmtShort(p.pru)}</td><td>${fmtShort(p.cur)}</td><td>${fmtShort(p.value)}</td><td class="${p.pl>=0?'rpos':'rneg'}">${sign(p.pl)} (${p.plPct>=0?"+":""}${p.plPct.toFixed(1)}%)</td></tr>`).join("")}
+    </tbody></table>`:'<div style="font-size:13px;color:#666">Aucun titre en portefeuille.</div>'}
+    <h2>Journal des mouvements de parts (${mvs.length})</h2>
+    ${mvs.length?`<table><thead><tr><th>Date</th><th>Mouvement</th><th>Membre</th><th>Montant</th><th>Part du jour</th><th>Parts</th></tr></thead><tbody>
+      ${mvs.map(x=>`<tr${x.annule?' style="color:#999;text-decoration:line-through"':''}><td>${x.date}</td><td>${LBL[x.type]||x.type}</td><td>${escHtml(x.membre)}</td><td>${fmt(x.montant)}</td><td>${fmt(x.vl)}</td><td>${x.type==="rachat"?"−":x.type==="cession"?"":"+"}${pfmt(x.parts)}</td></tr>`).join("")}
+    </tbody></table>`:'<div style="font-size:13px;color:#666">Aucun mouvement.</div>'}
+    <div style="margin-top:22px;font-size:11px;color:#777">Rapport établi par l'application « Mon Portefeuille BRVM » (mode Club) à partir des saisies du trésorier et des cours BRVM du jour. La valeur de la part se calcule automatiquement : patrimoine ÷ parts en circulation. Document d'information pour la réunion des membres — vérifiable par chacun via le lien de consultation.</div>`;
+  el.classList.add("open");
+  document.body.classList.add("report-open");
+  el.scrollTop=0;
+  closeSheet();
 }
 
 function openClubMv(type){
@@ -3092,7 +3161,8 @@ function clubSnapshot(){
     perf:vl!=null?(vl/(db.club.vl0||CLUB_VL0)-1)*100:null,
     membres:db.club.membres.map(m=>({nom:m.nom,parts:m.parts,pct:n>0?m.parts/n*100:0,valeur:vl!=null?m.parts*vl:0})),
     positions:t.ps.map(p=>({ticker:p.ticker,nom:stockMap[p.ticker]?.name||p.ticker,qty:p.qty,cours:p.cur,valeur:p.value})),
-    mouvements:[...db.club.mouvements].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,50)
+    mouvements:[...db.club.mouvements].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,50),
+    vlHist:(()=>{const H=db.club.vlHist||{};const ds=Object.keys(H).sort().slice(-90);const o={};ds.forEach(d=>o[d]=H[d]);return o;})()
   };
 }
 let _clubPubT=null;
