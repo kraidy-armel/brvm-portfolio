@@ -1574,7 +1574,7 @@ async function syncPrices(btn){
     if(btn){btn.textContent=orig;btn.disabled=false;}
   }
 }
-function save(){recordSnapshot();if(db)db._ts=Date.now();localStorage.setItem(DB_KEY,JSON.stringify(store));renderAll();if(typeof cloudPushDebounced==="function")cloudPushDebounced();}
+function save(){recordSnapshot();if(db)db._ts=Date.now();localStorage.setItem(DB_KEY,JSON.stringify(store));renderAll();if(typeof cloudPushDebounced==="function")cloudPushDebounced();if(typeof publishClubDebounced==="function")publishClubDebounced();}
 /* Indicateur discret de fraîcheur des cours */
 function joursBourseRetard(d){
   /* nombre de jours de bourse (lun-ven) écoulés entre la date des cours et aujourd'hui */
@@ -2839,7 +2839,7 @@ function clubFonder(){
   if(vl0<100){alert("⚠️ La part de fondation doit valoir au moins 100 F.");return;}
   const p=blankPortfolio(nom);
   const d=document.getElementById("cfDate")?.value||today();
-  p.club={actif:true,vl0:vl0,membres:[],mouvements:[]};
+  p.club={actif:true,vl0:vl0,shareId:uid()+Math.random().toString(36).slice(2,10)+Math.random().toString(36).slice(2,10),membres:[],mouvements:[]};
   membres.forEach(m=>{
     const parts=m.apport/vl0;
     p.club.membres.push({id:uid(),nom:m.nom,parts:parts});
@@ -2884,6 +2884,7 @@ function openClub(){
       <button class="btn" style="flex:1;margin:0" onclick="openClubMv('souscription')">🟢 Souscription</button>
       <button class="btn alt" style="flex:1;margin:0" onclick="openClubMv('rachat')">🔴 Rachat</button>
     </div>
+    <button class="btn alt" style="margin-top:10px" onclick="clubInviter()">🔗 Inviter les membres (lien de consultation)</button>
     <div class="sect-title" style="margin:16px 0 4px">📜 Journal du club (immuable)</div>
     ${mvs.length?mvs.map(x=>`<div class="row"><div class="tick">${ICO[x.type]||"•"}</div>
       <div class="grow"><div class="nm">${x.type==="fondation"?"Fondation":x.type==="souscription"?"Souscription":"Rachat"} — ${escHtml(x.membre)}</div>
@@ -2957,6 +2958,42 @@ function clubMvValider(type){
     db.club.mouvements.push({id:uid(),date:d,type:"rachat",membre:m.nom,montant:montant,vl:vl,parts:v});
     save();openClub();
   }
+}
+
+/* --- Publication du club pour les membres (lecture seule, via lien secret) --- */
+const CLUB_MEMBRE_URL="https://kraidy-armel.github.io/brvm-portfolio/club-membre.html?c=";
+function clubShareId(){
+  if(!clubOn())return null;
+  if(!db.club.shareId){db.club.shareId=uid()+Math.random().toString(36).slice(2,10)+Math.random().toString(36).slice(2,10);try{localStorage.setItem(DB_KEY,JSON.stringify(store));}catch(e){}}
+  return db.club.shareId;
+}
+function clubSnapshot(){
+  const t=totals(), bal=cashBalance(), vl=clubVL(), n=clubParts();
+  return {
+    nom:db.name, majDate:new Date().toISOString(),
+    vl:vl, vl0:db.club.vl0||CLUB_VL0, parts:n, patrimoine:t.value+bal, titres:t.value, liquidites:bal,
+    perf:vl!=null?(vl/(db.club.vl0||CLUB_VL0)-1)*100:null,
+    membres:db.club.membres.map(m=>({nom:m.nom,parts:m.parts,pct:n>0?m.parts/n*100:0,valeur:vl!=null?m.parts*vl:0})),
+    positions:t.ps.map(p=>({ticker:p.ticker,nom:stockMap[p.ticker]?.name||p.ticker,qty:p.qty,cours:p.cur,valeur:p.value})),
+    mouvements:[...db.club.mouvements].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,50)
+  };
+}
+let _clubPubT=null;
+function publishClubDebounced(){ if(!clubOn()||!sb||!cloudUserEmail)return; clearTimeout(_clubPubT); _clubPubT=setTimeout(publishClub,2500); }
+async function publishClub(){
+  if(!clubOn()||!sb)return;
+  try{
+    const {data:{user}}=await sb.auth.getUser(); if(!user)return;
+    await sb.from('brvm_club_share').upsert({id:clubShareId(),user_id:user.id,data:clubSnapshot(),updated_at:new Date().toISOString()});
+  }catch(e){}
+}
+function clubInviter(){
+  const lien=CLUB_MEMBRE_URL+clubShareId();
+  publishClub();
+  const msg="🤝 "+db.name+" — suis le club en direct depuis ton téléphone :\n"+lien+"\n(valeur de ta part, patrimoine, journal — mis à jour par le trésorier)";
+  const done=()=>alert("🔗 Lien copié !\n\nEnvoie-le aux membres (WhatsApp, SMS...). Chacun verra le club en lecture seule — personne ne peut rien modifier avec ce lien.");
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(msg).then(done).catch(()=>prompt("Copie ce lien :",lien));
+  else prompt("Copie ce lien :",lien);
 }
 
 /* --- Verrouillage par code (local) --- */

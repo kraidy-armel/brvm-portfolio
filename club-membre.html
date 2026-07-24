@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon club d'investissement</title>
+<style>
+  :root{--green:#0B6B53;--green-d:#085441;--green-l:#E6F4F0;--pos:#13A36B;--neg:#E0533D;
+    --bg:#F4F6F8;--card:#FFFFFF;--ink:#16221E;--muted:#6B7B76;--line:#E8ECEA;--gold:#C9962E}
+  *{box-sizing:border-box}
+  body{margin:0 auto;max-width:640px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);font-size:15px;line-height:1.45;padding-bottom:40px}
+  header{background:linear-gradient(135deg,var(--green),var(--green-d));color:#fff;padding:18px;border-radius:0 0 22px 22px}
+  .badge{display:inline-block;background:rgba(255,255,255,.2);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.5px}
+  h1{font-size:20px;margin:8px 0 2px}
+  .sub{font-size:12.5px;opacity:.85}
+  .big{font-size:30px;font-weight:700;margin:10px 0 2px}
+  .twin{display:flex;gap:10px;margin-top:12px}
+  .twin>div{flex:1;background:rgba(255,255,255,.12);border-radius:14px;padding:10px 12px}
+  .twin .k{font-size:11px;opacity:.8}.twin .v{font-size:15px;font-weight:600;margin-top:2px}
+  .wrap{padding:16px}
+  .card{background:var(--card);border-radius:18px;padding:14px 16px;box-shadow:0 2px 14px rgba(16,40,33,.06);margin-bottom:14px}
+  .sect{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:16px 4px 8px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;color:var(--muted);font-size:11px;text-transform:uppercase;padding:6px 4px;border-bottom:2px solid var(--green)}
+  td{padding:9px 4px;border-bottom:1px solid var(--line)}
+  .r{text-align:right}
+  .pos{color:var(--pos);font-weight:600}.neg{color:var(--neg);font-weight:600}
+  .hint{font-size:12px;color:var(--muted)}
+  .btn{display:block;width:100%;padding:13px;background:var(--green);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;margin-top:8px}
+  .empty{text-align:center;padding:40px 20px;color:var(--muted)}
+  footer{text-align:center;font-size:11px;color:var(--muted);padding:20px;font-style:italic}
+</style>
+</head>
+<body>
+<header id="hd">
+  <span class="badge">👁 CONSULTATION — LECTURE SEULE</span>
+  <h1 id="nom">Mon club d'investissement</h1>
+  <div class="sub" id="maj">Chargement…</div>
+  <div class="big" id="pat"></div>
+  <div class="twin">
+    <div><div class="k">Valeur de la part</div><div class="v" id="vl">—</div></div>
+    <div><div class="k">Parts en circulation</div><div class="v" id="parts">—</div></div>
+    <div><div class="k">Performance</div><div class="v" id="perf">—</div></div>
+  </div>
+</header>
+<div class="wrap" id="main"><div class="empty">⏳ Chargement du club…</div></div>
+<footer>« Mon Portefeuille BRVM » — mode Club · Le trésorier saisit, tout le monde voit, personne ne conteste.</footer>
+<script>
+const SB_URL="https://szzionsxkrasgcjnksjn.supabase.co";
+const SB_KEY="sb_publishable_OQbsCE5Q9yVkegRm3uNReQ_kLKAxpAk";
+const fmt=n=>Math.round(+n||0).toLocaleString("fr-FR")+" F";
+const pfmt=x=>(+x||0).toLocaleString("fr-FR",{maximumFractionDigits:2});
+const esc=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const frD=d=>{try{return new Date(d+"T00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"});}catch(e){return d;}};
+
+async function charger(){
+  const cid=new URLSearchParams(location.search).get("c");
+  const main=document.getElementById("main");
+  if(!cid){main.innerHTML='<div class="empty">⚠️ Lien incomplet.<br>Demande au trésorier de te renvoyer le lien d\'invitation.</div>';return;}
+  try{
+    const r=await fetch(SB_URL+"/rest/v1/brvm_club_share?id=eq."+encodeURIComponent(cid)+"&select=data,updated_at",
+      {headers:{apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},cache:"no-store"});
+    const rows=await r.json();
+    if(!Array.isArray(rows)||!rows.length||!rows[0].data){main.innerHTML='<div class="empty">🔍 Club introuvable.<br>Vérifie le lien avec le trésorier.</div>';return;}
+    afficher(rows[0].data, rows[0].updated_at);
+  }catch(e){
+    main.innerHTML='<div class="empty">📶 Connexion impossible.<br>Vérifie ton internet puis réessaie.<br><br><button class="btn" style="max-width:220px;margin:0 auto" onclick="charger()">🔄 Réessayer</button></div>';
+  }
+}
+function afficher(d, upd){
+  document.getElementById("nom").textContent="🤝 "+(d.nom||"Mon club");
+  document.title=d.nom||"Mon club";
+  const dt=new Date(d.majDate||upd);
+  document.getElementById("maj").textContent="Mis à jour par le trésorier le "+dt.toLocaleDateString("fr-FR",{day:"numeric",month:"long"})+" à "+dt.toTimeString().slice(0,5);
+  document.getElementById("pat").textContent=fmt(d.patrimoine);
+  document.getElementById("vl").textContent=d.vl!=null?fmt(d.vl):"—";
+  document.getElementById("parts").textContent=pfmt(d.parts);
+  const pf=d.perf;
+  const pe=document.getElementById("perf");
+  pe.textContent=pf!=null?((pf>=0?"+":"")+pf.toFixed(1)+" %"):"—";
+  pe.style.color=pf==null?"":(pf>=0?"#9BE7C4":"#FFC2BD");
+  const ICO={fondation:"🏁",souscription:"🟢",rachat:"🔴"};
+  let h='<div class="sect">👥 Les membres</div><div class="card"><table>'
+    +'<tr><th>Membre</th><th class="r">Parts</th><th class="r">%</th><th class="r">Valeur</th></tr>'
+    +(d.membres||[]).filter(m=>m.parts>0.005).sort((a,b)=>b.parts-a.parts).map(m=>
+      '<tr><td>'+esc(m.nom)+'</td><td class="r">'+pfmt(m.parts)+'</td><td class="r">'+(+m.pct).toFixed(1)+' %</td><td class="r"><b>'+fmt(m.valeur)+'</b></td></tr>').join("")
+    +'</table></div>';
+  h+='<div class="sect">📊 Le portefeuille du club</div><div class="card">';
+  if((d.positions||[]).length){
+    h+='<table><tr><th>Titre</th><th class="r">Qté</th><th class="r">Cours</th><th class="r">Valeur</th></tr>'
+      +d.positions.map(p=>'<tr><td>'+esc(p.nom)+' ('+esc(p.ticker)+')</td><td class="r">'+(+p.qty).toLocaleString("fr-FR")+'</td><td class="r">'+fmt(p.cours)+'</td><td class="r">'+fmt(p.valeur)+'</td></tr>').join("")
+      +'</table>';
+  } else h+='<div class="hint">Aucun titre pour l\'instant.</div>';
+  h+='<div class="hint" style="margin-top:8px">Liquidités du club : <b>'+fmt(d.liquidites)+'</b> · Titres : <b>'+fmt(d.titres)+'</b></div></div>';
+  h+='<div class="sect">📜 Journal du club</div><div class="card">'
+    +((d.mouvements||[]).length?d.mouvements.map(x=>
+      '<div style="padding:9px 0;border-bottom:1px solid var(--line)">'+(ICO[x.type]||"•")+' <b>'
+      +(x.type==="fondation"?"Fondation":x.type==="souscription"?"Souscription":"Rachat")+'</b> — '+esc(x.membre)
+      +'<div class="hint">'+frD(x.date)+' · '+fmt(x.montant)+' · '+(x.type==="rachat"?"−":"+")+pfmt(x.parts)+' parts à '+fmt(x.vl)+'</div></div>').join("")
+      :'<div class="hint">Aucun mouvement.</div>')
+    +'</div>';
+  h+='<button class="btn" onclick="charger()">🔄 Actualiser</button>'
+    +'<div class="hint" style="margin-top:10px;text-align:center">Ta part de gain suit tes parts, automatiquement. Ce lien est en lecture seule : personne ne peut modifier quoi que ce soit ici.</div>';
+  document.getElementById("main").innerHTML=h;
+}
+charger();
+setInterval(charger, 5*60*1000); /* rafraîchissement toutes les 5 minutes */
+</script>
+</body>
+</html>
