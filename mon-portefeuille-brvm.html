@@ -2930,7 +2930,7 @@ function openClub(){
       <button class="btn alt" style="flex:1;margin:0" onclick="openClubMv('rachat')">🔴 Rachat</button>
     </div>
     <button class="btn alt" style="margin-top:10px" onclick="openClubCession()">🔄 Cession — un membre rachète les parts d'un autre</button>
-    <button class="btn alt" style="margin-top:10px" onclick="clubInviter()">🔗 Inviter les membres (lien de consultation)</button>
+    <button class="btn alt" style="margin-top:10px" onclick="openClubAccess()">👥 Membres & accès (emails des membres)</button>
     <button class="btn alt" style="margin-top:10px" onclick="openClubReport()">📄 Rapport de réunion (imprimable)</button>
     <div class="sect-title" style="margin:16px 0 4px">📜 Journal du club (immuable)</div>
     ${mvs.length?mvs.map(x=>`<div class="row"${x.annule?' style="opacity:.45"':''}><div class="tick">${ICO[x.type]||"•"}</div>
@@ -3159,7 +3159,7 @@ function clubSnapshot(){
     nom:db.name, majDate:new Date().toISOString(),
     vl:vl, vl0:db.club.vl0||CLUB_VL0, parts:n, patrimoine:t.value+bal, titres:t.value, liquidites:bal,
     perf:vl!=null?(vl/(db.club.vl0||CLUB_VL0)-1)*100:null,
-    membres:db.club.membres.map(m=>({nom:m.nom,parts:m.parts,pct:n>0?m.parts/n*100:0,valeur:vl!=null?m.parts*vl:0})),
+    membres:db.club.membres.map(m=>({id:m.id,nom:m.nom,parts:m.parts,pct:n>0?m.parts/n*100:0,valeur:vl!=null?m.parts*vl:0})),
     positions:t.ps.map(p=>({ticker:p.ticker,nom:stockMap[p.ticker]?.name||p.ticker,qty:p.qty,cours:p.cur,valeur:p.value})),
     mouvements:[...db.club.mouvements].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,50),
     vlHist:(()=>{const H=db.club.vlHist||{};const ds=Object.keys(H).sort().slice(-90);const o={};ds.forEach(d=>o[d]=H[d]);return o;})()
@@ -3174,11 +3174,49 @@ async function publishClub(){
     await sb.from('brvm_club_share').upsert({id:clubShareId(),user_id:user.id,data:clubSnapshot(),updated_at:new Date().toISOString()});
   }catch(e){}
 }
+function openClubAccess(){
+  if(!clubOn())return;
+  if(!cloudUserEmail){alert("⚠️ Connecte-toi d'abord à ton compte ☁️ (Réglages) — l'accès des membres passe par le nuage.");return;}
+  openSheet(`<h3>👥 Membres & accès</h3>
+    <div class="hint">Associe chaque membre à son adresse email : il créera son compte avec cette adresse et verra son espace personnel + l'état du club. Sans email enregistré ici, pas d'accès — c'est ta liste qui fait autorité.</div>
+    <div style="margin-top:12px">
+    ${db.club.membres.map(m=>`
+      <label style="margin-top:10px">${escHtml(m.nom)} <span class="hint">${m.parts>0.005?pfmt(m.parts)+" parts":"0 part"}</span></label>
+      <input class="acc-email" data-mid="${m.id}" type="email" autocomplete="off" placeholder="email de ${escHtml(m.nom)}" value="${escAttr(m.email||"")}">`).join("")}
+    </div>
+    <div id="accMsg" class="hint" style="margin-top:10px"></div>
+    <button class="btn" style="margin-top:14px" onclick="clubSaveAccess(this)">💾 Enregistrer les accès</button>
+    <button class="btn alt" style="margin-top:10px" onclick="clubInviter()">📨 Copier le message d'invitation</button>`);
+}
+async function clubSaveAccess(btn){
+  const msg=t=>{const e=document.getElementById("accMsg");if(e)e.innerHTML=t;};
+  const rows=[...document.querySelectorAll(".acc-email")].map(i=>({mid:i.dataset.mid,email:(i.value||"").trim().toLowerCase()}));
+  const bad=rows.find(r=>r.email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(r.email));
+  if(bad){msg("⚠️ Une adresse semble invalide : "+escHtml(bad.email));return;}
+  rows.forEach(r=>{const m=db.club.membres.find(x=>x.id===r.mid);if(m)m.email=r.email;});
+  save();
+  if(!sb){msg("⚠️ Hors-ligne : emails gardés sur l'appareil, réessaie plus tard pour activer les accès.");return;}
+  btn.disabled=true; msg("⏳ Enregistrement des accès dans le nuage…");
+  try{
+    const {data:{user}}=await sb.auth.getUser();
+    if(!user){msg("⚠️ Reconnecte-toi à ton compte ☁️ puis réessaie.");btn.disabled=false;return;}
+    const cid=clubShareId();
+    const payload=db.club.membres.filter(m=>(m.email||"").length>3).map(m=>({club_id:cid,membre_id:m.id,membre_nom:m.nom,email:m.email,added_by:user.id}));
+    const {error}=await sb.from("brvm_club_membres").upsert(payload,{onConflict:"club_id,membre_id"});
+    if(error)throw error;
+    /* retire les accès des membres dont l'email a été effacé */
+    const sans=db.club.membres.filter(m=>!(m.email||"").length).map(m=>m.id);
+    if(sans.length)await sb.from("brvm_club_membres").delete().eq("club_id",cid).in("membre_id",sans);
+    await publishClub();
+    msg("✅ Accès enregistrés pour "+payload.length+" membre(s). Envoie-leur l'invitation !");
+  }catch(e){msg("⚠️ Échec : "+escHtml(e.message||String(e))+"<br>Vérifie que le SQL des accès a bien été exécuté dans Supabase.");}
+  btn.disabled=false;
+}
 function clubInviter(){
   const lien=CLUB_MEMBRE_URL+clubShareId();
   publishClub();
-  const msg="🤝 "+db.name+" — suis le club en direct depuis ton téléphone :\n"+lien+"\n(valeur de ta part, patrimoine, journal — mis à jour par le trésorier)";
-  const done=()=>alert("🔗 Lien copié !\n\nEnvoie-le aux membres (WhatsApp, SMS...). Chacun verra le club en lecture seule — personne ne peut rien modifier avec ce lien.");
+  const msg="🤝 "+db.name+" — ton espace membre est prêt !\n\n1. Ouvre : "+lien+"\n2. Crée ton compte avec TON adresse email (celle donnée au trésorier)\n3. Tu verras ton relevé personnel (cotisations, parts, plus-value) et l'état du club, mis à jour en direct.";
+  const done=()=>alert("📨 Message d'invitation copié !\n\nEnvoie-le aux membres (WhatsApp, SMS...). Seuls les emails enregistrés dans « Membres & accès » pourront entrer.");
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(msg).then(done).catch(()=>prompt("Copie ce lien :",lien));
   else prompt("Copie ce lien :",lien);
 }

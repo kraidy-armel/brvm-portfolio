@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mon club d'investissement</title>
+<title>Mon espace membre — Club d'investissement</title>
 <style>
   :root{--green:#0B6B53;--green-d:#085441;--green-l:#E6F4F0;--pos:#13A36B;--neg:#E0533D;
     --bg:#F4F6F8;--card:#FFFFFF;--ink:#16221E;--muted:#6B7B76;--line:#E8ECEA;--gold:#C9962E}
@@ -27,76 +27,176 @@
   .r{text-align:right}
   .pos{color:var(--pos);font-weight:600}.neg{color:var(--neg);font-weight:600}
   .hint{font-size:12px;color:var(--muted)}
-  .btn{display:block;width:100%;padding:13px;background:var(--green);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;margin-top:8px}
+  label{display:block;font-size:13px;font-weight:600;margin:12px 0 5px}
+  input{width:100%;padding:12px;border:1.5px solid var(--line);border-radius:12px;font-size:16px}
+  .btn{display:block;width:100%;padding:13px;background:var(--green);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;margin-top:12px}
+  .ghost{background:transparent;color:var(--green);border:1.5px solid var(--green)}
+  .lnk{background:none;border:none;color:var(--green);font-size:13px;text-decoration:underline;cursor:pointer;display:block;margin:12px auto 0}
   .empty{text-align:center;padding:40px 20px;color:var(--muted)}
+  .kv{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .kv:last-child{border-bottom:none}
+  .kv .k{color:var(--muted)}
   footer{text-align:center;font-size:11px;color:var(--muted);padding:20px;font-style:italic}
 </style>
 </head>
 <body>
 <header id="hd">
-  <span class="badge">👁 CONSULTATION — LECTURE SEULE</span>
-  <h1 id="nom">Mon club d'investissement</h1>
-  <div class="sub" id="maj">Chargement…</div>
-  <div class="big" id="pat"></div>
-  <div class="twin">
-    <div><div class="k">Valeur de la part</div><div class="v" id="vl">—</div></div>
-    <div><div class="k">Parts en circulation</div><div class="v" id="parts">—</div></div>
-    <div><div class="k">Performance</div><div class="v" id="perf">—</div></div>
+  <span class="badge" id="bdg">👤 ESPACE MEMBRE</span>
+  <h1 id="titre">Club d'investissement</h1>
+  <div class="sub" id="soustitre">Connecte-toi pour voir ton espace</div>
+  <div id="heroPerso" style="display:none">
+    <div class="big" id="pValeur"></div>
+    <div class="twin">
+      <div><div class="k">Mes parts</div><div class="v" id="pParts">—</div></div>
+      <div><div class="k">Total versé</div><div class="v" id="pVerse">—</div></div>
+      <div><div class="k">Ma plus-value</div><div class="v" id="pPV">—</div></div>
+    </div>
   </div>
 </header>
-<div class="wrap" id="main"><div class="empty">⏳ Chargement du club…</div></div>
-<footer>« Mon Portefeuille BRVM » — mode Club · Le trésorier saisit, tout le monde voit, personne ne conteste.</footer>
+<div class="wrap">
+  <div id="auth">
+    <div class="card">
+      <div id="authMode" style="font-weight:700;font-size:15px">Connexion à ton espace</div>
+      <label>Email <span class="hint">(celui donné au trésorier)</span></label>
+      <input id="aEmail" type="email" autocomplete="email" placeholder="ton@email.com">
+      <label>Mot de passe</label>
+      <input id="aPw" type="password" autocomplete="current-password" placeholder="au moins 6 caractères">
+      <div id="aMsg" class="hint" style="margin-top:8px"></div>
+      <button class="btn" onclick="connexion()">Se connecter</button>
+      <button class="btn ghost" onclick="inscription()">Créer mon compte (première fois)</button>
+      <button class="lnk" onclick="motdepasse()">Mot de passe oublié ?</button>
+    </div>
+    <div class="hint" style="text-align:center">Première visite ? Saisis l'email donné au trésorier, choisis un mot de passe, puis « Créer mon compte ».</div>
+  </div>
+  <div id="main" style="display:none"></div>
+</div>
+<footer>« Mon Portefeuille BRVM » — mode Club · Le trésorier saisit, chacun voit, personne ne conteste.</footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 const SB_URL="https://szzionsxkrasgcjnksjn.supabase.co";
 const SB_KEY="sb_publishable_OQbsCE5Q9yVkegRm3uNReQ_kLKAxpAk";
+const sbc=window.supabase.createClient(SB_URL,SB_KEY);
+const CID=new URLSearchParams(location.search).get("c");
 const fmt=n=>Math.round(+n||0).toLocaleString("fr-FR")+" F";
 const pfmt=x=>(+x||0).toLocaleString("fr-FR",{maximumFractionDigits:2});
 const esc=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 const frD=d=>{try{return new Date(d+"T00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"});}catch(e){return d;}};
+const say=m=>{const e=document.getElementById("aMsg");if(e)e.innerHTML=m;};
+
+async function connexion(){
+  const email=(document.getElementById("aEmail").value||"").trim(), pw=document.getElementById("aPw").value||"";
+  if(!email||!pw){say("⚠️ Email et mot de passe requis.");return;}
+  say("⏳ Connexion…");
+  const {error}=await sbc.auth.signInWithPassword({email,password:pw});
+  if(error){say("⚠️ "+esc(error.message));return;}
+  charger();
+}
+async function inscription(){
+  const email=(document.getElementById("aEmail").value||"").trim(), pw=document.getElementById("aPw").value||"";
+  if(!email||pw.length<6){say("⚠️ Email valide + mot de passe d'au moins 6 caractères.");return;}
+  say("⏳ Création du compte…");
+  const {data,error}=await sbc.auth.signUp({email,password:pw});
+  if(error){say("⚠️ "+esc(error.message));return;}
+  if(!data.session){say("📧 Compte créé ! Vérifie ta boîte email pour confirmer, puis reviens te connecter.");return;}
+  charger();
+}
+async function motdepasse(){
+  const email=(document.getElementById("aEmail").value||"").trim();
+  if(!email){say("⚠️ Saisis d'abord ton email, puis retouche « Mot de passe oublié ».");return;}
+  const {error}=await sbc.auth.resetPasswordForEmail(email,{redirectTo:location.href.split("#")[0]});
+  say(error?("⚠️ "+esc(error.message)):"📧 Email de récupération envoyé — ouvre le lien reçu puis choisis un nouveau mot de passe.");
+}
+sbc.auth.onAuthStateChange((ev)=>{ if(ev==="PASSWORD_RECOVERY"){ const np=prompt("Choisis ton NOUVEAU mot de passe (6 caractères minimum) :"); if(np&&np.length>=6){sbc.auth.updateUser({password:np}).then(()=>alert("✅ Mot de passe changé !"));} } });
+async function deconnexion(){ await sbc.auth.signOut(); location.reload(); }
+
+function statsPerso(d,nom){
+  const mvs=(d.mouvements||[]).filter(x=>!x.annule&&x.type!=="annulation");
+  let verse=0,recu=0; const lignes=[];
+  mvs.forEach(x=>{
+    if(x.type==="fondation"||x.type==="souscription"){
+      if(x.membre===nom){verse+=+x.montant||0;lignes.push({date:x.date,lbl:x.type==="fondation"?"Apport de fondation":"Cotisation",montant:+x.montant,sens:"+",parts:"+"+pfmt(x.parts)+" parts à "+fmt(x.vl)});}
+    }else if(x.type==="rachat"){
+      if(x.membre===nom){recu+=+x.montant||0;lignes.push({date:x.date,lbl:"Rachat (argent reçu)",montant:+x.montant,sens:"−",parts:"−"+pfmt(x.parts)+" parts à "+fmt(x.vl)});}
+    }else if(x.type==="cession"){
+      const p=String(x.membre).split(" → ");
+      if(p[0]===nom){recu+=+x.montant||0;lignes.push({date:x.date,lbl:"Cession à "+p[1]+" (réglée entre vous)",montant:+x.montant,sens:"−",parts:"−"+pfmt(x.parts)+" parts"});}
+      if(p[1]===nom){verse+=+x.montant||0;lignes.push({date:x.date,lbl:"Achat de parts à "+p[0]+" (réglé entre vous)",montant:+x.montant,sens:"+",parts:"+"+pfmt(x.parts)+" parts"});}
+    }
+  });
+  lignes.sort((a,b)=>b.date.localeCompare(a.date));
+  const membre=(d.membres||[]).find(m=>m.nom===nom)||{parts:0,valeur:0,pct:0};
+  const pv=(+membre.valeur||0)+recu-verse;
+  return {verse,recu,lignes,parts:+membre.parts||0,valeur:+membre.valeur||0,pct:+membre.pct||0,pv};
+}
 
 async function charger(){
-  const cid=new URLSearchParams(location.search).get("c");
+  const {data:{session}}=await sbc.auth.getSession();
+  if(!session)return;
+  document.getElementById("auth").style.display="none";
   const main=document.getElementById("main");
-  if(!cid){main.innerHTML='<div class="empty">⚠️ Lien incomplet.<br>Demande au trésorier de te renvoyer le lien d\'invitation.</div>';return;}
-  try{
-    const r=await fetch(SB_URL+"/rest/v1/brvm_club_share?id=eq."+encodeURIComponent(cid)+"&select=data,updated_at",
-      {headers:{apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},cache:"no-store"});
-    const rows=await r.json();
-    if(!Array.isArray(rows)||!rows.length||!rows[0].data){main.innerHTML='<div class="empty">🔍 Club introuvable.<br>Vérifie le lien avec le trésorier.</div>';return;}
-    afficher(rows[0].data, rows[0].updated_at);
-  }catch(e){
-    main.innerHTML='<div class="empty">📶 Connexion impossible.<br>Vérifie ton internet puis réessaie.<br><br><button class="btn" style="max-width:220px;margin:0 auto" onclick="charger()">🔄 Réessayer</button></div>';
+  main.style.display="block";
+  main.innerHTML='<div class="empty">⏳ Chargement du club…</div>';
+  if(!CID){main.innerHTML='<div class="empty">⚠️ Lien incomplet — demande au trésorier de te renvoyer l\'invitation.</div>';return;}
+  const {data:liens}=await sbc.from("brvm_club_membres").select("membre_id,membre_nom,email").eq("club_id",CID);
+  const moi=(liens||[]).find(l=>(l.email||"").toLowerCase()===(session.user.email||"").toLowerCase())||null;
+  const {data:row,error}=await sbc.from("brvm_club_share").select("data,updated_at").eq("id",CID).maybeSingle();
+  if(error||!row||!row.data){
+    main.innerHTML='<div class="empty">🔒 Accès non autorisé.<br><br>Ton email <b>'+esc(session.user.email)+'</b> n\'est pas (encore) dans la liste du trésorier pour ce club.<br>Demande-lui de l\'ajouter dans « Membres & accès ».<br><br><button class="btn ghost" style="max-width:220px;margin:14px auto 0" onclick="deconnexion()">Changer de compte</button></div>';
+    return;
   }
+  afficher(row.data,row.updated_at,moi,session.user.email);
 }
-function afficher(d, upd){
-  document.getElementById("nom").textContent="🤝 "+(d.nom||"Mon club");
+
+function afficher(d,upd,moi,email){
+  document.getElementById("titre").textContent="🤝 "+(d.nom||"Mon club");
   document.title=d.nom||"Mon club";
   const dt=new Date(d.majDate||upd);
-  document.getElementById("maj").textContent="Mis à jour par le trésorier le "+dt.toLocaleDateString("fr-FR",{day:"numeric",month:"long"})+" à "+dt.toTimeString().slice(0,5);
-  document.getElementById("pat").textContent=fmt(d.patrimoine);
-  document.getElementById("vl").textContent=d.vl!=null?fmt(d.vl):"—";
-  document.getElementById("parts").textContent=pfmt(d.parts);
-  const pf=d.perf;
-  const pe=document.getElementById("perf");
-  pe.textContent=pf!=null?((pf>=0?"+":"")+pf.toFixed(1)+" %"):"—";
-  pe.style.color=pf==null?"":(pf>=0?"#9BE7C4":"#FFC2BD");
-  const ICO={fondation:"🏁",souscription:"🟢",rachat:"🔴",cession:"🔄",annulation:"↩️"};
-  const LBL={fondation:"Fondation",souscription:"Souscription",rachat:"Rachat",cession:"Cession",annulation:"Annulation"};
-  let h='<div class="sect">👥 Les membres</div><div class="card"><table>'
-    +'<tr><th>Membre</th><th class="r">Parts</th><th class="r">%</th><th class="r">Valeur</th></tr>'
-    +(d.membres||[]).filter(m=>m.parts>0.005).sort((a,b)=>b.parts-a.parts).map(m=>
-      '<tr><td>'+esc(m.nom)+'</td><td class="r">'+pfmt(m.parts)+'</td><td class="r">'+(+m.pct).toFixed(1)+' %</td><td class="r"><b>'+fmt(m.valeur)+'</b></td></tr>').join("")
-    +'</table></div>';
+  document.getElementById("soustitre").textContent="Mis à jour le "+dt.toLocaleDateString("fr-FR",{day:"numeric",month:"long"})+" à "+dt.toTimeString().slice(0,5);
+  let h="";
+  if(moi){
+    const s=statsPerso(d,moi.membre_nom);
+    document.getElementById("bdg").textContent="👤 "+moi.membre_nom.toUpperCase();
+    document.getElementById("heroPerso").style.display="block";
+    document.getElementById("pValeur").textContent=fmt(s.valeur);
+    document.getElementById("pParts").textContent=pfmt(s.parts)+" ("+s.pct.toFixed(1)+" %)";
+    document.getElementById("pVerse").textContent=fmt(s.verse);
+    const pvEl=document.getElementById("pPV");
+    pvEl.textContent=(s.pv>=0?"+":"−")+fmt(Math.abs(s.pv));
+    pvEl.style.color=s.pv>=0?"#9BE7C4":"#FFC2BD";
+    h+='<div class="sect">🧾 Mon relevé — '+esc(moi.membre_nom)+'</div><div class="card">'
+      +'<div class="kv"><span class="k">Valeur de mes parts aujourd\'hui</span><b>'+fmt(s.valeur)+'</b></div>'
+      +'<div class="kv"><span class="k">Total versé (cotisations + achats)</span><b>'+fmt(s.verse)+'</b></div>'
+      +(s.recu>0?'<div class="kv"><span class="k">Total reçu (rachats + cessions)</span><b>'+fmt(s.recu)+'</b></div>':'')
+      +'<div class="kv"><span class="k">Ma plus-value</span><b class="'+(s.pv>=0?'pos':'neg')+'">'+(s.pv>=0?'+':'−')+fmt(Math.abs(s.pv))+'</b></div>'
+      +(s.lignes.length?('<table style="margin-top:8px"><tr><th>Date</th><th>Mouvement</th><th class="r">Montant</th></tr>'
+        +s.lignes.map(l=>'<tr><td>'+frD(l.date)+'</td><td>'+esc(l.lbl)+'<div class="hint">'+l.parts+'</div></td><td class="r '+(l.sens==="+"?"":"neg")+'">'+(l.sens==="+"?"":"−")+fmt(l.montant)+'</td></tr>').join("")+'</table>'):'')
+      +'<div class="hint" style="margin-top:8px">Plus-value = valeur actuelle de tes parts + argent reçu − total versé. Les cessions sont comptées à leur prix indicatif du jour.</div></div>';
+  }else{
+    document.getElementById("bdg").textContent="👁 CONSULTATION";
+    h+='<div class="hint" style="margin-bottom:10px">Connecté en <b>'+esc(email)+'</b> — ce compte n\'est relié à aucun membre (vue trésorier/consultation).</div>';
+  }
+  h+='<div class="sect">🏦 L\'état commun du club</div><div class="card">'
+    +'<div class="kv"><span class="k">Patrimoine (titres + liquidités)</span><b>'+fmt(d.patrimoine)+'</b></div>'
+    +'<div class="kv"><span class="k">Valeur de la part</span><b>'+(d.vl!=null?fmt(d.vl):"—")+'</b></div>'
+    +'<div class="kv"><span class="k">Parts en circulation</span><b>'+pfmt(d.parts)+'</b></div>'
+    +'<div class="kv"><span class="k">Performance depuis la fondation</span><b class="'+((d.perf||0)>=0?'pos':'neg')+'">'+(d.perf!=null?((d.perf>=0?"+":"")+d.perf.toFixed(1)+" %"):"—")+'</b></div></div>';
   const vh=d.vlHist||{}, vds=Object.keys(vh).sort();
   if(vds.length>=2)h+='<div class="sect">📈 Évolution de la part</div><div class="card"><canvas id="vlChart" height="140"></canvas></div>';
+  h+='<div class="sect">👥 Les membres</div><div class="card"><table>'
+    +'<tr><th>Membre</th><th class="r">Parts</th><th class="r">%</th><th class="r">Valeur</th></tr>'
+    +(d.membres||[]).filter(m=>m.parts>0.005).sort((a,b)=>b.parts-a.parts).map(m=>
+      '<tr'+(moi&&m.nom===moi.membre_nom?' style="background:var(--green-l)"':'')+'><td>'+esc(m.nom)+(moi&&m.nom===moi.membre_nom?' <b>(moi)</b>':'')+'</td><td class="r">'+pfmt(m.parts)+'</td><td class="r">'+(+m.pct).toFixed(1)+' %</td><td class="r"><b>'+fmt(m.valeur)+'</b></td></tr>').join("")
+    +'</table></div>';
   h+='<div class="sect">📊 Le portefeuille du club</div><div class="card">';
   if((d.positions||[]).length){
     h+='<table><tr><th>Titre</th><th class="r">Qté</th><th class="r">Cours</th><th class="r">Valeur</th></tr>'
       +d.positions.map(p=>'<tr><td>'+esc(p.nom)+' ('+esc(p.ticker)+')</td><td class="r">'+(+p.qty).toLocaleString("fr-FR")+'</td><td class="r">'+fmt(p.cours)+'</td><td class="r">'+fmt(p.valeur)+'</td></tr>').join("")
       +'</table>';
   } else h+='<div class="hint">Aucun titre pour l\'instant.</div>';
-  h+='<div class="hint" style="margin-top:8px">Liquidités du club : <b>'+fmt(d.liquidites)+'</b> · Titres : <b>'+fmt(d.titres)+'</b></div></div>';
+  h+='<div class="hint" style="margin-top:8px">Liquidités : <b>'+fmt(d.liquidites)+'</b> · Titres : <b>'+fmt(d.titres)+'</b></div></div>';
+  const ICO={fondation:"🏁",souscription:"🟢",rachat:"🔴",cession:"🔄",annulation:"↩️"};
+  const LBL={fondation:"Fondation",souscription:"Souscription",rachat:"Rachat",cession:"Cession",annulation:"Annulation"};
   h+='<div class="sect">📜 Journal du club</div><div class="card">'
     +((d.mouvements||[]).length?d.mouvements.map(x=>
       '<div style="padding:9px 0;border-bottom:1px solid var(--line)'+(x.annule?';opacity:.45':'')+'">'+(ICO[x.type]||"•")+' <b>'
@@ -105,7 +205,7 @@ function afficher(d, upd){
       :'<div class="hint">Aucun mouvement.</div>')
     +'</div>';
   h+='<button class="btn" onclick="charger()">🔄 Actualiser</button>'
-    +'<div class="hint" style="margin-top:10px;text-align:center">Ta part de gain suit tes parts, automatiquement. Ce lien est en lecture seule : personne ne peut modifier quoi que ce soit ici.</div>';
+    +'<button class="btn ghost" onclick="deconnexion()">Se déconnecter</button>';
   document.getElementById("main").innerHTML=h;
   if(vds.length>=2&&window.Chart){
     if(window._vlChart)window._vlChart.destroy();
@@ -119,8 +219,8 @@ function afficher(d, upd){
         scales:{y:{ticks:{font:{size:10}}},x:{ticks:{maxTicksLimit:6,font:{size:9}}}}}});
   }
 }
-charger();
-setInterval(charger, 5*60*1000); /* rafraîchissement toutes les 5 minutes */
+sbc.auth.getSession().then(({data:{session}})=>{ if(session)charger(); });
+setInterval(()=>{ if(document.getElementById("main").style.display!=="none")charger(); },5*60*1000);
 </script>
 </body>
 </html>
