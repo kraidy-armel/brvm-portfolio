@@ -217,6 +217,8 @@
     <span style="color:var(--muted);font-size:20px">›</span>
   </div>
 
+  <div id="clubCard" style="margin-top:14px"></div>
+
   <div id="goalsCard" style="margin-top:14px"></div>
 
   <div id="riskCard" style="margin-top:14px"></div>
@@ -1775,7 +1777,7 @@ function go(s){
 }
 
 /* ================= RENDU ================= */
-function renderAll(){renderHome();renderPortfolio();renderDiv();renderAgenda();renderTrendBanner();renderGoals();renderRisk();if(document.getElementById("s-analyse").classList.contains("active"))drawAnalyse();}
+function renderAll(){renderHome();renderPortfolio();renderDiv();renderAgenda();renderTrendBanner();renderGoals();renderRisk();drawClub();if(document.getElementById("s-analyse").classList.contains("active"))drawAnalyse();}
 
 function posRow(p,tappable){
   const c=p.pl>=0?"pos":"neg";
@@ -2748,12 +2750,182 @@ function openPortfolios(){
         <button class="del" style="color:var(--green)" onclick="event.stopPropagation();renamePf('${p.id}')">Renommer</button>
         ${store.portfolios.length>1?`<button class="del" onclick="event.stopPropagation();deletePf('${p.id}')">Suppr.</button>`:''}
       </div>`).join("")}</div>
-    <button class="btn" style="margin-top:14px" onclick="addPf()">＋ Nouveau portefeuille</button>`);
+    <button class="btn" style="margin-top:14px" onclick="addPf()">＋ Nouveau portefeuille</button>
+    <button class="btn alt" style="margin-top:10px" onclick="openClubIntro()">🤝 Fonder un club d'investissement</button>`);
 }
 function switchPf(id){activate(id);save();closeSheet();go("accueil");}
 function addPf(){const n=prompt("Nom du nouveau portefeuille :","Nouveau portefeuille");if(n&&n.trim()){const p=blankPortfolio(n.trim());store.portfolios.push(p);activate(p.id);save();closeSheet();go("accueil");}}
 function renamePf(id){const p=store.portfolios.find(x=>x.id===id);if(!p)return;const n=prompt("Nouveau nom :",p.name);if(n&&n.trim()){p.name=n.trim();save();openPortfolios();}}
 function deletePf(id){if(store.portfolios.length<=1)return;if(confirmDel("Supprimer ce PORTEFEUILLE ENTIER et toutes ses données ?")){store.tombstones=[...(store.tombstones||[]),id];store.portfolios=store.portfolios.filter(x=>x.id!==id);if(store.activeId===id)activate(store.portfolios[0].id);save();openPortfolios();}}
+
+/* ================= MODE CLUB — Étage 1 (trésorier unique) ================= */
+/* Un portefeuille peut être un CLUB D'INVESTISSEMENT : les apports des membres
+   achètent des PARTS à la valeur du jour (VL), comme un fonds commun de placement.
+   VL = (valeur des titres + liquidités) / parts en circulation.
+   Fondation : chaque part vaut 1 000 F. Ensuite la VL vit avec le marché.
+   Chaque souscription/rachat crée AUSSI le dépôt/retrait de liquidités
+   correspondant : la comptabilité du portefeuille reste exacte au franc près.
+   Le journal des mouvements est immuable (pas de suppression) : zéro palabre. */
+const CLUB_VL0=1000;
+function clubOn(){return !!(db&&db.club&&db.club.actif);}
+function clubParts(){return clubOn()?db.club.membres.reduce((s,m)=>s+(+m.parts||0),0):0;}
+function clubVL(){const n=clubParts();if(n<=0)return null;return (totals().value+cashBalance())/n;}
+const pfmt=x=>(+x||0).toLocaleString("fr-FR",{maximumFractionDigits:2});
+
+function openClubIntro(){
+  openSheet(`<h3>🤝 Fonder un club d'investissement</h3>
+    <div class="hint">Un nouveau portefeuille sera créé pour le club. Chaque membre apporte sa mise de départ et reçoit ses parts à ${CLUB_VL0.toLocaleString("fr-FR")} F la part. Ensuite, tout entrant ou sortant passe par la valeur de la part du jour — l'équité est automatique.</div>
+    <label>Nom du club</label><input id="cfNom" placeholder="ex : Club Éburnie">
+    <label style="margin-top:12px">Membres fondateurs et apports (FCFA)</label>
+    <div id="cfRows"></div>
+    <button class="btn ghost" style="margin-top:8px" onclick="clubAddRow()">＋ Ajouter un membre</button>
+    <div id="cfTotal" class="hint" style="margin-top:8px"></div>
+    <button class="btn" style="margin-top:14px" onclick="clubFonder()">🤝 Fonder le club</button>`);
+  clubAddRow();clubAddRow();clubAddRow();
+}
+function clubAddRow(){
+  const w=document.getElementById("cfRows"); if(!w)return;
+  const d=document.createElement("div");
+  d.style.cssText="display:flex;gap:8px;margin-top:8px";
+  d.innerHTML='<input class="cf-nom" placeholder="Nom du membre" style="flex:1.2"><input class="cf-apport" type="number" placeholder="Apport" style="flex:1" oninput="clubCfTotal()">';
+  w.appendChild(d);
+}
+function clubCfTotal(){
+  const t=[...document.querySelectorAll(".cf-apport")].reduce((s,i)=>s+(+i.value||0),0);
+  const el=document.getElementById("cfTotal");
+  if(el)el.innerHTML=t>0?("Mise de départ totale : <b>"+fmt(t)+"</b> → <b>"+pfmt(t/CLUB_VL0)+" parts</b> à "+CLUB_VL0.toLocaleString("fr-FR")+" F"):"";
+}
+function clubFonder(){
+  const nom=(document.getElementById("cfNom").value||"").trim()||"Mon club";
+  const noms=[...document.querySelectorAll(".cf-nom")].map(i=>i.value.trim());
+  const apports=[...document.querySelectorAll(".cf-apport")].map(i=>+i.value||0);
+  const membres=[];
+  for(let i=0;i<noms.length;i++){
+    if(!noms[i]&&!apports[i])continue;
+    if(!noms[i]||apports[i]<=0){alert("⚠️ Chaque ligne doit avoir un nom ET un apport positif (ou être vide).");return;}
+    membres.push({nom:noms[i],apport:apports[i]});
+  }
+  if(membres.length<2){alert("⚠️ Il faut au moins 2 membres pour fonder un club.");return;}
+  const p=blankPortfolio(nom);
+  const d=today();
+  p.club={actif:true,membres:[],mouvements:[]};
+  membres.forEach(m=>{
+    const parts=m.apport/CLUB_VL0;
+    p.club.membres.push({id:uid(),nom:m.nom,parts:parts});
+    p.cash.push({id:uid(),type:"depot",date:d,montant:m.apport,libelle:"Club — apport de "+m.nom});
+    p.club.mouvements.push({id:uid(),date:d,type:"fondation",membre:m.nom,montant:m.apport,vl:CLUB_VL0,parts:parts});
+  });
+  store.portfolios.push(p);activate(p.id);save();closeSheet();go("accueil");
+  setTimeout(()=>openClub(),200);
+}
+
+function drawClub(){
+  const el=document.getElementById("clubCard"); if(!el)return;
+  if(!clubOn()){el.innerHTML="";return;}
+  const vl=clubVL(), n=clubParts();
+  el.innerHTML=`<div class="card" style="padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:10px" onclick="openClub()">
+    <span style="font-size:22px">🤝</span>
+    <div class="grow"><b style="font-size:14.5px">Le club — ${db.club.membres.filter(m=>m.parts>0.005).length} membre(s)</b>
+    <div class="hint" style="margin:0">Part à <b>${vl!=null?fmt(vl):"—"}</b> · ${pfmt(n)} parts en circulation</div></div>
+    <span style="color:var(--muted);font-size:20px">›</span></div>`;
+}
+
+function openClub(){
+  if(!clubOn())return;
+  const vl=clubVL(), n=clubParts(), pat=totals().value+cashBalance();
+  const ms=[...db.club.membres].sort((a,b)=>b.parts-a.parts);
+  const perf=vl!=null?((vl/CLUB_VL0-1)*100):null;
+  const mvs=[...db.club.mouvements].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,12);
+  const ICO={fondation:"🏁",souscription:"🟢",rachat:"🔴"};
+  openSheet(`<h3>🤝 ${escHtml(db.name)}</h3>
+    <div class="card" style="padding:4px 14px;margin-top:10px">
+      <div class="kv"><span class="k">Patrimoine du club (titres + liquidités)</span><b>${fmt(pat)}</b></div>
+      <div class="kv"><span class="k">Valeur de la part (VL)</span><b>${vl!=null?fmt(vl):"—"}</b></div>
+      <div class="kv"><span class="k">Parts en circulation</span><b>${pfmt(n)}</b></div>
+      ${perf!=null?`<div class="kv"><span class="k">Performance depuis la fondation</span><b class="${perf>=0?'pos':'neg'}">${perf>=0?'+':''}${perf.toFixed(1)} %</b></div>`:''}
+    </div>
+    <div class="sect-title" style="margin:14px 0 4px">Les membres</div>
+    <div class="card" style="padding:4px 14px">
+      ${ms.map(m=>{const v=vl!=null?m.parts*vl:0;const pc=n>0?m.parts/n*100:0;
+        return `<div class="kv"><span class="k">${escHtml(m.nom)} · ${pfmt(m.parts)} parts (${pc.toFixed(1)} %)</span><b>${fmt(v)}</b></div>`;}).join("")}
+    </div>
+    <div style="display:flex;gap:10px;margin-top:14px">
+      <button class="btn" style="flex:1;margin:0" onclick="openClubMv('souscription')">🟢 Souscription</button>
+      <button class="btn alt" style="flex:1;margin:0" onclick="openClubMv('rachat')">🔴 Rachat</button>
+    </div>
+    <div class="sect-title" style="margin:16px 0 4px">📜 Journal du club (immuable)</div>
+    ${mvs.length?mvs.map(x=>`<div class="row"><div class="tick">${ICO[x.type]||"•"}</div>
+      <div class="grow"><div class="nm">${x.type==="fondation"?"Fondation":x.type==="souscription"?"Souscription":"Rachat"} — ${escHtml(x.membre)}</div>
+      <div class="sub">${frDate(x.date)} · ${fmt(x.montant)} · ${x.type==="rachat"?"−":"+"}${pfmt(x.parts)} parts à ${fmt(x.vl)}</div></div></div>`).join(""):'<div class="hint">Aucun mouvement.</div>'}
+    <div class="hint" style="margin-top:10px">⚖️ La VL est calculée sur les cours BRVM du jour et les liquidités réelles. Chaque mouvement est daté et définitif — c'est la garantie de tous.</div>`);
+}
+
+function openClubMv(type){
+  if(!clubOn())return;
+  const vl=clubVL();
+  if(vl==null){alert("⚠️ Aucune part en circulation.");return;}
+  const sous=type==="souscription";
+  const ms=db.club.membres.filter(m=>sous||m.parts>0.005);
+  openSheet(`<h3>${sous?"🟢 Souscription — un membre apporte de l'argent":"🔴 Rachat — un membre retire"}</h3>
+    <div class="hint">Valeur de la part aujourd'hui : <b>${fmt(vl)}</b> (cours BRVM du jour + liquidités).</div>
+    <label>Membre</label>
+    <select id="cmMembre" onchange="document.getElementById('cmNouveauWrap').style.display=this.value==='__new'?'block':'none';clubMvPreview('${type}')">
+      ${ms.map(m=>`<option value="${m.id}">${escHtml(m.nom)}${sous?"":" — "+pfmt(m.parts)+" parts"}</option>`).join("")}
+      ${sous?'<option value="__new">➕ Nouveau membre…</option>':''}
+    </select>
+    <div id="cmNouveauWrap" style="display:none"><label>Nom du nouveau membre</label><input id="cmNouveau" placeholder="ex : Gekkof"></div>
+    <label style="margin-top:12px">${sous?"Montant apporté (FCFA)":"Nombre de parts à racheter"}</label>
+    <input id="cmVal" type="number" oninput="clubMvPreview('${type}')" placeholder="${sous?'ex : 1000000':'ex : 500'}">
+    <div id="cmPrev" class="help" style="margin-top:12px;display:none"></div>
+    <button class="btn" style="margin-top:14px" onclick="clubMvValider('${type}')">Valider ${sous?"la souscription":"le rachat"}</button>`);
+}
+function clubMvPreview(type){
+  const vl=clubVL(); if(vl==null)return;
+  const v=+document.getElementById("cmVal").value||0;
+  const el=document.getElementById("cmPrev"); if(!el)return;
+  if(v<=0){el.style.display="none";return;}
+  el.style.display="block";
+  if(type==="souscription"){
+    const parts=v/vl, tot=clubParts()+parts;
+    el.innerHTML=`🧮 <div>${fmt(v)} ÷ ${fmt(vl)} = <b>${pfmt(parts)} parts</b> émises, soit <b>${(parts/tot*100).toFixed(2)} %</b> du club après l'opération. Les parts et la valeur des autres membres ne bougent pas.</div>`;
+  }else{
+    const id=document.getElementById("cmMembre").value;
+    const m=db.club.membres.find(x=>x.id===id); if(!m)return;
+    const montant=v*vl;
+    el.innerHTML=`🧮 <div>${pfmt(v)} parts × ${fmt(vl)} = <b>${fmt(montant)}</b> à verser au membre${v>m.parts?' — ⚠️ il ne détient que '+pfmt(m.parts)+' parts':''}${montant>cashBalance()?'<br>⚠️ Liquidités du club : '+fmt(cashBalance())+' — il faudra vendre des titres pour payer.':''}</div>`;
+  }
+}
+function clubMvValider(type){
+  const vl=clubVL(); if(vl==null)return;
+  const v=+document.getElementById("cmVal").value||0;
+  if(v<=0){alert("⚠️ Saisis une valeur positive.");return;}
+  const d=today();
+  if(type==="souscription"){
+    const sel=document.getElementById("cmMembre").value;
+    let m;
+    if(sel==="__new"){
+      const nom=(document.getElementById("cmNouveau").value||"").trim();
+      if(!nom){alert("⚠️ Donne le nom du nouveau membre.");return;}
+      if(db.club.membres.some(x=>x.nom.toLowerCase()===nom.toLowerCase())){alert("⚠️ Ce nom existe déjà — choisis-le dans la liste.");return;}
+      m={id:uid(),nom:nom,parts:0};db.club.membres.push(m);
+    }else{m=db.club.membres.find(x=>x.id===sel);if(!m)return;}
+    const parts=v/vl;
+    m.parts+=parts;
+    db.cash.push({id:uid(),type:"depot",date:d,montant:v,libelle:"Club — souscription "+m.nom});
+    db.club.mouvements.push({id:uid(),date:d,type:"souscription",membre:m.nom,montant:v,vl:vl,parts:parts});
+    save();openClub();
+  }else{
+    const m=db.club.membres.find(x=>x.id===document.getElementById("cmMembre").value); if(!m)return;
+    if(v>m.parts+0.005){alert("⚠️ "+m.nom+" ne détient que "+pfmt(m.parts)+" parts.");return;}
+    const montant=v*vl;
+    if(montant>cashBalance()&&!confirm("Liquidités du club : "+fmt(cashBalance())+".\nLe rachat coûte "+fmt(montant)+" — il faudra vendre des titres pour payer.\nEnregistrer quand même ?"))return;
+    m.parts=Math.max(0,m.parts-v);
+    if(m.parts<0.005)m.parts=0;
+    db.cash.push({id:uid(),type:"retrait",date:d,montant:montant,libelle:"Club — rachat "+m.nom});
+    db.club.mouvements.push({id:uid(),date:d,type:"rachat",membre:m.nom,montant:montant,vl:vl,parts:v});
+    save();openClub();
+  }
+}
 
 /* --- Verrouillage par code (local) --- */
 function lockHash(s){return btoa(unescape(encodeURIComponent("brvm:"+s)));}
