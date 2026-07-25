@@ -43,6 +43,12 @@
   .kv:last-child{border-bottom:none}
   .kv .k{color:var(--muted)}
   footer{text-align:center;font-size:11px;color:var(--muted);padding:20px;font-style:italic}
+  @media print{
+    body{background:#fff;max-width:none}
+    .btn,.lnk,#auth{display:none !important}
+    header{border-radius:0;background:#0B6B53 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .card{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+  }
 </style>
 </head>
 <body>
@@ -221,6 +227,7 @@ function afficher(d,upd,moi,email){
       :'<div class="hint">Aucun mouvement.</div>')
     +'</div>';
   h+='<button class="btn" onclick="charger()">🔄 Actualiser</button>'
+    +'<button class="btn ghost" onclick="window.print()">🖨️ Imprimer / PDF (mon relevé + le club)</button>'
     +'<button id="installBtn" class="btn ghost" style="display:'+(window._bip||_bip?'block':'none')+'" onclick="installerAppli()">📲 Installer sur mon téléphone</button>'
     +(!(navigator.standalone||matchMedia("(display-mode: standalone)").matches)?'<div class="hint" style="margin-top:8px;text-align:center">📲 Astuce : ajoute cette page à ton écran d\'accueil (menu du navigateur) — elle deviendra une vraie appli « Mon Club », déjà connectée.</div>':'')
     +'<button class="btn ghost" onclick="deconnexion()">Se déconnecter</button>';

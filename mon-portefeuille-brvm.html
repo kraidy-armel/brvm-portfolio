@@ -2558,11 +2558,28 @@ function openSettings(){
     <input id="liveUrl" type="url" placeholder="https://brvm-cours.xxxx.workers.dev" value="${escAttr(store.liveUrl||'')}" onchange="store.liveUrl=(this.value||'').trim();save()">
     <button class="btn ghost" style="margin-top:10px" onclick="openImportOps()">📥 Importer des opérations (CSV / Excel)</button>
     <button class="btn ghost" style="margin-top:10px" onclick="exportData()">⬇ Sauvegarder mes données (fichier .json)</button>
+    <button class="btn ghost" style="margin-top:10px" onclick="exportCSV()">📊 Exporter les opérations (Excel / CSV)</button>
     <label style="margin-top:16px">⬆ Restaurer une sauvegarde <span class="hint">(fichier .json exporté par l'appli)</span></label>
     <input type="file" accept=".json,application/json" onchange="importData(this)">
     <button class="btn alt" style="margin-top:18px" onclick="loadDemo()">Charger des données d'exemple</button>
     <button class="btn" style="margin-top:10px;background:var(--neg)" onclick="resetData()">Effacer ce portefeuille</button>
     <div class="hint" style="margin-top:18px;text-align:center">Mon Portefeuille BRVM · données indicatives, hors temps réel.</div>`);
+}
+/* Export CSV « spécial Excel » : BOM UTF-8 + point-virgule (format français) */
+function exportCSV(){
+  const esc=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
+  const L=[];
+  L.push(["Portefeuille","Date","Type","Titre","Quantité","Prix (FCFA)","Frais (FCFA)","Montant brut (FCFA)","Libellé"].join(";"));
+  store.portfolios.forEach(p=>{
+    (p.tx||[]).forEach(t=>L.push([esc(p.name),t.date,t.type==="achat"?"Achat":"Vente",t.ticker,t.qty,t.price,t.frais||0,t.qty*t.price,esc(t.libelle||"")].join(";")));
+    (p.div||[]).forEach(d=>L.push([esc(p.name),d.date,"Dividende",d.ticker||"",,,,"'"+(+d.montant||0),esc(d.libelle||"")].join(";")));
+    (p.cash||[]).forEach(m=>L.push([esc(p.name),m.date,m.type==="depot"?"Dépôt":m.type==="frais"?"Frais SGI":"Retrait",,,,,(m.type==="depot"?1:-1)*(+m.montant||0),esc(m.libelle||"")].join(";")));
+  });
+  const blob=new Blob(["\ufeff"+L.join("\n")],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="operations-brvm-"+today()+".csv";
+  a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),3000);
 }
 function exportData(){
   const blob=new Blob([JSON.stringify(store,null,2)],{type:"application/json"});
