@@ -176,6 +176,7 @@ function afficher(d,upd,moi,email){
     document.getElementById("bdg").textContent="👁 CONSULTATION";
     h+='<div class="hint" style="margin-bottom:10px">Connecté en <b>'+esc(email)+'</b> — ce compte n\'est relié à aucun membre (vue trésorier/consultation).</div>';
   }
+  h+='<div class="sect">🗳️ Les votes du club</div><div id="votesBox"><div class="card"><div class="hint">⏳ Chargement des votes…</div></div></div>';
   h+='<div class="sect">🏦 L\'état commun du club</div><div class="card">'
     +'<div class="kv"><span class="k">Patrimoine (titres + liquidités)</span><b>'+fmt(d.patrimoine)+'</b></div>'
     +'<div class="kv"><span class="k">Valeur de la part</span><b>'+(d.vl!=null?fmt(d.vl):"—")+'</b></div>'
@@ -207,6 +208,7 @@ function afficher(d,upd,moi,email){
   h+='<button class="btn" onclick="charger()">🔄 Actualiser</button>'
     +'<button class="btn ghost" onclick="deconnexion()">Se déconnecter</button>';
   document.getElementById("main").innerHTML=h;
+  chargerVotes(moi);
   if(vds.length>=2&&window.Chart){
     if(window._vlChart)window._vlChart.destroy();
     const frS=x=>{try{const t=new Date(x+"T00:00");return t.getDate()+"/"+(t.getMonth()+1);}catch(e){return x;}};
@@ -218,6 +220,45 @@ function afficher(d,upd,moi,email){
       options:{plugins:{legend:{display:true,labels:{font:{size:10},boxWidth:14}},tooltip:{callbacks:{label:x=>(x.dataset.label||"")+" : "+fmt(x.parsed.y)}}},
         scales:{y:{ticks:{font:{size:10}}},x:{ticks:{maxTicksLimit:6,font:{size:9}}}}}});
   }
+}
+let _moi=null;
+async function chargerVotes(moi){
+  _moi=moi;
+  const box=document.getElementById("votesBox"); if(!box)return;
+  try{
+    const {data:votes,error}=await sbc.from("brvm_club_votes").select("*").eq("club_id",CID).order("created_at",{ascending:false});
+    if(error)throw error;
+    const {data:buls}=await sbc.from("brvm_club_bulletins").select("*").eq("club_id",CID);
+    const auj=new Date().toISOString().slice(0,10);
+    if(!(votes||[]).length){box.innerHTML='<div class="card"><div class="hint">Aucune proposition au vote pour l\'instant.</div></div>';return;}
+    box.innerHTML=votes.map(v=>{
+      const b=(buls||[]).filter(x=>x.vote_id===v.id);
+      const oui=b.filter(x=>x.choix==="oui"), non=b.filter(x=>x.choix==="non");
+      const mien=moi?b.find(x=>(x.email||"").toLowerCase()===moi.email.toLowerCase()):null;
+      const open=v.statut==="ouvert"&&v.date_limite>=auj;
+      const badge=v.statut==="ouvert"?(open?'<span style="background:var(--green-l);color:var(--green);border-radius:8px;padding:2px 8px;font-size:11px;font-weight:700">EN COURS</span>':'<span style="background:#FAEEDA;color:#854F0B;border-radius:8px;padding:2px 8px;font-size:11px;font-weight:700">EN ATTENTE DE CLÔTURE</span>')
+        :v.statut==="adopte"?'<span style="background:var(--green-l);color:var(--green);border-radius:8px;padding:2px 8px;font-size:11px;font-weight:700">✅ ADOPTÉE</span>'
+        :'<span style="background:#FCEBE7;color:#8A3325;border-radius:8px;padding:2px 8px;font-size:11px;font-weight:700">❌ REJETÉE</span>';
+      return '<div class="card">'
+        +'<div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b style="font-size:14px">'+esc(v.titre)+'</b>'+badge+'</div>'
+        +(v.detail?'<div class="hint" style="margin-top:4px">'+esc(v.detail)+'</div>':'')
+        +'<div style="font-size:12.5px;margin-top:8px"><b class="pos">'+oui.length+' OUI</b>'+(oui.length?' — '+oui.map(x=>esc(x.membre_nom)).join(", "):'')
+        +'<br><b class="neg">'+non.length+' NON</b>'+(non.length?' — '+non.map(x=>esc(x.membre_nom)).join(", "):'')+'</div>'
+        +(v.statut==="ouvert"?'<div class="hint" style="margin-top:4px">Vote ouvert jusqu\'au '+frD(v.date_limite)+'</div>':'')
+        +(open&&moi?('<div style="display:flex;gap:10px;margin-top:10px">'
+          +'<button class="btn" style="flex:1;margin:0'+(mien&&mien.choix!=="oui"?';opacity:.5':'')+'" onclick="voter(\''+v.id+'\',\'oui\')">👍 OUI'+(mien&&mien.choix==="oui"?" ✓":"")+'</button>'
+          +'<button class="btn" style="flex:1;margin:0;background:var(--neg)'+(mien&&mien.choix!=="non"?';opacity:.5':'')+'" onclick="voter(\''+v.id+'\',\'non\')">👎 NON'+(mien&&mien.choix==="non"?" ✓":"")+'</button></div>'
+          +(mien?'<div class="hint" style="margin-top:6px;text-align:center">Tu as voté '+mien.choix.toUpperCase()+' — tu peux changer jusqu\'à la clôture.</div>':'<div class="hint" style="margin-top:6px;text-align:center">Tu n\'as pas encore voté.</div>')):'')
+        +'</div>';
+    }).join("");
+  }catch(e){box.innerHTML='<div class="card"><div class="hint">⚠️ Votes indisponibles ('+esc(e.message||String(e))+'). Le trésorier doit peut-être exécuter le SQL des votes.</div></div>';}
+}
+async function voter(voteId,choix){
+  if(!_moi)return;
+  const {data:{session}}=await sbc.auth.getSession(); if(!session)return;
+  const {error}=await sbc.from("brvm_club_bulletins").upsert({vote_id:voteId,club_id:CID,email:session.user.email.toLowerCase(),membre_nom:_moi.membre_nom,choix:choix,voted_at:new Date().toISOString()},{onConflict:"vote_id,email"});
+  if(error){alert("⚠️ Vote refusé : "+(error.message||""));return;}
+  chargerVotes(_moi);
 }
 sbc.auth.getSession().then(({data:{session}})=>{ if(session)charger(); });
 setInterval(()=>{ if(document.getElementById("main").style.display!=="none")charger(); },5*60*1000);

@@ -2944,6 +2944,7 @@ function openClub(){
       <button class="btn alt" style="flex:1;margin:0" onclick="openClubMv('rachat')">🔴 Rachat</button>
     </div>
     <button class="btn alt" style="margin-top:10px" onclick="openClubCession()">🔄 Cession — un membre rachète les parts d'un autre</button>
+    <button class="btn alt" style="margin-top:10px" onclick="openVotes()">🗳️ Votes du club</button>
     <button class="btn alt" style="margin-top:10px" onclick="openClubAccess()">👥 Membres & accès (emails des membres)</button>
     <button class="btn alt" style="margin-top:10px" onclick="openClubReport()">📄 Rapport de réunion (imprimable)</button>
     <div class="sect-title" style="margin:16px 0 4px">📜 Journal du club (immuable)</div>
@@ -3169,6 +3170,80 @@ function clubMvValider(type){
     db.club.mouvements.push({id:uid(),date:d,type:"rachat",membre:m.nom,montant:montant,vl:vl,parts:v});
     save();openClub();
   }
+}
+
+/* ===== ÉTAGE 2 : VOTES (règles choisies par le groupe : 1 membre = 1 voix, bulletin ouvert) ===== */
+function openVotes(){
+  if(!clubOn())return;
+  if(!sb||!cloudUserEmail){alert("⚠️ Connecte-toi d'abord à ton compte ☁️ — les votes passent par le nuage.");return;}
+  openSheet(`<h3>🗳️ Votes du club</h3>
+    <div class="hint">Règles du club : <b>1 membre = 1 voix</b>, bulletin ouvert (chacun voit qui a voté quoi), majorité simple des exprimés à la clôture.</div>
+    <div id="votesList" style="margin-top:10px"><div class="hint">⏳ Chargement…</div></div>
+    <button class="btn" style="margin-top:14px" onclick="openNewVote()">＋ Nouvelle proposition</button>`);
+  loadVotes();
+}
+async function loadVotes(){
+  const el=document.getElementById("votesList"); if(!el)return;
+  try{
+    const cid=clubShareId();
+    const {data:votes,error}=await sb.from("brvm_club_votes").select("*").eq("club_id",cid).order("created_at",{ascending:false});
+    if(error)throw error;
+    const {data:buls}=await sb.from("brvm_club_bulletins").select("*").eq("club_id",cid);
+    el.innerHTML=(votes||[]).length?votes.map(v=>voteCardHtml(v,(buls||[]).filter(b=>b.vote_id===v.id))).join(""):'<div class="hint">Aucune proposition pour l\'instant — crée la première !</div>';
+  }catch(e){el.innerHTML='<div class="hint">⚠️ '+escHtml(e.message||String(e))+'<br>Vérifie que le SQL des votes a bien été exécuté dans Supabase.</div>';}
+}
+function voteCardHtml(v,buls){
+  const oui=buls.filter(b=>b.choix==="oui"), non=buls.filter(b=>b.choix==="non");
+  const open=v.statut==="ouvert";
+  const badge=open?'<span style="background:var(--green-l);color:var(--green);border-radius:8px;padding:2px 8px;font-size:11px;font-weight:700">EN COURS</span>'
+    :v.statut==="adopte"?'<span style="background:var(--green-l);color:var(--green);border-radius:8px;padding:2px 8px;font-size:11px;font-weight:700">✅ ADOPTÉE</span>'
+    :'<span style="background:#FCEBE7;color:#8A3325;border-radius:8px;padding:2px 8px;font-size:11px;font-weight:700">❌ REJETÉE</span>';
+  return `<div class="card" style="padding:12px 14px;margin-top:10px">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b style="font-size:14px">${escHtml(v.titre)}</b>${badge}</div>
+    ${v.detail?`<div class="hint" style="margin-top:4px">${escHtml(v.detail)}</div>`:""}
+    <div style="font-size:12.5px;margin-top:8px">
+      <b class="pos">${oui.length} OUI</b>${oui.length?' — '+oui.map(b=>escHtml(b.membre_nom)).join(", "):""}<br>
+      <b class="neg">${non.length} NON</b>${non.length?' — '+non.map(b=>escHtml(b.membre_nom)).join(", "):""}
+    </div>
+    <div class="hint" style="margin-top:4px">${open?"Vote ouvert jusqu'au "+frDateShort(v.date_limite):"Clôturée le "+frDateShort((v.resultat&&v.resultat.date)||v.date_limite)+" · "+(v.resultat?v.resultat.oui+" oui / "+v.resultat.non+" non":"")}</div>
+    ${open?`<button class="btn alt" style="margin-top:8px" onclick="closeVote('${v.id}')">🔨 Clôturer et enregistrer la décision</button>`:""}
+  </div>`;
+}
+function openNewVote(){
+  const d7=new Date(Date.now()+7*86400000).toISOString().slice(0,10);
+  openSheet(`<h3>＋ Nouvelle proposition au vote</h3>
+    <div class="hint">Décris clairement : les membres voteront OUI ou NON, sans amendement possible.</div>
+    <label>Proposition</label><input id="nvTitre" placeholder="ex : Acheter 200 actions SNTS (~22 000 F/action)">
+    <label>Motif / détail <span class="hint">(optionnel mais recommandé)</span></label>
+    <textarea id="nvDetail" rows="3" placeholder="ex : rendement dividende 7 %, résultats en hausse, le club a 4,5 M de liquidités"></textarea>
+    <label>Vote ouvert jusqu'au</label><input id="nvLim" type="date" value="${d7}">
+    <div id="nvMsg" class="hint" style="margin-top:8px"></div>
+    <button class="btn" style="margin-top:14px" onclick="createVote(this)">🗳️ Soumettre au vote</button>`);
+}
+async function createVote(btn){
+  const titre=(document.getElementById("nvTitre").value||"").trim();
+  const lim=document.getElementById("nvLim").value;
+  const msg=t=>{const e=document.getElementById("nvMsg");if(e)e.innerHTML=t;};
+  if(!titre){msg("⚠️ Écris la proposition.");return;}
+  if(!lim||lim<today()){msg("⚠️ La date limite doit être aujourd'hui ou plus tard.");return;}
+  btn.disabled=true;msg("⏳ Envoi…");
+  try{
+    const {data:{user}}=await sb.auth.getUser(); if(!user)throw new Error("reconnecte-toi à ton compte ☁️");
+    const {error}=await sb.from("brvm_club_votes").insert({id:uid()+Math.random().toString(36).slice(2,8),club_id:clubShareId(),titre:titre,detail:(document.getElementById("nvDetail").value||"").trim(),date_limite:lim,statut:"ouvert",cree_par:user.id});
+    if(error)throw error;
+    openVotes();
+  }catch(e){msg("⚠️ "+escHtml(e.message||String(e)));btn.disabled=false;}
+}
+async function closeVote(id){
+  try{
+    const {data:buls}=await sb.from("brvm_club_bulletins").select("*").eq("vote_id",id);
+    const oui=(buls||[]).filter(b=>b.choix==="oui").length, non=(buls||[]).filter(b=>b.choix==="non").length;
+    const adopte=oui>non; /* égalité = rejetée (règle prudente) */
+    if(!confirm("🔨 Clôturer ce vote ?\n\nDécompte actuel : "+oui+" OUI / "+non+" NON → "+(adopte?"ADOPTÉE ✅":"REJETÉE ❌")+(oui===non&&oui>0?" (égalité = rejet, règle prudente)":"")+"\n\nLa décision sera définitive et visible par tous."))return;
+    const {error}=await sb.from("brvm_club_votes").update({statut:adopte?"adopte":"rejete",resultat:{oui:oui,non:non,date:today()}}).eq("id",id);
+    if(error)throw error;
+    loadVotes();
+  }catch(e){alert("⚠️ "+(e.message||String(e)));}
 }
 
 /* --- Publication du club pour les membres (lecture seule, via lien secret) --- */
