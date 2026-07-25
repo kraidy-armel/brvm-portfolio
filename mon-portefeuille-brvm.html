@@ -2371,7 +2371,7 @@ function comboPick(id,ticker){
   document.getElementById(id).value=ticker;
   document.getElementById(id+'_q').value=(stockMap[ticker]?stockMap[ticker].name+' ('+ticker+')':ticker);
   document.getElementById(id+'_list').style.display='none';
-  if(id==='txTicker')txInfo();
+  if(id==='txTicker')txPrefillPrice(ticker);
 }
 function comboPickCustom(id){
   const raw=document.getElementById(id+'_q').value.trim();
@@ -2380,7 +2380,16 @@ function comboPickCustom(id){
   document.getElementById(id).value=known?r:raw.toUpperCase();
   document.getElementById(id+'_q').value=known?(stockMap[r].name+' ('+r+')'):raw.toUpperCase();
   document.getElementById(id+'_list').style.display='none';
-  if(id==='txTicker')txInfo();
+  if(id==='txTicker')txPrefillPrice(known?r:raw.toUpperCase());
+}
+/* Préremplit le prix avec le cours du jour du titre choisi (modifiable — c'est un point de départ) */
+function txPrefillPrice(tk){
+  const pr=document.getElementById("txPrice");
+  if(pr&&!pr.value){
+    const c=prixActuel(resolveTicker(tk));
+    if(c>0){pr.value=c;txAutoFrais();}
+  }
+  txInfo();
 }
 /* Récupère le ticker choisi (liste ou saisie libre), normalisé si possible */
 function comboValue(id){
