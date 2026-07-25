@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mon espace membre — Club d'investissement</title>
+<link rel="manifest" href="club-manifest.json">
+<meta name="theme-color" content="#0B6B53">
+<link rel="apple-touch-icon" href="icon-club-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mon Club">
 <style>
   :root{--green:#0B6B53;--green-d:#085441;--green-l:#E6F4F0;--pos:#13A36B;--neg:#E0533D;
     --bg:#F4F6F8;--card:#FFFFFF;--ink:#16221E;--muted:#6B7B76;--line:#E8ECEA;--gold:#C9962E}
@@ -77,7 +83,16 @@
 const SB_URL="https://szzionsxkrasgcjnksjn.supabase.co";
 const SB_KEY="sb_publishable_OQbsCE5Q9yVkegRm3uNReQ_kLKAxpAk";
 const sbc=window.supabase.createClient(SB_URL,SB_KEY);
-const CID=new URLSearchParams(location.search).get("c");
+/* Le lien d'invitation contient ?c=... ; on le mémorise pour que l'appli installée
+   (icône sur l'écran d'accueil) retrouve le club même sans le paramètre. */
+const CID=(()=>{ const u=new URLSearchParams(location.search).get("c");
+  if(u){try{localStorage.setItem("club_cid",u);}catch(e){} return u;}
+  try{return localStorage.getItem("club_cid");}catch(e){return null;} })();
+/* Installation comme une vraie appli (Android/Chrome) */
+let _bip=null;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();_bip=e;const b=document.getElementById("installBtn");if(b)b.style.display="block";});
+async function installerAppli(){ if(!_bip){alert("📲 Sur iPhone : bouton Partager → « Sur l'écran d'accueil ».\n📲 Sur Android : menu ⋮ du navigateur → « Ajouter à l'écran d'accueil ».");return;} _bip.prompt(); await _bip.userChoice; _bip=null; const b=document.getElementById("installBtn"); if(b)b.style.display="none"; }
+try{ if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js"); }catch(e){}
 const fmt=n=>Math.round(+n||0).toLocaleString("fr-FR")+" F";
 const pfmt=x=>(+x||0).toLocaleString("fr-FR",{maximumFractionDigits:2});
 const esc=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
@@ -206,6 +221,8 @@ function afficher(d,upd,moi,email){
       :'<div class="hint">Aucun mouvement.</div>')
     +'</div>';
   h+='<button class="btn" onclick="charger()">🔄 Actualiser</button>'
+    +'<button id="installBtn" class="btn ghost" style="display:'+(window._bip||_bip?'block':'none')+'" onclick="installerAppli()">📲 Installer sur mon téléphone</button>'
+    +(!(navigator.standalone||matchMedia("(display-mode: standalone)").matches)?'<div class="hint" style="margin-top:8px;text-align:center">📲 Astuce : ajoute cette page à ton écran d\'accueil (menu du navigateur) — elle deviendra une vraie appli « Mon Club », déjà connectée.</div>':'')
     +'<button class="btn ghost" onclick="deconnexion()">Se déconnecter</button>';
   document.getElementById("main").innerHTML=h;
   chargerVotes(moi);
