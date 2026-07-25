@@ -3461,6 +3461,19 @@ if(store.lock){document.getElementById("lockScreen").style.display="flex";setTim
 /* Ordre important : d'abord récupérer/fusionner le nuage, ENSUITE rafraîchir les cours
    (sinon un appareil en retard pouvait renvoyer ses vieilles données avant d'avoir lu le nuage). */
 initCloud().finally(()=>{ setSyncStatus(); setTimeout(autoSync,300); });
+
+/* Rafraîchissement AUTOMATIQUE — plus besoin de toucher 🔄 :
+   - toutes les 5 minutes tant que l'appli est ouverte (la garde interne de 10 min
+     évite les appels inutiles ; le robot publie toutes les 15 min) ;
+   - au retour au premier plan (téléphone déverrouillé, onglet réaffiché) :
+     cours frais + données du nuage (autres appareils, club). */
+setInterval(()=>{ try{autoSync();}catch(e){} }, 5*60*1000);
+let _fgPull=0;
+document.addEventListener("visibilitychange",async()=>{
+  if(document.visibilityState!=="visible")return;
+  try{autoSync();}catch(e){}
+  if(Date.now()-_fgPull>5*60*1000){ _fgPull=Date.now(); try{await initCloud();}catch(e){} }
+});
 </script>
 </body>
 </html>
