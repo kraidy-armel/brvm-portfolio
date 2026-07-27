@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-07-27T14:35:14+00:00",
-  "updated_human": "27/07/2026 14:35 UTC",
+  "updated": "2026-07-27T14:50:16+00:00",
+  "updated_human": "27/07/2026 14:50 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -44,7 +44,7 @@
   "source": "brvm.org"
  },
  "BOABF": {
-  "actuel": 7150.0,
+  "actuel": 6900.0,
   "veille": 7150,
   "date": "2026-07-27",
   "source": "brvm.org"
@@ -427,7 +427,7 @@
     "2026-07-22": 7200.0,
     "2026-07-23": 7150.0,
     "2026-07-24": 7150.0,
-    "2026-07-27": 7150.0
+    "2026-07-27": 6900.0
    },
    "BOAC": {
     "2026-07-03": 9200.0,
@@ -1430,14 +1430,14 @@
    },
    {
     "date": "2026-06-13",
-    "societe": "BIIC",
-    "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
+    "societe": "LNB",
+    "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-13",
-    "societe": "LNB",
-    "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
+    "societe": "BIIC",
+    "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -1588,14 +1588,14 @@
   },
   {
    "date": "2026-06-13",
-   "societe": "BIIC",
-   "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
+   "societe": "LNB",
+   "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-13",
-   "societe": "LNB",
-   "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
+   "societe": "BIIC",
+   "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
