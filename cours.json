@@ -1,305 +1,305 @@
 {
  "_meta": {
-  "updated": "2026-07-27T10:20:09+00:00",
-  "updated_human": "27/07/2026 10:20 UTC",
+  "updated": "2026-07-27T10:35:10+00:00",
+  "updated_human": "27/07/2026 10:35 UTC",
   "count": 48,
   "diagnostic": {
-   "brvm_officiel": "https://www.brvm.org/en/cours-actions/0 -> tableau de cours introuvable (JS ?)",
-   "github_secours": "47 titres",
+   "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
+   "github_secours": "non utilise (officiel suffisant)",
    "alertes_perso": "aucun seuil franchi",
    "resultat": "48 titres",
-   "dates_couvertes": "2019-05-10 -> 2026-07-23",
+   "dates_couvertes": "2026-07-27 -> 2026-07-27",
    "indice_composite": "484.32 (https://www.brvm.org/fr/indices/0)",
    "annonces": "25 annonce(s)"
   }
  },
  "ABJC": {
-  "actuel": 3180.0,
-  "veille": 3180.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
- },
- "BICC": {
-  "actuel": 27505.0,
-  "veille": 28050.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 3145.0,
+  "veille": 3145,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "BICB": {
-  "actuel": 7085.0,
-  "veille": 6595.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 8100.0,
+  "veille": 7615,
+  "date": "2026-07-27",
+  "source": "brvm.org"
+ },
+ "BICC": {
+  "actuel": 28650.0,
+  "veille": 28305,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "BNBC": {
-  "actuel": 1990.0,
-  "veille": 1975.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 1985.0,
+  "veille": 1985,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "BOAB": {
-  "actuel": 8695.0,
-  "veille": 8700.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 8600.0,
+  "veille": 8600,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "BOABF": {
   "actuel": 7150.0,
-  "veille": 7200.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "veille": 7150,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "BOAC": {
-  "actuel": 10000.0,
-  "veille": 9875.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 10200.0,
+  "veille": 10200,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "BOAM": {
-  "actuel": 5615.0,
-  "veille": 5630.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 5400.0,
+  "veille": 5600,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "BOAN": {
-  "actuel": 5345.0,
-  "veille": 5200.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 5195.0,
+  "veille": 5300,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "BOAS": {
-  "actuel": 7580.0,
-  "veille": 7495.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 7850.0,
+  "veille": 7845,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "CABC": {
-  "actuel": 3940.0,
-  "veille": 3850.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 3705.0,
+  "veille": 3795,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "CBIBF": {
-  "actuel": 26450.0,
-  "veille": 26450.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 27050.0,
+  "veille": 26999,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "CFAC": {
-  "actuel": 1695.0,
-  "veille": 1695.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 1680.0,
+  "veille": 1680,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "CIEC": {
-  "actuel": 5390.0,
-  "veille": 5200.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 5295.0,
+  "veille": 5300,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "ECOC": {
-  "actuel": 15900.0,
-  "veille": 15715.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 16245.0,
+  "veille": 16245,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "ETIT": {
   "actuel": 75.0,
-  "veille": 70.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "veille": 73,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "FTSC": {
-  "actuel": 1970.0,
-  "veille": 1985.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 1985.0,
+  "veille": 1985,
+  "date": "2026-07-27",
+  "source": "brvm.org"
+ },
+ "LNBB": {
+  "actuel": 4305.0,
+  "veille": 4305,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "NEIC": {
-  "actuel": 2190.0,
-  "veille": 2200.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 2250.0,
+  "veille": 2250,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "NSBC": {
-  "actuel": 23000.0,
-  "veille": 22900.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 23600.0,
+  "veille": 23401,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "NTLC": {
-  "actuel": 16495.0,
-  "veille": 16100.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 16265.0,
+  "veille": 16489,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "ONTBF": {
-  "actuel": 2775.0,
-  "veille": 2745.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 2800.0,
+  "veille": 2800,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "ORAC": {
-  "actuel": 16300.0,
-  "veille": 16005.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 16725.0,
+  "veille": 16725,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "ORGT": {
-  "actuel": 2680.0,
-  "veille": 2680.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 2715.0,
+  "veille": 2700,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "PALC": {
-  "actuel": 8850.0,
-  "veille": 8800.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 8690.0,
+  "veille": 8700,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "PRSC": {
   "actuel": 4605.0,
-  "veille": 4630.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "veille": 4610,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "SAFC": {
-  "actuel": 4550.0,
-  "veille": 4580.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 4650.0,
+  "veille": 4750,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "SCRC": {
-  "actuel": 3500.0,
-  "veille": 3550.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 3535.0,
+  "veille": 3495,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "SDCC": {
-  "actuel": 11900.0,
-  "veille": 11900.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 11970.0,
+  "veille": 11825,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "SDSC": {
-  "actuel": 2770.0,
-  "veille": 2770.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 2650.0,
+  "veille": 2760,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "SEMC": {
-  "actuel": 1520.0,
-  "veille": 1430.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 1515.0,
+  "veille": 1515,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "SGBC": {
-  "actuel": 37995.0,
-  "veille": 38000.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 38200.0,
+  "veille": 37999,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "SHEC": {
-  "actuel": 2210.0,
-  "veille": 2205.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 2195.0,
+  "veille": 2195,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "SIBC": {
-  "actuel": 8650.0,
-  "veille": 8800.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 8990.0,
+  "veille": 8900,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "SICC": {
-  "actuel": 5300.0,
-  "veille": 5600.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 5600.0,
+  "veille": 5300,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "SIVC": {
-  "actuel": 2250.0,
-  "veille": 2250.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 2245.0,
+  "veille": 2250,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "SLBC": {
-  "actuel": 39995.0,
-  "veille": 38995.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 39490.0,
+  "veille": 39494,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "SMBC": {
   "actuel": 16000.0,
-  "veille": 16650.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "veille": 16000,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "SNTS": {
-  "actuel": 31800.0,
-  "veille": 31500.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 31000.0,
+  "veille": 31494,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "SOGC": {
-  "actuel": 8300.0,
-  "veille": 8200.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 8495.0,
+  "veille": 8220,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "SPHC": {
-  "actuel": 7480.0,
-  "veille": 7350.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 7600.0,
+  "veille": 7600,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "STAC": {
-  "actuel": 3000.0,
-  "veille": 2990.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 2890.0,
+  "veille": 2905,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "STBC": {
-  "actuel": 23405.0,
-  "veille": 23500.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
- },
- "SVOC": {
-  "actuel": 2395.0,
-  "veille": 2395.0,
-  "date": "2019-05-10",
-  "source": "github/Fredysessie"
+  "actuel": 23100.0,
+  "veille": 23190,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "TTLC": {
-  "actuel": 3000.0,
-  "veille": 2950.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 2850.0,
+  "veille": 2995,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "TTLS": {
-  "actuel": 3800.0,
-  "veille": 3700.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 3755.0,
+  "veille": 3750,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "UNLC": {
-  "actuel": 52000.0,
-  "veille": 52000.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 51000.0,
+  "veille": 51998,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "UNXC": {
-  "actuel": 1830.0,
-  "veille": 1890.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 1885.0,
+  "veille": 1850,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "SGBCI": {
-  "actuel": 37995.0,
-  "veille": 38000.0,
-  "date": "2026-07-23",
-  "source": "github/Fredysessie"
+  "actuel": 38200.0,
+  "veille": 37999,
+  "date": "2026-07-27",
+  "source": "brvm.org"
  },
  "_histo": {
   "points": {
@@ -343,7 +343,7 @@
     "2026-07-22": 6595.0,
     "2026-07-23": 7085.0,
     "2026-07-24": 7615.0,
-    "2026-07-27": 7615.0
+    "2026-07-27": 8100.0
    },
    "BICC": {
     "2026-07-03": 29380.0,
@@ -364,7 +364,7 @@
     "2026-07-22": 28050.0,
     "2026-07-23": 27505.0,
     "2026-07-24": 28305.0,
-    "2026-07-27": 28305.0
+    "2026-07-27": 28650.0
    },
    "BNBC": {
     "2026-07-03": 2000.0,
@@ -469,7 +469,7 @@
     "2026-07-22": 5630.0,
     "2026-07-23": 5615.0,
     "2026-07-24": 5600.0,
-    "2026-07-27": 5600.0
+    "2026-07-27": 5400.0
    },
    "BOAN": {
     "2026-07-03": 4240.0,
@@ -490,7 +490,7 @@
     "2026-07-22": 5200.0,
     "2026-07-23": 5345.0,
     "2026-07-24": 5300.0,
-    "2026-07-27": 5300.0
+    "2026-07-27": 5195.0
    },
    "BOAS": {
     "2026-07-03": 7350.0,
@@ -511,7 +511,7 @@
     "2026-07-22": 7495.0,
     "2026-07-23": 7580.0,
     "2026-07-24": 7845.0,
-    "2026-07-27": 7845.0
+    "2026-07-27": 7850.0
    },
    "CABC": {
     "2026-07-03": 4495.0,
@@ -532,7 +532,7 @@
     "2026-07-22": 3850.0,
     "2026-07-23": 3940.0,
     "2026-07-24": 3795.0,
-    "2026-07-27": 3795.0
+    "2026-07-27": 3705.0
    },
    "CBIBF": {
     "2026-07-03": 23910.0,
@@ -553,7 +553,7 @@
     "2026-07-22": 26450.0,
     "2026-07-23": 26450.0,
     "2026-07-24": 27000.0,
-    "2026-07-27": 27000.0
+    "2026-07-27": 27050.0
    },
    "CFAC": {
     "2026-07-03": 1765.0,
@@ -595,7 +595,7 @@
     "2026-07-22": 5200.0,
     "2026-07-23": 5390.0,
     "2026-07-24": 5300.0,
-    "2026-07-27": 5300.0
+    "2026-07-27": 5295.0
    },
    "ECOC": {
     "2026-07-03": 17270.0,
@@ -637,7 +637,7 @@
     "2026-07-22": 70.0,
     "2026-07-23": 75.0,
     "2026-07-24": 73.0,
-    "2026-07-27": 73.0
+    "2026-07-27": 75.0
    },
    "FTSC": {
     "2026-07-03": 2020.0,
@@ -721,7 +721,7 @@
     "2026-07-22": 22900.0,
     "2026-07-23": 23000.0,
     "2026-07-24": 23400.0,
-    "2026-07-27": 23400.0
+    "2026-07-27": 23600.0
    },
    "NTLC": {
     "2026-07-03": 16500.0,
@@ -742,7 +742,7 @@
     "2026-07-22": 16100.0,
     "2026-07-23": 16495.0,
     "2026-07-24": 16490.0,
-    "2026-07-27": 16490.0
+    "2026-07-27": 16265.0
    },
    "ONTBF": {
     "2026-07-03": 2800.0,
@@ -805,7 +805,7 @@
     "2026-07-22": 2680.0,
     "2026-07-23": 2680.0,
     "2026-07-24": 2700.0,
-    "2026-07-27": 2700.0
+    "2026-07-27": 2715.0
    },
    "PALC": {
     "2026-07-03": 8835.0,
@@ -826,7 +826,7 @@
     "2026-07-22": 8800.0,
     "2026-07-23": 8850.0,
     "2026-07-24": 8700.0,
-    "2026-07-27": 8700.0
+    "2026-07-27": 8690.0
    },
    "PRSC": {
     "2026-07-03": 4500.0,
@@ -847,7 +847,7 @@
     "2026-07-22": 4630.0,
     "2026-07-23": 4605.0,
     "2026-07-24": 4610.0,
-    "2026-07-27": 4610.0
+    "2026-07-27": 4605.0
    },
    "SAFC": {
     "2026-07-03": 4580.0,
@@ -868,7 +868,7 @@
     "2026-07-22": 4580.0,
     "2026-07-23": 4550.0,
     "2026-07-24": 4750.0,
-    "2026-07-27": 4750.0
+    "2026-07-27": 4650.0
    },
    "SCRC": {
     "2026-07-03": 3610.0,
@@ -889,7 +889,7 @@
     "2026-07-22": 3550.0,
     "2026-07-23": 3500.0,
     "2026-07-24": 3495.0,
-    "2026-07-27": 3495.0
+    "2026-07-27": 3535.0
    },
    "SDCC": {
     "2026-07-03": 12045.0,
@@ -910,7 +910,7 @@
     "2026-07-22": 11900.0,
     "2026-07-23": 11900.0,
     "2026-07-24": 11825.0,
-    "2026-07-27": 11825.0
+    "2026-07-27": 11970.0
    },
    "SDSC": {
     "2026-07-03": 2435.0,
@@ -931,7 +931,7 @@
     "2026-07-22": 2770.0,
     "2026-07-23": 2770.0,
     "2026-07-24": 2760.0,
-    "2026-07-27": 2760.0
+    "2026-07-27": 2650.0
    },
    "SEMC": {
     "2026-07-03": 1500.0,
@@ -973,7 +973,7 @@
     "2026-07-22": 38000.0,
     "2026-07-23": 37995.0,
     "2026-07-24": 38000.0,
-    "2026-07-27": 38000.0
+    "2026-07-27": 38200.0
    },
    "SHEC": {
     "2026-07-03": 2195.0,
@@ -1015,7 +1015,7 @@
     "2026-07-22": 8800.0,
     "2026-07-23": 8650.0,
     "2026-07-24": 8900.0,
-    "2026-07-27": 8900.0
+    "2026-07-27": 8990.0
    },
    "SICC": {
     "2026-07-03": 5200.0,
@@ -1036,7 +1036,7 @@
     "2026-07-22": 5600.0,
     "2026-07-23": 5300.0,
     "2026-07-24": 5300.0,
-    "2026-07-27": 5300.0
+    "2026-07-27": 5600.0
    },
    "SIVC": {
     "2026-07-03": 2355.0,
@@ -1057,7 +1057,7 @@
     "2026-07-22": 2250.0,
     "2026-07-23": 2250.0,
     "2026-07-24": 2250.0,
-    "2026-07-27": 2250.0
+    "2026-07-27": 2245.0
    },
    "SLBC": {
     "2026-07-03": 39200.0,
@@ -1078,7 +1078,7 @@
     "2026-07-22": 38995.0,
     "2026-07-23": 39995.0,
     "2026-07-24": 39495.0,
-    "2026-07-27": 39495.0
+    "2026-07-27": 39490.0
    },
    "SMBC": {
     "2026-07-03": 17735.0,
@@ -1120,7 +1120,7 @@
     "2026-07-22": 31500.0,
     "2026-07-23": 31800.0,
     "2026-07-24": 31495.0,
-    "2026-07-27": 31495.0
+    "2026-07-27": 31000.0
    },
    "SOGC": {
     "2026-07-03": 8450.0,
@@ -1141,7 +1141,7 @@
     "2026-07-22": 8200.0,
     "2026-07-23": 8300.0,
     "2026-07-24": 8220.0,
-    "2026-07-27": 8220.0
+    "2026-07-27": 8495.0
    },
    "SPHC": {
     "2026-07-03": 7675.0,
@@ -1183,7 +1183,7 @@
     "2026-07-22": 2990.0,
     "2026-07-23": 3000.0,
     "2026-07-24": 2905.0,
-    "2026-07-27": 2905.0
+    "2026-07-27": 2890.0
    },
    "STBC": {
     "2026-07-03": 24350.0,
@@ -1204,7 +1204,7 @@
     "2026-07-22": 23500.0,
     "2026-07-23": 23405.0,
     "2026-07-24": 23190.0,
-    "2026-07-27": 23190.0
+    "2026-07-27": 23100.0
    },
    "TTLC": {
     "2026-07-03": 2925.0,
@@ -1225,7 +1225,7 @@
     "2026-07-22": 2950.0,
     "2026-07-23": 3000.0,
     "2026-07-24": 2995.0,
-    "2026-07-27": 2995.0
+    "2026-07-27": 2850.0
    },
    "TTLS": {
     "2026-07-03": 4045.0,
@@ -1246,7 +1246,7 @@
     "2026-07-22": 3700.0,
     "2026-07-23": 3800.0,
     "2026-07-24": 3750.0,
-    "2026-07-27": 3750.0
+    "2026-07-27": 3755.0
    },
    "UNLC": {
     "2026-07-03": 51395.0,
@@ -1267,7 +1267,7 @@
     "2026-07-22": 52000.0,
     "2026-07-23": 52000.0,
     "2026-07-24": 52000.0,
-    "2026-07-27": 52000.0
+    "2026-07-27": 51000.0
    },
    "UNXC": {
     "2026-07-03": 1535.0,
@@ -1288,7 +1288,7 @@
     "2026-07-22": 1890.0,
     "2026-07-23": 1830.0,
     "2026-07-24": 1850.0,
-    "2026-07-27": 1850.0
+    "2026-07-27": 1885.0
    },
    "SVOC": {
     "2019-05-10": 2395.0
@@ -1430,14 +1430,14 @@
    },
    {
     "date": "2026-06-13",
-    "societe": "LNB",
-    "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
+    "societe": "BIIC",
+    "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-13",
-    "societe": "BIIC",
-    "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
+    "societe": "LNB",
+    "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -1588,14 +1588,14 @@
   },
   {
    "date": "2026-06-13",
-   "societe": "LNB",
-   "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
+   "societe": "BIIC",
+   "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-13",
-   "societe": "BIIC",
-   "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
+   "societe": "LNB",
+   "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
