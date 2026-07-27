@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-07-27T09:50:12+00:00",
-  "updated_human": "27/07/2026 09:50 UTC",
+  "updated": "2026-07-27T10:05:11+00:00",
+  "updated_human": "27/07/2026 10:05 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "https://www.brvm.org/en/cours-actions/0 -> HTTPSConnectionPool(host='www.brvm.org', port=443): Read timed out. (read timeout=30)",
@@ -9,8 +9,8 @@
    "alertes_perso": "aucun seuil franchi",
    "resultat": "48 titres",
    "dates_couvertes": "2019-05-10 -> 2026-07-23",
-   "indice_composite": "non recupere (https://www.brvm.org/en -> HTTPSConnectionPool(host='www.brvm.org', port=443): Read timed out. (read timeout=30))",
-   "annonces": "non recuperees"
+   "indice_composite": "484.32 (https://www.brvm.org/fr/indices/0)",
+   "annonces": "25 annonce(s)"
   }
  },
  "ABJC": {
@@ -1377,13 +1377,13 @@
    {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
-    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
-    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -1535,13 +1535,13 @@
   {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
-   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
-   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
