@@ -2572,6 +2572,7 @@ function openSettings(){
     <button class="btn ghost" style="margin-top:10px" onclick="exportData()">⬇ Sauvegarder mes données (fichier .json)</button>
     <button class="btn ghost" style="margin-top:10px" onclick="exportCSV()">📊 Exporter les opérations (Excel / CSV)</button>
     <button class="btn ghost" style="margin-top:10px" onclick="openTransfert()">🔁 Enregistrer un transfert de titres (autre SGI)</button>
+    <button class="btn ghost" style="margin-top:10px" onclick="openTransfertUndo()">↩️ Annuler un transfert enregistré</button>
     <label style="margin-top:16px">⬆ Restaurer une sauvegarde <span class="hint">(fichier .json exporté par l'appli)</span></label>
     <input type="file" accept=".json,application/json" onchange="importData(this)">
     <button class="btn alt" style="margin-top:18px" onclick="loadDemo()">Charger des données d'exemple</button>
@@ -2584,6 +2585,38 @@ function openSettings(){
    du relevé de la SGI) sous forme d'achats datés du jour du transfert, plus un dépôt de
    contrepartie pour que les liquidités restent justes (l'argent avait été payé ailleurs).
    Rien n'est supprimé : l'historique et les courbes restent intacts. */
+/* Annulation propre d'un transfert : retire d'un coup les achats ET le dépôt de
+   contrepartie créés ensemble (repérés par leur libellé et leur date). */
+function transfertsEnregistres(){
+  const g={};
+  (db.tx||[]).forEach(t=>{ if((t.libelle||"").startsWith("Transfert")){
+    const k=t.date+"|"+t.libelle; if(!g[k])g[k]={date:t.date,lib:t.libelle,tx:[],cash:[],cout:0};
+    g[k].tx.push(t); g[k].cout+=t.qty*t.price; }});
+  (db.cash||[]).forEach(m=>{ if((m.libelle||"").startsWith("Contrepartie Transfert")){
+    const lib=m.libelle.replace("Contrepartie ","");
+    const k=m.date+"|"+lib; if(!g[k])g[k]={date:m.date,lib:lib,tx:[],cash:[],cout:0};
+    g[k].cash.push(m); }});
+  return Object.values(g).sort((a,b)=>b.date.localeCompare(a.date));
+}
+function openTransfertUndo(){
+  const L=transfertsEnregistres();
+  openSheet(`<h3>↩️ Annuler un transfert</h3>
+    <div class="hint">Retire d'un coup les lignes créées par « Enregistrer un transfert » (achats + dépôt de contrepartie). Le reste de ton historique n'est pas touché.</div>
+    ${L.length?L.map((g,i)=>`<div class="card" style="padding:12px 14px;margin-top:10px">
+      <b style="font-size:14px">${escHtml(g.lib)}</b>
+      <div class="hint">${frDate(g.date)} · ${g.tx.length} ligne(s) d'achat · coût ${fmt(g.cout)}${g.cash.length?" · + dépôt de contrepartie":""}</div>
+      <div class="hint" style="margin-top:6px">${g.tx.map(t=>(stockMap[t.ticker]?.name||t.ticker)+" : "+t.qty.toLocaleString("fr-FR")+" × "+fmtShort(t.price)).join("<br>")}</div>
+      <button class="btn alt" style="margin-top:10px" onclick="undoTransfert('${escAttr(g.date)}','${escAttr(g.lib)}')">↩️ Annuler ce transfert</button>
+    </div>`).join(""):'<div class="hint" style="margin-top:12px">Aucun transfert enregistré dans ce portefeuille.</div>'}`);
+}
+function undoTransfert(date,lib){
+  const nbTx=(db.tx||[]).filter(t=>t.date===date&&t.libelle===lib).length;
+  const nbCash=(db.cash||[]).filter(m=>m.date===date&&m.libelle==="Contrepartie "+lib).length;
+  if(!confirm("↩️ Retirer "+nbTx+" ligne(s) d'achat"+(nbCash?" et le dépôt de contrepartie":"")+" du transfert « "+lib+" » ?\n\nLe reste de ton historique n'est pas touché."))return;
+  db.tx=(db.tx||[]).filter(t=>!(t.date===date&&t.libelle===lib));
+  db.cash=(db.cash||[]).filter(m=>!(m.date===date&&m.libelle==="Contrepartie "+lib));
+  save(); openTransfertUndo();
+}
 function openTransfert(){
   openSheet(`<h3>🔁 Transfert de titres reçus</h3>
     <div class="hint">Pour des titres arrivés d'une autre SGI : saisis leur <b>coût d'origine</b> (colonne CMP de ton relevé) pour que tes gains soient justes. Une ligne par titre.</div>
