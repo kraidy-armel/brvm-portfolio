@@ -1287,10 +1287,17 @@ function openRisk(){
 }
 
 /* --- « Et si j'avais gardé ? » : analyse contrefactuelle des ventes --- */
+/* Cours le plus RÉCENT connu : on compare la fiche du portefeuille (db.prices, mise à
+   jour pour les titres détenus) avec l'historique global (store.priceHist, alimenté pour
+   tous les titres à chaque synchro). Un portefeuille qui ne détient plus un titre gardait
+   sinon un cours périmé — c'est ce qui déclenchait de fausses alertes. */
 function prixActuel(tk){
-  const p=db.prices[tk]; if(p&&+p.actuel>0)return +p.actuel;
+  tk=resolveTicker(tk);
   const H=(store.priceHist||{})[tk]||{}; const ds=Object.keys(H).sort();
-  return ds.length?+H[ds[ds.length-1]]:0;
+  const dHist=ds.length?ds[ds.length-1]:"", vHist=ds.length?+H[ds[ds.length-1]]:0;
+  const p=db.prices[tk]||{}; const vDb=+p.actuel||0, dDb=(p.date||"").slice(0,10);
+  if(vHist>0&&vDb>0)return dHist>=dDb?vHist:vDb;
+  return vDb>0?vDb:vHist;
 }
 function sellReview(depuis){
   const ventes=[...db.tx].filter(t=>t.type==="vente"&&(!depuis||t.date>depuis)).sort((a,b)=>b.date.localeCompare(a.date));
@@ -1637,7 +1644,12 @@ function setSyncStatus(state){
 }
 /* Synchro silencieuse en arrière-plan (à l'ouverture) — sans pop-up */
 async function autoSync(force){
-  const held=positions(); if(!held.length){setSyncStatus();return;}
+  /* titres à rafraîchir : ceux détenus + ceux sous alerte (sinon leur cours reste périmé
+     dans ce portefeuille et les alertes se comparent à de vieux chiffres) */
+  const held=positions().slice();
+  (db.alerts||[]).forEach(a=>{const tk=resolveTicker(a.ticker);
+    if(tk&&!held.some(p=>resolveTicker(p.ticker)===tk))held.push({ticker:tk});});
+  if(!held.length){setSyncStatus();return;}
   const now=Date.now();
   if(!force && store.lastSync && (now-store.lastSync)<10*60*1000){ setSyncStatus(); return; }
   setSyncStatus("maj");
@@ -2035,7 +2047,7 @@ function openAlert(){
     <button class="btn" style="margin-top:18px" onclick="saveAlert()">Créer l'alerte</button>`);
 }
 function saveAlert(){
-  const ticker=comboValue('alTicker'); const seuil=+document.getElementById('alSeuil').value;
+  const ticker=resolveTicker(comboValue('alTicker')); const seuil=+document.getElementById('alSeuil').value;
   if(!ticker){alert("Choisis une société.");return;}
   if(!seuil){alert("Renseigne un seuil de prix.");return;}
   if(!db.alerts)db.alerts=[];
@@ -2050,7 +2062,7 @@ function checkAlerts(){
   const trig=[];
   db.alerts.forEach(a=>{
     if(a.statut!=='active')return;
-    const cur=+(db.prices[a.ticker]||{}).actuel; if(!cur)return;
+    const cur=prixActuel(a.ticker); if(!cur)return;
     if((a.condition===">="&&cur>=a.seuil)||(a.condition==="<="&&cur<=a.seuil)){a.statut='declenchee';trig.push({a,cur});}
   });
   if(trig.length)setTimeout(()=>alert("🔔 Alerte(s) déclenchée(s) :\n\n"+trig.map(t=>`${stockMap[t.a.ticker]?.name||t.a.ticker} : cours ${t.a.condition} ${fmtShort(t.a.seuil)} (actuel ${fmtShort(t.cur)})`).join("\n")),350);
@@ -2559,12 +2571,83 @@ function openSettings(){
     <button class="btn ghost" style="margin-top:10px" onclick="openImportOps()">📥 Importer des opérations (CSV / Excel)</button>
     <button class="btn ghost" style="margin-top:10px" onclick="exportData()">⬇ Sauvegarder mes données (fichier .json)</button>
     <button class="btn ghost" style="margin-top:10px" onclick="exportCSV()">📊 Exporter les opérations (Excel / CSV)</button>
+    <button class="btn ghost" style="margin-top:10px" onclick="openTransfert()">🔁 Enregistrer un transfert de titres (autre SGI)</button>
     <label style="margin-top:16px">⬆ Restaurer une sauvegarde <span class="hint">(fichier .json exporté par l'appli)</span></label>
     <input type="file" accept=".json,application/json" onchange="importData(this)">
     <button class="btn alt" style="margin-top:18px" onclick="loadDemo()">Charger des données d'exemple</button>
     <button class="btn" style="margin-top:10px;background:var(--neg)" onclick="resetData()">Effacer ce portefeuille</button>
     <div class="hint" style="margin-top:18px;text-align:center">Mon Portefeuille BRVM · données indicatives, hors temps réel.</div>`);
 }
+/* --- 🔁 Transfert de titres reçus d'une autre SGI ---------------------------------
+   Des titres arrivés par transfert n'ont pas de prix d'achat dans l'appli : leurs ventes
+   affichent alors un gain énorme et faux. On enregistre donc leur COÛT D'ORIGINE (le CMP
+   du relevé de la SGI) sous forme d'achats datés du jour du transfert, plus un dépôt de
+   contrepartie pour que les liquidités restent justes (l'argent avait été payé ailleurs).
+   Rien n'est supprimé : l'historique et les courbes restent intacts. */
+function openTransfert(){
+  openSheet(`<h3>🔁 Transfert de titres reçus</h3>
+    <div class="hint">Pour des titres arrivés d'une autre SGI : saisis leur <b>coût d'origine</b> (colonne CMP de ton relevé) pour que tes gains soient justes. Une ligne par titre.</div>
+    <label>Date du transfert</label><input id="trDate" type="date" value="${today()}">
+    <label style="margin-top:10px">Origine <span class="hint">(pour le libellé)</span></label>
+    <input id="trOrig" placeholder="ex : Bridge Bank">
+    <div id="trRows" style="margin-top:6px"></div>
+    <button class="btn ghost" style="margin-top:8px" onclick="trAddRow()">＋ Ajouter un titre</button>
+    <label style="margin-top:14px"><input type="checkbox" id="trCash" checked style="width:auto;margin-right:6px">Ajouter le dépôt de contrepartie</label>
+    <div class="hint">Recommandé : sans lui, l'appli croirait que tu viens de payer ces titres et tes liquidités deviendraient fausses.</div>
+    <div id="trPrev" class="help" style="margin-top:12px;display:none"></div>
+    <button class="btn" style="margin-top:14px" onclick="trValider(this)">✅ Enregistrer le transfert</button>`);
+  trAddRow();trAddRow();trAddRow();
+}
+function trAddRow(){
+  const w=document.getElementById("trRows"); if(!w)return;
+  const i="tr"+uid();
+  const d=document.createElement("div");
+  d.style.cssText="display:flex;gap:6px;margin-top:8px;align-items:center";
+  d.innerHTML='<input class="tr-tk" placeholder="Ticker (ex : NTLC)" style="flex:1.1;text-transform:uppercase" oninput="trPreview()">'
+    +'<input class="tr-qty" type="number" placeholder="Qté" style="flex:.8" oninput="trPreview()">'
+    +'<input class="tr-pu" type="number" step="0.01" placeholder="Coût unitaire (CMP)" style="flex:1.2" oninput="trPreview()">';
+  w.appendChild(d);
+}
+function trLignes(){
+  const tks=[...document.querySelectorAll(".tr-tk")],qs=[...document.querySelectorAll(".tr-qty")],ps=[...document.querySelectorAll(".tr-pu")];
+  const out=[];
+  for(let i=0;i<tks.length;i++){
+    const tk=(tks[i].value||"").trim().toUpperCase(), q=+qs[i].value||0, pu=+ps[i].value||0;
+    if(!tk&&!q&&!pu)continue;
+    out.push({tk:resolveTicker(tk),q:q,pu:pu,valide:!!(tk&&q>0&&pu>0)});
+  }
+  return out;
+}
+function trPreview(){
+  const el=document.getElementById("trPrev"); if(!el)return;
+  const L=trLignes().filter(x=>x.valide);
+  if(!L.length){el.style.display="none";return;}
+  const tot=L.reduce((s,x)=>s+x.q*x.pu,0);
+  el.style.display="block";
+  el.innerHTML="🧮 <div>"+L.map(x=>(stockMap[x.tk]?.name||x.tk)+" : "+x.q.toLocaleString("fr-FR")+" × "+fmtShort(x.pu)+" = <b>"+fmt(x.q*x.pu)+"</b>").join("<br>")
+    +"<br><br><b>Total du coût réintégré : "+fmt(tot)+"</b></div>";
+}
+function trValider(btn){
+  const L=trLignes();
+  if(!L.length){alert("⚠️ Saisis au moins un titre.");return;}
+  const mauvais=L.find(x=>!x.valide);
+  if(mauvais){alert("⚠️ Chaque ligne doit avoir un ticker, une quantité et un coût unitaire positifs.");return;}
+  const d=document.getElementById("trDate").value||today();
+  const orig=(document.getElementById("trOrig").value||"").trim();
+  const lib="Transfert"+(orig?" "+orig:"");
+  const tot=L.reduce((s,x)=>s+x.q*x.pu,0);
+  const cash=document.getElementById("trCash").checked;
+  if(!confirm("🔁 Enregistrer ce transfert dans « "+db.name+" » ?\n\n"
+    +L.map(x=>"• "+(stockMap[x.tk]?.name||x.tk)+" : "+x.q+" titres à "+Math.round(x.pu)+" F").join("\n")
+    +"\n\nCoût total réintégré : "+fmt(tot)
+    +(cash?"\nDépôt de contrepartie : "+fmt(tot)+" (liquidités inchangées)":"\n⚠️ SANS dépôt de contrepartie : tes liquidités baisseront de "+fmt(tot))
+    +"\n\nRien ne sera supprimé — ces lignes s'ajoutent à ton historique."))return;
+  L.forEach(x=>db.tx.push({id:uid(),type:"achat",ticker:x.tk,qty:x.q,price:x.pu,frais:0,date:d,libelle:lib,these:"Titres reçus par transfert — coût d'origine repris du relevé de la SGI"}));
+  if(cash){if(!db.cash)db.cash=[];db.cash.push({id:uid(),type:"depot",date:d,montant:Math.round(tot),libelle:"Contrepartie "+lib});}
+  closeSheet();save();
+  setTimeout(()=>alert("✅ Transfert enregistré : "+L.length+" titre(s), "+fmt(tot)+" de coût réintégré.\n\nVérifie « Ce que chaque titre m'a rapporté » — tes gains sont maintenant calculés sur le vrai prix de revient."),300);
+}
+
 /* Export CSV « spécial Excel » : BOM UTF-8 + point-virgule (format français) */
 function exportCSV(){
   const esc=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
