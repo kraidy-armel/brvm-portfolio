@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-07-29T10:05:21+00:00",
-  "updated_human": "29/07/2026 10:05 UTC",
+  "updated": "2026-07-29T10:20:10+00:00",
+  "updated_human": "29/07/2026 10:20 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "https://www.brvm.org/en/cours-actions/0 -> HTTPSConnectionPool(host='www.brvm.org', port=443): Read timed out. (read timeout=30)",
