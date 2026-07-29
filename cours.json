@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-07-29T14:35:13+00:00",
-  "updated_human": "29/07/2026 14:35 UTC",
+  "updated": "2026-07-29T14:50:21+00:00",
+  "updated_human": "29/07/2026 14:50 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -80,8 +80,8 @@
   "source": "brvm.org"
  },
  "CBIBF": {
-  "actuel": 27305.0,
-  "veille": 27199,
+  "actuel": 27995.0,
+  "veille": 27201,
   "date": "2026-07-29",
   "source": "brvm.org"
  },
@@ -272,13 +272,13 @@
   "source": "brvm.org"
  },
  "TTLC": {
-  "actuel": 2855.0,
+  "actuel": 2990.0,
   "veille": 3000,
   "date": "2026-07-29",
   "source": "brvm.org"
  },
  "TTLS": {
-  "actuel": 3500.0,
+  "actuel": 3625.0,
   "veille": 3650,
   "date": "2026-07-29",
   "source": "brvm.org"
@@ -565,7 +565,7 @@
     "2026-07-24": 27000.0,
     "2026-07-27": 27080.0,
     "2026-07-28": 27200.0,
-    "2026-07-29": 27305.0
+    "2026-07-29": 27995.0
    },
    "CFAC": {
     "2026-07-04": 1765.0,
@@ -1269,7 +1269,7 @@
     "2026-07-24": 2995.0,
     "2026-07-27": 2990.0,
     "2026-07-28": 3000.0,
-    "2026-07-29": 2855.0
+    "2026-07-29": 2990.0
    },
    "TTLS": {
     "2026-07-04": 4045.0,
@@ -1291,7 +1291,7 @@
     "2026-07-24": 3750.0,
     "2026-07-27": 3700.0,
     "2026-07-28": 3650.0,
-    "2026-07-29": 3500.0
+    "2026-07-29": 3625.0
    },
    "UNLC": {
     "2026-07-04": 51395.0,
@@ -1448,12 +1448,6 @@
    {
     "date": "2026-06-26",
     "societe": "SITAB",
-    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "SITAB",
     "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
     "type": "ago"
    },
@@ -1470,6 +1464,12 @@
     "type": "ago"
    },
    {
+    "date": "2026-06-26",
+    "societe": "SITAB",
+    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
     "date": "2026-06-15",
     "societe": "TRACTAFRIC CI",
     "titre": "TRACTAFRIC MOTORS CI : Avis de convocation - Assemblée Générale Mixte",
@@ -1477,14 +1477,14 @@
    },
    {
     "date": "2026-06-13",
-    "societe": "LNB",
-    "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
+    "societe": "BIIC",
+    "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-13",
-    "societe": "BIIC",
-    "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
+    "societe": "LNB",
+    "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -1606,12 +1606,6 @@
   {
    "date": "2026-06-26",
    "societe": "SITAB",
-   "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "SITAB",
    "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
    "type": "ago"
   },
@@ -1628,6 +1622,12 @@
    "type": "ago"
   },
   {
+   "date": "2026-06-26",
+   "societe": "SITAB",
+   "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
    "date": "2026-06-15",
    "societe": "TRACTAFRIC CI",
    "titre": "TRACTAFRIC MOTORS CI : Avis de convocation - Assemblée Générale Mixte",
@@ -1635,14 +1635,14 @@
   },
   {
    "date": "2026-06-13",
-   "societe": "LNB",
-   "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
+   "societe": "BIIC",
+   "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-13",
-   "societe": "BIIC",
-   "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
+   "societe": "LNB",
+   "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
