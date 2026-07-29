@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-07-29T13:50:10+00:00",
-  "updated_human": "29/07/2026 13:50 UTC",
+  "updated": "2026-07-29T14:05:14+00:00",
+  "updated_human": "29/07/2026 14:05 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -9,7 +9,7 @@
    "alertes_perso": "aucun seuil franchi",
    "resultat": "48 titres",
    "dates_couvertes": "2026-07-29 -> 2026-07-29",
-   "indice_composite": "non recupere (https://www.brvm.org/en -> HTTPSConnectionPool(host='www.brvm.org', port=443): Read timed out. (read timeout=30))",
+   "indice_composite": "482.71 (https://www.brvm.org/fr/indices/0)",
    "annonces": "25 annonce(s)"
   }
  },
@@ -1435,14 +1435,14 @@
    },
    {
     "date": "2026-06-29",
-    "societe": "LNB",
-    "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
+    "societe": "AIR LIQUIDE CI",
+    "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-29",
-    "societe": "AIR LIQUIDE CI",
-    "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
+    "societe": "LNB",
+    "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -1593,14 +1593,14 @@
   },
   {
    "date": "2026-06-29",
-   "societe": "LNB",
-   "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
+   "societe": "AIR LIQUIDE CI",
+   "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-29",
-   "societe": "AIR LIQUIDE CI",
-   "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
+   "societe": "LNB",
+   "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
