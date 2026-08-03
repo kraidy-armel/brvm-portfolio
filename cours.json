@@ -1,10 +1,10 @@
 {
  "_meta": {
-  "updated": "2026-08-03T14:35:11+00:00",
-  "updated_human": "03/08/2026 14:35 UTC",
+  "updated": "2026-08-03T14:50:17+00:00",
+  "updated_human": "03/08/2026 14:50 UTC",
   "count": 48,
   "diagnostic": {
-   "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
+   "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/liste, 47 titres)",
    "github_secours": "non utilise (officiel suffisant)",
    "alertes_perso": "aucun seuil franchi",
    "resultat": "48 titres",
@@ -110,7 +110,7 @@
   "source": "brvm.org"
  },
  "FTSC": {
-  "actuel": 1970.0,
+  "actuel": 1910.0,
   "veille": 1970,
   "date": "2026-08-03",
   "source": "brvm.org"
@@ -675,7 +675,7 @@
     "2026-07-29": 1970.0,
     "2026-07-30": 1910.0,
     "2026-07-31": 1970.0,
-    "2026-08-03": 1970.0
+    "2026-08-03": 1910.0
    },
    "LNBB": {
     "2026-07-07": 4340.0,
@@ -1435,14 +1435,14 @@
    },
    {
     "date": "2026-06-29",
-    "societe": "AIR LIQUIDE CI",
-    "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
+    "societe": "LNB",
+    "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-29",
-    "societe": "LNB",
-    "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
+    "societe": "AIR LIQUIDE CI",
+    "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -1593,14 +1593,14 @@
   },
   {
    "date": "2026-06-29",
-   "societe": "AIR LIQUIDE CI",
-   "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
+   "societe": "LNB",
+   "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-29",
-   "societe": "LNB",
-   "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
+   "societe": "AIR LIQUIDE CI",
+   "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
