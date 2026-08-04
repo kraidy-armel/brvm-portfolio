@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-08-04T13:05:16+00:00",
-  "updated_human": "04/08/2026 13:05 UTC",
+  "updated": "2026-08-04T13:20:17+00:00",
+  "updated_human": "04/08/2026 13:20 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -38,13 +38,13 @@
   "source": "brvm.org"
  },
  "BOAB": {
-  "actuel": 8700.0,
+  "actuel": 8715.0,
   "veille": 8695,
   "date": "2026-08-04",
   "source": "brvm.org"
  },
  "BOABF": {
-  "actuel": 7100.0,
+  "actuel": 7200.0,
   "veille": 7200,
   "date": "2026-08-04",
   "source": "brvm.org"
@@ -68,7 +68,7 @@
   "source": "brvm.org"
  },
  "BOAS": {
-  "actuel": 7685.0,
+  "actuel": 7700.0,
   "veille": 7685,
   "date": "2026-08-04",
   "source": "brvm.org"
@@ -122,7 +122,7 @@
   "source": "brvm.org"
  },
  "NEIC": {
-  "actuel": 2250.0,
+  "actuel": 2235.0,
   "veille": 2280,
   "date": "2026-08-04",
   "source": "brvm.org"
@@ -134,7 +134,7 @@
   "source": "brvm.org"
  },
  "NTLC": {
-  "actuel": 16550.0,
+  "actuel": 16600.0,
   "veille": 16550,
   "date": "2026-08-04",
   "source": "brvm.org"
@@ -146,8 +146,8 @@
   "source": "brvm.org"
  },
  "ORAC": {
-  "actuel": 16755.0,
-  "veille": 17000,
+  "actuel": 16800.0,
+  "veille": 17001,
   "date": "2026-08-04",
   "source": "brvm.org"
  },
@@ -170,7 +170,7 @@
   "source": "brvm.org"
  },
  "SAFC": {
-  "actuel": 5085.0,
+  "actuel": 5000.0,
   "veille": 5000,
   "date": "2026-08-04",
   "source": "brvm.org"
@@ -194,7 +194,7 @@
   "source": "brvm.org"
  },
  "SEMC": {
-  "actuel": 1485.0,
+  "actuel": 1460.0,
   "veille": 1480,
   "date": "2026-08-04",
   "source": "brvm.org"
@@ -224,14 +224,14 @@
   "source": "brvm.org"
  },
  "SIVC": {
-  "actuel": 2130.0,
+  "actuel": 2150.0,
   "veille": 2200,
   "date": "2026-08-04",
   "source": "brvm.org"
  },
  "SLBC": {
-  "actuel": 37500.0,
-  "veille": 37700,
+  "actuel": 37100.0,
+  "veille": 37699,
   "date": "2026-08-04",
   "source": "brvm.org"
  },
@@ -278,7 +278,7 @@
   "source": "brvm.org"
  },
  "TTLS": {
-  "actuel": 3650.0,
+  "actuel": 3625.0,
   "veille": 3655,
   "date": "2026-08-04",
   "source": "brvm.org"
@@ -411,7 +411,7 @@
     "2026-07-30": 8700.0,
     "2026-07-31": 8700.0,
     "2026-08-03": 8695.0,
-    "2026-08-04": 8700.0
+    "2026-08-04": 8715.0
    },
    "BOABF": {
     "2026-07-08": 5970.0,
@@ -433,7 +433,7 @@
     "2026-07-30": 7100.0,
     "2026-07-31": 7100.0,
     "2026-08-03": 7200.0,
-    "2026-08-04": 7100.0
+    "2026-08-04": 7200.0
    },
    "BOAC": {
     "2026-07-08": 9490.0,
@@ -521,7 +521,7 @@
     "2026-07-30": 7700.0,
     "2026-07-31": 7790.0,
     "2026-08-03": 7685.0,
-    "2026-08-04": 7685.0
+    "2026-08-04": 7700.0
    },
    "CABC": {
     "2026-07-08": 4000.0,
@@ -719,7 +719,7 @@
     "2026-07-30": 2300.0,
     "2026-07-31": 2280.0,
     "2026-08-03": 2280.0,
-    "2026-08-04": 2250.0
+    "2026-08-04": 2235.0
    },
    "NSBC": {
     "2026-07-08": 21950.0,
@@ -763,7 +763,7 @@
     "2026-07-30": 16505.0,
     "2026-07-31": 16500.0,
     "2026-08-03": 16550.0,
-    "2026-08-04": 16550.0
+    "2026-08-04": 16600.0
    },
    "ONTBF": {
     "2026-07-08": 2795.0,
@@ -807,7 +807,7 @@
     "2026-07-30": 16760.0,
     "2026-07-31": 16995.0,
     "2026-08-03": 17000.0,
-    "2026-08-04": 16755.0
+    "2026-08-04": 16800.0
    },
    "ORGT": {
     "2026-07-08": 2685.0,
@@ -895,7 +895,7 @@
     "2026-07-30": 5205.0,
     "2026-07-31": 5130.0,
     "2026-08-03": 5000.0,
-    "2026-08-04": 5085.0
+    "2026-08-04": 5000.0
    },
    "SCRC": {
     "2026-07-08": 3550.0,
@@ -983,7 +983,7 @@
     "2026-07-30": 1500.0,
     "2026-07-31": 1485.0,
     "2026-08-03": 1480.0,
-    "2026-08-04": 1485.0
+    "2026-08-04": 1460.0
    },
    "SGBC": {
     "2026-07-08": 38900.0,
@@ -1093,7 +1093,7 @@
     "2026-07-30": 2195.0,
     "2026-07-31": 2200.0,
     "2026-08-03": 2200.0,
-    "2026-08-04": 2130.0
+    "2026-08-04": 2150.0
    },
    "SLBC": {
     "2026-07-08": 39900.0,
@@ -1115,7 +1115,7 @@
     "2026-07-30": 39690.0,
     "2026-07-31": 37750.0,
     "2026-08-03": 37700.0,
-    "2026-08-04": 37500.0
+    "2026-08-04": 37100.0
    },
    "SMBC": {
     "2026-07-08": 17000.0,
@@ -1291,7 +1291,7 @@
     "2026-07-30": 3650.0,
     "2026-07-31": 3655.0,
     "2026-08-03": 3655.0,
-    "2026-08-04": 3650.0
+    "2026-08-04": 3625.0
    },
    "UNLC": {
     "2026-07-08": 53735.0,
@@ -1412,12 +1412,6 @@
    {
     "date": "2026-08-03",
     "societe": "BOLLORE TRANSPORT & LOGISTICS",
-    "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
-    "type": "ago"
-   },
-   {
-    "date": "2026-08-03",
-    "societe": "BOLLORE TRANSPORT & LOGISTICS",
     "titre": "AFRICA GLOBAL LOGISTICS CI : Pouvoir - Assemblée Générale Mixte",
     "type": "ago"
    },
@@ -1425,6 +1419,12 @@
     "date": "2026-08-03",
     "societe": "BOLLORE TRANSPORT & LOGISTICS",
     "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
+    "type": "ago"
+   },
+   {
+    "date": "2026-08-03",
+    "societe": "BOLLORE TRANSPORT & LOGISTICS",
+    "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
     "type": "ago"
    },
    {
@@ -1570,12 +1570,6 @@
   {
    "date": "2026-08-03",
    "societe": "BOLLORE TRANSPORT & LOGISTICS",
-   "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
-   "type": "ago"
-  },
-  {
-   "date": "2026-08-03",
-   "societe": "BOLLORE TRANSPORT & LOGISTICS",
    "titre": "AFRICA GLOBAL LOGISTICS CI : Pouvoir - Assemblée Générale Mixte",
    "type": "ago"
   },
@@ -1583,6 +1577,12 @@
    "date": "2026-08-03",
    "societe": "BOLLORE TRANSPORT & LOGISTICS",
    "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
+   "type": "ago"
+  },
+  {
+   "date": "2026-08-03",
+   "societe": "BOLLORE TRANSPORT & LOGISTICS",
+   "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
    "type": "ago"
   },
   {
