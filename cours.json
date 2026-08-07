@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-08-07T12:35:16+00:00",
-  "updated_human": "07/08/2026 12:35 UTC",
+  "updated": "2026-08-07T12:37:58+00:00",
+  "updated_human": "07/08/2026 12:37 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -1466,6 +1466,12 @@
    {
     "date": "2026-06-26",
     "societe": "SITAB",
+    "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "SITAB",
     "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
     "type": "ago"
    },
@@ -1479,12 +1485,6 @@
     "date": "2026-06-26",
     "societe": "SITAB",
     "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "SITAB",
-    "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -1624,6 +1624,12 @@
   {
    "date": "2026-06-26",
    "societe": "SITAB",
+   "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "SITAB",
    "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
    "type": "ago"
   },
@@ -1637,12 +1643,6 @@
    "date": "2026-06-26",
    "societe": "SITAB",
    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "SITAB",
-   "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
