@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-08-10T11:50:10+00:00",
-  "updated_human": "10/08/2026 11:50 UTC",
+  "updated": "2026-08-10T12:05:10+00:00",
+  "updated_human": "10/08/2026 12:05 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -10,7 +10,7 @@
    "resultat": "48 titres",
    "dates_couvertes": "2026-08-10 -> 2026-08-10",
    "indice_composite": "485.48 (https://www.brvm.org/fr/indices/0)",
-   "annonces": "25 annonce(s)"
+   "annonces": "15 annonce(s)"
   }
  },
  "ABJC": {
@@ -1350,66 +1350,6 @@
   },
   "_annonces_prec": [
    {
-    "date": "2026-08-21",
-    "societe": "SGCI",
-    "titre": "Dividende net 2 606 FCFA/action - detachement 21/08, paiement 24/08",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-09-04",
-    "societe": "NESTLE CI",
-    "titre": "Dividende net 420 FCFA/action - detachement 04/09, paiement 07/09",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-08-13",
-    "societe": "CFAO MOTORS CI",
-    "titre": "Dividende net 63 FCFA/action - detachement 13/08, paiement 14/08",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-08-12",
-    "societe": "SITAB",
-    "titre": "Dividende net 1 707,2 FCFA/action - detachement 12/08, paiement 13/08",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-07-05",
-    "societe": "SOGB",
-    "titre": "Dividende net 570 FCFA/action - detachement 05/07, paiement 06/08",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-08-03",
-    "societe": "NSBC",
-    "titre": "Dividende net 768,16 FCFA/action - detachement 03/08, paiement 04/08",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-07-31",
-    "societe": "LNB",
-    "titre": "Dividende net 164,1709 FCFA/action - detachement 31/07, paiement 03/08",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-07-29",
-    "societe": "SOLIBRA",
-    "titre": "Dividende net 2 127 FCFA/action - detachement 29/07, paiement 30/07",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-07-27",
-    "societe": "CIE CI",
-    "titre": "Dividende net 234 FCFA/action - detachement 27/07, paiement 28/07",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-07-30",
-    "societe": "BIIC",
-    "titre": "Dividende net 254,6 FCFA/action - detachement 30/07, paiement 31/07",
-    "type": "dividende"
-   },
-   {
     "date": "2026-08-03",
     "societe": "BOLLORE TRANSPORT & LOGISTICS",
     "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
@@ -1507,66 +1447,6 @@
   "source": "https://www.brvm.org/fr/indices/0"
  },
  "_annonces": [
-  {
-   "date": "2026-08-21",
-   "societe": "SGCI",
-   "titre": "Dividende net 2 606 FCFA/action - detachement 21/08, paiement 24/08",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-09-04",
-   "societe": "NESTLE CI",
-   "titre": "Dividende net 420 FCFA/action - detachement 04/09, paiement 07/09",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-08-13",
-   "societe": "CFAO MOTORS CI",
-   "titre": "Dividende net 63 FCFA/action - detachement 13/08, paiement 14/08",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-08-12",
-   "societe": "SITAB",
-   "titre": "Dividende net 1 707,2 FCFA/action - detachement 12/08, paiement 13/08",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-07-05",
-   "societe": "SOGB",
-   "titre": "Dividende net 570 FCFA/action - detachement 05/07, paiement 06/08",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-08-03",
-   "societe": "NSBC",
-   "titre": "Dividende net 768,16 FCFA/action - detachement 03/08, paiement 04/08",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-07-31",
-   "societe": "LNB",
-   "titre": "Dividende net 164,1709 FCFA/action - detachement 31/07, paiement 03/08",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-07-29",
-   "societe": "SOLIBRA",
-   "titre": "Dividende net 2 127 FCFA/action - detachement 29/07, paiement 30/07",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-07-27",
-   "societe": "CIE CI",
-   "titre": "Dividende net 234 FCFA/action - detachement 27/07, paiement 28/07",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-07-30",
-   "societe": "BIIC",
-   "titre": "Dividende net 254,6 FCFA/action - detachement 30/07, paiement 31/07",
-   "type": "dividende"
-  },
   {
    "date": "2026-08-03",
    "societe": "BOLLORE TRANSPORT & LOGISTICS",
