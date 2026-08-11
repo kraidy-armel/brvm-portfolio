@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-08-11T16:50:11+00:00",
-  "updated_human": "11/08/2026 16:50 UTC",
+  "updated": "2026-08-11T17:23:26+00:00",
+  "updated_human": "11/08/2026 17:23 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -1412,6 +1412,12 @@
    {
     "date": "2026-08-03",
     "societe": "BOLLORE TRANSPORT & LOGISTICS",
+    "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
+    "type": "ago"
+   },
+   {
+    "date": "2026-08-03",
+    "societe": "BOLLORE TRANSPORT & LOGISTICS",
     "titre": "AFRICA GLOBAL LOGISTICS CI : Pouvoir - Assemblée Générale Mixte",
     "type": "ago"
    },
@@ -1419,12 +1425,6 @@
     "date": "2026-08-03",
     "societe": "BOLLORE TRANSPORT & LOGISTICS",
     "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
-    "type": "ago"
-   },
-   {
-    "date": "2026-08-03",
-    "societe": "BOLLORE TRANSPORT & LOGISTICS",
-    "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
     "type": "ago"
    },
    {
@@ -1570,6 +1570,12 @@
   {
    "date": "2026-08-03",
    "societe": "BOLLORE TRANSPORT & LOGISTICS",
+   "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
+   "type": "ago"
+  },
+  {
+   "date": "2026-08-03",
+   "societe": "BOLLORE TRANSPORT & LOGISTICS",
    "titre": "AFRICA GLOBAL LOGISTICS CI : Pouvoir - Assemblée Générale Mixte",
    "type": "ago"
   },
@@ -1577,12 +1583,6 @@
    "date": "2026-08-03",
    "societe": "BOLLORE TRANSPORT & LOGISTICS",
    "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
-   "type": "ago"
-  },
-  {
-   "date": "2026-08-03",
-   "societe": "BOLLORE TRANSPORT & LOGISTICS",
-   "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
    "type": "ago"
   },
   {
