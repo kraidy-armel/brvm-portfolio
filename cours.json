@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-08-12T14:42:37+00:00",
-  "updated_human": "12/08/2026 14:42 UTC",
+  "updated": "2026-08-12T14:50:12+00:00",
+  "updated_human": "12/08/2026 14:50 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -44,7 +44,7 @@
   "source": "brvm.org"
  },
  "BOABF": {
-  "actuel": 7300.0,
+  "actuel": 7100.0,
   "veille": 7350,
   "date": "2026-08-12",
   "source": "brvm.org"
@@ -86,7 +86,7 @@
   "source": "brvm.org"
  },
  "CFAC": {
-  "actuel": 1650.0,
+  "actuel": 1695.0,
   "veille": 1695,
   "date": "2026-08-12",
   "source": "brvm.org"
@@ -194,7 +194,7 @@
   "source": "brvm.org"
  },
  "SEMC": {
-  "actuel": 1480.0,
+  "actuel": 1500.0,
   "veille": 1495,
   "date": "2026-08-12",
   "source": "brvm.org"
@@ -278,7 +278,7 @@
   "source": "brvm.org"
  },
  "TTLS": {
-  "actuel": 3510.0,
+  "actuel": 3600.0,
   "veille": 3600,
   "date": "2026-08-12",
   "source": "brvm.org"
@@ -433,7 +433,7 @@
     "2026-08-07": 7230.0,
     "2026-08-10": 7325.0,
     "2026-08-11": 7350.0,
-    "2026-08-12": 7300.0
+    "2026-08-12": 7100.0
    },
    "BOAC": {
     "2026-07-16": 9720.0,
@@ -587,7 +587,7 @@
     "2026-08-07": 1700.0,
     "2026-08-10": 1695.0,
     "2026-08-11": 1695.0,
-    "2026-08-12": 1650.0
+    "2026-08-12": 1695.0
    },
    "CIEC": {
     "2026-07-16": 4905.0,
@@ -983,7 +983,7 @@
     "2026-08-07": 1445.0,
     "2026-08-10": 1500.0,
     "2026-08-11": 1495.0,
-    "2026-08-12": 1480.0
+    "2026-08-12": 1500.0
    },
    "SGBC": {
     "2026-07-16": 37995.0,
@@ -1291,7 +1291,7 @@
     "2026-08-07": 3500.0,
     "2026-08-10": 3600.0,
     "2026-08-11": 3600.0,
-    "2026-08-12": 3510.0
+    "2026-08-12": 3600.0
    },
    "UNLC": {
     "2026-07-16": 55000.0,
@@ -1465,6 +1465,12 @@
    },
    {
     "date": "2026-06-26",
+    "societe": "AIR LIQUIDE CI",
+    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
     "societe": "SITAB",
     "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
@@ -1482,12 +1488,6 @@
     "type": "ago"
    },
    {
-    "date": "2026-06-26",
-    "societe": "AIR LIQUIDE CI",
-    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
-    "type": "ago"
-   },
-   {
     "date": "2026-06-15",
     "societe": "TRACTAFRIC CI",
     "titre": "TRACTAFRIC MOTORS CI : Avis de convocation - Assemblée Générale Mixte",
@@ -1495,8 +1495,8 @@
    },
    {
     "date": "2026-06-13",
-    "societe": "LNB",
-    "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
+    "societe": "BIIC",
+    "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    }
   ]
@@ -1623,6 +1623,12 @@
   },
   {
    "date": "2026-06-26",
+   "societe": "AIR LIQUIDE CI",
+   "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
    "societe": "SITAB",
    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
@@ -1640,12 +1646,6 @@
    "type": "ago"
   },
   {
-   "date": "2026-06-26",
-   "societe": "AIR LIQUIDE CI",
-   "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
-   "type": "ago"
-  },
-  {
    "date": "2026-06-15",
    "societe": "TRACTAFRIC CI",
    "titre": "TRACTAFRIC MOTORS CI : Avis de convocation - Assemblée Générale Mixte",
@@ -1653,8 +1653,8 @@
   },
   {
    "date": "2026-06-13",
-   "societe": "LNB",
-   "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
+   "societe": "BIIC",
+   "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   }
  ]
