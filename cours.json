@@ -1,305 +1,305 @@
 {
  "_meta": {
-  "updated": "2026-08-13T12:04:29+00:00",
-  "updated_human": "13/08/2026 12:04 UTC",
+  "updated": "2026-08-13T12:05:21+00:00",
+  "updated_human": "13/08/2026 12:05 UTC",
   "count": 48,
   "diagnostic": {
-   "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
-   "github_secours": "non utilise (officiel suffisant)",
+   "brvm_officiel": "https://www.brvm.org/en/cours-actions/0 -> HTTPSConnectionPool(host='www.brvm.org', port=443): Read timed out. (read timeout=30)",
+   "github_secours": "47 titres",
    "alertes_perso": "aucun seuil franchi",
    "resultat": "48 titres",
-   "dates_couvertes": "2026-08-13 -> 2026-08-13",
+   "dates_couvertes": "2019-05-10 -> 2026-08-06",
    "indice_composite": "492.16 (https://www.brvm.org/fr/indices/0)",
    "annonces": "25 annonce(s)"
   }
  },
  "ABJC": {
-  "actuel": 3180.0,
-  "veille": 3180,
-  "date": "2026-08-13",
-  "source": "brvm.org"
- },
- "BICB": {
-  "actuel": 8000.0,
-  "veille": 8095,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 3010.0,
+  "veille": 2800.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "BICC": {
-  "actuel": 29000.0,
-  "veille": 29000,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 29100.0,
+  "veille": 29000.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
+ },
+ "BICB": {
+  "actuel": 7595.0,
+  "veille": 7500.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "BNBC": {
-  "actuel": 2000.0,
-  "veille": 1995,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 1900.0,
+  "veille": 1915.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "BOAB": {
-  "actuel": 8695.0,
-  "veille": 8655,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 8710.0,
+  "veille": 8700.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "BOABF": {
-  "actuel": 7100.0,
-  "veille": 7100,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 7230.0,
+  "veille": 7200.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "BOAC": {
-  "actuel": 12200.0,
-  "veille": 12480,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 11600.0,
+  "veille": 11600.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "BOAM": {
-  "actuel": 6100.0,
-  "veille": 6050,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 5590.0,
+  "veille": 5585.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "BOAN": {
-  "actuel": 5100.0,
-  "veille": 5100,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 5200.0,
+  "veille": 5075.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "BOAS": {
-  "actuel": 7690.0,
-  "veille": 7690,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 7710.0,
+  "veille": 7600.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "CABC": {
-  "actuel": 3460.0,
-  "veille": 3500,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 3550.0,
+  "veille": 3500.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "CBIBF": {
-  "actuel": 28700.0,
-  "veille": 28700,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 28305.0,
+  "veille": 28300.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "CFAC": {
-  "actuel": 1680.0,
-  "veille": 1695,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 1700.0,
+  "veille": 1690.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "CIEC": {
-  "actuel": 5750.0,
-  "veille": 5450,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 5020.0,
+  "veille": 5000.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "ECOC": {
-  "actuel": 16000.0,
-  "veille": 16000,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 16200.0,
+  "veille": 16000.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "ETIT": {
-  "actuel": 68.0,
-  "veille": 65,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 65.0,
+  "veille": 64.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "FTSC": {
-  "actuel": 2195.0,
-  "veille": 2190,
-  "date": "2026-08-13",
-  "source": "brvm.org"
- },
- "LNBB": {
-  "actuel": 4150.0,
-  "veille": 4245,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 2000.0,
+  "veille": 1990.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "NEIC": {
-  "actuel": 2255.0,
-  "veille": 2260,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 2115.0,
+  "veille": 2260.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "NSBC": {
-  "actuel": 23500.0,
-  "veille": 23590,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 23550.0,
+  "veille": 23850.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "NTLC": {
-  "actuel": 17450.0,
-  "veille": 17450,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 16595.0,
+  "veille": 16750.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "ONTBF": {
-  "actuel": 2790.0,
-  "veille": 2900,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 2940.0,
+  "veille": 2985.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "ORAC": {
-  "actuel": 17500.0,
-  "veille": 17255,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 17175.0,
+  "veille": 17175.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "ORGT": {
-  "actuel": 3100.0,
-  "veille": 3110,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 3125.0,
+  "veille": 3140.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "PALC": {
-  "actuel": 8975.0,
-  "veille": 9100,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 8980.0,
+  "veille": 8980.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "PRSC": {
-  "actuel": 4495.0,
-  "veille": 4400,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 4480.0,
+  "veille": 4485.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "SAFC": {
-  "actuel": 5555.0,
-  "veille": 5170,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 5250.0,
+  "veille": 5000.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "SCRC": {
-  "actuel": 3625.0,
-  "veille": 3595,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 3550.0,
+  "veille": 3575.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "SDCC": {
-  "actuel": 11605.0,
-  "veille": 11605,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 11900.0,
+  "veille": 11400.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "SDSC": {
-  "actuel": 2800.0,
-  "veille": 2730,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 2530.0,
+  "veille": 2355.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "SEMC": {
-  "actuel": 1450.0,
-  "veille": 1500,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 1445.0,
+  "veille": 1450.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "SGBC": {
-  "actuel": 39200.0,
-  "veille": 38496,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 38000.0,
+  "veille": 37905.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "SHEC": {
-  "actuel": 2200.0,
-  "veille": 2250,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 2290.0,
+  "veille": 2300.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "SIBC": {
-  "actuel": 9115.0,
-  "veille": 9120,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 9300.0,
+  "veille": 9250.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "SICC": {
-  "actuel": 9380.0,
-  "veille": 8730,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 7085.0,
+  "veille": 7085.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "SIVC": {
-  "actuel": 2405.0,
-  "veille": 2400,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 2125.0,
+  "veille": 2075.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "SLBC": {
-  "actuel": 37400.0,
-  "veille": 37199,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 37000.0,
+  "veille": 36900.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "SMBC": {
-  "actuel": 16400.0,
-  "veille": 16501,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 16550.0,
+  "veille": 16500.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "SNTS": {
-  "actuel": 31800.0,
-  "veille": 31998,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 31000.0,
+  "veille": 30200.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "SOGC": {
-  "actuel": 7855.0,
-  "veille": 7860,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 8100.0,
+  "veille": 8100.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "SPHC": {
-  "actuel": 8050.0,
-  "veille": 7870,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 7600.0,
+  "veille": 7600.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "STAC": {
-  "actuel": 2680.0,
-  "veille": 2660,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 2675.0,
+  "veille": 2690.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "STBC": {
-  "actuel": 22800.0,
-  "veille": 23500,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 24980.0,
+  "veille": 25000.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
+ },
+ "SVOC": {
+  "actuel": 2395.0,
+  "veille": 2395.0,
+  "date": "2019-05-10",
+  "source": "github/Fredysessie"
  },
  "TTLC": {
-  "actuel": 2995.0,
-  "veille": 2995,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 2805.0,
+  "veille": 2980.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "TTLS": {
-  "actuel": 3600.0,
-  "veille": 3600,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 3500.0,
+  "veille": 3630.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "UNLC": {
-  "actuel": 58000.0,
-  "veille": 58000,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 54595.0,
+  "veille": 54595.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "UNXC": {
-  "actuel": 1945.0,
-  "veille": 1925,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 1900.0,
+  "veille": 1895.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "SGBCI": {
-  "actuel": 39200.0,
-  "veille": 38496,
-  "date": "2026-08-13",
-  "source": "brvm.org"
+  "actuel": 38000.0,
+  "veille": 37905.0,
+  "date": "2026-08-06",
+  "source": "github/Fredysessie"
  },
  "_histo": {
   "points": {
@@ -1466,18 +1466,6 @@
    {
     "date": "2026-06-26",
     "societe": "SITAB",
-    "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "AIR LIQUIDE CI",
-    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "SITAB",
     "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
@@ -1488,6 +1476,18 @@
     "type": "ago"
    },
    {
+    "date": "2026-06-26",
+    "societe": "SITAB",
+    "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "AIR LIQUIDE CI",
+    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+    "type": "ago"
+   },
+   {
     "date": "2026-06-15",
     "societe": "TRACTAFRIC CI",
     "titre": "TRACTAFRIC MOTORS CI : Avis de convocation - Assemblée Générale Mixte",
@@ -1495,8 +1495,8 @@
    },
    {
     "date": "2026-06-13",
-    "societe": "BIIC",
-    "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
+    "societe": "LNB",
+    "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    }
   ]
@@ -1624,18 +1624,6 @@
   {
    "date": "2026-06-26",
    "societe": "SITAB",
-   "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "AIR LIQUIDE CI",
-   "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "SITAB",
    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
@@ -1646,6 +1634,18 @@
    "type": "ago"
   },
   {
+   "date": "2026-06-26",
+   "societe": "SITAB",
+   "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "AIR LIQUIDE CI",
+   "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+   "type": "ago"
+  },
+  {
    "date": "2026-06-15",
    "societe": "TRACTAFRIC CI",
    "titre": "TRACTAFRIC MOTORS CI : Avis de convocation - Assemblée Générale Mixte",
@@ -1653,8 +1653,8 @@
   },
   {
    "date": "2026-06-13",
-   "societe": "BIIC",
-   "titre": "BIIC BN : Avis de convocation - Assemblée Générale Ordinaire",
+   "societe": "LNB",
+   "titre": "LNB BN : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   }
  ]
