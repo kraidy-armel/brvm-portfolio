@@ -1,10 +1,10 @@
 {
  "_meta": {
-  "updated": "2026-08-13T11:05:16+00:00",
-  "updated_human": "13/08/2026 11:05 UTC",
+  "updated": "2026-08-13T11:14:09+00:00",
+  "updated_human": "13/08/2026 11:14 UTC",
   "count": 48,
   "diagnostic": {
-   "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/liste, 47 titres)",
+   "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
    "github_secours": "non utilise (officiel suffisant)",
    "alertes_perso": "aucun seuil franchi",
    "resultat": "48 titres",
