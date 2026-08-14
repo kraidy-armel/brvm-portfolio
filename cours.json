@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-08-14T15:35:10+00:00",
-  "updated_human": "14/08/2026 15:35 UTC",
+  "updated": "2026-08-14T15:50:09+00:00",
+  "updated_human": "14/08/2026 15:50 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -1350,6 +1350,12 @@
   },
   "_annonces_prec": [
    {
+    "date": "2026-08-28",
+    "societe": "TOTAL",
+    "titre": "Dividende net 158,8270 FCFA/action - detachement 28/08, paiement 31/08",
+    "type": "dividende"
+   },
+   {
     "date": "2026-08-27",
     "societe": "SAPH CI",
     "titre": "Dividende net 489 FCFA/action - detachement 27/08, paiement 28/08",
@@ -1404,10 +1410,10 @@
     "type": "dividende"
    },
    {
-    "date": "2026-07-27",
-    "societe": "CIE CI",
-    "titre": "Dividende net 234 FCFA/action - detachement 27/07, paiement 28/07",
-    "type": "dividende"
+    "date": "2026-08-03",
+    "societe": "BOLLORE TRANSPORT & LOGISTICS",
+    "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
+    "type": "ago"
    },
    {
     "date": "2026-08-03",
@@ -1419,12 +1425,6 @@
     "date": "2026-08-03",
     "societe": "BOLLORE TRANSPORT & LOGISTICS",
     "titre": "AFRICA GLOBAL LOGISTICS CI : Pouvoir - Assemblée Générale Mixte",
-    "type": "ago"
-   },
-   {
-    "date": "2026-08-03",
-    "societe": "BOLLORE TRANSPORT & LOGISTICS",
-    "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
     "type": "ago"
    },
    {
@@ -1442,13 +1442,13 @@
    {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
-    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
-    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -1508,6 +1508,12 @@
  },
  "_annonces": [
   {
+   "date": "2026-08-28",
+   "societe": "TOTAL",
+   "titre": "Dividende net 158,8270 FCFA/action - detachement 28/08, paiement 31/08",
+   "type": "dividende"
+  },
+  {
    "date": "2026-08-27",
    "societe": "SAPH CI",
    "titre": "Dividende net 489 FCFA/action - detachement 27/08, paiement 28/08",
@@ -1562,10 +1568,10 @@
    "type": "dividende"
   },
   {
-   "date": "2026-07-27",
-   "societe": "CIE CI",
-   "titre": "Dividende net 234 FCFA/action - detachement 27/07, paiement 28/07",
-   "type": "dividende"
+   "date": "2026-08-03",
+   "societe": "BOLLORE TRANSPORT & LOGISTICS",
+   "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
+   "type": "ago"
   },
   {
    "date": "2026-08-03",
@@ -1577,12 +1583,6 @@
    "date": "2026-08-03",
    "societe": "BOLLORE TRANSPORT & LOGISTICS",
    "titre": "AFRICA GLOBAL LOGISTICS CI : Pouvoir - Assemblée Générale Mixte",
-   "type": "ago"
-  },
-  {
-   "date": "2026-08-03",
-   "societe": "BOLLORE TRANSPORT & LOGISTICS",
-   "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
    "type": "ago"
   },
   {
@@ -1600,13 +1600,13 @@
   {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
-   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
-   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
