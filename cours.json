@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-08-17T13:52:05+00:00",
-  "updated_human": "17/08/2026 13:52 UTC",
+  "updated": "2026-08-17T14:05:10+00:00",
+  "updated_human": "17/08/2026 14:05 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -9,7 +9,7 @@
    "alertes_perso": "aucun seuil franchi",
    "resultat": "48 titres",
    "dates_couvertes": "2026-08-17 -> 2026-08-17",
-   "indice_composite": "497.65 (https://www.brvm.org/fr/indices/0)",
+   "indice_composite": "non recupere (https://www.brvm.org/en -> motif non trouve)",
    "annonces": "25 annonce(s)"
   }
  },
