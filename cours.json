@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-08-19T14:35:12+00:00",
-  "updated_human": "19/08/2026 14:35 UTC",
+  "updated": "2026-08-19T14:50:15+00:00",
+  "updated_human": "19/08/2026 14:50 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -98,7 +98,7 @@
   "source": "brvm.org"
  },
  "ECOC": {
-  "actuel": 16350.0,
+  "actuel": 16500.0,
   "veille": 16885,
   "date": "2026-08-19",
   "source": "brvm.org"
@@ -140,7 +140,7 @@
   "source": "brvm.org"
  },
  "ONTBF": {
-  "actuel": 2820.0,
+  "actuel": 2945.0,
   "veille": 2900,
   "date": "2026-08-19",
   "source": "brvm.org"
@@ -242,8 +242,8 @@
   "source": "brvm.org"
  },
  "SNTS": {
-  "actuel": 33600.0,
-  "veille": 32501,
+  "actuel": 34400.0,
+  "veille": 32499,
   "date": "2026-08-19",
   "source": "brvm.org"
  },
@@ -278,7 +278,7 @@
   "source": "brvm.org"
  },
  "TTLS": {
-  "actuel": 3900.0,
+  "actuel": 3700.0,
   "veille": 3800,
   "date": "2026-08-19",
   "source": "brvm.org"
@@ -631,7 +631,7 @@
     "2026-08-14": 16000.0,
     "2026-08-17": 16005.0,
     "2026-08-18": 16885.0,
-    "2026-08-19": 16350.0
+    "2026-08-19": 16500.0
    },
    "ETIT": {
     "2026-07-23": 75.0,
@@ -785,7 +785,7 @@
     "2026-08-14": 2800.0,
     "2026-08-17": 2900.0,
     "2026-08-18": 2900.0,
-    "2026-08-19": 2820.0
+    "2026-08-19": 2945.0
    },
    "ORAC": {
     "2026-07-23": 16300.0,
@@ -1159,7 +1159,7 @@
     "2026-08-14": 31900.0,
     "2026-08-17": 31900.0,
     "2026-08-18": 32500.0,
-    "2026-08-19": 33600.0
+    "2026-08-19": 34400.0
    },
    "SOGC": {
     "2026-07-23": 8300.0,
@@ -1291,7 +1291,7 @@
     "2026-08-14": 3585.0,
     "2026-08-17": 3700.0,
     "2026-08-18": 3800.0,
-    "2026-08-19": 3900.0
+    "2026-08-19": 3700.0
    },
    "UNLC": {
     "2026-07-23": 52000.0,
@@ -1453,14 +1453,14 @@
    },
    {
     "date": "2026-06-29",
-    "societe": "LNB",
-    "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
+    "societe": "AIR LIQUIDE CI",
+    "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-29",
-    "societe": "AIR LIQUIDE CI",
-    "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
+    "societe": "LNB",
+    "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -1611,14 +1611,14 @@
   },
   {
    "date": "2026-06-29",
-   "societe": "LNB",
-   "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
+   "societe": "AIR LIQUIDE CI",
+   "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-29",
-   "societe": "AIR LIQUIDE CI",
-   "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
+   "societe": "LNB",
+   "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
