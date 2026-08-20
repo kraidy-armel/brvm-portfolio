@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-08-20T14:35:11+00:00",
-  "updated_human": "20/08/2026 14:35 UTC",
+  "updated": "2026-08-20T14:50:10+00:00",
+  "updated_human": "20/08/2026 14:50 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -38,13 +38,13 @@
   "source": "brvm.org"
  },
  "BOAB": {
-  "actuel": 9450.0,
+  "actuel": 9500.0,
   "veille": 9100,
   "date": "2026-08-20",
   "source": "brvm.org"
  },
  "BOABF": {
-  "actuel": 7700.0,
+  "actuel": 7500.0,
   "veille": 7300,
   "date": "2026-08-20",
   "source": "brvm.org"
@@ -194,7 +194,7 @@
   "source": "brvm.org"
  },
  "SEMC": {
-  "actuel": 1535.0,
+  "actuel": 1590.0,
   "veille": 1600,
   "date": "2026-08-20",
   "source": "brvm.org"
@@ -224,7 +224,7 @@
   "source": "brvm.org"
  },
  "SIVC": {
-  "actuel": 2260.0,
+  "actuel": 2380.0,
   "veille": 2350,
   "date": "2026-08-20",
   "source": "brvm.org"
@@ -236,7 +236,7 @@
   "source": "brvm.org"
  },
  "SMBC": {
-  "actuel": 17375.0,
+  "actuel": 16620.0,
   "veille": 16500,
   "date": "2026-08-20",
   "source": "brvm.org"
@@ -284,7 +284,7 @@
   "source": "brvm.org"
  },
  "UNLC": {
-  "actuel": 57000.0,
+  "actuel": 52000.0,
   "veille": 53998,
   "date": "2026-08-20",
   "source": "brvm.org"
@@ -411,7 +411,7 @@
     "2026-08-17": 8800.0,
     "2026-08-18": 9400.0,
     "2026-08-19": 9100.0,
-    "2026-08-20": 9450.0
+    "2026-08-20": 9500.0
    },
    "BOABF": {
     "2026-07-24": 7150.0,
@@ -433,7 +433,7 @@
     "2026-08-17": 7300.0,
     "2026-08-18": 7350.0,
     "2026-08-19": 7300.0,
-    "2026-08-20": 7700.0
+    "2026-08-20": 7500.0
    },
    "BOAC": {
     "2026-07-24": 10200.0,
@@ -983,7 +983,7 @@
     "2026-08-17": 1480.0,
     "2026-08-18": 1590.0,
     "2026-08-19": 1600.0,
-    "2026-08-20": 1535.0
+    "2026-08-20": 1590.0
    },
    "SGBC": {
     "2026-07-24": 38000.0,
@@ -1093,7 +1093,7 @@
     "2026-08-17": 2410.0,
     "2026-08-18": 2390.0,
     "2026-08-19": 2350.0,
-    "2026-08-20": 2260.0
+    "2026-08-20": 2380.0
    },
    "SLBC": {
     "2026-07-24": 39495.0,
@@ -1137,7 +1137,7 @@
     "2026-08-17": 16445.0,
     "2026-08-18": 16445.0,
     "2026-08-19": 16500.0,
-    "2026-08-20": 17375.0
+    "2026-08-20": 16620.0
    },
    "SNTS": {
     "2026-07-24": 31495.0,
@@ -1313,7 +1313,7 @@
     "2026-08-17": 57990.0,
     "2026-08-18": 54000.0,
     "2026-08-19": 54000.0,
-    "2026-08-20": 57000.0
+    "2026-08-20": 52000.0
    },
    "UNXC": {
     "2026-07-24": 1850.0,
@@ -1412,12 +1412,6 @@
    {
     "date": "2026-08-03",
     "societe": "BOLLORE TRANSPORT & LOGISTICS",
-    "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
-    "type": "ago"
-   },
-   {
-    "date": "2026-08-03",
-    "societe": "BOLLORE TRANSPORT & LOGISTICS",
     "titre": "AFRICA GLOBAL LOGISTICS CI : Pouvoir - Assemblée Générale Mixte",
     "type": "ago"
    },
@@ -1425,6 +1419,12 @@
     "date": "2026-08-03",
     "societe": "BOLLORE TRANSPORT & LOGISTICS",
     "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
+    "type": "ago"
+   },
+   {
+    "date": "2026-08-03",
+    "societe": "BOLLORE TRANSPORT & LOGISTICS",
+    "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
     "type": "ago"
    },
    {
@@ -1570,12 +1570,6 @@
   {
    "date": "2026-08-03",
    "societe": "BOLLORE TRANSPORT & LOGISTICS",
-   "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
-   "type": "ago"
-  },
-  {
-   "date": "2026-08-03",
-   "societe": "BOLLORE TRANSPORT & LOGISTICS",
    "titre": "AFRICA GLOBAL LOGISTICS CI : Pouvoir - Assemblée Générale Mixte",
    "type": "ago"
   },
@@ -1583,6 +1577,12 @@
    "date": "2026-08-03",
    "societe": "BOLLORE TRANSPORT & LOGISTICS",
    "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
+   "type": "ago"
+  },
+  {
+   "date": "2026-08-03",
+   "societe": "BOLLORE TRANSPORT & LOGISTICS",
+   "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
    "type": "ago"
   },
   {
