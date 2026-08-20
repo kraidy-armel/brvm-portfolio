@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-08-20T14:05:14+00:00",
-  "updated_human": "20/08/2026 14:05 UTC",
+  "updated": "2026-08-20T14:20:15+00:00",
+  "updated_human": "20/08/2026 14:20 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -140,7 +140,7 @@
   "source": "brvm.org"
  },
  "ONTBF": {
-  "actuel": 2890.0,
+  "actuel": 2900.0,
   "veille": 2945,
   "date": "2026-08-20",
   "source": "brvm.org"
@@ -785,7 +785,7 @@
     "2026-08-17": 2900.0,
     "2026-08-18": 2900.0,
     "2026-08-19": 2945.0,
-    "2026-08-20": 2890.0
+    "2026-08-20": 2900.0
    },
    "ORAC": {
     "2026-07-24": 16725.0,
