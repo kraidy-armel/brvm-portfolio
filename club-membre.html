@@ -161,9 +161,17 @@ async function charger(){
   if(!CID){main.innerHTML='<div class="empty">⚠️ Lien incomplet — demande au trésorier de te renvoyer l\'invitation.</div>';return;}
   const {data:liens}=await sbc.from("brvm_club_membres").select("membre_id,membre_nom,email").eq("club_id",CID);
   const moi=(liens||[]).find(l=>(l.email||"").toLowerCase()===(session.user.email||"").toLowerCase())||null;
+  /* Vérifié AVANT de lire les données du club (pas seulement avant de les
+     afficher) : un compte qui n'est pas dans la liste du trésorier n'a rien à
+     voir ici — ni son propre relevé, ni surtout l'état commun (patrimoine,
+     valeur des parts, noms et parts des AUTRES membres, journal complet). */
+  if(!moi){
+    main.innerHTML='<div class="empty">🔒 Accès non autorisé.<br><br>Ton email <b>'+esc(session.user.email)+'</b> n\'est pas (encore) dans la liste du trésorier pour ce club.<br>Demande-lui de l\'ajouter dans « Membres & accès ».<br><br><button class="btn ghost" style="max-width:220px;margin:14px auto 0" onclick="deconnexion()">Changer de compte</button></div>';
+    return;
+  }
   const {data:row,error}=await sbc.from("brvm_club_share").select("data,updated_at").eq("id",CID).maybeSingle();
   if(error||!row||!row.data){
-    main.innerHTML='<div class="empty">🔒 Accès non autorisé.<br><br>Ton email <b>'+esc(session.user.email)+'</b> n\'est pas (encore) dans la liste du trésorier pour ce club.<br>Demande-lui de l\'ajouter dans « Membres & accès ».<br><br><button class="btn ghost" style="max-width:220px;margin:14px auto 0" onclick="deconnexion()">Changer de compte</button></div>';
+    main.innerHTML='<div class="empty">⚠️ Données du club indisponibles pour le moment. Réessaie dans un instant.</div>';
     return;
   }
   afficher(row.data,row.updated_at,moi,session.user.email);

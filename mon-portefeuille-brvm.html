@@ -3115,7 +3115,24 @@ function clubParts(){return clubOn()?db.club.membres.reduce((s,m)=>s+(+m.parts||
 function clubVL(){const n=clubParts();if(n<=0)return null;return (totals().value+cashBalance())/n;}
 const pfmt=x=>(+x||0).toLocaleString("fr-FR",{maximumFractionDigits:2});
 
+/* Fonder un club engage d'autres personnes (leurs apports, leurs parts) : seul
+   le propriétaire de l'app — celui qui connaît son mot de passe — doit pouvoir
+   le faire, même si l'appareil est déverrouillé au moment où quelqu'un d'autre
+   l'a en main. */
+function confirmClubFounding(){
+  if(!store.lock){
+    alert("🔒 Protège d'abord l'app par un mot de passe avant de fonder un club (⚙️ Réglages → Protéger par identifiant et mot de passe) — un club ne doit pouvoir être fondé que par toi.");
+    openSettings();
+    return false;
+  }
+  const p=prompt("🔒 Ton mot de passe de l'app, pour confirmer que c'est bien toi qui fondes ce club :");
+  if(p===null)return false;
+  if(lockHash((store.lockUser||"")+"\n"+p.trim())===store.lock)return true;
+  alert("Mot de passe incorrect — création annulée.");
+  return false;
+}
 function openClubIntro(){
+  if(!confirmClubFounding())return;
   openSheet(`<h3>🤝 Fonder un club d'investissement</h3>
     <div class="hint">Un nouveau portefeuille sera créé pour le club. Chaque membre apporte sa mise de départ et reçoit ses parts au prix de fondation choisi ci-dessous. Ensuite, tout entrant ou sortant passe par la valeur de la part du jour — l'équité est automatique.</div>
     <label>Nom du club</label><input id="cfNom" placeholder="ex : Club Éburnie">
