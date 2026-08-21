@@ -810,6 +810,10 @@ function applyDark(){
 }
 function toggleDark(){try{localStorage.setItem("brvm_dark",isDark()?"0":"1");}catch(e){}applyDark();renderAll();openSettings();}
 
+/* --- Vue "Mes positions" : tableau ou cartes (préférence mémorisée sur l'appareil) --- */
+function posViewMode(){try{return localStorage.getItem("brvm_posview")||"table";}catch(e){return "table";}}
+function setPosView(mode){try{localStorage.setItem("brvm_posview",mode);}catch(e){}renderPortfolio();}
+
 /* --- Dividendes probablement oubliés : détachement passé (agenda) sans saisie --- */
 function missedDividends(){
   const auj=today();
@@ -2032,7 +2036,14 @@ function toggleAcc(k){accOpen[k]=!accOpen[k];try{localStorage.setItem("brvm_acc"
 
 function renderPortfolio(){
   const t=totals();
-  document.getElementById("positions").innerHTML=posTable(t.ps);
+  const posMode=posViewMode();
+  const posToggle=`<div class="seg" style="margin-bottom:12px">
+      <button class="${posMode==='table'?'on':''}" onclick="setPosView('table')">📊 Tableau</button>
+      <button class="${posMode==='cards'?'on':''}" onclick="setPosView('cards')">🗂️ Cartes</button>
+    </div>`;
+  document.getElementById("positions").innerHTML=t.ps.length
+    ?posToggle+(posMode==='table'?posTable(t.ps):t.ps.map(p=>posRow(p,true)).join(""))
+    :`<div class="empty"><div class="ico">📊</div>Ton portefeuille est vide.</div>`;
   let txs=[...db.tx].sort((a,b)=>b.date.localeCompare(a.date));
   const q=(document.getElementById("txSearch")?.value||"").toLowerCase().trim();
   if(q)txs=txs.filter(x=>((stockMap[x.ticker]?.name||"")+" "+x.ticker+" "+(x.libelle||"")+" "+x.date+" "+x.type).toLowerCase().includes(q));
