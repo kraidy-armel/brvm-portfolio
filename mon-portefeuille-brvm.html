@@ -75,6 +75,26 @@
   .val{font-weight:600}
   .chg{font-size:12.5px;font-weight:600}
 
+  /* Positions en tableau (vue "Portefeuille") */
+  .postable-wrap{overflow-x:auto;margin:0 -16px;padding:0 16px}
+  .postable{width:100%;border-collapse:collapse;font-size:13.5px}
+  .postable th,.postable td{padding:10px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:right}
+  .postable th:first-child,.postable td:first-child{text-align:left;border-left:3px solid transparent}
+  .postable th{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
+  .postable tbody tr{cursor:pointer;transition:background .15s}
+  .postable tbody tr:hover td{background:var(--bg)}
+  .postable tbody tr:last-child td{border-bottom:none}
+  .postable tbody tr.pos-row td:first-child{border-left-color:var(--pos)}
+  .postable tbody tr.neg-row td:first-child{border-left-color:var(--neg)}
+  .postable .nm{font-weight:600;font-size:13.5px;display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .postable .sub{font-size:11px;color:var(--muted);font-weight:400}
+  .postable .pct{font-size:11px;display:block}
+  .postable th.wcell-h,.postable td.wcell{text-align:left}
+  .postable .wwrap{display:flex;align-items:center;gap:8px}
+  .postable .wwrap .bar{width:52px;margin:0;flex-shrink:0}
+  .postable .wwrap .wpct{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .postable tfoot td{padding:12px 10px;border-top:2px solid var(--line);border-bottom:none;font-weight:700;background:var(--bg)}
+
   .btn{display:block;width:100%;background:var(--green);color:#fff;padding:14px;border-radius:14px;font-weight:600;font-size:15px;text-align:center}
   .btn.alt{background:var(--green-l);color:var(--green)}
   .btn.ghost{background:var(--card);color:var(--green);border:1.5px solid var(--green-l)}
@@ -241,7 +261,7 @@
 <!-- PORTEFEUILLE -->
 <section class="screen" id="s-portefeuille">
   <h2 style="margin:6px 4px 4px">Portefeuille</h2>
-  <div class="help">💡 <div>Une <b>position</b> = les actions que tu détiens d'une société. Le <b>PRU</b> est ton prix d'achat moyen. La plus-value, c'est ce que tu gagnerais en vendant aujourd'hui.</div></div>
+  <div class="help">💡 <div>Une <b>position</b> = les actions que tu détiens d'une société. Le <b>PRU</b> est ton prix d'achat moyen. La colonne <b>+/- value</b> est ce que tu gagnerais en vendant aujourd'hui. La colonne <b>Réalisé</b> est ce que tu as déjà encaissé sur ce titre : plus-values des ventes passées + dividendes reçus.</div></div>
   <div class="card" id="positions"></div>
 
   <div class="topbar" style="margin-top:18px">
@@ -1849,6 +1869,56 @@ function posRow(p,tappable){
   </div>`;
 }
 
+function posTable(ps){
+  if(!ps.length)return `<div class="empty"><div class="ico">📊</div>Ton portefeuille est vide.</div>`;
+  const totalValue=ps.reduce((s,p)=>s+p.value,0);
+  const totalInv=ps.reduce((s,p)=>s+p.invested,0);
+  const totalPl=ps.reduce((s,p)=>s+p.pl,0);
+  const totalPlPct=totalInv?totalPl/totalInv*100:0;
+  const multi=ps.length>1;
+  const best=multi?ps.reduce((a,b)=>b.plPct>a.plPct?b:a,ps[0]):null;
+  const worst=multi?ps.reduce((a,b)=>b.plPct<a.plPct?b:a,ps[0]):null;
+  const R=realized();
+  const divByTicker={};
+  db.div.forEach(d=>{divByTicker[d.ticker]=(divByTicker[d.ticker]||0)+(+d.montant||0);});
+  let totalRealized=0;
+  const rows=ps.map(p=>{
+    const dayPct=p.prev>0?(p.cur-p.prev)/p.prev*100:0;
+    const dCls=dayPct>0?"pos":(dayPct<0?"neg":"");
+    const c=p.pl>=0?"pos":"neg";
+    const weight=totalValue?p.value/totalValue*100:0;
+    let badge="";
+    if(best&&p.ticker===best.ticker&&best.plPct>0)badge=`<span class="tag">🏆 top</span>`;
+    else if(worst&&p.ticker===worst.ticker&&worst.plPct<0)badge=`<span class="tag" style="background:var(--neg-l);color:var(--neg)">🔻 recul</span>`;
+    const capGain=R.byTicker[p.ticker]||0;
+    const divs=divByTicker[p.ticker]||0;
+    const realizedTotal=capGain+divs;
+    totalRealized+=realizedTotal;
+    const rc=realizedTotal>0?"pos":(realizedTotal<0?"neg":"");
+    return `<tr onclick="posDetail('${p.ticker}')" class="${c}-row">
+      <td><div class="nm">${stockMap[p.ticker]?.name||p.ticker}${badge}</div><div class="sub">${p.ticker}</div></td>
+      <td class="wcell"><div class="wwrap"><div class="bar"><span style="width:${weight.toFixed(0)}%;background:var(--${c})"></span></div><span class="wpct">${weight.toFixed(0)}%</span></div></td>
+      <td>${p.qty.toLocaleString("fr-FR")}</td>
+      <td>${fmtShort(p.pru)}</td>
+      <td>${fmtShort(p.cur)}</td>
+      <td class="${dCls}">${dayPct>=0?"+":""}${dayPct.toFixed(1)}%</td>
+      <td><b>${fmtShort(p.value)}</b></td>
+      <td class="${c}">${p.pl>=0?"+":""}${fmtShort(p.pl)}<span class="pct">${p.plPct>=0?"+":""}${p.plPct.toFixed(1)}%</span></td>
+      <td class="${rc}">${realizedTotal!==0?(realizedTotal>0?"+":"")+fmtShort(realizedTotal):"—"}${divs>0?`<span class="pct">dont ${fmtShort(divs)} div.</span>`:""}</td>
+    </tr>`;
+  }).join("");
+  return `<div class="postable-wrap"><table class="postable">
+    <thead><tr><th>Titre</th><th class="wcell-h">Poids</th><th>Qté</th><th>PRU</th><th>Cours</th><th>Jour</th><th>Valeur</th><th>+/- value</th><th>Réalisé</th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot><tr>
+      <td>Total</td><td></td><td></td><td></td><td></td><td></td>
+      <td>${fmtShort(totalValue)}</td>
+      <td class="${totalPl>=0?"pos":"neg"}">${totalPl>=0?"+":""}${fmtShort(totalPl)}<span class="pct" style="font-weight:700">${totalPlPct>=0?"+":""}${totalPlPct.toFixed(1)}%</span></td>
+      <td class="${totalRealized>=0?"pos":"neg"}">${totalRealized!==0?(totalRealized>=0?"+":"")+fmtShort(totalRealized):"—"}</td>
+    </tr></tfoot>
+  </table></div>`;
+}
+
 function renderHome(){
   const t=totals();
   const h=new Date().getHours();
@@ -1962,7 +2032,7 @@ function toggleAcc(k){accOpen[k]=!accOpen[k];try{localStorage.setItem("brvm_acc"
 
 function renderPortfolio(){
   const t=totals();
-  document.getElementById("positions").innerHTML=t.ps.length?t.ps.map(p=>posRow(p,true)).join(""):`<div class="empty"><div class="ico">📊</div>Ton portefeuille est vide.</div>`;
+  document.getElementById("positions").innerHTML=posTable(t.ps);
   let txs=[...db.tx].sort((a,b)=>b.date.localeCompare(a.date));
   const q=(document.getElementById("txSearch")?.value||"").toLowerCase().trim();
   if(q)txs=txs.filter(x=>((stockMap[x.ticker]?.name||"")+" "+x.ticker+" "+(x.libelle||"")+" "+x.date+" "+x.type).toLowerCase().includes(q));
