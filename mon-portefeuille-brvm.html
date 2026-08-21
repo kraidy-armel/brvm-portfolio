@@ -3653,12 +3653,13 @@ function lockHash(s){
    vers le hash sécurisé — sans ça, la mise à jour bloquerait l'accès de tous
    les utilisateurs ayant déjà activé un verrouillage ou un code de suppression. */
 function migrateLegacyLock(){
-  if(store.hSalt)return; /* déjà migré (ou jamais verrouillé) */
+  if(store.hSalt)return false; /* déjà migré (ou jamais verrouillé) */
   const decode=old=>{try{const d=decodeURIComponent(escape(atob(old)));return d.indexOf("brvm:")===0?d.slice(5):null;}catch(e){return null;}};
   let changed=false;
   if(store.lock){const payload=decode(store.lock);if(payload!==null){store.lock=lockHash(payload);changed=true;}}
   if(store.delCode){const payload=decode(store.delCode);if(payload!==null){store.delCode=lockHash(payload);changed=true;}}
   if(changed){try{localStorage.setItem(DB_KEY,JSON.stringify(store));}catch(e){}}
+  return changed;
 }
 function setLock(){
   if(store.lock){
@@ -3725,10 +3726,15 @@ async function pullCloud(){
       cloud.portfolios=merged;
       cloud.tombstones=[...tomb];
       store=cloud; if(store.sgiRate==null)store.sgiRate=1.5;
+      /* le nuage peut encore contenir un verrou à l'ancien format (Base64) si
+         cet appareil est le premier à recevoir la mise à jour de sécurité —
+         sans ça, le mot de passe local (déjà migré) ne correspondrait plus
+         jamais au verrou fraîchement écrasé par la copie du nuage. */
+      const relocked=migrateLegacyLock();
       if(!store.portfolios.some(p=>p.id===store.activeId))store.activeId=store.portfolios[0].id;
       activate(store.activeId);
       localStorage.setItem(DB_KEY,JSON.stringify(store));
-      if(needPush)pushCloud();
+      if(needPush||relocked)pushCloud();
     } else { await pushCloud(); }
   }catch(e){}
   renderAll();
