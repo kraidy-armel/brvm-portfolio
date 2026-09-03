@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-09-03T14:35:14+00:00",
-  "updated_human": "03/09/2026 14:35 UTC",
+  "updated": "2026-09-03T14:50:20+00:00",
+  "updated_human": "03/09/2026 14:50 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -80,7 +80,7 @@
   "source": "brvm.org"
  },
  "CBIBF": {
-  "actuel": 34000.0,
+  "actuel": 33100.0,
   "veille": 32499,
   "date": "2026-09-03",
   "source": "brvm.org"
@@ -170,7 +170,7 @@
   "source": "brvm.org"
  },
  "SAFC": {
-  "actuel": 6000.0,
+  "actuel": 5800.0,
   "veille": 6005,
   "date": "2026-09-03",
   "source": "brvm.org"
@@ -565,7 +565,7 @@
     "2026-08-31": 29630.0,
     "2026-09-01": 30605.0,
     "2026-09-02": 32500.0,
-    "2026-09-03": 34000.0
+    "2026-09-03": 33100.0
    },
    "CFAC": {
     "2026-08-07": 1700.0,
@@ -895,7 +895,7 @@
     "2026-08-31": 5900.0,
     "2026-09-01": 6200.0,
     "2026-09-02": 6005.0,
-    "2026-09-03": 6000.0
+    "2026-09-03": 5800.0
    },
    "SCRC": {
     "2026-08-07": 3550.0,
@@ -1442,13 +1442,13 @@
    {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
-    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
-    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -1600,13 +1600,13 @@
   {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
-   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
-   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
