@@ -436,7 +436,84 @@ function adminHtml(d,vl,n,pat,bal){
     +'<button class="btn ghost" onclick="syncCours()">🔄 Synchroniser les cours BRVM</button>'
     +'<button class="btn ghost" onclick="openAccess()">👥 Membres & accès (emails)</button>'
     +'<button class="btn ghost" onclick="openNewVote()">🗳️ Nouvelle proposition au vote</button>'
+    +'<button class="btn ghost" onclick="openEditMv()">✏️ Corriger un mouvement (montant/apport)</button>'
+    +'</div>'
+    +'<div class="sect">⚠️ Zone sensible</div><div class="card">'
+    +'<div class="hint">Supprime ce club et TOUTES ses données (membres, mouvements, votes) pour repartir de zéro avec ce même compte.</div>'
+    +'<button class="btn danger" onclick="resetClub()">🗑️ Supprimer ce club et recommencer</button>'
     +'</div>';
+}
+
+/* Corrige une erreur de saisie sur un mouvement déjà enregistré (typiquement
+   un apport de fondation mal renseigné) : on modifie le MONTANT du mouvement,
+   les parts sont recalculées à la même valeur de part qu'à l'origine (x.vl),
+   et l'écriture de trésorerie liée (dépôt/retrait) est retrouvée et ajustée
+   du même coup -- sinon le "total versé" du membre et les liquidités du club
+   resteraient faux après la correction. Pas destiné à un vrai mouvement
+   d'argent : pour ça, Souscription/Rachat/Cession existent déjà. */
+function cashLibelleFor(x){
+  if(x.type==="fondation")return "Apport de fondation de "+x.membre;
+  if(x.type==="souscription")return "Souscription "+x.membre;
+  if(x.type==="rachat")return "Rachat "+x.membre;
+  return null;
+}
+function openEditMv(){
+  const d=STATE.data;
+  const eligibles=[...d.mouvements].filter(x=>!x.annule&&["fondation","souscription","rachat"].includes(x.type)).sort((a,b)=>b.date.localeCompare(a.date));
+  if(!eligibles.length){alert("⚠️ Aucun mouvement corrigible pour l'instant.");return;}
+  const main=document.getElementById("main");
+  main.innerHTML='<div class="card"><h3 style="margin:0 0 8px">✏️ Corriger un mouvement</h3>'
+    +'<div class="hint">Corrige le montant d\'un mouvement déjà enregistré (ex : apport de fondation mal saisi). Les parts du membre et les liquidités du club sont recalculées automatiquement. Réservé aux erreurs de saisie.</div>'
+    +'<label>Mouvement à corriger</label><select id="emMv" onchange="emMvFill()">'
+      +eligibles.map(x=>'<option value="'+x.id+'">'+frD(x.date)+' · '+(x.type==="fondation"?"Fondation":x.type==="souscription"?"Souscription":"Rachat")+' — '+esc(x.membre)+' ('+fmt(x.montant)+')</option>').join("")
+    +'</select>'
+    +'<label>Montant correct (FCFA)</label><input id="emMontant" type="number">'
+    +'<label>Motif de la correction</label><input id="emNote" placeholder="ex : erreur de saisie">'
+    +'<button class="btn" onclick="editMvValider()">Valider la correction</button>'
+    +'<button class="lnk" onclick="afficher()">← Retour</button></div>';
+  emMvFill();
+}
+function emMvFill(){
+  const d=STATE.data;
+  const x=d.mouvements.find(m=>m.id===document.getElementById("emMv").value);
+  if(x)document.getElementById("emMontant").value=x.montant;
+}
+async function editMvValider(){
+  const d=STATE.data;
+  const x=d.mouvements.find(m=>m.id===document.getElementById("emMv").value); if(!x)return;
+  const nv=+document.getElementById("emMontant").value;
+  if(!(nv>0)){alert("⚠️ Montant invalide.");return;}
+  const note=(document.getElementById("emNote").value||"").trim();
+  const m=d.membres.find(z=>z.nom===x.membre); if(!m){alert("⚠️ Membre introuvable.");return;}
+  const vl=x.vl||d.vl0||CLUB_VL0_DEFAULT;
+  const oldMontant=x.montant, oldParts=x.parts;
+  const newParts=nv/vl;
+  const deltaParts=newParts-oldParts;
+  const cashEntry=d.cash.find(c=>c.date===x.date&&Math.abs(c.montant-oldMontant)<0.01&&c.libelle===cashLibelleFor(x));
+  if(!confirm("✏️ Corriger ce mouvement : "+fmt(oldMontant)+" → "+fmt(nv)+" ?\n\n"+m.nom+" passera de "+pfmt(m.parts)+" à "+pfmt(Math.max(0,m.parts+deltaParts))+" parts."+(cashEntry?"":"\n\n⚠️ Écriture de trésorerie correspondante introuvable — vérifie manuellement les liquidités après coup.")))return;
+  x.montant=nv; x.parts=newParts;
+  x.note=(x.note?x.note+" · ":"")+"corrigé le "+today()+" (était "+fmt(oldMontant)+")"+(note?" — "+note:"");
+  m.parts=Math.max(0,m.parts+deltaParts);
+  if(cashEntry)cashEntry.montant=nv;
+  await saveClub();
+  afficher();
+}
+
+/* Supprime entièrement ce club (données Supabase) pour permettre au même
+   compte de refonder un club propre. Irréversible -- double confirmation. */
+async function resetClub(){
+  if(!confirm("⚠️ Supprimer DÉFINITIVEMENT ce club et toutes ses données (membres, mouvements, votes) ?\n\nCette action est IRRÉVERSIBLE."))return;
+  if(!confirm("Dernière confirmation : es-tu VRAIMENT sûr ? Il n'y a aucun moyen de récupérer ces données après suppression."))return;
+  const cid=STATE.cid;
+  try{
+    await sbc.from("brvm_club_bulletins").delete().eq("club_id",cid);
+    await sbc.from("brvm_club_votes").delete().eq("club_id",cid);
+    await sbc.from("brvm_club_membres").delete().eq("club_id",cid);
+    await sbc.from("brvm_club_share").delete().eq("id",cid);
+  }catch(e){alert("⚠️ Échec de la suppression : "+(e.message||e));return;}
+  try{localStorage.removeItem("club_cid");}catch(e){}
+  alert("✅ Club supprimé. Tu peux maintenant en fonder un nouveau.");
+  location.href="club.html";
 }
 
 function openMv(type){
