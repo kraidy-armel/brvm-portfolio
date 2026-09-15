@@ -1064,6 +1064,8 @@ function mergeAnnonces(list){
       if(!f.p.events)f.p.events=[];
       /* pas de doublon si un événement similaire existe déjà à ±15 jours DANS CE portefeuille */
       if(f.p.events.some(e=>e.ticker===tk&&e.type===a.type&&Math.abs(new Date(e.date+"T00:00")-new Date(d+"T00:00"))<15*86400000))return;
+      /* ni si cette même annonce a été supprimée volontairement (voir delEvent) */
+      if((f.p.dismissedAnnonces||[]).some(x=>x.ticker===tk&&x.type===a.type&&Math.abs(new Date(x.date+"T00:00")-new Date(d+"T00:00"))<15*86400000))return;
       f.p.events.push({id:uid(),type:a.type,ticker:tk,date:d,note:("🤖 "+(a.titre||"Annonce BRVM")).slice(0,90),auto:true});
       f.modified=true;
       added++;
@@ -2653,7 +2655,20 @@ function saveEvent(){
   db.events.push({id:uid(),type:document.getElementById("evType").value,ticker:comboValue("evTicker"),date:document.getElementById("evDate").value||today(),note:document.getElementById("evNote").value.trim()});
   closeSheet();save();
 }
-function delEvent(id){if(!confirmDel("Supprimer cet événement de l'agenda ?"))return;db.events=db.events.filter(e=>e.id!==id);save();}
+function delEvent(id){
+  if(!confirmDel("Supprimer cet événement de l'agenda ?"))return;
+  const e=db.events.find(x=>x.id===id);
+  /* mémorise les annonces auto supprimées volontairement, sinon la prochaine
+     synchro les recrée (voir mergeAnnonces : "auto-réparateur, les agendas
+     manquants se remplissent" — sans ça, il ne sait pas qu'on l'a fait exprès). */
+  if(e&&e.auto&&e.ticker&&e.type){
+    if(!db.dismissedAnnonces)db.dismissedAnnonces=[];
+    db.dismissedAnnonces.push({ticker:e.ticker,type:e.type,date:e.date});
+    if(db.dismissedAnnonces.length>300)db.dismissedAnnonces=db.dismissedAnnonces.slice(-300);
+  }
+  db.events=db.events.filter(x=>x.id!==id);
+  save();
+}
 
 /* --- Cours du jour --- */
 function openPrices(){
