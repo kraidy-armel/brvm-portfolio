@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon Club — Club d'investissement BRVM</title>
+<link rel="manifest" href="club-manifest.json">
+<meta name="theme-color" content="#0B6B53">
+<link rel="apple-touch-icon" href="icon-club-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mon Club">
+<style>
+  :root{--green:#0B6B53;--green-d:#085441;--green-l:#E6F4F0;--pos:#13A36B;--neg:#E0533D;--neg-l:#FCEBE7;
+    --bg:#F4F6F8;--card:#FFFFFF;--ink:#16221E;--muted:#6B7B76;--line:#E8ECEA;--gold:#C9962E}
+  *{box-sizing:border-box}
+  body{margin:0 auto;max-width:640px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);font-size:15px;line-height:1.45;padding-bottom:40px}
+  header{background:linear-gradient(135deg,var(--green),var(--green-d));color:#fff;padding:18px;border-radius:0 0 22px 22px}
+  .badge{display:inline-block;background:rgba(255,255,255,.2);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.5px}
+  h1{font-size:20px;margin:8px 0 2px}
+  .sub{font-size:12.5px;opacity:.85}
+  .big{font-size:30px;font-weight:700;margin:10px 0 2px}
+  .twin{display:flex;gap:10px;margin-top:12px}
+  .twin>div{flex:1;background:rgba(255,255,255,.12);border-radius:14px;padding:10px 12px}
+  .twin .k{font-size:11px;opacity:.8}.twin .v{font-size:15px;font-weight:600;margin-top:2px}
+  .wrap{padding:16px}
+  .card{background:var(--card);border-radius:18px;padding:14px 16px;box-shadow:0 2px 14px rgba(16,40,33,.06);margin-bottom:14px}
+  .sect{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:16px 4px 8px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;color:var(--muted);font-size:11px;text-transform:uppercase;padding:6px 4px;border-bottom:2px solid var(--green)}
+  td{padding:9px 4px;border-bottom:1px solid var(--line)}
+  .r{text-align:right}
+  .pos{color:var(--pos);font-weight:600}.neg{color:var(--neg);font-weight:600}
+  .hint{font-size:12px;color:var(--muted)}
+  label{display:block;font-size:13px;font-weight:600;margin:12px 0 5px}
+  input,select,textarea{width:100%;padding:12px;border:1.5px solid var(--line);border-radius:12px;font-size:16px;font-family:inherit;background:#fff;color:var(--ink)}
+  .btn{display:block;width:100%;padding:13px;background:var(--green);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;margin-top:12px;text-align:center}
+  .ghost{background:transparent;color:var(--green);border:1.5px solid var(--green)}
+  .danger{background:var(--neg)}
+  .row2{display:flex;gap:10px}
+  .row2>.btn{flex:1;margin:0}
+  .lnk{background:none;border:none;color:var(--green);font-size:13px;text-decoration:underline;cursor:pointer;display:block;margin:12px auto 0}
+  .empty{text-align:center;padding:40px 20px;color:var(--muted)}
+  .kv{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .kv:last-child{border-bottom:none}
+  .kv .k{color:var(--muted)}
+  .tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px}
+  .memberRow{display:flex;gap:8px;margin-top:8px}
+  .memberRow input{flex:1}
+  footer{text-align:center;font-size:11px;color:var(--muted);padding:20px;font-style:italic}
+  @media print{
+    body{background:#fff;max-width:none}
+    .btn,.lnk,#auth,.noprint{display:none !important}
+    header{border-radius:0;background:#0B6B53 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .card{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<header id="hd">
+  <span class="badge" id="bdg">🤝 CLUB D'INVESTISSEMENT</span>
+  <h1 id="titre">Mon Club</h1>
+  <div class="sub" id="soustitre">Connecte-toi pour voir ton espace</div>
+  <div id="heroPerso" style="display:none">
+    <div class="big" id="pValeur"></div>
+    <div class="twin">
+      <div><div class="k">Mes parts</div><div class="v" id="pParts">—</div></div>
+      <div><div class="k">Total versé</div><div class="v" id="pVerse">—</div></div>
+      <div><div class="k">Ma plus-value</div><div class="v" id="pPV">—</div></div>
+    </div>
+  </div>
+</header>
+<div class="wrap">
+  <div id="auth">
+    <div class="card">
+      <div style="font-weight:700;font-size:15px">Connexion à ton espace club</div>
+      <label>Email</label>
+      <input id="aEmail" type="email" autocomplete="email" placeholder="ton@email.com">
+      <label>Mot de passe</label>
+      <input id="aPw" type="password" autocomplete="current-password" placeholder="au moins 6 caractères">
+      <div id="aMsg" class="hint" style="margin-top:8px"></div>
+      <button class="btn" onclick="connexion()">Se connecter</button>
+      <button class="btn ghost" onclick="inscription()">Créer mon compte (première fois)</button>
+      <button class="lnk" onclick="motdepasse()">Mot de passe oublié ?</button>
+    </div>
+    <div class="hint" style="text-align:center">Trésorier : crée ton compte puis fonde ton club. Membre invité : utilise l'email donné au trésorier.</div>
+  </div>
+  <div id="main" style="display:none"></div>
+</div>
+<footer>Mon Club — le trésorier saisit, chacun voit, personne ne conteste.</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SB_URL="https://szzionsxkrasgcjnksjn.supabase.co";
+const SB_KEY="sb_publishable_OQbsCE5Q9yVkegRm3uNReQ_kLKAxpAk";
+const sbc=window.supabase.createClient(SB_URL,SB_KEY);
+const COURS_URL="https://raw.githubusercontent.com/kraidy-armel/brvm-portfolio/main/cours.json";
+const CLUB_URL=location.origin+location.pathname;
+const CLUB_VL0_DEFAULT=10000;
+
+/* Titres BRVM : ticker -> nom (copie de la liste de l'app principale, pour
+   afficher les noms sans dépendre de l'autre fichier). */
+const STOCKS=[
+  ["SNTS","Sonatel"],["ORAC","Orange Côte d'Ivoire"],["ONTBF","Onatel Burkina Faso"],
+  ["BOAB","Bank of Africa Bénin"],["BOABF","Bank of Africa Burkina Faso"],["BOAC","Bank of Africa Côte d'Ivoire"],
+  ["BOAM","Bank of Africa Mali"],["BOAN","Bank of Africa Niger"],["BOAS","Bank of Africa Sénégal"],
+  ["BICB","BIIC Bénin"],["BICC","BICI Côte d'Ivoire"],["CBIBF","Coris Bank International Burkina"],
+  ["ECOC","Ecobank Côte d'Ivoire"],["ETIT","Ecobank Transnational (ETI)"],["NSBC","NSIA Banque Côte d'Ivoire"],
+  ["ORGT","Oragroup"],["SAFC","SAFCA - Alios Finance CI"],["SGBC","Société Générale CI (SGB)"],
+  ["SIBC","Société Ivoirienne de Banque"],["NTLC","Nestlé Côte d'Ivoire"],["PALC","Palm Côte d'Ivoire (PALMCI)"],
+  ["SPHC","SAPH Côte d'Ivoire"],["SICC","SICOR Côte d'Ivoire"],["STBC","SITAB Côte d'Ivoire"],
+  ["SOGC","SOGB Côte d'Ivoire"],["SLBC","Solibra Côte d'Ivoire"],["SCRC","Sucrivoire"],
+  ["UNLC","Unilever Côte d'Ivoire"],["BNBC","Bernabé Côte d'Ivoire"],["CFAC","CFAO Motors Côte d'Ivoire"],
+  ["LNBB","Loterie Nationale du Bénin"],["NEIC","NEI-CEDA Côte d'Ivoire"],["ABJC","Servair Abidjan"],
+  ["PRSC","Tractafric Motors Côte d'Ivoire"],["UNXC","Uniwax Côte d'Ivoire"],["SMBC","SMB Côte d'Ivoire"],
+  ["TTLC","Total Côte d'Ivoire"],["TTLS","Total Sénégal"],["SHEC","Vivo Energy Côte d'Ivoire"],
+  ["SDSC","Africa Global Logistics CI (ex Bolloré)"],["SEMC","Crown SIEM Côte d'Ivoire"],["SIVC","Erium CI (ex Air Liquide)"],
+  ["FTSC","Filtisac Côte d'Ivoire"],["STAC","Setao Côte d'Ivoire"],["CABC","Sicable Côte d'Ivoire"],
+  ["CIEC","CIE Côte d'Ivoire"],["SDCC","SODECI Côte d'Ivoire"]
+];
+const stockMap={}; STOCKS.forEach(s=>stockMap[s[0]]={name:s[1]});
+
+/* Lien d'invitation : ?c=... mémorisé pour que l'appli installée retrouve
+   son club sans le paramètre dans l'URL. */
+const URL_CID=new URLSearchParams(location.search).get("c");
+if(URL_CID){try{localStorage.setItem("club_cid",URL_CID);}catch(e){}}
+
+let _bip=null;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();_bip=e;const b=document.getElementById("installBtn");if(b)b.style.display="block";});
+async function installerAppli(){ if(!_bip){alert("📲 Sur iPhone : bouton Partager → « Sur l'écran d'accueil ».\n📲 Sur Android : menu ⋮ du navigateur → « Ajouter à l'écran d'accueil ».");return;} _bip.prompt(); await _bip.userChoice; _bip=null; const b=document.getElementById("installBtn"); if(b)b.style.display="none"; }
+try{ if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js"); }catch(e){}
+
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const today=()=>new Date().toISOString().slice(0,10);
+const fmt=n=>Math.round(+n||0).toLocaleString("fr-FR")+" F";
+const fmtN=n=>Math.round(+n||0).toLocaleString("fr-FR");
+const pfmt=x=>(+x||0).toLocaleString("fr-FR",{maximumFractionDigits:2});
+const esc=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const frD=d=>{try{return new Date(d+"T00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"});}catch(e){return d;}};
+const frDs=d=>{try{return new Date(d+"T00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short"});}catch(e){return d;}};
+const say=m=>{const e=document.getElementById("aMsg");if(e)e.innerHTML=m;};
+
+/* ===== Authentification (compte unique, trésorier ET membres) ===== */
+async function connexion(){
+  const email=(document.getElementById("aEmail").value||"").trim(), pw=document.getElementById("aPw").value||"";
+  if(!email||!pw){say("⚠️ Email et mot de passe requis.");return;}
+  say("⏳ Connexion…");
+  const {error}=await sbc.auth.signInWithPassword({email,password:pw});
+  if(error){say("⚠️ "+esc(error.message));return;}
+  charger();
+}
+async function inscription(){
+  const email=(document.getElementById("aEmail").value||"").trim(), pw=document.getElementById("aPw").value||"";
+  if(!email||pw.length<6){say("⚠️ Email valide + mot de passe d'au moins 6 caractères.");return;}
+  say("⏳ Création du compte…");
+  const {data,error}=await sbc.auth.signUp({email,password:pw});
+  if(error){say("⚠️ "+esc(error.message));return;}
+  if(!data.session){say("📧 Compte créé ! Vérifie ta boîte email pour confirmer, puis reviens te connecter.");return;}
+  charger();
+}
+async function motdepasse(){
+  const email=(document.getElementById("aEmail").value||"").trim();
+  if(!email){say("⚠️ Saisis d'abord ton email, puis retouche « Mot de passe oublié ».");return;}
+  const {error}=await sbc.auth.resetPasswordForEmail(email,{redirectTo:location.href.split("#")[0]});
+  say(error?("⚠️ "+esc(error.message)):"📧 Email de récupération envoyé — ouvre le lien reçu puis choisis un nouveau mot de passe.");
+}
+sbc.auth.onAuthStateChange((ev)=>{ if(ev==="PASSWORD_RECOVERY"){ const np=prompt("Choisis ton NOUVEAU mot de passe (6 caractères minimum) :"); if(np&&np.length>=6){sbc.auth.updateUser({password:np}).then(()=>alert("✅ Mot de passe changé !"));} } });
+async function deconnexion(){ await sbc.auth.signOut(); try{localStorage.removeItem("club_cid");}catch(e){} location.reload(); }
+
+/* ===== Moteur de calcul (patrimoine du club = titres + liquidités) ===== */
+function positions(d){
+  const m={};
+  const txs=[...(d.tx||[])].sort((a,b)=>a.date.localeCompare(b.date));
+  txs.forEach(t=>{
+    if(!m[t.ticker])m[t.ticker]={ticker:t.ticker,qty:0,cost:0};
+    const p=m[t.ticker];
+    if(t.type==="achat"){p.qty+=t.qty;p.cost+=t.qty*t.price+(+t.frais||0);}
+    else{const avg=p.qty>0?p.cost/p.qty:0;p.cost-=avg*Math.min(t.qty,p.qty);p.qty-=t.qty;}
+  });
+  return Object.values(m).filter(p=>p.qty>0.0001).map(p=>{
+    const pru=p.qty>0?p.cost/p.qty:0;
+    const px=(d.prices||{})[p.ticker]||{};
+    const cur=+px.actuel||pru;
+    return {...p,pru,cur,value:p.qty*cur};
+  }).sort((a,b)=>b.value-a.value);
+}
+function cashBalance(d){
+  let bal=0;
+  (d.cash||[]).forEach(m=>bal+=(m.type==="depot"?1:-1)*(+m.montant||0));
+  (d.tx||[]).forEach(t=>{const brut=t.qty*t.price; bal+= t.type==="achat"? -(brut+(+t.frais||0)) : (brut-(+t.frais||0));});
+  return bal;
+}
+function clubParts(d){return (d.membres||[]).reduce((s,m)=>s+(+m.parts||0),0);}
+function clubVL(d){const n=clubParts(d);if(n<=0)return null;const pat=positions(d).reduce((s,p)=>s+p.value,0)+cashBalance(d);return pat/n;}
+function clubVLAt(d,date){
+  if(!date||date>=today()){const v=clubVL(d);return v!=null?{vl:v,date:today(),exact:true}:null;}
+  const H=d.vlHist||{}; const ds=Object.keys(H).filter(k=>k<=date).sort();
+  if(!ds.length)return null;
+  const k=ds[ds.length-1];
+  return {vl:+H[k],date:k,exact:k===date};
+}
+
+/* ===== Résolution du club à afficher =====
+   ?c=CID (lien d'invitation membre) prime toujours. Sinon, si un CID est
+   mémorisé sur l'appareil, on le reprend. Sinon on regarde si ce compte a
+   déjà fondé un club (trésorier). Sinon : écran de fondation. */
+async function resolveCID(session){
+  if(URL_CID)return URL_CID;
+  let stored=null; try{stored=localStorage.getItem("club_cid");}catch(e){}
+  if(stored)return stored;
+  const {data:mine}=await sbc.from("brvm_club_share").select("id").eq("user_id",session.user.id).maybeSingle();
+  if(mine&&mine.id){try{localStorage.setItem("club_cid",mine.id);}catch(e){} return mine.id;}
+  return null;
+}
+
+let STATE={cid:null,data:null,isTreasurer:false,moi:null,email:null};
+
+async function charger(){
+  const {data:{session}}=await sbc.auth.getSession();
+  if(!session)return;
+  document.getElementById("auth").style.display="none";
+  const main=document.getElementById("main");
+  main.style.display="block";
+  main.innerHTML='<div class="empty">⏳ Chargement…</div>';
+  const cid=await resolveCID(session);
+  if(!cid){ afficherFondation(); return; }
+  const {data:row,error}=await sbc.from("brvm_club_share").select("*").eq("id",cid).maybeSingle();
+  if(error||!row||!row.data){
+    main.innerHTML='<div class="empty">⚠️ Ce club est introuvable ou ses données sont indisponibles pour le moment.<br><br><button class="btn ghost" style="max-width:240px;margin:10px auto 0" onclick="deconnexion()">Changer de compte</button></div>';
+    return;
+  }
+  const isTreasurer=row.user_id===session.user.id;
+  const {data:liens}=await sbc.from("brvm_club_membres").select("membre_id,membre_nom,email").eq("club_id",cid);
+  const moi=(liens||[]).find(l=>(l.email||"").toLowerCase()===(session.user.email||"").toLowerCase())||null;
+  /* Un compte qui n'est ni le trésorier ni un membre autorisé n'a accès à
+     RIEN — ni relevé perso, ni état commun, ni journal. */
+  if(!isTreasurer&&!moi){
+    main.innerHTML='<div class="empty">🔒 Accès non autorisé.<br><br>Ton email <b>'+esc(session.user.email)+'</b> n\'est pas (encore) dans la liste du trésorier pour ce club.<br>Demande-lui de t\'ajouter dans « Membres & accès ».<br><br><button class="btn ghost" style="max-width:220px;margin:14px auto 0" onclick="deconnexion()">Changer de compte</button></div>';
+    return;
+  }
+  STATE={cid,data:row.data,isTreasurer,moi,email:session.user.email};
+  afficher();
+}
+
+async function saveClub(){
+  STATE.data.majDate=new Date().toISOString();
+  await sbc.from("brvm_club_share").update({data:STATE.data,updated_at:new Date().toISOString()}).eq("id",STATE.cid);
+}
+
+/* ===== Écran de fondation (trésorier, première visite) ===== */
+function afficherFondation(){
+  document.getElementById("bdg").textContent="🏁 FONDATION";
+  document.getElementById("titre").textContent="Fonder mon club";
+  document.getElementById("soustitre").textContent="Crée le club, invite tes co-investisseurs";
+  const main=document.getElementById("main");
+  main.innerHTML=`<div class="card">
+    <div class="hint">Chaque membre apporte sa mise de départ et reçoit ses parts au prix de fondation choisi ci-dessous. Ensuite, tout entrant ou sortant passe par la valeur de la part du jour — l'équité est automatique.</div>
+    <label>Nom du club</label><input id="fNom" placeholder="ex : Club Éburnie">
+    <label>Valeur d'une part à la fondation (FCFA)</label>
+    <input id="fVL0" type="number" value="${CLUB_VL0_DEFAULT}" oninput="fTotal()">
+    <label>Date de fondation (jour des apports)</label>
+    <input id="fDate" type="date" value="${today()}">
+    <label>Membres fondateurs et apports (FCFA)</label>
+    <div id="fRows"></div>
+    <button class="btn ghost" onclick="fAddRow()">＋ Ajouter un membre</button>
+    <div id="fTot" class="hint" style="margin-top:8px"></div>
+    <button class="btn" id="fBtn" onclick="fonderClub()">🤝 Fonder le club</button>
+  </div>`;
+  fAddRow();fAddRow();
+}
+function fAddRow(){
+  const w=document.getElementById("fRows"); if(!w)return;
+  const d=document.createElement("div"); d.className="memberRow";
+  d.innerHTML='<input class="f-nom" placeholder="Nom du membre"><input class="f-apport" type="number" placeholder="Apport" oninput="fTotal()">';
+  w.appendChild(d);
+}
+function fTotal(){
+  const t=[...document.querySelectorAll(".f-apport")].reduce((s,i)=>s+(+i.value||0),0);
+  const vl0=+document.getElementById("fVL0")?.value||CLUB_VL0_DEFAULT;
+  const el=document.getElementById("fTot");
+  if(el)el.innerHTML=t>0?("Mise de départ totale : <b>"+fmt(t)+"</b> → <b>"+pfmt(t/vl0)+" parts</b> à "+fmtN(vl0)+" F"):"";
+}
+async function fonderClub(){
+  const nom=(document.getElementById("fNom").value||"").trim()||"Mon club";
+  const noms=[...document.querySelectorAll(".f-nom")].map(i=>i.value.trim());
+  const apports=[...document.querySelectorAll(".f-apport")].map(i=>+i.value||0);
+  const membres=[];
+  for(let i=0;i<noms.length;i++){
+    if(!noms[i]&&!apports[i])continue;
+    if(!noms[i]||apports[i]<=0){alert("⚠️ Chaque ligne doit avoir un nom ET un apport positif (ou être vide).");return;}
+    membres.push({nom:noms[i],apport:apports[i]});
+  }
+  if(membres.length<2){alert("⚠️ Il faut au moins 2 membres pour fonder un club.");return;}
+  const vl0=+document.getElementById("fVL0").value||CLUB_VL0_DEFAULT;
+  if(vl0<100){alert("⚠️ La part de fondation doit valoir au moins 100 F.");return;}
+  const d=document.getElementById("fDate")?.value||today();
+  const {data:{user}}=await sbc.auth.getUser(); if(!user){alert("⚠️ Reconnecte-toi.");return;}
+  const btn=document.getElementById("fBtn"); btn.disabled=true; btn.textContent="⏳ Création…";
+  const data={nom,vl0,dateFondation:d,membres:[],mouvements:[],vlHist:{[d]:vl0},cash:[],tx:[],prices:{}};
+  membres.forEach(m=>{
+    const parts=m.apport/vl0;
+    data.membres.push({id:uid(),nom:m.nom,parts,email:""});
+    data.cash.push({id:uid(),type:"depot",date:d,montant:m.apport,libelle:"Apport de fondation de "+m.nom});
+    data.mouvements.push({id:uid(),date:d,type:"fondation",membre:m.nom,montant:m.apport,vl:vl0,parts});
+  });
+  const cid=uid()+Math.random().toString(36).slice(2,10)+Math.random().toString(36).slice(2,10);
+  const {error}=await sbc.from("brvm_club_share").insert({id:cid,user_id:user.id,data,updated_at:new Date().toISOString()});
+  if(error){alert("⚠️ Échec de la création : "+(error.message||""));btn.disabled=false;btn.textContent="🤝 Fonder le club";return;}
+  try{localStorage.setItem("club_cid",cid);}catch(e){}
+  charger();
+}
+
+/* ===== Relevé personnel (identique pour le trésorier-membre et un membre invité) ===== */
+function statsPerso(d,nom){
+  const mvs=(d.mouvements||[]).filter(x=>!x.annule&&x.type!=="annulation");
+  let verse=0,recu=0; const lignes=[];
+  mvs.forEach(x=>{
+    if(x.type==="fondation"||x.type==="souscription"){
+      if(x.membre===nom){verse+=+x.montant||0;lignes.push({date:x.date,lbl:x.type==="fondation"?"Apport de fondation":"Cotisation",montant:+x.montant,sens:"+",parts:"+"+pfmt(x.parts)+" parts à "+fmt(x.vl)});}
+    }else if(x.type==="rachat"){
+      if(x.membre===nom){recu+=+x.montant||0;lignes.push({date:x.date,lbl:"Rachat (argent reçu)",montant:+x.montant,sens:"−",parts:"−"+pfmt(x.parts)+" parts à "+fmt(x.vl)});}
+    }else if(x.type==="cession"){
+      const p=String(x.membre).split(" → ");
+      if(p[0]===nom){recu+=+x.montant||0;lignes.push({date:x.date,lbl:"Cession à "+p[1]+" (réglée entre vous)",montant:+x.montant,sens:"−",parts:"−"+pfmt(x.parts)+" parts"});}
+      if(p[1]===nom){verse+=+x.montant||0;lignes.push({date:x.date,lbl:"Achat de parts à "+p[0]+" (réglé entre vous)",montant:+x.montant,sens:"+",parts:"+"+pfmt(x.parts)+" parts"});}
+    }
+  });
+  lignes.sort((a,b)=>b.date.localeCompare(a.date));
+  const vl=clubVL(d), n=clubParts(d);
+  const membre=(d.membres||[]).find(m=>m.nom===nom)||{parts:0};
+  const valeur=vl!=null?(+membre.parts||0)*vl:0, pct=n>0?(+membre.parts||0)/n*100:0;
+  const pv=valeur+recu-verse;
+  return {verse,recu,lignes,parts:+membre.parts||0,valeur,pct,pv};
+}
+
+/* ===== Rendu principal ===== */
+function afficher(){
+  const d=STATE.data, moi=STATE.moi, isTr=STATE.isTreasurer;
+  document.getElementById("titre").textContent="🤝 "+(d.nom||"Mon club");
+  document.title=d.nom||"Mon Club";
+  const dt=d.majDate?new Date(d.majDate):new Date();
+  document.getElementById("soustitre").textContent=isTr?"Espace trésorier · mis à jour le "+dt.toLocaleDateString("fr-FR",{day:"numeric",month:"long"}):"Mis à jour le "+dt.toLocaleDateString("fr-FR",{day:"numeric",month:"long"});
+  const vl=clubVL(d), n=clubParts(d), pos=positions(d), bal=cashBalance(d), pat=pos.reduce((s,p)=>s+p.value,0)+bal;
+  let h="";
+
+  if(moi){
+    const s=statsPerso(d,moi.membre_nom);
+    document.getElementById("bdg").textContent=(isTr?"🔑 TRÉSORIER · ":"👤 ")+moi.membre_nom.toUpperCase();
+    document.getElementById("heroPerso").style.display="block";
+    document.getElementById("pValeur").textContent=fmt(s.valeur);
+    document.getElementById("pParts").textContent=pfmt(s.parts)+" ("+s.pct.toFixed(1)+" %)";
+    document.getElementById("pVerse").textContent=fmt(s.verse);
+    const pvEl=document.getElementById("pPV");
+    pvEl.textContent=(s.pv>=0?"+":"−")+fmt(Math.abs(s.pv));
+    pvEl.style.color=s.pv>=0?"#9BE7C4":"#FFC2BD";
+    h+='<div class="sect">🧾 Mon relevé — '+esc(moi.membre_nom)+'</div><div class="card">'
+      +'<div class="kv"><span class="k">Valeur de mes parts aujourd\'hui</span><b>'+fmt(s.valeur)+'</b></div>'
+      +'<div class="kv"><span class="k">Total versé (cotisations + achats)</span><b>'+fmt(s.verse)+'</b></div>'
+      +(s.recu>0?'<div class="kv"><span class="k">Total reçu (rachats + cessions)</span><b>'+fmt(s.recu)+'</b></div>':'')
+      +'<div class="kv"><span class="k">Ma plus-value</span><b class="'+(s.pv>=0?'pos':'neg')+'">'+(s.pv>=0?'+':'−')+fmt(Math.abs(s.pv))+'</b></div>'
+      +(s.lignes.length?('<table style="margin-top:8px"><tr><th>Date</th><th>Mouvement</th><th class="r">Montant</th></tr>'
+        +s.lignes.map(l=>'<tr><td>'+frD(l.date)+'</td><td>'+esc(l.lbl)+'<div class="hint">'+l.parts+'</div></td><td class="r '+(l.sens==="+"?"":"neg")+'">'+(l.sens==="+"?"":"−")+fmt(l.montant)+'</td></tr>').join("")+'</table>'):'')
+      +'</div>';
+  }else{
+    document.getElementById("bdg").textContent=isTr?"🔑 TRÉSORIER":"👁 CONSULTATION";
+    document.getElementById("heroPerso").style.display="none";
+    h+='<div class="hint" style="margin-bottom:10px">Connecté en <b>'+esc(STATE.email)+'</b>'+(isTr?" — tu es le trésorier de ce club.":" — ce compte n'est relié à aucun membre.")+'</div>';
+  }
+
+  if(isTr)h+=adminHtml(d,vl,n,pat,bal);
+
+  h+='<div class="sect">🗳️ Les votes du club</div><div id="votesBox"><div class="card"><div class="hint">⏳ Chargement…</div></div></div>';
+
+  h+='<div class="sect">🏦 L\'état commun du club</div><div class="card">'
+    +'<div class="kv"><span class="k">Patrimoine (titres + liquidités)</span><b>'+fmt(pat)+'</b></div>'
+    +'<div class="kv"><span class="k">Valeur de la part</span><b>'+(vl!=null?fmt(vl):"—")+'</b></div>'
+    +'<div class="kv"><span class="k">Parts en circulation</span><b>'+pfmt(n)+'</b></div>'
+    +'<div class="kv"><span class="k">Performance depuis la fondation</span><b class="'+((vl!=null&&vl>=(d.vl0||CLUB_VL0_DEFAULT))?'pos':'neg')+'">'+(vl!=null?(((vl/(d.vl0||CLUB_VL0_DEFAULT)-1)*100>=0?"+":"")+((vl/(d.vl0||CLUB_VL0_DEFAULT)-1)*100).toFixed(1)+" %"):"—")+'</b></div></div>';
+
+  const vh=d.vlHist||{}, vds=Object.keys(vh).sort();
+  if(vds.length>=2)h+='<div class="sect">📈 Évolution de la part</div><div class="card"><canvas id="vlChart" height="140"></canvas></div>';
+
+  h+='<div class="sect">👥 Les membres</div><div class="card"><table>'
+    +'<tr><th>Membre</th><th class="r">Parts</th><th class="r">%</th><th class="r">Valeur</th></tr>'
+    +(d.membres||[]).filter(m=>m.parts>0.005).sort((a,b)=>b.parts-a.parts).map(m=>
+      '<tr'+(moi&&m.nom===moi.membre_nom?' style="background:var(--green-l)"':'')+'><td>'+esc(m.nom)+(moi&&m.nom===moi.membre_nom?' <b>(moi)</b>':'')+'</td><td class="r">'+pfmt(m.parts)+'</td><td class="r">'+(n>0?(m.parts/n*100).toFixed(1):0)+' %</td><td class="r"><b>'+(vl!=null?fmt(m.parts*vl):"—")+'</b></td></tr>').join("")
+    +'</table></div>';
+
+  h+='<div class="sect">📊 Le portefeuille du club</div><div class="card">';
+  if(pos.length){
+    h+='<table><tr><th>Titre</th><th class="r">Qté</th><th class="r">Cours</th><th class="r">Valeur</th></tr>'
+      +pos.map(p=>'<tr><td>'+esc(stockMap[p.ticker]?.name||p.ticker)+' ('+esc(p.ticker)+')</td><td class="r">'+fmtN(p.qty)+'</td><td class="r">'+fmt(p.cur)+'</td><td class="r">'+fmt(p.value)+'</td></tr>').join("")
+      +'</table>';
+  } else h+='<div class="hint">Aucun titre pour l\'instant.</div>';
+  h+='<div class="hint" style="margin-top:8px">Liquidités : <b>'+fmt(bal)+'</b> · Titres : <b>'+fmt(pat-bal)+'</b></div></div>';
+
+  const ICO={fondation:"🏁",souscription:"🟢",rachat:"🔴",cession:"🔄",annulation:"↩️"};
+  const LBL={fondation:"Fondation",souscription:"Souscription",rachat:"Rachat",cession:"Cession",annulation:"Annulation"};
+  const mvs=[...(d.mouvements||[])].sort((a,b)=>b.date.localeCompare(a.date));
+  h+='<div class="sect">📜 Journal du club</div><div class="card">'
+    +(mvs.length?mvs.map(x=>'<div style="padding:9px 0;border-bottom:1px solid var(--line)'+(x.annule?';opacity:.45':'')+'">'+(ICO[x.type]||"•")+' <b>'
+      +(LBL[x.type]||x.type)+'</b> — '+esc(x.membre)+(x.annule?' <span class="hint">(annulée)</span>':'')
+      +(isTr&&!x.annule&&(x.type==="souscription"||x.type==="rachat"||x.type==="cession")?' <button class="lnk" style="display:inline;margin:0" onclick="clubAnnuler(\''+x.id+'\')">↩️ annuler</button>':'')
+      +'<div class="hint">'+frD(x.date)+' · '+fmt(x.montant)+' · '+(x.type==="rachat"?"−":x.type==="cession"?"":"+")+pfmt(x.parts)+' parts à '+fmt(x.vl)+(x.note?' · '+esc(x.note):'')+'</div></div>').join("")
+      :'<div class="hint">Aucun mouvement.</div>')
+    +'</div>';
+
+  h+='<button class="btn" onclick="charger()">🔄 Actualiser</button>'
+    +'<button class="btn ghost" onclick="window.print()">🖨️ Imprimer / PDF</button>'
+    +'<button id="installBtn" class="btn ghost" style="display:'+(window._bip||_bip?'block':'none')+'" onclick="installerAppli()">📲 Installer sur mon téléphone</button>'
+    +(!(navigator.standalone||matchMedia("(display-mode: standalone)").matches)?'<div class="hint" style="margin-top:8px;text-align:center">📲 Astuce : ajoute cette page à ton écran d\'accueil — elle deviendra une vraie appli « Mon Club ».</div>':'')
+    +'<button class="btn ghost" onclick="deconnexion()">Se déconnecter</button>';
+
+  document.getElementById("main").innerHTML=h;
+  chargerVotes();
+  if(vds.length>=2&&window.Chart){
+    if(window._vlChart)window._vlChart.destroy();
+    window._vlChart=new Chart(document.getElementById("vlChart"),{type:"line",
+      data:{labels:vds.map(frDs),datasets:[
+        {label:"Valeur de la part",data:vds.map(k=>+vh[k]),borderColor:"#0B6B53",backgroundColor:"rgba(11,107,83,.12)",fill:true,tension:.3,pointRadius:2,borderWidth:2},
+        {label:"Prix de fondation",data:vds.map(()=>+d.vl0||CLUB_VL0_DEFAULT),borderColor:"#C9962E",borderDash:[6,5],fill:false,pointRadius:0,borderWidth:1.5}
+      ]},
+      options:{plugins:{legend:{display:true,labels:{font:{size:10},boxWidth:14}},tooltip:{callbacks:{label:x=>(x.dataset.label||"")+" : "+fmt(x.parsed.y)}}},
+        scales:{y:{ticks:{font:{size:10}}},x:{ticks:{maxTicksLimit:6,font:{size:9}}}}}});
+  }
+}
+
+/* ===== Bloc trésorier : actions d'administration du club ===== */
+function adminHtml(d,vl,n,pat,bal){
+  return '<div class="sect">🔑 Actions du trésorier</div><div class="card">'
+    +'<div class="row2"><button class="btn" onclick="openMv(\'souscription\')">🟢 Souscription</button><button class="btn ghost" onclick="openMv(\'rachat\')">🔴 Rachat</button></div>'
+    +'<button class="btn ghost" onclick="openCession()">🔄 Cession entre membres</button>'
+    +'<div class="row2" style="margin-top:12px"><button class="btn ghost" onclick="openStockTx(\'achat\')">📈 Acheter un titre</button><button class="btn ghost" onclick="openStockTx(\'vente\')">📉 Vendre un titre</button></div>'
+    +'<button class="btn ghost" onclick="syncCours()">🔄 Synchroniser les cours BRVM</button>'
+    +'<button class="btn ghost" onclick="openAccess()">👥 Membres & accès (emails)</button>'
+    +'<button class="btn ghost" onclick="openNewVote()">🗳️ Nouvelle proposition au vote</button>'
+    +'</div>';
+}
+
+function openMv(type){
+  const d=STATE.data, vl=clubVL(d);
+  if(vl==null){alert("⚠️ Aucune part en circulation.");return;}
+  const sous=type==="souscription";
+  const ms=(d.membres||[]).filter(m=>sous||m.parts>0.005);
+  const main=document.getElementById("main");
+  main.innerHTML='<div class="card">'
+    +'<h3 style="margin:0 0 8px">'+(sous?"🟢 Souscription — un membre apporte de l'argent":"🔴 Rachat — un membre retire")+'</h3>'
+    +'<div class="hint">Valeur de la part aujourd\'hui : <b>'+fmt(vl)+'</b>.</div>'
+    +'<label>Membre</label><select id="mvMembre" onchange="mvPreview(\''+type+'\')">'
+      +ms.map(m=>'<option value="'+m.id+'">'+esc(m.nom)+(sous?'':' — '+pfmt(m.parts)+' parts')+'</option>').join("")
+      +(sous?'<option value="__new">➕ Nouveau membre…</option>':'')+'</select>'
+    +'<div id="mvNouveauWrap" style="display:none"><label>Nom du nouveau membre</label><input id="mvNouveau" placeholder="ex : Gekkof"></div>'
+    +'<label>Date</label><input id="mvDate" type="date" value="'+today()+'" oninput="mvPreview(\''+type+'\')">'
+    +'<label>'+(sous?"Montant apporté (FCFA)":"Nombre de parts à racheter")+'</label>'
+    +'<input id="mvVal" type="number" oninput="mvPreview(\''+type+'\')" placeholder="'+(sous?'ex : 1000000':'ex : 500')+'">'
+    +'<div id="mvPrev" class="hint" style="margin-top:10px;display:none"></div>'
+    +'<button class="btn" onclick="mvValider(\''+type+'\')">Valider</button>'
+    +'<button class="lnk" onclick="afficher()">← Retour</button></div>';
+  document.getElementById("mvMembre").addEventListener("change",e=>{document.getElementById("mvNouveauWrap").style.display=e.target.value==="__new"?"block":"none";});
+}
+function mvPreview(type){
+  const d=STATE.data;
+  const v=+document.getElementById("mvVal").value||0;
+  const el=document.getElementById("mvPrev"); if(!el)return;
+  if(v<=0){el.style.display="none";return;}
+  el.style.display="block";
+  const dt=document.getElementById("mvDate")?.value||today();
+  const va=clubVLAt(d,dt);
+  if(!va){el.innerHTML="⚠️ Aucune valeur de part connue pour cette date.";return;}
+  const vl=va.vl;
+  if(type==="souscription"){
+    const parts=v/vl, tot=clubParts(d)+parts;
+    el.innerHTML="🧮 "+fmt(v)+" ÷ "+fmt(vl)+" = <b>"+pfmt(parts)+" parts</b> émises, soit <b>"+(parts/tot*100).toFixed(2)+" %</b> du club après l'opération.";
+  }else{
+    const id=document.getElementById("mvMembre").value;
+    const m=(d.membres||[]).find(x=>x.id===id); if(!m)return;
+    const montant=v*vl;
+    el.innerHTML="🧮 "+pfmt(v)+" parts × "+fmt(vl)+" = <b>"+fmt(montant)+"</b> à verser au membre"+(v>m.parts?" — ⚠️ il ne détient que "+pfmt(m.parts)+" parts":"")+(montant>cashBalance(d)?"<br>⚠️ Liquidités du club : "+fmt(cashBalance(d))+" — vends d'abord des titres.":"");
+  }
+}
+async function mvValider(type){
+  const d=STATE.data;
+  const v=+document.getElementById("mvVal").value||0;
+  if(v<=0){alert("⚠️ Saisis une valeur positive.");return;}
+  const dt=document.getElementById("mvDate")?.value||today();
+  const va=clubVLAt(d,dt);
+  if(!va){alert("⚠️ Aucune valeur de part connue pour cette date.");return;}
+  const vl=va.vl;
+  if(type==="souscription"){
+    const sel=document.getElementById("mvMembre").value;
+    let m;
+    if(sel==="__new"){
+      const nom=(document.getElementById("mvNouveau").value||"").trim();
+      if(!nom){alert("⚠️ Donne le nom du nouveau membre.");return;}
+      if(d.membres.some(x=>x.nom.toLowerCase()===nom.toLowerCase())){alert("⚠️ Ce nom existe déjà.");return;}
+      m={id:uid(),nom,parts:0,email:""};d.membres.push(m);
+    }else{m=d.membres.find(x=>x.id===sel);if(!m)return;}
+    const parts=v/vl;
+    m.parts+=parts;
+    d.cash.push({id:uid(),type:"depot",date:dt,montant:v,libelle:"Souscription "+m.nom});
+    d.mouvements.push({id:uid(),date:dt,type:"souscription",membre:m.nom,montant:v,vl,parts});
+  }else{
+    const m=d.membres.find(x=>x.id===document.getElementById("mvMembre").value); if(!m)return;
+    if(v>m.parts+0.005){alert("⚠️ "+m.nom+" ne détient que "+pfmt(m.parts)+" parts.");return;}
+    const montant=v*vl;
+    if(montant>cashBalance(d)){alert("⛔ Rachat impossible : liquidités insuffisantes ("+fmt(cashBalance(d))+"). Vends d'abord des titres.");return;}
+    m.parts=Math.max(0,m.parts-v); if(m.parts<0.005)m.parts=0;
+    d.cash.push({id:uid(),type:"retrait",date:dt,montant,libelle:"Rachat "+m.nom});
+    d.mouvements.push({id:uid(),date:dt,type:"rachat",membre:m.nom,montant,vl,parts:v});
+  }
+  await saveClub();
+  afficher();
+}
+function openCession(){
+  const d=STATE.data, vl=clubVL(d); if(vl==null){alert("⚠️ Aucune part en circulation.");return;}
+  const vendeurs=d.membres.filter(m=>m.parts>0.005);
+  const main=document.getElementById("main");
+  main.innerHTML='<div class="card"><h3 style="margin:0 0 8px">🔄 Cession de parts entre membres</h3>'
+    +'<div class="hint">L\'argent se règle entre eux, hors caisse du club. Valeur indicative du jour : <b>'+fmt(vl)+'</b> la part.</div>'
+    +'<label>Vendeur</label><select id="ceVendeur">'+vendeurs.map(m=>'<option value="'+m.id+'">'+esc(m.nom)+' — '+pfmt(m.parts)+' parts</option>').join("")+'</select>'
+    +'<label>Acheteur</label><select id="ceAcheteur">'+d.membres.map(m=>'<option value="'+m.id+'">'+esc(m.nom)+'</option>').join("")+'<option value="__new">➕ Nouveau membre…</option></select>'
+    +'<div id="ceNouveauWrap" style="display:none"><label>Nom du nouveau membre</label><input id="ceNouveau" placeholder="ex : Gekkof"></div>'
+    +'<label>Nombre de parts cédées</label><input id="ceParts" type="number" placeholder="ex : 100">'
+    +'<label>Date</label><input id="ceDate" type="date" value="'+today()+'">'
+    +'<button class="btn" onclick="cessionValider()">Valider la cession</button>'
+    +'<button class="lnk" onclick="afficher()">← Retour</button></div>';
+  document.getElementById("ceAcheteur").addEventListener("change",e=>{document.getElementById("ceNouveauWrap").style.display=e.target.value==="__new"?"block":"none";});
+}
+async function cessionValider(){
+  const d=STATE.data;
+  const dt=document.getElementById("ceDate")?.value||today();
+  const va=clubVLAt(d,dt); if(!va){alert("⚠️ Aucune valeur de part connue pour cette date.");return;}
+  const vl=va.vl;
+  const v=+document.getElementById("ceParts").value||0;
+  if(v<=0){alert("⚠️ Saisis un nombre de parts positif.");return;}
+  const vend=d.membres.find(x=>x.id===document.getElementById("ceVendeur").value); if(!vend)return;
+  if(v>vend.parts+0.005){alert("⚠️ "+vend.nom+" ne détient que "+pfmt(vend.parts)+" parts.");return;}
+  let ach; const sel=document.getElementById("ceAcheteur").value;
+  if(sel==="__new"){
+    const nom=(document.getElementById("ceNouveau").value||"").trim();
+    if(!nom){alert("⚠️ Donne le nom du nouveau membre.");return;}
+    if(d.membres.some(x=>x.nom.toLowerCase()===nom.toLowerCase())){alert("⚠️ Ce nom existe déjà.");return;}
+    ach={id:uid(),nom,parts:0,email:""};d.membres.push(ach);
+  }else{ach=d.membres.find(x=>x.id===sel);if(!ach)return;}
+  if(ach.id===vend.id){alert("⚠️ Le vendeur et l'acheteur doivent être différents.");return;}
+  vend.parts=Math.max(0,vend.parts-v); if(vend.parts<0.005)vend.parts=0;
+  ach.parts+=v;
+  d.mouvements.push({id:uid(),date:dt,type:"cession",membre:vend.nom+" → "+ach.nom,montant:v*vl,vl,parts:v});
+  await saveClub();
+  afficher();
+}
+async function clubAnnuler(mvId){
+  const d=STATE.data;
+  const x=d.mouvements.find(m=>m.id===mvId); if(!x||x.annule)return;
+  if(!confirm("↩️ Annuler ce mouvement ?\n\nLe journal ne s'efface jamais : une écriture INVERSE sera ajoutée, et les parts/liquidités seront remises comme avant."))return;
+  const dt=today();
+  if(x.type==="souscription"){
+    const m=d.membres.find(z=>z.nom===x.membre); if(!m){alert("Membre introuvable.");return;}
+    if(x.parts>m.parts+0.005){alert("⚠️ Impossible : mouvements postérieurs. Annule d'abord les plus récents.");return;}
+    m.parts=Math.max(0,m.parts-x.parts); if(m.parts<0.005)m.parts=0;
+    d.cash.push({id:uid(),type:"retrait",date:dt,montant:x.montant,libelle:"Annulation souscription "+x.membre});
+  }else if(x.type==="rachat"){
+    const m=d.membres.find(z=>z.nom===x.membre); if(!m){alert("Membre introuvable.");return;}
+    m.parts+=x.parts;
+    d.cash.push({id:uid(),type:"depot",date:dt,montant:x.montant,libelle:"Annulation rachat "+x.membre});
+  }else if(x.type==="cession"){
+    const noms=x.membre.split(" → ");
+    const vend=d.membres.find(z=>z.nom===noms[0]), ach=d.membres.find(z=>z.nom===noms[1]);
+    if(!vend||!ach){alert("Membres introuvables.");return;}
+    if(x.parts>ach.parts+0.005){alert("⚠️ "+ach.nom+" n'a plus assez de parts.");return;}
+    ach.parts=Math.max(0,ach.parts-x.parts); if(ach.parts<0.005)ach.parts=0;
+    vend.parts+=x.parts;
+  }else return;
+  x.annule=true;
+  d.mouvements.push({id:uid(),date:dt,type:"annulation",membre:x.membre,montant:x.montant,vl:x.vl,parts:x.parts,note:"annule le mouvement du "+frDs(x.date)});
+  await saveClub();
+  afficher();
+}
+
+/* ===== Achats/ventes de titres + synchro des cours ===== */
+function openStockTx(type){
+  const achat=type==="achat";
+  const d=STATE.data;
+  const held=positions(d).map(p=>p.ticker);
+  const main=document.getElementById("main");
+  main.innerHTML='<div class="card"><h3 style="margin:0 0 8px">'+(achat?"📈 Achat de titres":"📉 Vente de titres")+'</h3>'
+    +'<label>Société</label><select id="stTicker">'+STOCKS.filter(s=>achat||held.includes(s[0])).map(s=>'<option value="'+s[0]+'">'+esc(s[1])+' ('+s[0]+')</option>').join("")+'</select>'
+    +'<label>Nombre de titres</label><input id="stQty" type="number" placeholder="ex : 50">'
+    +'<label>Prix par action (FCFA)</label><input id="stPrice" type="number" placeholder="ex : 15000">'
+    +'<label>Frais SGI (FCFA)</label><input id="stFrais" type="number" value="0">'
+    +'<label>Date</label><input id="stDate" type="date" value="'+today()+'">'
+    +'<div class="hint" style="margin-top:8px">Liquidités disponibles : <b>'+fmt(cashBalance(d))+'</b></div>'
+    +'<button class="btn" onclick="stockTxValider(\''+type+'\')">Valider</button>'
+    +'<button class="lnk" onclick="afficher()">← Retour</button></div>';
+}
+async function stockTxValider(type){
+  const d=STATE.data;
+  const ticker=document.getElementById("stTicker").value;
+  const qty=+document.getElementById("stQty").value||0;
+  const price=+document.getElementById("stPrice").value||0;
+  const frais=+document.getElementById("stFrais").value||0;
+  const dt=document.getElementById("stDate").value||today();
+  if(qty<=0||price<=0){alert("⚠️ Quantité et prix doivent être positifs.");return;}
+  if(type==="achat"){
+    const cout=qty*price+frais;
+    if(cout>cashBalance(d)){alert("⛔ Achat impossible : liquidités disponibles "+fmt(cashBalance(d))+", coût "+fmt(cout)+".");return;}
+  }else{
+    const held=positions(d).find(p=>p.ticker===ticker);
+    if(!held||qty>held.qty+0.001){alert("⚠️ Le club ne détient pas assez de "+ticker+".");return;}
+  }
+  d.tx.push({id:uid(),type,ticker,qty,price,frais,date:dt});
+  await saveClub();
+  afficher();
+}
+async function syncCours(){
+  const d=STATE.data;
+  const btn=event&&event.target; if(btn)btn.textContent="⏳ Synchronisation…";
+  try{
+    const r=await fetch(COURS_URL+"?t="+Date.now());
+    if(!r.ok)throw new Error("réponse "+r.status);
+    const cj=await r.json();
+    if(!cj||!((cj._meta||{}).count>0))throw new Error("cours indisponibles");
+    let n=0;
+    positions(d).forEach(p=>{
+      if(cj[p.ticker]){d.prices[p.ticker]={actuel:+cj[p.ticker].actuel,veille:+cj[p.ticker].veille||+cj[p.ticker].actuel,date:cj[p.ticker].date||""};n++;}
+    });
+    const vl=clubVL(d);
+    if(vl!=null)d.vlHist[today()]=vl;
+    await saveClub();
+    afficher();
+  }catch(e){ alert("⚠️ Cours indisponibles pour le moment : "+(e.message||e)); afficher(); }
+}
+
+/* ===== Membres & accès ===== */
+function openAccess(){
+  const d=STATE.data;
+  const main=document.getElementById("main");
+  main.innerHTML='<div class="card"><h3 style="margin:0 0 8px">👥 Membres & accès</h3>'
+    +'<div class="hint">Associe chaque membre à son email : il créera son compte avec cette adresse et verra son espace personnel + l\'état du club. Sans email enregistré ici, pas d\'accès.</div>'
+    +d.membres.map(m=>'<label>'+esc(m.nom)+' <span class="hint">'+(m.parts>0.005?pfmt(m.parts)+" parts":"0 part")+'</span></label>'
+      +'<input class="acc-email" data-mid="'+m.id+'" type="email" placeholder="email de '+esc(m.nom)+'" value="'+esc(m.email||"")+'">').join("")
+    +'<div id="accMsg" class="hint" style="margin-top:10px"></div>'
+    +'<button class="btn" onclick="saveAccess(this)">💾 Enregistrer les accès</button>'
+    +'<button class="btn ghost" onclick="copierInvitation()">📨 Copier le message d\'invitation</button>'
+    +'<button class="lnk" onclick="afficher()">← Retour</button></div>';
+}
+async function saveAccess(btn){
+  const d=STATE.data;
+  const msg=t=>{const e=document.getElementById("accMsg");if(e)e.innerHTML=t;};
+  const rows=[...document.querySelectorAll(".acc-email")].map(i=>({mid:i.dataset.mid,email:(i.value||"").trim().toLowerCase()}));
+  const bad=rows.find(r=>r.email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(r.email));
+  if(bad){msg("⚠️ Une adresse semble invalide : "+esc(bad.email));return;}
+  rows.forEach(r=>{const m=d.membres.find(x=>x.id===r.mid);if(m)m.email=r.email;});
+  btn.disabled=true; msg("⏳ Enregistrement…");
+  try{
+    const {data:{user}}=await sbc.auth.getUser(); if(!user)throw new Error("reconnecte-toi");
+    const payload=d.membres.filter(m=>(m.email||"").length>3).map(m=>({club_id:STATE.cid,membre_id:m.id,membre_nom:m.nom,email:m.email,added_by:user.id}));
+    if(payload.length){const {error}=await sbc.from("brvm_club_membres").upsert(payload,{onConflict:"club_id,membre_id"}); if(error)throw error;}
+    const sans=d.membres.filter(m=>!(m.email||"").length).map(m=>m.id);
+    if(sans.length)await sbc.from("brvm_club_membres").delete().eq("club_id",STATE.cid).in("membre_id",sans);
+    await saveClub();
+    msg("✅ Accès enregistrés pour "+payload.length+" membre(s). Envoie-leur l'invitation !");
+  }catch(e){msg("⚠️ Échec : "+esc(e.message||String(e)));}
+  btn.disabled=false;
+}
+function copierInvitation(){
+  const d=STATE.data;
+  const lien=CLUB_URL+"?c="+STATE.cid;
+  const msg="🤝 "+d.nom+" — ton espace membre est prêt !\n\n1. Ouvre : "+lien+"\n2. Crée ton compte avec TON adresse email (celle donnée au trésorier)\n3. Tu verras ton relevé personnel et l'état du club, mis à jour en direct.";
+  const done=()=>alert("📨 Message copié ! Envoie-le aux membres (WhatsApp, SMS...). Seuls les emails enregistrés dans « Membres & accès » pourront entrer.");
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(msg).then(done).catch(()=>prompt("Copie ce lien :",lien));
+  else prompt("Copie ce lien :",lien);
+}
+
+/* ===== Votes (1 membre = 1 voix, bulletin ouvert) ===== */
+function openNewVote(){
+  const d7=new Date(Date.now()+7*86400000).toISOString().slice(0,10);
+  const main=document.getElementById("main");
+  main.innerHTML='<div class="card"><h3 style="margin:0 0 8px">＋ Nouvelle proposition au vote</h3>'
+    +'<div class="hint">Décris clairement : les membres voteront OUI ou NON, sans amendement possible.</div>'
+    +'<label>Proposition</label><input id="nvTitre" placeholder="ex : Acheter 200 actions SNTS">'
+    +'<label>Motif / détail (optionnel)</label><textarea id="nvDetail" rows="3"></textarea>'
+    +'<label>Vote ouvert jusqu\'au</label><input id="nvLim" type="date" value="'+d7+'">'
+    +'<div id="nvMsg" class="hint" style="margin-top:8px"></div>'
+    +'<button class="btn" onclick="createVote(this)">🗳️ Soumettre au vote</button>'
+    +'<button class="lnk" onclick="afficher()">← Retour</button></div>';
+}
+async function createVote(btn){
+  const titre=(document.getElementById("nvTitre").value||"").trim();
+  const lim=document.getElementById("nvLim").value;
+  const msg=t=>{const e=document.getElementById("nvMsg");if(e)e.innerHTML=t;};
+  if(!titre){msg("⚠️ Écris la proposition.");return;}
+  if(!lim||lim<today()){msg("⚠️ La date limite doit être aujourd'hui ou plus tard.");return;}
+  btn.disabled=true;msg("⏳ Envoi…");
+  try{
+    const {data:{user}}=await sbc.auth.getUser(); if(!user)throw new Error("reconnecte-toi");
+    const {error}=await sbc.from("brvm_club_votes").insert({id:uid()+Math.random().toString(36).slice(2,8),club_id:STATE.cid,titre,detail:(document.getElementById("nvDetail").value||"").trim(),date_limite:lim,statut:"ouvert",cree_par:user.id});
+    if(error)throw error;
+    afficher();
+  }catch(e){msg("⚠️ "+esc(e.message||String(e)));btn.disabled=false;}
+}
+async function chargerVotes(){
+  const box=document.getElementById("votesBox"); if(!box)return;
+  try{
+    const {data:votes,error}=await sbc.from("brvm_club_votes").select("*").eq("club_id",STATE.cid).order("created_at",{ascending:false});
+    if(error)throw error;
+    const {data:buls}=await sbc.from("brvm_club_bulletins").select("*").eq("club_id",STATE.cid);
+    const auj=today();
+    if(!(votes||[]).length){box.innerHTML='<div class="card"><div class="hint">Aucune proposition au vote pour l\'instant.</div></div>';return;}
+    const moi=STATE.moi;
+    box.innerHTML=votes.map(v=>{
+      const b=(buls||[]).filter(x=>x.vote_id===v.id);
+      const oui=b.filter(x=>x.choix==="oui"), non=b.filter(x=>x.choix==="non");
+      const mien=moi?b.find(x=>(x.email||"").toLowerCase()===STATE.email.toLowerCase()):null;
+      const open=v.statut==="ouvert"&&v.date_limite>=auj;
+      const badge=v.statut==="ouvert"?(open?'<span class="tag" style="background:var(--green-l);color:var(--green)">EN COURS</span>':'<span class="tag" style="background:#FAEEDA;color:#854F0B">EN ATTENTE DE CLÔTURE</span>')
+        :v.statut==="adopte"?'<span class="tag" style="background:var(--green-l);color:var(--green)">✅ ADOPTÉE</span>'
+        :'<span class="tag" style="background:#FCEBE7;color:#8A3325">❌ REJETÉE</span>';
+      return '<div class="card">'
+        +'<div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b style="font-size:14px">'+esc(v.titre)+'</b>'+badge+'</div>'
+        +(v.detail?'<div class="hint" style="margin-top:4px">'+esc(v.detail)+'</div>':'')
+        +'<div style="font-size:12.5px;margin-top:8px"><b class="pos">'+oui.length+' OUI</b>'+(oui.length?' — '+oui.map(x=>esc(x.membre_nom)).join(", "):'')
+        +'<br><b class="neg">'+non.length+' NON</b>'+(non.length?' — '+non.map(x=>esc(x.membre_nom)).join(", "):'')+'</div>'
+        +(v.statut==="ouvert"?'<div class="hint" style="margin-top:4px">Vote ouvert jusqu\'au '+frD(v.date_limite)+'</div>':'')
+        +(open&&moi?('<div class="row2" style="margin-top:10px">'
+          +'<button class="btn" style="'+(mien&&mien.choix!=="oui"?"opacity:.5":"")+'" onclick="voter(\''+v.id+'\',\'oui\')">👍 OUI'+(mien&&mien.choix==="oui"?" ✓":"")+'</button>'
+          +'<button class="btn danger" style="'+(mien&&mien.choix!=="non"?"opacity:.5":"")+'" onclick="voter(\''+v.id+'\',\'non\')">👎 NON'+(mien&&mien.choix==="non"?" ✓":"")+'</button></div>'):'')
+        +(STATE.isTreasurer&&open?'<button class="btn ghost" onclick="closeVote(\''+v.id+'\')">🔨 Clôturer et enregistrer la décision</button>':'')
+        +'</div>';
+    }).join("");
+  }catch(e){box.innerHTML='<div class="card"><div class="hint">⚠️ Votes indisponibles.</div></div>';}
+}
+async function voter(voteId,choix){
+  if(!STATE.moi)return;
+  const {error}=await sbc.from("brvm_club_bulletins").upsert({vote_id:voteId,club_id:STATE.cid,email:STATE.email.toLowerCase(),membre_nom:STATE.moi.membre_nom,choix,voted_at:new Date().toISOString()},{onConflict:"vote_id,email"});
+  if(error){alert("⚠️ Vote refusé : "+(error.message||""));return;}
+  chargerVotes();
+}
+async function closeVote(id){
+  try{
+    const {data:buls}=await sbc.from("brvm_club_bulletins").select("*").eq("vote_id",id);
+    const oui=(buls||[]).filter(b=>b.choix==="oui").length, non=(buls||[]).filter(b=>b.choix==="non").length;
+    const adopte=oui>non;
+    if(!confirm("🔨 Clôturer ce vote ?\n\nDécompte : "+oui+" OUI / "+non+" NON → "+(adopte?"ADOPTÉE ✅":"REJETÉE ❌")+"\n\nLa décision sera définitive et visible par tous."))return;
+    const {error}=await sbc.from("brvm_club_votes").update({statut:adopte?"adopte":"rejete",resultat:{oui,non,date:today()}}).eq("id",id);
+    if(error)throw error;
+    chargerVotes();
+  }catch(e){alert("⚠️ "+(e.message||String(e)));}
+}
+
+sbc.auth.getSession().then(({data:{session}})=>{ if(session)charger(); });
+setInterval(()=>{ if(document.getElementById("main").style.display!=="none")charger(); },5*60*1000);
+</script>
+</body>
+</html>

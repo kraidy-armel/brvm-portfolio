@@ -1,8 +1,8 @@
 {
  "name": "Mon Club d'investissement",
  "short_name": "Mon Club",
- "description": "Espace membre du club — parts, relevé, votes",
- "start_url": "club-membre.html",
+ "description": "Fonder et gérer un club d'investissement — parts, relevé, votes",
+ "start_url": "club.html",
  "scope": ".",
  "display": "standalone",
  "background_color": "#F4F6F8",
