@@ -2701,27 +2701,39 @@ function savePrices(){
 function openSettings(){
   openSheet(`<h3>Réglages & sauvegarde</h3>
     <div class="hint">Tes données sont stockées sur cet appareil uniquement. Pense à les sauvegarder.</div>
-    <button class="btn ghost" style="margin-top:16px" onclick="openAccount()">☁️ Compte & synchronisation en ligne</button>
+
+    <button class="btn ghost" style="margin-top:16px" onclick="toggleDark()">${isDark()?'☀️ Repasser en mode clair':'🌙 Passer en mode sombre'}</button>
+
+    <div class="sect-title" style="margin-top:20px">Compte & sécurité</div>
+    <button class="btn ghost" onclick="openAccount()">☁️ Compte & synchronisation en ligne</button>
     <button class="btn ghost" style="margin-top:10px" onclick="openPortfolios()">📁 Gérer mes portefeuilles</button>
     <button class="btn ghost" style="margin-top:10px" onclick="setLock()">${store.lock?'🔒 Retirer le verrouillage (identifiant + mot de passe)':'🔒 Protéger par identifiant + mot de passe'}</button>
-    <button class="btn ghost" style="margin-top:10px" onclick="toggleDark()">${isDark()?'☀️ Repasser en mode clair':'🌙 Passer en mode sombre'}</button>
-    <button class="btn ghost" style="margin-top:10px" onclick="openGoals()">🎯 Mes objectifs</button>
     <button class="btn ghost" style="margin-top:10px" onclick="setDelCode()">🗑️ ${store.delCode?'Modifier / retirer mon code de suppression':'Créer mon code de suppression'}</button>
+
+    <div class="sect-title" style="margin-top:20px">Ce portefeuille</div>
+    <button class="btn ghost" onclick="openGoals()">🎯 Mes objectifs</button>
     <button class="btn ghost" style="margin-top:10px" onclick="closeSheet();openReport()">📄 Rapport de portefeuille (PDF)</button>
-    <label style="margin-top:16px">Frais SGI de <b>ce portefeuille</b> — commission + taxes (%)</label>
-    <input id="sgiRate" type="number" step="0.01" min="0" value="${sgiRate()}" onchange="setSgiRate(this.value)">
-    <div class="hint">Chaque portefeuille a son taux selon sa SGI (ex : BSIC ≈ 1,18 %, NSIA ≈ 1,40 %). Ce réglage s'applique au portefeuille actif : <b>${escHtml(db.name||"")}</b>. Utilisé pour les frais auto et la plus-value nette.</div>
-    <label style="margin-top:16px">🔴 Service de cours en direct <span class="hint">URL de ton Worker Cloudflare — « Synchroniser » ira chercher les cours du jour à la demande. Laisse vide pour utiliser le robot GitHub.</span></label>
-    <input id="liveUrl" type="url" placeholder="https://brvm-cours.xxxx.workers.dev" value="${escAttr(store.liveUrl||'')}" onchange="store.liveUrl=(this.value||'').trim();save()">
-    <button class="btn ghost" style="margin-top:10px" onclick="openImportOps()">📥 Importer des opérations (CSV / Excel)</button>
-    <button class="btn ghost" style="margin-top:10px" onclick="exportData()">⬇ Sauvegarder mes données (fichier .json)</button>
-    <button class="btn ghost" style="margin-top:10px" onclick="exportCSV()">📊 Exporter les opérations (Excel / CSV)</button>
     <button class="btn ghost" style="margin-top:10px" onclick="openTransfert()">🔁 Enregistrer un transfert de titres (autre SGI)</button>
     <button class="btn ghost" style="margin-top:10px" onclick="openTransfertUndo()">↩️ Annuler un transfert enregistré</button>
-    <label style="margin-top:16px">⬆ Restaurer une sauvegarde <span class="hint">(fichier .json exporté par l'appli)</span></label>
+    <label style="margin-top:14px">Frais SGI de <b>ce portefeuille</b> — commission + taxes (%)</label>
+    <input id="sgiRate" type="number" step="0.01" min="0" value="${sgiRate()}" onchange="setSgiRate(this.value)">
+    <div class="hint">Chaque portefeuille a son taux selon sa SGI (ex : BSIC ≈ 1,18 %, NSIA ≈ 1,40 %). Ce réglage s'applique au portefeuille actif : <b>${escHtml(db.name||"")}</b>. Utilisé pour les frais auto et la plus-value nette.</div>
+
+    <div class="sect-title" style="margin-top:20px">Cours en direct</div>
+    <label>🔴 Service de cours en direct <span class="hint">URL de ton Worker Cloudflare — « Synchroniser » ira chercher les cours du jour à la demande. Laisse vide pour utiliser le robot GitHub.</span></label>
+    <input id="liveUrl" type="url" placeholder="https://brvm-cours.xxxx.workers.dev" value="${escAttr(store.liveUrl||'')}" onchange="store.liveUrl=(this.value||'').trim();save()">
+
+    <div class="sect-title" style="margin-top:20px">Données</div>
+    <button class="btn ghost" onclick="openImportOps()">📥 Importer des opérations (CSV / Excel)</button>
+    <button class="btn ghost" style="margin-top:10px" onclick="exportData()">⬇ Sauvegarder mes données (fichier .json)</button>
+    <button class="btn ghost" style="margin-top:10px" onclick="exportCSV()">📊 Exporter les opérations (Excel / CSV)</button>
+    <label style="margin-top:14px">⬆ Restaurer une sauvegarde <span class="hint">(fichier .json exporté par l'appli)</span></label>
     <input type="file" accept=".json,application/json" onchange="importData(this)">
-    <button class="btn alt" style="margin-top:18px" onclick="loadDemo()">Charger des données d'exemple</button>
-    <button class="btn" style="margin-top:10px;background:var(--neg)" onclick="resetData()">Effacer ce portefeuille</button>
+    <button class="btn alt" style="margin-top:14px" onclick="loadDemo()">Charger des données d'exemple</button>
+
+    <div class="sect-title" style="margin-top:20px">Zone sensible</div>
+    <button class="btn" style="background:var(--neg)" onclick="resetData()">Effacer ce portefeuille</button>
+
     <div class="hint" style="margin-top:18px;text-align:center">Mon Portefeuille BRVM · données indicatives, hors temps réel.</div>`);
 }
 /* --- 🔁 Transfert de titres reçus d'une autre SGI ---------------------------------
