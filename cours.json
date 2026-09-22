@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-09-22T15:50:14+00:00",
-  "updated_human": "22/09/2026 15:50 UTC",
+  "updated": "2026-09-22T16:05:15+00:00",
+  "updated_human": "22/09/2026 16:05 UTC",
   "count": 48,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 47 titres)",
@@ -1448,13 +1448,13 @@
    {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
-    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
-    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -1472,18 +1472,6 @@
    {
     "date": "2026-06-26",
     "societe": "SITAB",
-    "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "AIR LIQUIDE CI",
-    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "SITAB",
     "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
@@ -1491,6 +1479,18 @@
     "date": "2026-06-26",
     "societe": "SITAB",
     "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "SITAB",
+    "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "AIR LIQUIDE CI",
+    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
     "type": "ago"
    },
    {
@@ -1606,13 +1606,13 @@
   {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
-   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
-   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
@@ -1630,18 +1630,6 @@
   {
    "date": "2026-06-26",
    "societe": "SITAB",
-   "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "AIR LIQUIDE CI",
-   "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "SITAB",
    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
@@ -1649,6 +1637,18 @@
    "date": "2026-06-26",
    "societe": "SITAB",
    "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "SITAB",
+   "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "AIR LIQUIDE CI",
+   "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
    "type": "ago"
   },
   {
