@@ -1890,7 +1890,8 @@ const POS_SORT_COLS={
   cur:{label:"Cours",get:p=>p.cur,dir0:-1},
   jour:{label:"Jour",get:p=>p._dayPct,dir0:-1},
   valeur:{label:"Valeur",get:p=>p.value,dir0:-1},
-  pl:{label:"+/- value",get:p=>p.plPct,dir0:-1},
+  plm:{label:"+/- montant",get:p=>p.pl,dir0:-1},
+  plpct:{label:"+/- %",get:p=>p.plPct,dir0:-1},
   real:{label:"Réalisé",get:p=>p._realized,dir0:-1}
 };
 function posSortState(){try{return JSON.parse(localStorage.getItem("brvm_possort")||"null")||{key:"valeur",dir:-1};}catch(e){return{key:"valeur",dir:-1};}}
@@ -1941,7 +1942,8 @@ function posTable(ps){
       <td>${fmtShort(p.cur)}</td>
       <td class="${dCls}">${p._dayPct>=0?"+":""}${p._dayPct.toFixed(1)}%</td>
       <td><b>${fmtShort(p.value)}</b></td>
-      <td class="${c}">${p.pl>=0?"+":""}${fmtShort(p.pl)}<span class="pct">${p.plPct>=0?"+":""}${p.plPct.toFixed(1)}%</span></td>
+      <td class="${c}">${p.pl>=0?"+":""}${fmtShort(p.pl)}</td>
+      <td class="${c}">${p.plPct>=0?"+":""}${p.plPct.toFixed(1)}%</td>
       <td class="${rc}">${p._realized!==0?(p._realized>0?"+":"")+fmtShort(p._realized):"—"}${p._divs>0?`<span class="pct">dont ${fmtShort(p._divs)} div.</span>`:""}</td>
     </tr>`;
   }).join("");
@@ -1951,12 +1953,13 @@ function posTable(ps){
     return `<th class="${col.cls||""}" onclick="setPosSort('${key}')" style="cursor:pointer${active?";color:var(--green)":""}">${col.label}${arrow}</th>`;
   };
   return `<div class="postable-wrap"><table class="postable">
-    <thead><tr>${["titre","poids","qty","pru","cur","jour","valeur","pl","real"].map(th).join("")}</tr></thead>
+    <thead><tr>${["titre","poids","qty","pru","cur","jour","valeur","plm","plpct","real"].map(th).join("")}</tr></thead>
     <tbody>${rows}</tbody>
     <tfoot><tr>
       <td>Total</td><td></td><td></td><td></td><td></td><td></td>
       <td>${fmtShort(totalValue)}</td>
-      <td class="${totalPl>=0?"pos":"neg"}">${totalPl>=0?"+":""}${fmtShort(totalPl)}<span class="pct" style="font-weight:700">${totalPlPct>=0?"+":""}${totalPlPct.toFixed(1)}%</span></td>
+      <td class="${totalPl>=0?"pos":"neg"}">${totalPl>=0?"+":""}${fmtShort(totalPl)}</td>
+      <td class="${totalPl>=0?"pos":"neg"}">${totalPlPct>=0?"+":""}${totalPlPct.toFixed(1)}%</td>
       <td class="${totalRealized>=0?"pos":"neg"}">${totalRealized!==0?(totalRealized>=0?"+":"")+fmtShort(totalRealized):"—"}</td>
     </tr></tfoot>
   </table></div>`;
