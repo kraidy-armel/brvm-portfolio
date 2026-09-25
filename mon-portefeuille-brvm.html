@@ -2047,6 +2047,7 @@ function drawEvo(){
   const h=db.history||[];
   if(h.length<2){card.innerHTML='<div class="empty" style="padding:20px">📉<br>Le graphique s\'affichera dès que tu auras mis à jour tes cours sur au moins 2 jours différents.</div>';return;}
   if(!card.querySelector("canvas"))card.innerHTML='<canvas id="evoChart" height="150"></canvas>';
+  if(!document.getElementById("evoMinMax"))card.insertAdjacentHTML("beforeend",'<div id="evoMinMax" class="hint" style="margin-top:10px;text-align:center"></div>');
   if(evoChartObj)evoChartObj.destroy();
   /* Patrimoine total = titres (enregistrés chaque jour) + liquidités reconstituées à la même
      date. Ainsi une vente (titres -> liquidités) ne fait plus « chuter » la courbe : l'argent
@@ -2061,6 +2062,11 @@ function drawEvo(){
     options:{plugins:{legend:{display:true,labels:{font:{size:10},boxWidth:14}},tooltip:{callbacks:{label:c=>(c.dataset.label||"")+" : "+fmt(c.parsed.y)}}},
       scales:{y:{ticks:{callback:v=>fmtAxis(v),font:{size:10}}},x:{ticks:{maxTicksLimit:6,font:{size:10}}}}}
   });
+  /* Plus haut / plus bas du patrimoine total (ligne pleine), sur tout l'historique enregistré */
+  let iMax=0,iMin=0;
+  pat.forEach((v,i)=>{if(v>pat[iMax])iMax=i;if(v<pat[iMin])iMin=i;});
+  const mm=document.getElementById("evoMinMax");
+  if(mm)mm.innerHTML=`📈 Plus haut : <b>${fmt(pat[iMax])}</b> le ${frDate(h[iMax].date)} · 📉 Plus bas : <b>${fmt(pat[iMin])}</b> le ${frDate(h[iMin].date)}`;
 }
 
 /* --- Accordéons (état mémorisé sur l'appareil) --- */
