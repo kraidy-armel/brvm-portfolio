@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-09-29T14:35:12+00:00",
-  "updated_human": "29/09/2026 14:35 UTC",
+  "updated": "2026-09-29T14:50:11+00:00",
+  "updated_human": "29/09/2026 14:50 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -32,8 +32,8 @@
   "source": "brvm.org"
  },
  "BICC": {
-  "actuel": 31900.0,
-  "veille": 32501,
+  "actuel": 34895.0,
+  "veille": 32500,
   "date": "2026-09-29",
   "source": "brvm.org"
  },
@@ -122,20 +122,20 @@
   "source": "brvm.org"
  },
  "LNBB": {
-  "actuel": 3800.0,
+  "actuel": 3900.0,
   "veille": 3895,
   "date": "2026-09-29",
   "source": "brvm.org"
  },
  "NEIC": {
-  "actuel": 2250.0,
+  "actuel": 2300.0,
   "veille": 2395,
   "date": "2026-09-29",
   "source": "brvm.org"
  },
  "NSBC": {
-  "actuel": 22505.0,
-  "veille": 22411,
+  "actuel": 21500.0,
+  "veille": 22410,
   "date": "2026-09-29",
   "source": "brvm.org"
  },
@@ -176,7 +176,7 @@
   "source": "brvm.org"
  },
  "SAFC": {
-  "actuel": 4700.0,
+  "actuel": 4800.0,
   "veille": 4620,
   "date": "2026-09-29",
   "source": "brvm.org"
@@ -278,7 +278,7 @@
   "source": "brvm.org"
  },
  "TTLC": {
-  "actuel": 3260.0,
+  "actuel": 3175.0,
   "veille": 3150,
   "date": "2026-09-29",
   "source": "brvm.org"
@@ -373,7 +373,7 @@
     "2026-09-24": 30500.0,
     "2026-09-25": 32000.0,
     "2026-09-28": 32500.0,
-    "2026-09-29": 31900.0
+    "2026-09-29": 34895.0
    },
    "BNBC": {
     "2026-09-02": 2220.0,
@@ -703,7 +703,7 @@
     "2026-09-24": 3975.0,
     "2026-09-25": 3980.0,
     "2026-09-28": 3895.0,
-    "2026-09-29": 3800.0
+    "2026-09-29": 3900.0
    },
    "NEIC": {
     "2026-09-02": 3000.0,
@@ -725,7 +725,7 @@
     "2026-09-24": 2400.0,
     "2026-09-25": 2390.0,
     "2026-09-28": 2395.0,
-    "2026-09-29": 2250.0
+    "2026-09-29": 2300.0
    },
    "NSBC": {
     "2026-09-02": 22955.0,
@@ -747,7 +747,7 @@
     "2026-09-24": 21880.0,
     "2026-09-25": 22500.0,
     "2026-09-28": 22410.0,
-    "2026-09-29": 22505.0
+    "2026-09-29": 21500.0
    },
    "NTLC": {
     "2026-09-02": 16700.0,
@@ -901,7 +901,7 @@
     "2026-09-24": 4000.0,
     "2026-09-25": 4300.0,
     "2026-09-28": 4620.0,
-    "2026-09-29": 4700.0
+    "2026-09-29": 4800.0
    },
    "SCRC": {
     "2026-09-02": 3605.0,
@@ -1275,7 +1275,7 @@
     "2026-09-24": 3050.0,
     "2026-09-25": 3050.0,
     "2026-09-28": 3150.0,
-    "2026-09-29": 3260.0
+    "2026-09-29": 3175.0
    },
    "TTLS": {
     "2026-09-02": 3855.0,
@@ -1460,13 +1460,13 @@
    {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
-    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
-    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -1618,13 +1618,13 @@
   {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
-   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
-   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
