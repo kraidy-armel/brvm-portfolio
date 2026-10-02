@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-10-02T16:50:16+00:00",
-  "updated_human": "02/10/2026 16:50 UTC",
+  "updated": "2026-10-02T20:11:26+00:00",
+  "updated_human": "02/10/2026 20:11 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -1425,6 +1425,12 @@
     "type": "dividende"
    },
    {
+    "date": "2026-10-02",
+    "societe": "ECOBANK TG",
+    "titre": "ETI TG : Avis de convocation - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
     "date": "2026-09-18",
     "societe": "SONATEL",
     "titre": "SONATEL SN : Avis de convocation - Assemblée Générale Extraordinaire",
@@ -1507,12 +1513,6 @@
     "societe": "AIR LIQUIDE CI",
     "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
     "type": "ago"
-   },
-   {
-    "date": "2026-06-15",
-    "societe": "TRACTAFRIC CI",
-    "titre": "TRACTAFRIC MOTORS CI : Avis de convocation - Assemblée Générale Mixte",
-    "type": "ago"
    }
   ]
  },
@@ -1581,6 +1581,12 @@
    "societe": "SITAB",
    "titre": "Dividende net 1 707,2 FCFA/action - detachement 12/08, paiement 13/08",
    "type": "dividende"
+  },
+  {
+   "date": "2026-10-02",
+   "societe": "ECOBANK TG",
+   "titre": "ETI TG : Avis de convocation - Assemblée Générale Ordinaire",
+   "type": "ago"
   },
   {
    "date": "2026-09-18",
@@ -1664,12 +1670,6 @@
    "date": "2026-06-26",
    "societe": "AIR LIQUIDE CI",
    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-15",
-   "societe": "TRACTAFRIC CI",
-   "titre": "TRACTAFRIC MOTORS CI : Avis de convocation - Assemblée Générale Mixte",
    "type": "ago"
   }
  ]
