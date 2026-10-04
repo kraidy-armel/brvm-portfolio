@@ -268,6 +268,8 @@ INDICE_URLS = [
 ]
 
 
+DIV_PAGES = 4   # pages de 10 lignes lues sur « Paiement de dividendes »
+
 ANNONCE_PAGES = [
     ("https://www.brvm.org/fr/emetteurs/type-annonces/convocations-assemblees-generales", "ago"),
     ("https://www.brvm.org/fr/emetteurs/type-annonces/communiques", "communique"),
@@ -341,49 +343,59 @@ def scrape_dividendes():
     out = []
     if not HAS_BS4:
         return out
-    try:
-        r = http_get("https://www.brvm.org/fr/esv/paiement-de-dividendes", timeout=30)
-        if r.status_code != 200 or not r.text:
-            return out
-        soup = BeautifulSoup(r.text, "html.parser")
-        for table in soup.find_all("table"):
-            ths = [th.get_text(" ", strip=True).lower() for th in table.find_all("th")]
-            heads = " ".join(ths)
-            if "dividende" not in heads or "emetteur" not in heads:
+    # Le site affiche 10 dividendes par page, SANS les classer par date : lire
+    # la seule page 0 faisait rater des dividendes recents (SIB, Onatel,
+    # BOA-CI...). On lit les premieres pages et on garde ~6 mois d'historique.
+    base = "https://www.brvm.org/fr/esv/paiement-de-dividendes"
+    limite = (datetime.date.today() - datetime.timedelta(days=180)).isoformat()
+    vus = set()
+    for page in range(DIV_PAGES):
+        try:
+            r = http_get(base if page == 0 else f"{base}?page={page}", timeout=30)
+            if r.status_code != 200 or not r.text:
                 continue
-
-            def col(k):
-                for i, h in enumerate(ths):
-                    if k in h:
-                        return i
-                return None
-
-            i_em, i_pay = col("emetteur"), col("paiement")
-            i_ex, i_mt = col("ex-dividende"), col("montant")
-            for tr in table.find_all("tr"):
-                tds = [td.get_text(" ", strip=True) for td in tr.find_all("td")]
-                if len(tds) < 5:
+            soup = BeautifulSoup(r.text, "html.parser")
+            for table in soup.find_all("table"):
+                ths = [th.get_text(" ", strip=True).lower() for th in table.find_all("th")]
+                heads = " ".join(ths)
+                if "dividende" not in heads or "emetteur" not in heads:
                     continue
-                em = tds[i_em] if (i_em is not None and i_em < len(tds)) else ""
-                if not em:
-                    continue
-                dex = parse_date_fr(tds[i_ex]) if (i_ex is not None and i_ex < len(tds)) else None
-                dpay = parse_date_fr(tds[i_pay]) if (i_pay is not None and i_pay < len(tds)) else None
-                d = dex or dpay
-                if not d:
-                    continue
-                mt = tds[i_mt] if (i_mt is not None and i_mt < len(tds)) else ""
 
-                def jm(x):
-                    return (x[8:10] + "/" + x[5:7]) if x else "?"
-                # dates volontairement en JJ/MM (sans annee) dans le titre :
-                # l'appli garde ainsi la date ex-dividende comme date d'evenement
-                titre = f"Dividende net {mt}/action - detachement {jm(dex)}, paiement {jm(dpay)}"
-                out.append({"date": d, "societe": em,
-                            "titre": titre[:120], "type": "dividende"})
-    except Exception:
-        pass
-    return out[:20]
+                def col(k):
+                    for i, h in enumerate(ths):
+                        if k in h:
+                            return i
+                    return None
+
+                i_em, i_pay = col("emetteur"), col("paiement")
+                i_ex, i_mt = col("ex-dividende"), col("montant")
+                for tr in table.find_all("tr"):
+                    tds = [td.get_text(" ", strip=True) for td in tr.find_all("td")]
+                    if len(tds) < 5:
+                        continue
+                    em = tds[i_em] if (i_em is not None and i_em < len(tds)) else ""
+                    if not em:
+                        continue
+                    dex = parse_date_fr(tds[i_ex]) if (i_ex is not None and i_ex < len(tds)) else None
+                    dpay = parse_date_fr(tds[i_pay]) if (i_pay is not None and i_pay < len(tds)) else None
+                    d = dex or dpay
+                    if not d or d < limite:
+                        continue
+                    mt = tds[i_mt] if (i_mt is not None and i_mt < len(tds)) else ""
+                    if (em, d, mt) in vus:      # le site liste parfois une ligne en double
+                        continue
+                    vus.add((em, d, mt))
+
+                    def jm(x):
+                        return (x[8:10] + "/" + x[5:7]) if x else "?"
+                    # dates volontairement en JJ/MM (sans annee) dans le titre :
+                    # l'appli garde ainsi la date ex-dividende comme date d'evenement
+                    titre = f"Dividende net {mt}/action - detachement {jm(dex)}, paiement {jm(dpay)}"
+                    out.append({"date": d, "societe": em,
+                                "titre": titre[:120], "type": "dividende"})
+        except Exception:
+            pass
+    return out[:40]
 
 
 def scrape_indice():
@@ -705,7 +717,7 @@ def main():
         histo["_indice_prec"] = out["_indice"]
 
     # Annonces emetteurs (AG, resultats) + calendrier officiel des dividendes
-    ann = (scrape_dividendes() + scrape_annonces())[:50]
+    ann = (scrape_dividendes() + scrape_annonces())[:60]
     if ann:
         out["_annonces"] = ann
         diag["annonces"] = f"{len(ann)} annonce(s)"
