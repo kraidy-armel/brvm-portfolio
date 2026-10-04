@@ -1061,18 +1061,32 @@ function mergeAnnonces(list){
     const tk=annToTicker(a.societe);
     if(!tk)return;
     /* date de l'événement : « du 12 août 2026 » ou « 12/08/2026 » dans le titre, sinon date de publication */
+    const rap=a.type==="rapport";
     let d=a.date||today();
-    let m=(a.titre||"").match(/(\d{1,2})(?:er)?\s+(janvier|f[ée]vrier|mars|avril|mai|juin|juillet|ao[ûu]t|septembre|octobre|novembre|d[ée]cembre)\s+(\d{4})/i);
-    if(m){const mo=MOIS[norm(m[2])];if(mo)d=m[3]+"-"+String(mo).padStart(2,"0")+"-"+String(+m[1]).padStart(2,"0");}
-    else{m=(a.titre||"").match(/(\d{2})\/(\d{2})\/(\d{4})/);if(m)d=m[3]+"-"+m[2]+"-"+m[1];}
+    /* un rapport garde sa date de publication : « au 31 décembre 2025 » dans son titre est la clôture, pas la parution */
+    if(!rap){
+      let m=(a.titre||"").match(/(\d{1,2})(?:er)?\s+(janvier|f[ée]vrier|mars|avril|mai|juin|juillet|ao[ûu]t|septembre|octobre|novembre|d[ée]cembre)\s+(\d{4})/i);
+      if(m){const mo=MOIS[norm(m[2])];if(mo)d=m[3]+"-"+String(mo).padStart(2,"0")+"-"+String(+m[1]).padStart(2,"0");}
+      else{m=(a.titre||"").match(/(\d{2})\/(\d{2})\/(\d{4})/);if(m)d=m[3]+"-"+m[2]+"-"+m[1];}
+    }
+    /* fenêtre anti-doublon : ±15 jours, mais un rapport = même jour seulement
+       (trois rapports d'un même titre peuvent sortir à quelques jours d'écart) */
+    const tol=rap?43200000:15*86400000;
     follows.forEach(f=>{
       if(!f.s.has(tk))return;
       if(!f.p.events)f.p.events=[];
-      /* pas de doublon si un événement similaire existe déjà à ±15 jours DANS CE portefeuille */
-      if(f.p.events.some(e=>e.ticker===tk&&e.type===a.type&&Math.abs(new Date(e.date+"T00:00")-new Date(d+"T00:00"))<15*86400000))return;
+      const exist=f.p.events.find(e=>e.ticker===tk&&e.type===a.type&&Math.abs(new Date(e.date+"T00:00")-new Date(d+"T00:00"))<tol);
+      if(exist){
+        /* document publié plus tard le même jour : on l'ajoute à l'événement existant */
+        if(rap&&a.docs){
+          const have=new Set((exist.docs||[]).map(x=>x.f)), nw=a.docs.filter(x=>!have.has(x.f));
+          if(nw.length){exist.docs=(exist.docs||[]).concat(nw).slice(0,6);exist.note=("🤖 "+(exist.docs.length>1?a.societe+" : "+exist.docs.length+" documents publiés":exist.docs[0].t)).slice(0,90);f.modified=true;added++;}
+        }
+        return;
+      }
       /* ni si cette même annonce a été supprimée volontairement (voir delEvent) */
-      if((f.p.dismissedAnnonces||[]).some(x=>x.ticker===tk&&x.type===a.type&&Math.abs(new Date(x.date+"T00:00")-new Date(d+"T00:00"))<15*86400000))return;
-      f.p.events.push({id:uid(),type:a.type,ticker:tk,date:d,note:("🤖 "+(a.titre||"Annonce BRVM")).slice(0,90),auto:true});
+      if((f.p.dismissedAnnonces||[]).some(x=>x.ticker===tk&&x.type===a.type&&Math.abs(new Date(x.date+"T00:00")-new Date(d+"T00:00"))<tol))return;
+      f.p.events.push({id:uid(),type:a.type,ticker:tk,date:d,note:("🤖 "+(a.titre||"Annonce BRVM")).slice(0,90),auto:true,...(rap&&a.docs&&a.docs.length?{docs:a.docs.slice(0,6)}:{})});
       f.modified=true;
       added++;
     });
@@ -2138,7 +2152,7 @@ function renderDiv(){
 }
 
 function evRow(e){
-  const labels={ago:["AGO","gold"],resultats:["Résultats","gray"],dividende:["Détachement dividende","gold"],frais:["🏦 Frais SGI","gray"],sauvegarde:["💾 Sauvegarde","gray"],autre:["Événement","gray"]};
+  const labels={ago:["AGO","gold"],resultats:["Résultats","gray"],dividende:["Détachement dividende","gold"],frais:["🏦 Frais SGI","gray"],sauvegarde:["💾 Sauvegarde","gray"],rapport:["📄 Rapport","gold"],autre:["Événement","gray"]};
   const [lab,cls]=labels[e.type]||labels.autre;
   const past=e.date<today();
   return `<div class="row" style="${past?"opacity:.5":""}">
@@ -2146,7 +2160,8 @@ function evRow(e){
       <span style="font-weight:700">${new Date(e.date+"T00:00").getDate()}</span>
       <span style="font-size:9px">${new Date(e.date+"T00:00").toLocaleDateString("fr-FR",{month:"short"})}</span></div>
     <div class="grow"><div class="nm">${e.ticker?(stockMap[e.ticker]?.name||e.ticker):"BRVM"}</div>
-      <div class="sub"><span class="tag ${cls}">${lab}</span> ${e.note?"· "+e.note:""}</div></div>
+      <div class="sub"><span class="tag ${cls}">${lab}</span> ${e.note?"· "+escHtml(e.note):""}</div>
+      ${(e.docs||[]).map(x=>`<div class="sub"><a href="https://www.brvm.org/sites/default/files/${encodeURI(x.f)}" target="_blank" rel="noopener" style="color:var(--green)">📎 ${escHtml(x.t)}</a></div>`).join("")}</div>
     <button class="del" onclick="delEvent('${e.id}')">×</button>
   </div>`;
 }

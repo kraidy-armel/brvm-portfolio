@@ -30,6 +30,7 @@ import os
 import sys
 import datetime
 import re
+import time
 
 try:
     import requests
@@ -398,6 +399,103 @@ def scrape_dividendes():
     return out[:40]
 
 
+RAPPORTS_INDEX = "https://www.brvm.org/fr/rapports-societes-cotees"
+RAPPORTS_JOURS = 45      # on ne garde que les rapports publies ces N derniers jours
+RAPPORTS_MAX = 30        # plafond d'evenements (1 evenement = 1 societe + 1 jour)
+RAPPORTS_DIR = "/sites/default/files/"
+
+
+def scrape_rapports():
+    """Rapports d'activites, etats financiers et rapports des commissaires aux
+    comptes publies par les societes cotees. Le site n'affiche pas de date dans
+    le tableau, mais le nom du fichier PDF commence par la date de publication
+    (20261001_-_rapport_dactivites_...pdf).
+
+    Renvoie une liste d'evenements groupes par (societe, jour), ou None si le
+    site est injoignable (l'appelant garde alors le resultat de la veille).
+    Chaque evenement : {date, societe, titre, type:"rapport", docs:[{t, f}]},
+    ou f = nom du fichier (l'appli reconstruit l'adresse complete)."""
+    if not HAS_BS4:
+        return None
+    limite = (datetime.date.today() - datetime.timedelta(days=RAPPORTS_JOURS)).strftime("%Y%m%d")
+    societes = {}                     # slug -> nom de l'emetteur
+    for page in range(6):
+        try:
+            r = http_get(RAPPORTS_INDEX if page == 0 else f"{RAPPORTS_INDEX}?page={page}", timeout=30)
+            if r.status_code != 200 or not r.text:
+                break
+            soup = BeautifulSoup(r.text, "html.parser")
+            avant = len(societes)
+            for tr in soup.find_all("tr"):
+                a = tr.find("a", href=re.compile(r"/fr/rapports-societe-cotes/"))
+                tds = [td.get_text(" ", strip=True) for td in tr.find_all("td")]
+                if a and len(tds) >= 2 and tds[1]:
+                    societes[a["href"].rstrip("/").split("/")[-1]] = tds[1]
+            if len(societes) == avant:    # page vide : fin de la pagination
+                break
+        except Exception:
+            break
+        time.sleep(0.3)
+    if not societes:
+        return None
+
+    groupes = {}                      # (societe, date) -> evenement
+    for slug, nom in societes.items():
+        try:
+            r = http_get(f"https://www.brvm.org/fr/rapports-societe-cotes/{slug}", timeout=30)
+            if r.status_code != 200 or not r.text:
+                continue
+            for tr in BeautifulSoup(r.text, "html.parser").find_all("tr"):
+                a = tr.find("a", href=re.compile(re.escape(RAPPORTS_DIR) + r"\d{8}_"))
+                tds = tr.find_all("td")
+                if not a or not tds:
+                    continue
+                fichier = a["href"].split(RAPPORTS_DIR)[-1]
+                ymd = fichier[:8]
+                try:
+                    datetime.datetime.strptime(ymd, "%Y%m%d")
+                except ValueError:
+                    continue
+                if ymd < limite:
+                    continue
+                titre = tds[0].get_text(" ", strip=True)[:90]
+                date = f"{ymd[:4]}-{ymd[4:6]}-{ymd[6:]}"
+                ev = groupes.setdefault((nom, date), {"date": date, "societe": nom,
+                                                      "type": "rapport", "docs": []})
+                if not any(d["f"] == fichier for d in ev["docs"]):
+                    ev["docs"].append({"t": titre, "f": fichier})
+        except Exception:
+            pass
+        time.sleep(0.3)
+    out = []
+    for ev in groupes.values():
+        n = len(ev["docs"])
+        ev["titre"] = ev["docs"][0]["t"] if n == 1 else f"{ev['societe']} : {n} documents publies"
+        out.append(ev)
+    out.sort(key=lambda e: e["date"], reverse=True)
+    return out[:RAPPORTS_MAX]
+
+
+def rapports_du_jour(ancien, histo, now):
+    """Une seule lecture complete par jour (~80 pages) : aux autres passages du
+    robot on reprend le resultat deja stocke dans _histo. Si le site est
+    injoignable, on garde la veille plutot que de perdre l'information."""
+    jour = now.date().isoformat()
+    prec = ancien.get("_rapports_prec") if isinstance(ancien, dict) else None
+    scan = ancien.get("_rapports_scan") if isinstance(ancien, dict) else ""
+    if scan == jour and prec is not None:
+        rap = prec
+    else:
+        rap = scrape_rapports()
+        if rap is None:
+            rap = prec or []
+        else:
+            scan = jour
+    histo["_rapports_prec"] = rap
+    histo["_rapports_scan"] = scan or ""
+    return rap
+
+
 def scrape_indice():
     """Cherche la valeur de l'indice BRVM Composite sur le site officiel.
     Renvoie (valeur, source) ou (None, message)."""
@@ -718,6 +816,8 @@ def main():
 
     # Annonces emetteurs (AG, resultats) + calendrier officiel des dividendes
     ann = (scrape_dividendes() + scrape_annonces())[:60]
+    # + rapports d'activites / etats financiers (lus 1 fois par jour, groupes par societe et par jour)
+    ann = ann + rapports_du_jour(ancien_histo, histo, now)
     if ann:
         out["_annonces"] = ann
         diag["annonces"] = f"{len(ann)} annonce(s)"
