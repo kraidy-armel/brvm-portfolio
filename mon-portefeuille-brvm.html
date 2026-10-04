@@ -989,7 +989,7 @@ const ANN_ALIAS=[
   [/FILTISAC/,"FTSC"],
   [/BERNABE/,"BNBC"],
   [/CFAO/,"CFAC"],
-  [/VIVO/,"SVOC"],
+  [/VIVO/,"SHEC"],
   [/TOTAL.*(SENEGAL|\bSN\b)/,"TTLS"],
   [/TOTAL/,"TTLC"],
   [/SODECI/,"SDCC"],
@@ -1007,9 +1007,9 @@ const ANN_ALIAS=[
   [/AIR LIQUIDE|\bERIUM\b/,"SIVC"],
   [/SERVAIR|ABIDJAN CATERING/,"ABJC"],
   [/\bSHELL\b|\bSHEC\b/,"SHEC"],
-  [/TRACTAFRIC|SODE\b/,"SOGC"],
+  [/\bSOGB\b|\bSODE\b/,"SOGC"],
   [/\bSIB\b|INTERNATIONALE DE BANQUE/,"SIBC"],
-  [/\bPRSC\b|TROPICALE.*PRESSING|SICTA/,"PRSC"],
+  [/\bPRSC\b|TRACTAFRIC|TROPICALE.*PRESSING|SICTA/,"PRSC"],
   [/LOTERIE NATIONALE|\bLNB\b/,"LNBB"],
   [/CROWN\s*SIEM|EVIOSYS|\bSIEM\b/,"SEMC"],
   [/\bNEI\b|CEDA/,"NEIC"],
@@ -1046,7 +1046,15 @@ function mergeAnnonces(list){
   }).filter(f=>f.s.size);
   if(!follows.length)return;
   const MOIS={JANVIER:1,FEVRIER:2,MARS:3,AVRIL:4,MAI:5,JUIN:6,JUILLET:7,AOUT:8,SEPTEMBRE:9,OCTOBRE:10,NOVEMBRE:11,DECEMBRE:12};
-  let added=0;
+  let added=0, repaired=0;
+  /* Répare les événements auto rangés sous le mauvais titre par l'ancien alias
+     (Tractafric était rattaché à SOGB/SOGC) : on les retire, la boucle ci-dessous
+     les recrée sous PRSC chez ceux qui détiennent vraiment ce titre. */
+  follows.forEach(f=>{
+    const n0=(f.p.events||[]).length;
+    f.p.events=(f.p.events||[]).filter(e=>!(e.auto&&e.ticker==="SOGC"&&/TRACTAFRIC/i.test(e.note||"")));
+    if(f.p.events.length!==n0){f.modified=true;repaired++;}
+  });
   list.forEach(a=>{
     if(!a||!a.societe||!a.type)return;
     /* société -> ticker (helper partagé avec la fiche « Le point ») */
@@ -1069,7 +1077,7 @@ function mergeAnnonces(list){
       added++;
     });
   });
-  if(added){
+  if(added||repaired){
     /* horodater les portefeuilles modifiés + envoyer au nuage, sinon la fusion
        de synchro reprendrait la version du nuage (sans ces événements) */
     follows.forEach(f=>{if(f.modified)f.p._ts=Date.now();});
