@@ -1,316 +1,315 @@
 {
  "_meta": {
-  "updated": "2026-10-02T20:11:26+00:00",
-  "updated_human": "02/10/2026 20:11 UTC",
+  "updated": "2026-10-05T09:05:12+00:00",
+  "updated_human": "05/10/2026 09:05 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
    "github_secours": "non utilise (officiel suffisant)",
    "alertes_perso": "aucun seuil franchi",
    "resultat": "49 titres",
-   "dates_couvertes": "2026-10-02 -> 2026-10-02",
-   "indice_composite": "549.02 (https://www.brvm.org/fr/indices/0)",
-   "annonces": "25 annonce(s)"
+   "dates_couvertes": "2026-10-05 -> 2026-10-05",
+   "indice_composite": "546.78 (https://www.brvm.org/fr/indices/0)",
+   "annonces": "64 annonce(s)"
   }
  },
  "ABJC": {
   "actuel": 3500.0,
-  "veille": 3370,
-  "date": "2026-10-02",
+  "veille": 3500,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "BBGC": {
   "actuel": 8995.0,
-  "veille": 8800,
-  "date": "2026-10-02",
+  "veille": 8995,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "BICB": {
   "actuel": 8800.0,
   "veille": 8800,
-  "date": "2026-10-02",
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "BICC": {
   "actuel": 33800.0,
   "veille": 33800,
-  "date": "2026-10-02",
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "BNBC": {
   "actuel": 1950.0,
-  "veille": 1900,
-  "date": "2026-10-02",
+  "veille": 1950,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "BOAB": {
   "actuel": 9435.0,
-  "veille": 9385,
-  "date": "2026-10-02",
+  "veille": 9435,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "BOABF": {
   "actuel": 8240.0,
-  "veille": 8000,
-  "date": "2026-10-02",
+  "veille": 8240,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "BOAC": {
   "actuel": 11450.0,
-  "veille": 11490,
-  "date": "2026-10-02",
+  "veille": 11450,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "BOAM": {
   "actuel": 6100.0,
-  "veille": 6090,
-  "date": "2026-10-02",
+  "veille": 6100,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "BOAN": {
   "actuel": 4950.0,
-  "veille": 5000,
-  "date": "2026-10-02",
+  "veille": 4950,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "BOAS": {
   "actuel": 8290.0,
-  "veille": 8175,
-  "date": "2026-10-02",
+  "veille": 8290,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "CABC": {
   "actuel": 3350.0,
-  "veille": 3395,
-  "date": "2026-10-02",
+  "veille": 3350,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "CBIBF": {
   "actuel": 31500.0,
-  "veille": 30300,
-  "date": "2026-10-02",
+  "veille": 31500,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "CFAC": {
   "actuel": 1450.0,
-  "veille": 1520,
-  "date": "2026-10-02",
+  "veille": 1450,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "CIEC": {
   "actuel": 6450.0,
-  "veille": 6500,
-  "date": "2026-10-02",
+  "veille": 6450,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "ECOC": {
   "actuel": 17100.0,
-  "veille": 16794,
-  "date": "2026-10-02",
+  "veille": 17100,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "ETIT": {
   "actuel": 67.0,
   "veille": 67,
-  "date": "2026-10-02",
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "FTSC": {
   "actuel": 1980.0,
-  "veille": 1995,
-  "date": "2026-10-02",
+  "veille": 1980,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "LNBB": {
   "actuel": 3825.0,
-  "veille": 3890,
-  "date": "2026-10-02",
+  "veille": 3825,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "NEIC": {
   "actuel": 2235.0,
-  "veille": 2245,
-  "date": "2026-10-02",
+  "veille": 2235,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "NSBC": {
   "actuel": 22000.0,
   "veille": 22000,
-  "date": "2026-10-02",
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "NTLC": {
   "actuel": 14910.0,
-  "veille": 14900,
-  "date": "2026-10-02",
+  "veille": 14910,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "ONTBF": {
   "actuel": 2920.0,
-  "veille": 2935,
-  "date": "2026-10-02",
+  "veille": 2920,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "ORAC": {
   "actuel": 20605.0,
-  "veille": 21800,
-  "date": "2026-10-02",
+  "veille": 20605,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "ORGT": {
   "actuel": 2900.0,
-  "veille": 3000,
-  "date": "2026-10-02",
+  "veille": 2900,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "PALC": {
   "actuel": 8345.0,
-  "veille": 8300,
-  "date": "2026-10-02",
+  "veille": 8345,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "PRSC": {
   "actuel": 3900.0,
-  "veille": 3905,
-  "date": "2026-10-02",
+  "veille": 3900,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "SAFC": {
   "actuel": 4385.0,
-  "veille": 4450,
-  "date": "2026-10-02",
+  "veille": 4385,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "SCRC": {
   "actuel": 2760.0,
-  "veille": 2790,
-  "date": "2026-10-02",
+  "veille": 2760,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "SDCC": {
   "actuel": 12980.0,
-  "veille": 12940,
-  "date": "2026-10-02",
+  "veille": 12980,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "SDSC": {
   "actuel": 2950.0,
-  "veille": 2915,
-  "date": "2026-10-02",
+  "veille": 2950,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "SEMC": {
   "actuel": 1495.0,
   "veille": 1495,
-  "date": "2026-10-02",
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "SGBC": {
   "actuel": 39995.0,
-  "veille": 39000,
-  "date": "2026-10-02",
+  "veille": 39995,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "SHEC": {
   "actuel": 2290.0,
-  "veille": 2300,
-  "date": "2026-10-02",
+  "veille": 2290,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "SIBC": {
   "actuel": 9185.0,
-  "veille": 9160,
-  "date": "2026-10-02",
+  "veille": 9185,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "SICC": {
   "actuel": 8400.0,
   "veille": 8400,
-  "date": "2026-10-02",
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "SIVC": {
   "actuel": 1995.0,
-  "veille": 2000,
-  "date": "2026-10-02",
+  "veille": 1995,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "SLBC": {
   "actuel": 37300.0,
-  "veille": 37000,
-  "date": "2026-10-02",
+  "veille": 37300,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "SMBC": {
   "actuel": 16450.0,
-  "veille": 16411,
-  "date": "2026-10-02",
+  "veille": 16450,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "SNTS": {
   "actuel": 45000.0,
   "veille": 45000,
-  "date": "2026-10-02",
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "SOGC": {
   "actuel": 7950.0,
-  "veille": 7940,
-  "date": "2026-10-02",
+  "veille": 7950,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "SPHC": {
   "actuel": 7900.0,
-  "veille": 7890,
-  "date": "2026-10-02",
+  "veille": 7900,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "STAC": {
   "actuel": 2200.0,
-  "veille": 2150,
-  "date": "2026-10-02",
+  "veille": 2200,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "STBC": {
   "actuel": 21800.0,
-  "veille": 21969,
-  "date": "2026-10-02",
+  "veille": 21800,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "TTLC": {
   "actuel": 3025.0,
-  "veille": 3010,
-  "date": "2026-10-02",
+  "veille": 3025,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "TTLS": {
   "actuel": 3700.0,
-  "veille": 3690,
-  "date": "2026-10-02",
+  "veille": 3700,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "UNLC": {
   "actuel": 50900.0,
-  "veille": 51002,
-  "date": "2026-10-02",
+  "veille": 50900,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "UNXC": {
   "actuel": 2270.0,
-  "veille": 2360,
-  "date": "2026-10-02",
+  "veille": 2270,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "SGBCI": {
   "actuel": 39995.0,
-  "veille": 39000,
-  "date": "2026-10-02",
+  "veille": 39995,
+  "date": "2026-10-05",
   "source": "brvm.org"
  },
  "_histo": {
   "points": {
    "ABJC": {
-    "2026-09-07": 3975.0,
     "2026-09-08": 3995.0,
     "2026-09-09": 3995.0,
     "2026-09-10": 4005.0,
@@ -329,10 +328,10 @@
     "2026-09-29": 3650.0,
     "2026-09-30": 3640.0,
     "2026-10-01": 3370.0,
-    "2026-10-02": 3500.0
+    "2026-10-02": 3500.0,
+    "2026-10-05": 3500.0
    },
    "BICB": {
-    "2026-09-07": 10790.0,
     "2026-09-08": 10450.0,
     "2026-09-09": 10110.0,
     "2026-09-10": 10200.0,
@@ -351,10 +350,10 @@
     "2026-09-29": 8560.0,
     "2026-09-30": 8910.0,
     "2026-10-01": 8800.0,
-    "2026-10-02": 8800.0
+    "2026-10-02": 8800.0,
+    "2026-10-05": 8800.0
    },
    "BICC": {
-    "2026-09-07": 33785.0,
     "2026-09-08": 33815.0,
     "2026-09-09": 34000.0,
     "2026-09-10": 32600.0,
@@ -373,10 +372,10 @@
     "2026-09-29": 34895.0,
     "2026-09-30": 32605.0,
     "2026-10-01": 33800.0,
-    "2026-10-02": 33800.0
+    "2026-10-02": 33800.0,
+    "2026-10-05": 33800.0
    },
    "BNBC": {
-    "2026-09-07": 2105.0,
     "2026-09-08": 2045.0,
     "2026-09-09": 2120.0,
     "2026-09-10": 2165.0,
@@ -395,10 +394,10 @@
     "2026-09-29": 1990.0,
     "2026-09-30": 1875.0,
     "2026-10-01": 1900.0,
-    "2026-10-02": 1950.0
+    "2026-10-02": 1950.0,
+    "2026-10-05": 1950.0
    },
    "BOAB": {
-    "2026-09-07": 10240.0,
     "2026-09-08": 10280.0,
     "2026-09-09": 10200.0,
     "2026-09-10": 10030.0,
@@ -417,10 +416,10 @@
     "2026-09-29": 9400.0,
     "2026-09-30": 9750.0,
     "2026-10-01": 9385.0,
-    "2026-10-02": 9435.0
+    "2026-10-02": 9435.0,
+    "2026-10-05": 9435.0
    },
    "BOABF": {
-    "2026-09-07": 8900.0,
     "2026-09-08": 8950.0,
     "2026-09-09": 8990.0,
     "2026-09-10": 8995.0,
@@ -439,10 +438,10 @@
     "2026-09-29": 8190.0,
     "2026-09-30": 8200.0,
     "2026-10-01": 8000.0,
-    "2026-10-02": 8240.0
+    "2026-10-02": 8240.0,
+    "2026-10-05": 8240.0
    },
    "BOAC": {
-    "2026-09-07": 12495.0,
     "2026-09-08": 12500.0,
     "2026-09-09": 12495.0,
     "2026-09-10": 12400.0,
@@ -461,10 +460,10 @@
     "2026-09-29": 11600.0,
     "2026-09-30": 11500.0,
     "2026-10-01": 11490.0,
-    "2026-10-02": 11450.0
+    "2026-10-02": 11450.0,
+    "2026-10-05": 11450.0
    },
    "BOAM": {
-    "2026-09-07": 6870.0,
     "2026-09-08": 6870.0,
     "2026-09-09": 7005.0,
     "2026-09-10": 7195.0,
@@ -483,10 +482,10 @@
     "2026-09-29": 5995.0,
     "2026-09-30": 6145.0,
     "2026-10-01": 6090.0,
-    "2026-10-02": 6100.0
+    "2026-10-02": 6100.0,
+    "2026-10-05": 6100.0
    },
    "BOAN": {
-    "2026-09-07": 5445.0,
     "2026-09-08": 5490.0,
     "2026-09-09": 5470.0,
     "2026-09-10": 5495.0,
@@ -505,10 +504,10 @@
     "2026-09-29": 5350.0,
     "2026-09-30": 5300.0,
     "2026-10-01": 5000.0,
-    "2026-10-02": 4950.0
+    "2026-10-02": 4950.0,
+    "2026-10-05": 4950.0
    },
    "BOAS": {
-    "2026-09-07": 8265.0,
     "2026-09-08": 8275.0,
     "2026-09-09": 8200.0,
     "2026-09-10": 8300.0,
@@ -527,10 +526,10 @@
     "2026-09-29": 8145.0,
     "2026-09-30": 8145.0,
     "2026-10-01": 8175.0,
-    "2026-10-02": 8290.0
+    "2026-10-02": 8290.0,
+    "2026-10-05": 8290.0
    },
    "CABC": {
-    "2026-09-07": 3525.0,
     "2026-09-08": 3490.0,
     "2026-09-09": 3490.0,
     "2026-09-10": 3480.0,
@@ -549,10 +548,10 @@
     "2026-09-29": 3395.0,
     "2026-09-30": 3395.0,
     "2026-10-01": 3395.0,
-    "2026-10-02": 3350.0
+    "2026-10-02": 3350.0,
+    "2026-10-05": 3350.0
    },
    "CBIBF": {
-    "2026-09-07": 33300.0,
     "2026-09-08": 33000.0,
     "2026-09-09": 33500.0,
     "2026-09-10": 33600.0,
@@ -571,10 +570,10 @@
     "2026-09-29": 32490.0,
     "2026-09-30": 30060.0,
     "2026-10-01": 30300.0,
-    "2026-10-02": 31500.0
+    "2026-10-02": 31500.0,
+    "2026-10-05": 31500.0
    },
    "CFAC": {
-    "2026-09-07": 1740.0,
     "2026-09-08": 1725.0,
     "2026-09-09": 1690.0,
     "2026-09-10": 1695.0,
@@ -593,10 +592,10 @@
     "2026-09-29": 1600.0,
     "2026-09-30": 1545.0,
     "2026-10-01": 1520.0,
-    "2026-10-02": 1450.0
+    "2026-10-02": 1450.0,
+    "2026-10-05": 1450.0
    },
    "CIEC": {
-    "2026-09-07": 7080.0,
     "2026-09-08": 7295.0,
     "2026-09-09": 7400.0,
     "2026-09-10": 7100.0,
@@ -615,10 +614,10 @@
     "2026-09-29": 6450.0,
     "2026-09-30": 6450.0,
     "2026-10-01": 6500.0,
-    "2026-10-02": 6450.0
+    "2026-10-02": 6450.0,
+    "2026-10-05": 6450.0
    },
    "ECOC": {
-    "2026-09-07": 17500.0,
     "2026-09-08": 17500.0,
     "2026-09-09": 17695.0,
     "2026-09-10": 16800.0,
@@ -637,10 +636,10 @@
     "2026-09-29": 16795.0,
     "2026-09-30": 16835.0,
     "2026-10-01": 16795.0,
-    "2026-10-02": 17100.0
+    "2026-10-02": 17100.0,
+    "2026-10-05": 17100.0
    },
    "ETIT": {
-    "2026-09-07": 71.0,
     "2026-09-08": 70.0,
     "2026-09-09": 70.0,
     "2026-09-10": 70.0,
@@ -659,10 +658,10 @@
     "2026-09-29": 69.0,
     "2026-09-30": 67.0,
     "2026-10-01": 67.0,
-    "2026-10-02": 67.0
+    "2026-10-02": 67.0,
+    "2026-10-05": 67.0
    },
    "FTSC": {
-    "2026-09-07": 2130.0,
     "2026-09-08": 2100.0,
     "2026-09-09": 2100.0,
     "2026-09-10": 2100.0,
@@ -681,10 +680,10 @@
     "2026-09-29": 1995.0,
     "2026-09-30": 1975.0,
     "2026-10-01": 1995.0,
-    "2026-10-02": 1980.0
+    "2026-10-02": 1980.0,
+    "2026-10-05": 1980.0
    },
    "LNBB": {
-    "2026-09-07": 3900.0,
     "2026-09-08": 4100.0,
     "2026-09-09": 4050.0,
     "2026-09-10": 3950.0,
@@ -703,10 +702,10 @@
     "2026-09-29": 3900.0,
     "2026-09-30": 3865.0,
     "2026-10-01": 3890.0,
-    "2026-10-02": 3825.0
+    "2026-10-02": 3825.0,
+    "2026-10-05": 3825.0
    },
    "NEIC": {
-    "2026-09-07": 2980.0,
     "2026-09-08": 2980.0,
     "2026-09-09": 2630.0,
     "2026-09-10": 2825.0,
@@ -725,10 +724,10 @@
     "2026-09-29": 2300.0,
     "2026-09-30": 2300.0,
     "2026-10-01": 2245.0,
-    "2026-10-02": 2235.0
+    "2026-10-02": 2235.0,
+    "2026-10-05": 2235.0
    },
    "NSBC": {
-    "2026-09-07": 24885.0,
     "2026-09-08": 24500.0,
     "2026-09-09": 24450.0,
     "2026-09-10": 24000.0,
@@ -747,10 +746,10 @@
     "2026-09-29": 21500.0,
     "2026-09-30": 21500.0,
     "2026-10-01": 22000.0,
-    "2026-10-02": 22000.0
+    "2026-10-02": 22000.0,
+    "2026-10-05": 22000.0
    },
    "NTLC": {
-    "2026-09-07": 18000.0,
     "2026-09-08": 16900.0,
     "2026-09-09": 16890.0,
     "2026-09-10": 16700.0,
@@ -769,10 +768,10 @@
     "2026-09-29": 15400.0,
     "2026-09-30": 15000.0,
     "2026-10-01": 14900.0,
-    "2026-10-02": 14910.0
+    "2026-10-02": 14910.0,
+    "2026-10-05": 14910.0
    },
    "ONTBF": {
-    "2026-09-07": 2870.0,
     "2026-09-08": 2870.0,
     "2026-09-09": 2870.0,
     "2026-09-10": 2870.0,
@@ -791,10 +790,10 @@
     "2026-09-29": 2950.0,
     "2026-09-30": 2945.0,
     "2026-10-01": 2935.0,
-    "2026-10-02": 2920.0
+    "2026-10-02": 2920.0,
+    "2026-10-05": 2920.0
    },
    "ORAC": {
-    "2026-09-07": 21800.0,
     "2026-09-08": 21260.0,
     "2026-09-09": 21900.0,
     "2026-09-10": 22450.0,
@@ -813,10 +812,10 @@
     "2026-09-29": 21805.0,
     "2026-09-30": 21500.0,
     "2026-10-01": 21800.0,
-    "2026-10-02": 20605.0
+    "2026-10-02": 20605.0,
+    "2026-10-05": 20605.0
    },
    "ORGT": {
-    "2026-09-07": 3400.0,
     "2026-09-08": 3395.0,
     "2026-09-09": 3300.0,
     "2026-09-10": 3300.0,
@@ -835,10 +834,10 @@
     "2026-09-29": 3000.0,
     "2026-09-30": 2900.0,
     "2026-10-01": 3000.0,
-    "2026-10-02": 2900.0
+    "2026-10-02": 2900.0,
+    "2026-10-05": 2900.0
    },
    "PALC": {
-    "2026-09-07": 8780.0,
     "2026-09-08": 8500.0,
     "2026-09-09": 8450.0,
     "2026-09-10": 8300.0,
@@ -857,10 +856,10 @@
     "2026-09-29": 8250.0,
     "2026-09-30": 8290.0,
     "2026-10-01": 8300.0,
-    "2026-10-02": 8345.0
+    "2026-10-02": 8345.0,
+    "2026-10-05": 8345.0
    },
    "PRSC": {
-    "2026-09-07": 4350.0,
     "2026-09-08": 4495.0,
     "2026-09-09": 4400.0,
     "2026-09-10": 4400.0,
@@ -879,10 +878,10 @@
     "2026-09-29": 3900.0,
     "2026-09-30": 4100.0,
     "2026-10-01": 3905.0,
-    "2026-10-02": 3900.0
+    "2026-10-02": 3900.0,
+    "2026-10-05": 3900.0
    },
    "SAFC": {
-    "2026-09-07": 6035.0,
     "2026-09-08": 5595.0,
     "2026-09-09": 5180.0,
     "2026-09-10": 5490.0,
@@ -901,10 +900,10 @@
     "2026-09-29": 4800.0,
     "2026-09-30": 4595.0,
     "2026-10-01": 4450.0,
-    "2026-10-02": 4385.0
+    "2026-10-02": 4385.0,
+    "2026-10-05": 4385.0
    },
    "SCRC": {
-    "2026-09-07": 3500.0,
     "2026-09-08": 3500.0,
     "2026-09-09": 3395.0,
     "2026-09-10": 3350.0,
@@ -923,10 +922,10 @@
     "2026-09-29": 2950.0,
     "2026-09-30": 2835.0,
     "2026-10-01": 2790.0,
-    "2026-10-02": 2760.0
+    "2026-10-02": 2760.0,
+    "2026-10-05": 2760.0
    },
    "SDCC": {
-    "2026-09-07": 13710.0,
     "2026-09-08": 13700.0,
     "2026-09-09": 13500.0,
     "2026-09-10": 13230.0,
@@ -945,10 +944,10 @@
     "2026-09-29": 12990.0,
     "2026-09-30": 13000.0,
     "2026-10-01": 12940.0,
-    "2026-10-02": 12980.0
+    "2026-10-02": 12980.0,
+    "2026-10-05": 12980.0
    },
    "SDSC": {
-    "2026-09-07": 3110.0,
     "2026-09-08": 3090.0,
     "2026-09-09": 3060.0,
     "2026-09-10": 3090.0,
@@ -967,10 +966,10 @@
     "2026-09-29": 3015.0,
     "2026-09-30": 3015.0,
     "2026-10-01": 2915.0,
-    "2026-10-02": 2950.0
+    "2026-10-02": 2950.0,
+    "2026-10-05": 2950.0
    },
    "SEMC": {
-    "2026-09-07": 1565.0,
     "2026-09-08": 1500.0,
     "2026-09-09": 1565.0,
     "2026-09-10": 1565.0,
@@ -989,10 +988,10 @@
     "2026-09-29": 1495.0,
     "2026-09-30": 1495.0,
     "2026-10-01": 1495.0,
-    "2026-10-02": 1495.0
+    "2026-10-02": 1495.0,
+    "2026-10-05": 1495.0
    },
    "SGBC": {
-    "2026-09-07": 38800.0,
     "2026-09-08": 38800.0,
     "2026-09-09": 38870.0,
     "2026-09-10": 38870.0,
@@ -1011,10 +1010,10 @@
     "2026-09-29": 38900.0,
     "2026-09-30": 38990.0,
     "2026-10-01": 39000.0,
-    "2026-10-02": 39995.0
+    "2026-10-02": 39995.0,
+    "2026-10-05": 39995.0
    },
    "SHEC": {
-    "2026-09-07": 2480.0,
     "2026-09-08": 2480.0,
     "2026-09-09": 2495.0,
     "2026-09-10": 2500.0,
@@ -1033,10 +1032,10 @@
     "2026-09-29": 2390.0,
     "2026-09-30": 2360.0,
     "2026-10-01": 2300.0,
-    "2026-10-02": 2290.0
+    "2026-10-02": 2290.0,
+    "2026-10-05": 2290.0
    },
    "SIBC": {
-    "2026-09-07": 9100.0,
     "2026-09-08": 9200.0,
     "2026-09-09": 9225.0,
     "2026-09-10": 9300.0,
@@ -1055,10 +1054,10 @@
     "2026-09-29": 9150.0,
     "2026-09-30": 9160.0,
     "2026-10-01": 9160.0,
-    "2026-10-02": 9185.0
+    "2026-10-02": 9185.0,
+    "2026-10-05": 9185.0
    },
    "SICC": {
-    "2026-09-07": 8500.0,
     "2026-09-08": 8500.0,
     "2026-09-09": 8400.0,
     "2026-09-10": 8400.0,
@@ -1077,10 +1076,10 @@
     "2026-09-29": 8400.0,
     "2026-09-30": 8400.0,
     "2026-10-01": 8400.0,
-    "2026-10-02": 8400.0
+    "2026-10-02": 8400.0,
+    "2026-10-05": 8400.0
    },
    "SIVC": {
-    "2026-09-07": 2395.0,
     "2026-09-08": 2335.0,
     "2026-09-09": 2305.0,
     "2026-09-10": 2300.0,
@@ -1099,10 +1098,10 @@
     "2026-09-29": 2140.0,
     "2026-09-30": 2000.0,
     "2026-10-01": 2000.0,
-    "2026-10-02": 1995.0
+    "2026-10-02": 1995.0,
+    "2026-10-05": 1995.0
    },
    "SLBC": {
-    "2026-09-07": 37200.0,
     "2026-09-08": 37700.0,
     "2026-09-09": 38000.0,
     "2026-09-10": 37900.0,
@@ -1121,10 +1120,10 @@
     "2026-09-29": 37800.0,
     "2026-09-30": 37500.0,
     "2026-10-01": 37000.0,
-    "2026-10-02": 37300.0
+    "2026-10-02": 37300.0,
+    "2026-10-05": 37300.0
    },
    "SMBC": {
-    "2026-09-07": 17580.0,
     "2026-09-08": 17630.0,
     "2026-09-09": 17995.0,
     "2026-09-10": 18500.0,
@@ -1143,10 +1142,10 @@
     "2026-09-29": 16500.0,
     "2026-09-30": 16500.0,
     "2026-10-01": 16410.0,
-    "2026-10-02": 16450.0
+    "2026-10-02": 16450.0,
+    "2026-10-05": 16450.0
    },
    "SNTS": {
-    "2026-09-07": 38700.0,
     "2026-09-08": 39200.0,
     "2026-09-09": 38800.0,
     "2026-09-10": 39005.0,
@@ -1165,10 +1164,10 @@
     "2026-09-29": 42995.0,
     "2026-09-30": 45000.0,
     "2026-10-01": 45000.0,
-    "2026-10-02": 45000.0
+    "2026-10-02": 45000.0,
+    "2026-10-05": 45000.0
    },
    "SOGC": {
-    "2026-09-07": 8140.0,
     "2026-09-08": 7700.0,
     "2026-09-09": 7800.0,
     "2026-09-10": 8005.0,
@@ -1187,10 +1186,10 @@
     "2026-09-29": 7945.0,
     "2026-09-30": 8100.0,
     "2026-10-01": 7940.0,
-    "2026-10-02": 7950.0
+    "2026-10-02": 7950.0,
+    "2026-10-05": 7950.0
    },
    "SPHC": {
-    "2026-09-07": 9265.0,
     "2026-09-08": 8575.0,
     "2026-09-09": 7935.0,
     "2026-09-10": 8055.0,
@@ -1209,10 +1208,10 @@
     "2026-09-29": 7900.0,
     "2026-09-30": 7995.0,
     "2026-10-01": 7890.0,
-    "2026-10-02": 7900.0
+    "2026-10-02": 7900.0,
+    "2026-10-05": 7900.0
    },
    "STAC": {
-    "2026-09-07": 2540.0,
     "2026-09-08": 2500.0,
     "2026-09-09": 2500.0,
     "2026-09-10": 2580.0,
@@ -1231,10 +1230,10 @@
     "2026-09-29": 2380.0,
     "2026-09-30": 2300.0,
     "2026-10-01": 2150.0,
-    "2026-10-02": 2200.0
+    "2026-10-02": 2200.0,
+    "2026-10-05": 2200.0
    },
    "STBC": {
-    "2026-09-07": 22000.0,
     "2026-09-08": 21905.0,
     "2026-09-09": 22000.0,
     "2026-09-10": 22000.0,
@@ -1253,10 +1252,10 @@
     "2026-09-29": 21975.0,
     "2026-09-30": 21970.0,
     "2026-10-01": 21970.0,
-    "2026-10-02": 21800.0
+    "2026-10-02": 21800.0,
+    "2026-10-05": 21800.0
    },
    "TTLC": {
-    "2026-09-07": 3200.0,
     "2026-09-08": 3240.0,
     "2026-09-09": 3295.0,
     "2026-09-10": 3280.0,
@@ -1275,10 +1274,10 @@
     "2026-09-29": 3175.0,
     "2026-09-30": 3200.0,
     "2026-10-01": 3010.0,
-    "2026-10-02": 3025.0
+    "2026-10-02": 3025.0,
+    "2026-10-05": 3025.0
    },
    "TTLS": {
-    "2026-09-07": 3800.0,
     "2026-09-08": 3790.0,
     "2026-09-09": 3840.0,
     "2026-09-10": 3850.0,
@@ -1297,10 +1296,10 @@
     "2026-09-29": 3615.0,
     "2026-09-30": 3640.0,
     "2026-10-01": 3690.0,
-    "2026-10-02": 3700.0
+    "2026-10-02": 3700.0,
+    "2026-10-05": 3700.0
    },
    "UNLC": {
-    "2026-09-07": 51000.0,
     "2026-09-08": 51100.0,
     "2026-09-09": 53000.0,
     "2026-09-10": 54300.0,
@@ -1319,10 +1318,10 @@
     "2026-09-29": 47215.0,
     "2026-09-30": 47500.0,
     "2026-10-01": 51000.0,
-    "2026-10-02": 50900.0
+    "2026-10-02": 50900.0,
+    "2026-10-05": 50900.0
    },
    "UNXC": {
-    "2026-09-07": 2340.0,
     "2026-09-08": 2340.0,
     "2026-09-09": 2350.0,
     "2026-09-10": 2400.0,
@@ -1341,7 +1340,8 @@
     "2026-09-29": 2445.0,
     "2026-09-30": 2425.0,
     "2026-10-01": 2360.0,
-    "2026-10-02": 2270.0
+    "2026-10-02": 2270.0,
+    "2026-10-05": 2270.0
    },
    "SVOC": {
     "2019-05-10": 2395.0
@@ -1353,16 +1353,220 @@
     "2026-09-29": 9000.0,
     "2026-09-30": 9000.0,
     "2026-10-01": 8800.0,
-    "2026-10-02": 8995.0
+    "2026-10-02": 8995.0,
+    "2026-10-05": 8995.0
    }
   },
-  "derniere_notif": "2026-10-02",
+  "derniere_notif": "2026-10-05",
   "alertes_notifiees": {},
   "_indice_prec": {
-   "composite": 549.02,
-   "date": "2026-10-02",
+   "composite": 546.78,
+   "date": "2026-10-05",
    "source": "https://www.brvm.org/fr/indices/0"
   },
+  "_rapports_prec": [
+   {
+    "date": "2026-10-01",
+    "societe": "BANK OF AFRICA CI",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "BOA CI : Rapport d'activités - 1er semestre 2026",
+      "f": "20261001_-_rapport_dactivites_-_1er_semestre_2026_-_boa_ci.pdf"
+     },
+     {
+      "t": "BOA CI : Rapport d’examen limité des états financiers - 1er semestre 2026",
+      "f": "20261001_-_rapport_dexamen_limite_des_etats_financiers_-_1er_semestre_2026_-_boa_ci.pdf"
+     }
+    ],
+    "titre": "BANK OF AFRICA CI : 2 documents publies"
+   },
+   {
+    "date": "2026-10-01",
+    "societe": "ONATEL BF",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "Rapport d'activités et Attestation des Commissaires Aux Comptes - 1er semestre 2026",
+      "f": "20261001_-_rapport_dactivites_et_attestation_des_commissaires_aux_comptes_-_1er_semestre_2026_-_onatel_bf.pdf"
+     }
+    ],
+    "titre": "Rapport d'activités et Attestation des Commissaires Aux Comptes - 1er semestre 2026"
+   },
+   {
+    "date": "2026-09-28",
+    "societe": "SIB",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "SIB CI : Rapport d'activités - 1er semestre 2026",
+      "f": "20260928_-_rapport_dactivites_-_1er_semestre_2026_-_sib_ci.pdf"
+     },
+     {
+      "t": "SIB CI : Attestation des Commissaires Aux Comptes - 1er semestre 2026",
+      "f": "20260928_-_attestation_des_commissaires_aux_comptes_-_1er_semestre_2026_-_sib_ci.pdf"
+     }
+    ],
+    "titre": "SIB : 2 documents publies"
+   },
+   {
+    "date": "2026-09-25",
+    "societe": "BANK OF AFRICA NG",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "BOA NIGER : Attestation des Commissaires Aux Comptes et Rapport d'activités - 1er semestre",
+      "f": "20260925_-_attestation_des_commissaires_aux_comptes_et_rapport_dactivites_-_1er_semestre_2026_-_boa_niger.pdf"
+     }
+    ],
+    "titre": "BOA NIGER : Attestation des Commissaires Aux Comptes et Rapport d'activités - 1er semestre"
+   },
+   {
+    "date": "2026-09-24",
+    "societe": "BBGCI",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "BRIDGE BANK GROUP CI : 1er semestre 2026",
+      "f": "20260924_-_rapport_dactivites_-_1er_semestre_2026_-_bridge_bank_group_ci.pdf"
+     },
+     {
+      "t": "BRIDGE BANK GROUP CI : Rapport des Commissaires Aux Comptes - 1er semestre 2026",
+      "f": "20260924_-_rapport_des_commissaires_aux_comptes_-_1er_semestre_2026_-_bridge_bank_group_ci.pdf"
+     }
+    ],
+    "titre": "BBGCI : 2 documents publies"
+   },
+   {
+    "date": "2026-09-23",
+    "societe": "BANK OF AFRICA ML",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "BOA MALI : Rapport d'activités - 1er semestre 2026",
+      "f": "20260923_-_rapport_dactivites_-_1er_semestre_2026_-_boa_mali.pdf"
+     }
+    ],
+    "titre": "BOA MALI : Rapport d'activités - 1er semestre 2026"
+   },
+   {
+    "date": "2026-09-21",
+    "societe": "BANK OF AFRICA SN",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "BOA SENEGAL : Rapport d'activités - 1er semestre 2026",
+      "f": "20260921_-_rapport_dactivites_-_1er_semestre_2026_-_boa_sn.pdf"
+     }
+    ],
+    "titre": "BOA SENEGAL : Rapport d'activités - 1er semestre 2026"
+   },
+   {
+    "date": "2026-09-21",
+    "societe": "BIIC",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "BIIC BN : Rapport d'activités et Etats financiers IFRS - 1er semestre 2026",
+      "f": "20260921_-_rapport_dactivites_et_etats_financiers_ifrs_-_1er_semestre_2026_-_biic_bn.pdf"
+     }
+    ],
+    "titre": "BIIC BN : Rapport d'activités et Etats financiers IFRS - 1er semestre 2026"
+   },
+   {
+    "date": "2026-09-21",
+    "societe": "SUCRIVOIRE",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "SUCRIVOIRE CI : Rapport d'activités - 1er trimestre 2026",
+      "f": "20260921_-_rapport_dactivites_-_1er_trimestre_2026_-_sucrivoire_ci.pdf"
+     }
+    ],
+    "titre": "SUCRIVOIRE CI : Rapport d'activités - 1er trimestre 2026"
+   },
+   {
+    "date": "2026-09-17",
+    "societe": "BOLLORE TRANSPORT & LOGISTICS",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "AFRICA GLOBAL LOGISTICS CI : Rapport des Commissaires Aux Comptes sur les Etats Financiers",
+      "f": "20260917_-_rapport_des_commissaires_aux_comptes_sur_les_etats_financiers_-_africa_global_logistics_ci.pdf"
+     },
+     {
+      "t": "AFRICA GLOBAL LOGISTICS CI : Etats Financiers certifiés - Exercice 2025",
+      "f": "20260917_-_etats_financiers_certifies_-_exercice_2025_-_africa_global_logistics_ci.pdf"
+     }
+    ],
+    "titre": "BOLLORE TRANSPORT & LOGISTICS : 2 documents publies"
+   },
+   {
+    "date": "2026-09-09",
+    "societe": "ECOBANK CI",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "ECOBANK CI : Rapport d'activités - 1er semestre 2026",
+      "f": "20260909_-_rapport_dactivites_-_1er_semestre_2026_-_ecobank_ci.pdf"
+     }
+    ],
+    "titre": "ECOBANK CI : Rapport d'activités - 1er semestre 2026"
+   },
+   {
+    "date": "2026-09-04",
+    "societe": "SAPH CI",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "SAPH CI : Rapport d'activités et Attestation des Commissaires Aux Comptes sur le rapport d",
+      "f": "20260904_-_rapport_dactivites_et_attestation_des_cac_sur_le_rapport_dactivites_-_1er_semestre_2026_-_saph_ci.pdf"
+     }
+    ],
+    "titre": "SAPH CI : Rapport d'activités et Attestation des Commissaires Aux Comptes sur le rapport d"
+   },
+   {
+    "date": "2026-09-03",
+    "societe": "SAFCA CI",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "SAFCA CI : Rapport d'activités - 2eme trimestre 2026",
+      "f": "20260903_-_rapport_dactivites_-_2eme_trimestre_2026_-_safca_ci.pdf"
+     }
+    ],
+    "titre": "SAFCA CI : Rapport d'activités - 2eme trimestre 2026"
+   },
+   {
+    "date": "2026-08-31",
+    "societe": "CORIS BANK INTERNATIONAL",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "CORIS BANK INTERNATIONAL BF : Rapport d'Examen Limité des Commissaires Aux Comptes sur les",
+      "f": "20260831_-_rapport_dexamen_limite_des_cac_sur_les_etats_financiers_au_30_juin_2026_-_coris_bank_international_bf.pdf"
+     },
+     {
+      "t": "CORIS BANK INTERNATIONAL BF : Rapport d'activités - 1er semestre 2026",
+      "f": "20260831_-_rapport_dactivites_-_1er_semestre_2026_-_coris_bank_international_bf.pdf"
+     }
+    ],
+    "titre": "CORIS BANK INTERNATIONAL : 2 documents publies"
+   },
+   {
+    "date": "2026-08-31",
+    "societe": "SGCI",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "SOCIETE GENERALE CI : Rapport d'activités - 1er semestre 2026",
+      "f": "20260831_-_rapport_dactivites_-_1er_semestre_2026_-_societe_generale_ci.pdf"
+     }
+    ],
+    "titre": "SOCIETE GENERALE CI : Rapport d'activités - 1er semestre 2026"
+   }
+  ],
+  "_rapports_scan": "2026-10-05",
   "_annonces_prec": [
    {
     "date": "2026-09-17",
@@ -1425,6 +1629,150 @@
     "type": "dividende"
    },
    {
+    "date": "2026-07-05",
+    "societe": "SOGB",
+    "titre": "Dividende net 570 FCFA/action - detachement 05/07, paiement 06/08",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-08-03",
+    "societe": "NSBC",
+    "titre": "Dividende net 768,16 FCFA/action - detachement 03/08, paiement 04/08",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-07-31",
+    "societe": "LNB",
+    "titre": "Dividende net 164,1709 FCFA/action - detachement 31/07, paiement 03/08",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-07-29",
+    "societe": "SOLIBRA",
+    "titre": "Dividende net 2 127 FCFA/action - detachement 29/07, paiement 30/07",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-07-27",
+    "societe": "CIE CI",
+    "titre": "Dividende net 234 FCFA/action - detachement 27/07, paiement 28/07",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-07-30",
+    "societe": "BIIC",
+    "titre": "Dividende net 254,6 FCFA/action - detachement 30/07, paiement 31/07",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-09-29",
+    "societe": "SERVAIR ABIDJAN CI",
+    "titre": "Dividende net 124 FCFA/action - detachement 29/09, paiement 30/09",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-29",
+    "societe": "ECOBANK TG",
+    "titre": "Dividende net 0,9 FCFA/action - detachement 29/06, paiement 30/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-07-16",
+    "societe": "TOTAL SENEGAL S.A.",
+    "titre": "Dividende net 176,65 FCFA/action - detachement 16/07, paiement 17/07",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-07-30",
+    "societe": "SIB",
+    "titre": "Dividende net 425 F CFA/action - detachement 30/07, paiement 31/07",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-07-03",
+    "societe": "BICI CI",
+    "titre": "Dividende net 1 315 FCFA/action - detachement 03/07, paiement 06/07",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-29",
+    "societe": "ECOBANK TG",
+    "titre": "Dividende net 0,16 cents de dollars/action - detachement 29/06, paiement 30/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "PALM CI",
+    "titre": "Dividende net 501,596 FCFA/action - detachement 26/06, paiement 29/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-18",
+    "societe": "CORIS BANK INTERNATIONAL",
+    "titre": "Dividende net 900 FCFA/action - detachement 18/06, paiement 19/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-05",
+    "societe": "ORANGE CI",
+    "titre": "Dividende net 800 FCFA/action - detachement 05/06, paiement 08/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-12",
+    "societe": "ONATEL BF",
+    "titre": "Dividende net 145,3214 FCFA/action - detachement 12/06, paiement 15/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-05-29",
+    "societe": "SICABLE",
+    "titre": "Dividende net 152,02 FCFA/action - detachement 29/05, paiement 01/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-02",
+    "societe": "BANK OF AFRICA ML",
+    "titre": "Dividende net 305,04 FCFA/action - detachement 02/06, paiement 03/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-05-22",
+    "societe": "ECOBANK CI",
+    "titre": "Dividende net 888 FCFA/action - detachement 22/05, paiement 26/05",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-05-29",
+    "societe": "BANK OF AFRICA SN",
+    "titre": "Dividende net 450 FCFA/action - detachement 29/05, paiement 01/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-05-22",
+    "societe": "BANK OF AFRICA BN",
+    "titre": "Dividende net 585 FCFA/action - detachement 22/05, paiement 26/05",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-05-22",
+    "societe": "SONATEL",
+    "titre": "Dividende net 1 740 FCFA/action - detachement 22/05, paiement 26/05",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-05-05",
+    "societe": "BANK OF AFRICA CI",
+    "titre": "Dividende net 594,528 FCFA/action - detachement 05/05, paiement 06/05",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-04-22",
+    "societe": "BANK OF AFRICA BF",
+    "titre": "Dividende net 397 FCFA/action - detachement 22/04, paiement 23/04",
+    "type": "dividende"
+   },
+   {
     "date": "2026-10-02",
     "societe": "ECOBANK TG",
     "titre": "ETI TG : Avis de convocation - Assemblée Générale Ordinaire",
@@ -1480,14 +1828,26 @@
    },
    {
     "date": "2026-06-29",
+    "societe": "LNB",
+    "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-29",
     "societe": "AIR LIQUIDE CI",
     "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
-    "date": "2026-06-29",
-    "societe": "LNB",
-    "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
+    "date": "2026-06-26",
+    "societe": "SITAB",
+    "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "AIR LIQUIDE CI",
+    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
     "type": "ago"
    },
    {
@@ -1503,22 +1863,210 @@
     "type": "ago"
    },
    {
-    "date": "2026-06-26",
-    "societe": "SITAB",
-    "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
-    "type": "ago"
+    "date": "2026-10-01",
+    "societe": "BANK OF AFRICA CI",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "BOA CI : Rapport d'activités - 1er semestre 2026",
+      "f": "20261001_-_rapport_dactivites_-_1er_semestre_2026_-_boa_ci.pdf"
+     },
+     {
+      "t": "BOA CI : Rapport d’examen limité des états financiers - 1er semestre 2026",
+      "f": "20261001_-_rapport_dexamen_limite_des_etats_financiers_-_1er_semestre_2026_-_boa_ci.pdf"
+     }
+    ],
+    "titre": "BANK OF AFRICA CI : 2 documents publies"
    },
    {
-    "date": "2026-06-26",
-    "societe": "AIR LIQUIDE CI",
-    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
-    "type": "ago"
+    "date": "2026-10-01",
+    "societe": "ONATEL BF",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "Rapport d'activités et Attestation des Commissaires Aux Comptes - 1er semestre 2026",
+      "f": "20261001_-_rapport_dactivites_et_attestation_des_commissaires_aux_comptes_-_1er_semestre_2026_-_onatel_bf.pdf"
+     }
+    ],
+    "titre": "Rapport d'activités et Attestation des Commissaires Aux Comptes - 1er semestre 2026"
+   },
+   {
+    "date": "2026-09-28",
+    "societe": "SIB",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "SIB CI : Rapport d'activités - 1er semestre 2026",
+      "f": "20260928_-_rapport_dactivites_-_1er_semestre_2026_-_sib_ci.pdf"
+     },
+     {
+      "t": "SIB CI : Attestation des Commissaires Aux Comptes - 1er semestre 2026",
+      "f": "20260928_-_attestation_des_commissaires_aux_comptes_-_1er_semestre_2026_-_sib_ci.pdf"
+     }
+    ],
+    "titre": "SIB : 2 documents publies"
+   },
+   {
+    "date": "2026-09-25",
+    "societe": "BANK OF AFRICA NG",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "BOA NIGER : Attestation des Commissaires Aux Comptes et Rapport d'activités - 1er semestre",
+      "f": "20260925_-_attestation_des_commissaires_aux_comptes_et_rapport_dactivites_-_1er_semestre_2026_-_boa_niger.pdf"
+     }
+    ],
+    "titre": "BOA NIGER : Attestation des Commissaires Aux Comptes et Rapport d'activités - 1er semestre"
+   },
+   {
+    "date": "2026-09-24",
+    "societe": "BBGCI",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "BRIDGE BANK GROUP CI : 1er semestre 2026",
+      "f": "20260924_-_rapport_dactivites_-_1er_semestre_2026_-_bridge_bank_group_ci.pdf"
+     },
+     {
+      "t": "BRIDGE BANK GROUP CI : Rapport des Commissaires Aux Comptes - 1er semestre 2026",
+      "f": "20260924_-_rapport_des_commissaires_aux_comptes_-_1er_semestre_2026_-_bridge_bank_group_ci.pdf"
+     }
+    ],
+    "titre": "BBGCI : 2 documents publies"
+   },
+   {
+    "date": "2026-09-23",
+    "societe": "BANK OF AFRICA ML",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "BOA MALI : Rapport d'activités - 1er semestre 2026",
+      "f": "20260923_-_rapport_dactivites_-_1er_semestre_2026_-_boa_mali.pdf"
+     }
+    ],
+    "titre": "BOA MALI : Rapport d'activités - 1er semestre 2026"
+   },
+   {
+    "date": "2026-09-21",
+    "societe": "BANK OF AFRICA SN",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "BOA SENEGAL : Rapport d'activités - 1er semestre 2026",
+      "f": "20260921_-_rapport_dactivites_-_1er_semestre_2026_-_boa_sn.pdf"
+     }
+    ],
+    "titre": "BOA SENEGAL : Rapport d'activités - 1er semestre 2026"
+   },
+   {
+    "date": "2026-09-21",
+    "societe": "BIIC",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "BIIC BN : Rapport d'activités et Etats financiers IFRS - 1er semestre 2026",
+      "f": "20260921_-_rapport_dactivites_et_etats_financiers_ifrs_-_1er_semestre_2026_-_biic_bn.pdf"
+     }
+    ],
+    "titre": "BIIC BN : Rapport d'activités et Etats financiers IFRS - 1er semestre 2026"
+   },
+   {
+    "date": "2026-09-21",
+    "societe": "SUCRIVOIRE",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "SUCRIVOIRE CI : Rapport d'activités - 1er trimestre 2026",
+      "f": "20260921_-_rapport_dactivites_-_1er_trimestre_2026_-_sucrivoire_ci.pdf"
+     }
+    ],
+    "titre": "SUCRIVOIRE CI : Rapport d'activités - 1er trimestre 2026"
+   },
+   {
+    "date": "2026-09-17",
+    "societe": "BOLLORE TRANSPORT & LOGISTICS",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "AFRICA GLOBAL LOGISTICS CI : Rapport des Commissaires Aux Comptes sur les Etats Financiers",
+      "f": "20260917_-_rapport_des_commissaires_aux_comptes_sur_les_etats_financiers_-_africa_global_logistics_ci.pdf"
+     },
+     {
+      "t": "AFRICA GLOBAL LOGISTICS CI : Etats Financiers certifiés - Exercice 2025",
+      "f": "20260917_-_etats_financiers_certifies_-_exercice_2025_-_africa_global_logistics_ci.pdf"
+     }
+    ],
+    "titre": "BOLLORE TRANSPORT & LOGISTICS : 2 documents publies"
+   },
+   {
+    "date": "2026-09-09",
+    "societe": "ECOBANK CI",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "ECOBANK CI : Rapport d'activités - 1er semestre 2026",
+      "f": "20260909_-_rapport_dactivites_-_1er_semestre_2026_-_ecobank_ci.pdf"
+     }
+    ],
+    "titre": "ECOBANK CI : Rapport d'activités - 1er semestre 2026"
+   },
+   {
+    "date": "2026-09-04",
+    "societe": "SAPH CI",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "SAPH CI : Rapport d'activités et Attestation des Commissaires Aux Comptes sur le rapport d",
+      "f": "20260904_-_rapport_dactivites_et_attestation_des_cac_sur_le_rapport_dactivites_-_1er_semestre_2026_-_saph_ci.pdf"
+     }
+    ],
+    "titre": "SAPH CI : Rapport d'activités et Attestation des Commissaires Aux Comptes sur le rapport d"
+   },
+   {
+    "date": "2026-09-03",
+    "societe": "SAFCA CI",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "SAFCA CI : Rapport d'activités - 2eme trimestre 2026",
+      "f": "20260903_-_rapport_dactivites_-_2eme_trimestre_2026_-_safca_ci.pdf"
+     }
+    ],
+    "titre": "SAFCA CI : Rapport d'activités - 2eme trimestre 2026"
+   },
+   {
+    "date": "2026-08-31",
+    "societe": "CORIS BANK INTERNATIONAL",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "CORIS BANK INTERNATIONAL BF : Rapport d'Examen Limité des Commissaires Aux Comptes sur les",
+      "f": "20260831_-_rapport_dexamen_limite_des_cac_sur_les_etats_financiers_au_30_juin_2026_-_coris_bank_international_bf.pdf"
+     },
+     {
+      "t": "CORIS BANK INTERNATIONAL BF : Rapport d'activités - 1er semestre 2026",
+      "f": "20260831_-_rapport_dactivites_-_1er_semestre_2026_-_coris_bank_international_bf.pdf"
+     }
+    ],
+    "titre": "CORIS BANK INTERNATIONAL : 2 documents publies"
+   },
+   {
+    "date": "2026-08-31",
+    "societe": "SGCI",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "SOCIETE GENERALE CI : Rapport d'activités - 1er semestre 2026",
+      "f": "20260831_-_rapport_dactivites_-_1er_semestre_2026_-_societe_generale_ci.pdf"
+     }
+    ],
+    "titre": "SOCIETE GENERALE CI : Rapport d'activités - 1er semestre 2026"
    }
   ]
  },
  "_indice": {
-  "composite": 549.02,
-  "date": "2026-10-02",
+  "composite": 546.78,
+  "date": "2026-10-05",
   "source": "https://www.brvm.org/fr/indices/0"
  },
  "_annonces": [
@@ -1583,6 +2131,150 @@
    "type": "dividende"
   },
   {
+   "date": "2026-07-05",
+   "societe": "SOGB",
+   "titre": "Dividende net 570 FCFA/action - detachement 05/07, paiement 06/08",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-08-03",
+   "societe": "NSBC",
+   "titre": "Dividende net 768,16 FCFA/action - detachement 03/08, paiement 04/08",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-07-31",
+   "societe": "LNB",
+   "titre": "Dividende net 164,1709 FCFA/action - detachement 31/07, paiement 03/08",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-07-29",
+   "societe": "SOLIBRA",
+   "titre": "Dividende net 2 127 FCFA/action - detachement 29/07, paiement 30/07",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-07-27",
+   "societe": "CIE CI",
+   "titre": "Dividende net 234 FCFA/action - detachement 27/07, paiement 28/07",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-07-30",
+   "societe": "BIIC",
+   "titre": "Dividende net 254,6 FCFA/action - detachement 30/07, paiement 31/07",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-09-29",
+   "societe": "SERVAIR ABIDJAN CI",
+   "titre": "Dividende net 124 FCFA/action - detachement 29/09, paiement 30/09",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-29",
+   "societe": "ECOBANK TG",
+   "titre": "Dividende net 0,9 FCFA/action - detachement 29/06, paiement 30/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-07-16",
+   "societe": "TOTAL SENEGAL S.A.",
+   "titre": "Dividende net 176,65 FCFA/action - detachement 16/07, paiement 17/07",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-07-30",
+   "societe": "SIB",
+   "titre": "Dividende net 425 F CFA/action - detachement 30/07, paiement 31/07",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-07-03",
+   "societe": "BICI CI",
+   "titre": "Dividende net 1 315 FCFA/action - detachement 03/07, paiement 06/07",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-29",
+   "societe": "ECOBANK TG",
+   "titre": "Dividende net 0,16 cents de dollars/action - detachement 29/06, paiement 30/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "PALM CI",
+   "titre": "Dividende net 501,596 FCFA/action - detachement 26/06, paiement 29/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-18",
+   "societe": "CORIS BANK INTERNATIONAL",
+   "titre": "Dividende net 900 FCFA/action - detachement 18/06, paiement 19/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-05",
+   "societe": "ORANGE CI",
+   "titre": "Dividende net 800 FCFA/action - detachement 05/06, paiement 08/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-12",
+   "societe": "ONATEL BF",
+   "titre": "Dividende net 145,3214 FCFA/action - detachement 12/06, paiement 15/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-05-29",
+   "societe": "SICABLE",
+   "titre": "Dividende net 152,02 FCFA/action - detachement 29/05, paiement 01/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-02",
+   "societe": "BANK OF AFRICA ML",
+   "titre": "Dividende net 305,04 FCFA/action - detachement 02/06, paiement 03/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-05-22",
+   "societe": "ECOBANK CI",
+   "titre": "Dividende net 888 FCFA/action - detachement 22/05, paiement 26/05",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-05-29",
+   "societe": "BANK OF AFRICA SN",
+   "titre": "Dividende net 450 FCFA/action - detachement 29/05, paiement 01/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-05-22",
+   "societe": "BANK OF AFRICA BN",
+   "titre": "Dividende net 585 FCFA/action - detachement 22/05, paiement 26/05",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-05-22",
+   "societe": "SONATEL",
+   "titre": "Dividende net 1 740 FCFA/action - detachement 22/05, paiement 26/05",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-05-05",
+   "societe": "BANK OF AFRICA CI",
+   "titre": "Dividende net 594,528 FCFA/action - detachement 05/05, paiement 06/05",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-04-22",
+   "societe": "BANK OF AFRICA BF",
+   "titre": "Dividende net 397 FCFA/action - detachement 22/04, paiement 23/04",
+   "type": "dividende"
+  },
+  {
    "date": "2026-10-02",
    "societe": "ECOBANK TG",
    "titre": "ETI TG : Avis de convocation - Assemblée Générale Ordinaire",
@@ -1638,14 +2330,26 @@
   },
   {
    "date": "2026-06-29",
+   "societe": "LNB",
+   "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-29",
    "societe": "AIR LIQUIDE CI",
    "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
-   "date": "2026-06-29",
-   "societe": "LNB",
-   "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
+   "date": "2026-06-26",
+   "societe": "SITAB",
+   "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "AIR LIQUIDE CI",
+   "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
    "type": "ago"
   },
   {
@@ -1661,16 +2365,204 @@
    "type": "ago"
   },
   {
-   "date": "2026-06-26",
-   "societe": "SITAB",
-   "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
-   "type": "ago"
+   "date": "2026-10-01",
+   "societe": "BANK OF AFRICA CI",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "BOA CI : Rapport d'activités - 1er semestre 2026",
+     "f": "20261001_-_rapport_dactivites_-_1er_semestre_2026_-_boa_ci.pdf"
+    },
+    {
+     "t": "BOA CI : Rapport d’examen limité des états financiers - 1er semestre 2026",
+     "f": "20261001_-_rapport_dexamen_limite_des_etats_financiers_-_1er_semestre_2026_-_boa_ci.pdf"
+    }
+   ],
+   "titre": "BANK OF AFRICA CI : 2 documents publies"
   },
   {
-   "date": "2026-06-26",
-   "societe": "AIR LIQUIDE CI",
-   "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
-   "type": "ago"
+   "date": "2026-10-01",
+   "societe": "ONATEL BF",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "Rapport d'activités et Attestation des Commissaires Aux Comptes - 1er semestre 2026",
+     "f": "20261001_-_rapport_dactivites_et_attestation_des_commissaires_aux_comptes_-_1er_semestre_2026_-_onatel_bf.pdf"
+    }
+   ],
+   "titre": "Rapport d'activités et Attestation des Commissaires Aux Comptes - 1er semestre 2026"
+  },
+  {
+   "date": "2026-09-28",
+   "societe": "SIB",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "SIB CI : Rapport d'activités - 1er semestre 2026",
+     "f": "20260928_-_rapport_dactivites_-_1er_semestre_2026_-_sib_ci.pdf"
+    },
+    {
+     "t": "SIB CI : Attestation des Commissaires Aux Comptes - 1er semestre 2026",
+     "f": "20260928_-_attestation_des_commissaires_aux_comptes_-_1er_semestre_2026_-_sib_ci.pdf"
+    }
+   ],
+   "titre": "SIB : 2 documents publies"
+  },
+  {
+   "date": "2026-09-25",
+   "societe": "BANK OF AFRICA NG",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "BOA NIGER : Attestation des Commissaires Aux Comptes et Rapport d'activités - 1er semestre",
+     "f": "20260925_-_attestation_des_commissaires_aux_comptes_et_rapport_dactivites_-_1er_semestre_2026_-_boa_niger.pdf"
+    }
+   ],
+   "titre": "BOA NIGER : Attestation des Commissaires Aux Comptes et Rapport d'activités - 1er semestre"
+  },
+  {
+   "date": "2026-09-24",
+   "societe": "BBGCI",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "BRIDGE BANK GROUP CI : 1er semestre 2026",
+     "f": "20260924_-_rapport_dactivites_-_1er_semestre_2026_-_bridge_bank_group_ci.pdf"
+    },
+    {
+     "t": "BRIDGE BANK GROUP CI : Rapport des Commissaires Aux Comptes - 1er semestre 2026",
+     "f": "20260924_-_rapport_des_commissaires_aux_comptes_-_1er_semestre_2026_-_bridge_bank_group_ci.pdf"
+    }
+   ],
+   "titre": "BBGCI : 2 documents publies"
+  },
+  {
+   "date": "2026-09-23",
+   "societe": "BANK OF AFRICA ML",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "BOA MALI : Rapport d'activités - 1er semestre 2026",
+     "f": "20260923_-_rapport_dactivites_-_1er_semestre_2026_-_boa_mali.pdf"
+    }
+   ],
+   "titre": "BOA MALI : Rapport d'activités - 1er semestre 2026"
+  },
+  {
+   "date": "2026-09-21",
+   "societe": "BANK OF AFRICA SN",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "BOA SENEGAL : Rapport d'activités - 1er semestre 2026",
+     "f": "20260921_-_rapport_dactivites_-_1er_semestre_2026_-_boa_sn.pdf"
+    }
+   ],
+   "titre": "BOA SENEGAL : Rapport d'activités - 1er semestre 2026"
+  },
+  {
+   "date": "2026-09-21",
+   "societe": "BIIC",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "BIIC BN : Rapport d'activités et Etats financiers IFRS - 1er semestre 2026",
+     "f": "20260921_-_rapport_dactivites_et_etats_financiers_ifrs_-_1er_semestre_2026_-_biic_bn.pdf"
+    }
+   ],
+   "titre": "BIIC BN : Rapport d'activités et Etats financiers IFRS - 1er semestre 2026"
+  },
+  {
+   "date": "2026-09-21",
+   "societe": "SUCRIVOIRE",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "SUCRIVOIRE CI : Rapport d'activités - 1er trimestre 2026",
+     "f": "20260921_-_rapport_dactivites_-_1er_trimestre_2026_-_sucrivoire_ci.pdf"
+    }
+   ],
+   "titre": "SUCRIVOIRE CI : Rapport d'activités - 1er trimestre 2026"
+  },
+  {
+   "date": "2026-09-17",
+   "societe": "BOLLORE TRANSPORT & LOGISTICS",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "AFRICA GLOBAL LOGISTICS CI : Rapport des Commissaires Aux Comptes sur les Etats Financiers",
+     "f": "20260917_-_rapport_des_commissaires_aux_comptes_sur_les_etats_financiers_-_africa_global_logistics_ci.pdf"
+    },
+    {
+     "t": "AFRICA GLOBAL LOGISTICS CI : Etats Financiers certifiés - Exercice 2025",
+     "f": "20260917_-_etats_financiers_certifies_-_exercice_2025_-_africa_global_logistics_ci.pdf"
+    }
+   ],
+   "titre": "BOLLORE TRANSPORT & LOGISTICS : 2 documents publies"
+  },
+  {
+   "date": "2026-09-09",
+   "societe": "ECOBANK CI",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "ECOBANK CI : Rapport d'activités - 1er semestre 2026",
+     "f": "20260909_-_rapport_dactivites_-_1er_semestre_2026_-_ecobank_ci.pdf"
+    }
+   ],
+   "titre": "ECOBANK CI : Rapport d'activités - 1er semestre 2026"
+  },
+  {
+   "date": "2026-09-04",
+   "societe": "SAPH CI",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "SAPH CI : Rapport d'activités et Attestation des Commissaires Aux Comptes sur le rapport d",
+     "f": "20260904_-_rapport_dactivites_et_attestation_des_cac_sur_le_rapport_dactivites_-_1er_semestre_2026_-_saph_ci.pdf"
+    }
+   ],
+   "titre": "SAPH CI : Rapport d'activités et Attestation des Commissaires Aux Comptes sur le rapport d"
+  },
+  {
+   "date": "2026-09-03",
+   "societe": "SAFCA CI",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "SAFCA CI : Rapport d'activités - 2eme trimestre 2026",
+     "f": "20260903_-_rapport_dactivites_-_2eme_trimestre_2026_-_safca_ci.pdf"
+    }
+   ],
+   "titre": "SAFCA CI : Rapport d'activités - 2eme trimestre 2026"
+  },
+  {
+   "date": "2026-08-31",
+   "societe": "CORIS BANK INTERNATIONAL",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "CORIS BANK INTERNATIONAL BF : Rapport d'Examen Limité des Commissaires Aux Comptes sur les",
+     "f": "20260831_-_rapport_dexamen_limite_des_cac_sur_les_etats_financiers_au_30_juin_2026_-_coris_bank_international_bf.pdf"
+    },
+    {
+     "t": "CORIS BANK INTERNATIONAL BF : Rapport d'activités - 1er semestre 2026",
+     "f": "20260831_-_rapport_dactivites_-_1er_semestre_2026_-_coris_bank_international_bf.pdf"
+    }
+   ],
+   "titre": "CORIS BANK INTERNATIONAL : 2 documents publies"
+  },
+  {
+   "date": "2026-08-31",
+   "societe": "SGCI",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "SOCIETE GENERALE CI : Rapport d'activités - 1er semestre 2026",
+     "f": "20260831_-_rapport_dactivites_-_1er_semestre_2026_-_societe_generale_ci.pdf"
+    }
+   ],
+   "titre": "SOCIETE GENERALE CI : Rapport d'activités - 1er semestre 2026"
   }
  ]
 }
