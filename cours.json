@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-10-08T09:35:12+00:00",
-  "updated_human": "08/10/2026 09:35 UTC",
+  "updated": "2026-10-08T09:50:12+00:00",
+  "updated_human": "08/10/2026 09:50 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -44,7 +44,7 @@
   "source": "brvm.org"
  },
  "BOAB": {
-  "actuel": 9360.0,
+  "actuel": 9400.0,
   "veille": 9360,
   "date": "2026-10-08",
   "source": "brvm.org"
@@ -62,7 +62,7 @@
   "source": "brvm.org"
  },
  "BOAM": {
-  "actuel": 6095.0,
+  "actuel": 6100.0,
   "veille": 6095,
   "date": "2026-10-08",
   "source": "brvm.org"
@@ -74,7 +74,7 @@
   "source": "brvm.org"
  },
  "BOAS": {
-  "actuel": 8195.0,
+  "actuel": 8200.0,
   "veille": 8195,
   "date": "2026-10-08",
   "source": "brvm.org"
@@ -98,13 +98,13 @@
   "source": "brvm.org"
  },
  "CIEC": {
-  "actuel": 6500.0,
+  "actuel": 6450.0,
   "veille": 6500,
   "date": "2026-10-08",
   "source": "brvm.org"
  },
  "ECOC": {
-  "actuel": 16700.0,
+  "actuel": 16765.0,
   "veille": 16700,
   "date": "2026-10-08",
   "source": "brvm.org"
@@ -116,13 +116,13 @@
   "source": "brvm.org"
  },
  "FTSC": {
-  "actuel": 1970.0,
+  "actuel": 1980.0,
   "veille": 1970,
   "date": "2026-10-08",
   "source": "brvm.org"
  },
  "LNBB": {
-  "actuel": 3890.0,
+  "actuel": 3900.0,
   "veille": 3890,
   "date": "2026-10-08",
   "source": "brvm.org"
@@ -212,7 +212,7 @@
   "source": "brvm.org"
  },
  "SHEC": {
-  "actuel": 2250.0,
+  "actuel": 2255.0,
   "veille": 2250,
   "date": "2026-10-08",
   "source": "brvm.org"
@@ -417,7 +417,7 @@
     "2026-10-05": 9370.0,
     "2026-10-06": 9340.0,
     "2026-10-07": 9360.0,
-    "2026-10-08": 9360.0
+    "2026-10-08": 9400.0
    },
    "BOABF": {
     "2026-09-11": 8990.0,
@@ -483,7 +483,7 @@
     "2026-10-05": 6090.0,
     "2026-10-06": 6095.0,
     "2026-10-07": 6095.0,
-    "2026-10-08": 6095.0
+    "2026-10-08": 6100.0
    },
    "BOAN": {
     "2026-09-11": 5595.0,
@@ -527,7 +527,7 @@
     "2026-10-05": 8150.0,
     "2026-10-06": 8145.0,
     "2026-10-07": 8195.0,
-    "2026-10-08": 8195.0
+    "2026-10-08": 8200.0
    },
    "CABC": {
     "2026-09-11": 3500.0,
@@ -615,7 +615,7 @@
     "2026-10-05": 6400.0,
     "2026-10-06": 6200.0,
     "2026-10-07": 6500.0,
-    "2026-10-08": 6500.0
+    "2026-10-08": 6450.0
    },
    "ECOC": {
     "2026-09-11": 17285.0,
@@ -637,7 +637,7 @@
     "2026-10-05": 16800.0,
     "2026-10-06": 16750.0,
     "2026-10-07": 16700.0,
-    "2026-10-08": 16700.0
+    "2026-10-08": 16765.0
    },
    "ETIT": {
     "2026-09-11": 70.0,
@@ -681,7 +681,7 @@
     "2026-10-05": 1850.0,
     "2026-10-06": 1975.0,
     "2026-10-07": 1970.0,
-    "2026-10-08": 1970.0
+    "2026-10-08": 1980.0
    },
    "LNBB": {
     "2026-09-11": 4000.0,
@@ -703,7 +703,7 @@
     "2026-10-05": 3890.0,
     "2026-10-06": 3930.0,
     "2026-10-07": 3890.0,
-    "2026-10-08": 3890.0
+    "2026-10-08": 3900.0
    },
    "NEIC": {
     "2026-09-11": 2750.0,
@@ -1033,7 +1033,7 @@
     "2026-10-05": 2215.0,
     "2026-10-06": 2260.0,
     "2026-10-07": 2250.0,
-    "2026-10-08": 2250.0
+    "2026-10-08": 2255.0
    },
    "SIBC": {
     "2026-09-11": 9300.0,
@@ -1824,12 +1824,6 @@
    {
     "date": "2026-08-03",
     "societe": "BOLLORE TRANSPORT & LOGISTICS",
-    "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
-    "type": "ago"
-   },
-   {
-    "date": "2026-08-03",
-    "societe": "BOLLORE TRANSPORT & LOGISTICS",
     "titre": "AFRICA GLOBAL LOGISTICS CI : Pouvoir - Assemblée Générale Mixte",
     "type": "ago"
    },
@@ -1837,6 +1831,12 @@
     "date": "2026-08-03",
     "societe": "BOLLORE TRANSPORT & LOGISTICS",
     "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
+    "type": "ago"
+   },
+   {
+    "date": "2026-08-03",
+    "societe": "BOLLORE TRANSPORT & LOGISTICS",
+    "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
     "type": "ago"
    },
    {
@@ -2360,12 +2360,6 @@
   {
    "date": "2026-08-03",
    "societe": "BOLLORE TRANSPORT & LOGISTICS",
-   "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
-   "type": "ago"
-  },
-  {
-   "date": "2026-08-03",
-   "societe": "BOLLORE TRANSPORT & LOGISTICS",
    "titre": "AFRICA GLOBAL LOGISTICS CI : Pouvoir - Assemblée Générale Mixte",
    "type": "ago"
   },
@@ -2373,6 +2367,12 @@
    "date": "2026-08-03",
    "societe": "BOLLORE TRANSPORT & LOGISTICS",
    "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
+   "type": "ago"
+  },
+  {
+   "date": "2026-08-03",
+   "societe": "BOLLORE TRANSPORT & LOGISTICS",
+   "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
    "type": "ago"
   },
   {
