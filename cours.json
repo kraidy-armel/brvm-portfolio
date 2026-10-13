@@ -1,311 +1,16 @@
 {
  "_meta": {
-  "updated": "2026-10-13T12:50:25+00:00",
-  "updated_human": "13/10/2026 12:50 UTC",
-  "count": 49,
+  "updated": "2026-10-13T13:05:18+00:00",
+  "updated_human": "13/10/2026 13:05 UTC",
+  "count": 0,
   "diagnostic": {
-   "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
-   "github_secours": "non utilise (officiel suffisant)",
+   "brvm_officiel": "https://www.brvm.org/en/cours-actions/0 -> HTTPSConnectionPool(host='www.brvm.org', port=443): Read timed out. (read timeout=30)",
+   "github_secours": "0 titres",
    "alertes_perso": "aucun seuil franchi",
-   "resultat": "49 titres",
-   "dates_couvertes": "2026-10-13 -> 2026-10-13",
+   "resultat": "AUCUNE donnee recuperee - sources indisponibles",
    "indice_composite": "545.46 (https://www.brvm.org/fr/indices/0)",
    "annonces": "70 annonce(s)"
   }
- },
- "ABJC": {
-  "actuel": 3150.0,
-  "veille": 3190,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "BBGC": {
-  "actuel": 10320.0,
-  "veille": 10450,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "BICB": {
-  "actuel": 8460.0,
-  "veille": 8450,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "BICC": {
-  "actuel": 31475.0,
-  "veille": 31450,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "BNBC": {
-  "actuel": 1890.0,
-  "veille": 1885,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "BOAB": {
-  "actuel": 9380.0,
-  "veille": 9200,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "BOABF": {
-  "actuel": 8005.0,
-  "veille": 8005,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "BOAC": {
-  "actuel": 11490.0,
-  "veille": 11475,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "BOAM": {
-  "actuel": 6010.0,
-  "veille": 6100,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "BOAN": {
-  "actuel": 4640.0,
-  "veille": 4475,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "BOAS": {
-  "actuel": 8145.0,
-  "veille": 8250,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "CABC": {
-  "actuel": 3290.0,
-  "veille": 3290,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "CBIBF": {
-  "actuel": 30500.0,
-  "veille": 30014,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "CFAC": {
-  "actuel": 1445.0,
-  "veille": 1480,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "CIEC": {
-  "actuel": 6195.0,
-  "veille": 6200,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "ECOC": {
-  "actuel": 16400.0,
-  "veille": 16501,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "ETIT": {
-  "actuel": 66.0,
-  "veille": 67,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "FTSC": {
-  "actuel": 1860.0,
-  "veille": 1860,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "LNBB": {
-  "actuel": 3925.0,
-  "veille": 3905,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "NEIC": {
-  "actuel": 2050.0,
-  "veille": 2140,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "NSBC": {
-  "actuel": 22000.0,
-  "veille": 21694,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "NTLC": {
-  "actuel": 14505.0,
-  "veille": 15000,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "ONTBF": {
-  "actuel": 2950.0,
-  "veille": 3000,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "ORAC": {
-  "actuel": 21980.0,
-  "veille": 21899,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "ORGT": {
-  "actuel": 2820.0,
-  "veille": 2820,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "PALC": {
-  "actuel": 7785.0,
-  "veille": 7750,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "PRSC": {
-  "actuel": 4420.0,
-  "veille": 4150,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "SAFC": {
-  "actuel": 4005.0,
-  "veille": 4145,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "SCRC": {
-  "actuel": 2455.0,
-  "veille": 2455,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "SDCC": {
-  "actuel": 12900.0,
-  "veille": 13179,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "SDSC": {
-  "actuel": 2955.0,
-  "veille": 2980,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "SEMC": {
-  "actuel": 1495.0,
-  "veille": 1495,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "SGBC": {
-  "actuel": 39100.0,
-  "veille": 39194,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "SHEC": {
-  "actuel": 2200.0,
-  "veille": 2215,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "SIBC": {
-  "actuel": 8750.0,
-  "veille": 8780,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "SICC": {
-  "actuel": 8400.0,
-  "veille": 8400,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "SIVC": {
-  "actuel": 1950.0,
-  "veille": 1950,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "SLBC": {
-  "actuel": 37695.0,
-  "veille": 37605,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "SMBC": {
-  "actuel": 15740.0,
-  "veille": 15560,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "SNTS": {
-  "actuel": 44945.0,
-  "veille": 44999,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "SOGC": {
-  "actuel": 7950.0,
-  "veille": 7985,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "SPHC": {
-  "actuel": 7980.0,
-  "veille": 7800,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "STAC": {
-  "actuel": 2085.0,
-  "veille": 2005,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "STBC": {
-  "actuel": 20105.0,
-  "veille": 21295,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "TTLC": {
-  "actuel": 3200.0,
-  "veille": 3000,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "TTLS": {
-  "actuel": 3810.0,
-  "veille": 3605,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "UNLC": {
-  "actuel": 48000.0,
-  "veille": 48000,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "UNXC": {
-  "actuel": 2195.0,
-  "veille": 2240,
-  "date": "2026-10-13",
-  "source": "brvm.org"
- },
- "SGBCI": {
-  "actuel": 39100.0,
-  "veille": 39194,
-  "date": "2026-10-13",
-  "source": "brvm.org"
  },
  "_histo": {
   "points": {
@@ -1915,6 +1620,12 @@
    {
     "date": "2026-06-26",
     "societe": "SITAB",
+    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "SITAB",
     "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
     "type": "ago"
    },
@@ -1928,12 +1639,6 @@
     "date": "2026-06-26",
     "societe": "AIR LIQUIDE CI",
     "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "SITAB",
-    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -2485,6 +2190,12 @@
   {
    "date": "2026-06-26",
    "societe": "SITAB",
+   "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "SITAB",
    "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
    "type": "ago"
   },
@@ -2498,12 +2209,6 @@
    "date": "2026-06-26",
    "societe": "AIR LIQUIDE CI",
    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "SITAB",
-   "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
