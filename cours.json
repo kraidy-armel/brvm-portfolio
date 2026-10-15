@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-10-15T13:20:18+00:00",
-  "updated_human": "15/10/2026 13:20 UTC",
+  "updated": "2026-10-15T13:35:20+00:00",
+  "updated_human": "15/10/2026 13:35 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -9,8 +9,8 @@
    "alertes_perso": "aucun seuil franchi",
    "resultat": "49 titres",
    "dates_couvertes": "2026-10-15 -> 2026-10-15",
-   "indice_composite": "non recupere (https://www.brvm.org/en -> HTTPSConnectionPool(host='www.brvm.org', port=443): Read timed out. (read timeout=30))",
-   "annonces": "42 annonce(s)"
+   "indice_composite": "536.65 (https://www.brvm.org/fr/indices/0)",
+   "annonces": "72 annonce(s)"
   }
  },
  "ABJC": {
@@ -20,13 +20,13 @@
   "source": "brvm.org"
  },
  "BBGC": {
-  "actuel": 10500.0,
+  "actuel": 10400.0,
   "veille": 10400,
   "date": "2026-10-15",
   "source": "brvm.org"
  },
  "BICB": {
-  "actuel": 8390.0,
+  "actuel": 8400.0,
   "veille": 8380,
   "date": "2026-10-15",
   "source": "brvm.org"
@@ -44,7 +44,7 @@
   "source": "brvm.org"
  },
  "BOAB": {
-  "actuel": 9200.0,
+  "actuel": 9205.0,
   "veille": 9305,
   "date": "2026-10-15",
   "source": "brvm.org"
@@ -86,13 +86,13 @@
   "source": "brvm.org"
  },
  "CBIBF": {
-  "actuel": 30800.0,
-  "veille": 30501,
+  "actuel": 31000.0,
+  "veille": 30500,
   "date": "2026-10-15",
   "source": "brvm.org"
  },
  "CFAC": {
-  "actuel": 1405.0,
+  "actuel": 1410.0,
   "veille": 1420,
   "date": "2026-10-15",
   "source": "brvm.org"
@@ -122,7 +122,7 @@
   "source": "brvm.org"
  },
  "LNBB": {
-  "actuel": 4050.0,
+  "actuel": 4075.0,
   "veille": 4050,
   "date": "2026-10-15",
   "source": "brvm.org"
@@ -134,19 +134,19 @@
   "source": "brvm.org"
  },
  "NSBC": {
-  "actuel": 20900.0,
-  "veille": 20900,
+  "actuel": 20805.0,
+  "veille": 20899,
   "date": "2026-10-15",
   "source": "brvm.org"
  },
  "NTLC": {
-  "actuel": 15490.0,
-  "veille": 15331,
+  "actuel": 15450.0,
+  "veille": 15330,
   "date": "2026-10-15",
   "source": "brvm.org"
  },
  "ONTBF": {
-  "actuel": 2950.0,
+  "actuel": 3065.0,
   "veille": 3045,
   "date": "2026-10-15",
   "source": "brvm.org"
@@ -158,13 +158,13 @@
   "source": "brvm.org"
  },
  "ORGT": {
-  "actuel": 2805.0,
+  "actuel": 2810.0,
   "veille": 2810,
   "date": "2026-10-15",
   "source": "brvm.org"
  },
  "PALC": {
-  "actuel": 7305.0,
+  "actuel": 7680.0,
   "veille": 7700,
   "date": "2026-10-15",
   "source": "brvm.org"
@@ -182,19 +182,19 @@
   "source": "brvm.org"
  },
  "SCRC": {
-  "actuel": 2350.0,
+  "actuel": 2300.0,
   "veille": 2435,
   "date": "2026-10-15",
   "source": "brvm.org"
  },
  "SDCC": {
-  "actuel": 12510.0,
+  "actuel": 12515.0,
   "veille": 12500,
   "date": "2026-10-15",
   "source": "brvm.org"
  },
  "SDSC": {
-  "actuel": 2900.0,
+  "actuel": 2950.0,
   "veille": 3100,
   "date": "2026-10-15",
   "source": "brvm.org"
@@ -230,7 +230,7 @@
   "source": "brvm.org"
  },
  "SIVC": {
-  "actuel": 1855.0,
+  "actuel": 1800.0,
   "veille": 1850,
   "date": "2026-10-15",
   "source": "brvm.org"
@@ -248,8 +248,8 @@
   "source": "brvm.org"
  },
  "SNTS": {
-  "actuel": 43950.0,
-  "veille": 44701,
+  "actuel": 43900.0,
+  "veille": 44700,
   "date": "2026-10-15",
   "source": "brvm.org"
  },
@@ -260,20 +260,20 @@
   "source": "brvm.org"
  },
  "SPHC": {
-  "actuel": 7400.0,
+  "actuel": 7500.0,
   "veille": 7555,
   "date": "2026-10-15",
   "source": "brvm.org"
  },
  "STAC": {
-  "actuel": 1900.0,
+  "actuel": 1950.0,
   "veille": 2000,
   "date": "2026-10-15",
   "source": "brvm.org"
  },
  "STBC": {
-  "actuel": 21300.0,
-  "veille": 21139,
+  "actuel": 21200.0,
+  "veille": 21141,
   "date": "2026-10-15",
   "source": "brvm.org"
  },
@@ -351,7 +351,7 @@
     "2026-10-12": 8450.0,
     "2026-10-13": 8440.0,
     "2026-10-14": 8380.0,
-    "2026-10-15": 8390.0
+    "2026-10-15": 8400.0
    },
    "BICC": {
     "2026-09-18": 31675.0,
@@ -417,7 +417,7 @@
     "2026-10-12": 9200.0,
     "2026-10-13": 9375.0,
     "2026-10-14": 9305.0,
-    "2026-10-15": 9200.0
+    "2026-10-15": 9205.0
    },
    "BOABF": {
     "2026-09-18": 7800.0,
@@ -571,7 +571,7 @@
     "2026-10-12": 30015.0,
     "2026-10-13": 30000.0,
     "2026-10-14": 30500.0,
-    "2026-10-15": 30800.0
+    "2026-10-15": 31000.0
    },
    "CFAC": {
     "2026-09-18": 1630.0,
@@ -593,7 +593,7 @@
     "2026-10-12": 1480.0,
     "2026-10-13": 1445.0,
     "2026-10-14": 1420.0,
-    "2026-10-15": 1405.0
+    "2026-10-15": 1410.0
    },
    "CIEC": {
     "2026-09-18": 6450.0,
@@ -703,7 +703,7 @@
     "2026-10-12": 3905.0,
     "2026-10-13": 3900.0,
     "2026-10-14": 4050.0,
-    "2026-10-15": 4050.0
+    "2026-10-15": 4075.0
    },
    "NEIC": {
     "2026-09-18": 2490.0,
@@ -747,7 +747,7 @@
     "2026-10-12": 21695.0,
     "2026-10-13": 21000.0,
     "2026-10-14": 20900.0,
-    "2026-10-15": 20900.0
+    "2026-10-15": 20805.0
    },
    "NTLC": {
     "2026-09-18": 16000.0,
@@ -769,7 +769,7 @@
     "2026-10-12": 15000.0,
     "2026-10-13": 15400.0,
     "2026-10-14": 15330.0,
-    "2026-10-15": 15490.0
+    "2026-10-15": 15450.0
    },
    "ONTBF": {
     "2026-09-18": 2900.0,
@@ -791,7 +791,7 @@
     "2026-10-12": 3000.0,
     "2026-10-13": 3000.0,
     "2026-10-14": 3045.0,
-    "2026-10-15": 2950.0
+    "2026-10-15": 3065.0
    },
    "ORAC": {
     "2026-09-18": 22200.0,
@@ -835,7 +835,7 @@
     "2026-10-12": 2820.0,
     "2026-10-13": 2820.0,
     "2026-10-14": 2810.0,
-    "2026-10-15": 2805.0
+    "2026-10-15": 2810.0
    },
    "PALC": {
     "2026-09-18": 8390.0,
@@ -857,7 +857,7 @@
     "2026-10-12": 7750.0,
     "2026-10-13": 7785.0,
     "2026-10-14": 7700.0,
-    "2026-10-15": 7305.0
+    "2026-10-15": 7680.0
    },
    "PRSC": {
     "2026-09-18": 4305.0,
@@ -923,7 +923,7 @@
     "2026-10-12": 2455.0,
     "2026-10-13": 2460.0,
     "2026-10-14": 2435.0,
-    "2026-10-15": 2350.0
+    "2026-10-15": 2300.0
    },
    "SDCC": {
     "2026-09-18": 12485.0,
@@ -945,7 +945,7 @@
     "2026-10-12": 13180.0,
     "2026-10-13": 12900.0,
     "2026-10-14": 12500.0,
-    "2026-10-15": 12510.0
+    "2026-10-15": 12515.0
    },
    "SDSC": {
     "2026-09-18": 2910.0,
@@ -967,7 +967,7 @@
     "2026-10-12": 2980.0,
     "2026-10-13": 3020.0,
     "2026-10-14": 3100.0,
-    "2026-10-15": 2900.0
+    "2026-10-15": 2950.0
    },
    "SEMC": {
     "2026-09-18": 1495.0,
@@ -1099,7 +1099,7 @@
     "2026-10-12": 1950.0,
     "2026-10-13": 1900.0,
     "2026-10-14": 1850.0,
-    "2026-10-15": 1855.0
+    "2026-10-15": 1800.0
    },
    "SLBC": {
     "2026-09-18": 38000.0,
@@ -1165,7 +1165,7 @@
     "2026-10-12": 45000.0,
     "2026-10-13": 44900.0,
     "2026-10-14": 44700.0,
-    "2026-10-15": 43950.0
+    "2026-10-15": 43900.0
    },
    "SOGC": {
     "2026-09-18": 7855.0,
@@ -1209,7 +1209,7 @@
     "2026-10-12": 7800.0,
     "2026-10-13": 7900.0,
     "2026-10-14": 7555.0,
-    "2026-10-15": 7400.0
+    "2026-10-15": 7500.0
    },
    "STAC": {
     "2026-09-18": 2275.0,
@@ -1231,7 +1231,7 @@
     "2026-10-12": 2005.0,
     "2026-10-13": 2085.0,
     "2026-10-14": 2000.0,
-    "2026-10-15": 1900.0
+    "2026-10-15": 1950.0
    },
    "STBC": {
     "2026-09-18": 21950.0,
@@ -1253,7 +1253,7 @@
     "2026-10-12": 21295.0,
     "2026-10-13": 21300.0,
     "2026-10-14": 21140.0,
-    "2026-10-15": 21300.0
+    "2026-10-15": 21200.0
    },
    "TTLC": {
     "2026-09-18": 3160.0,
@@ -1362,7 +1362,7 @@
     "2026-10-12": 10450.0,
     "2026-10-13": 10395.0,
     "2026-10-14": 10400.0,
-    "2026-10-15": 10500.0
+    "2026-10-15": 10400.0
    }
   },
   "derniere_notif": "2026-10-15",
@@ -1657,6 +1657,186 @@
   "_rapports_scan": "2026-10-15",
   "_annonces_prec": [
    {
+    "date": "2026-10-26",
+    "societe": "BOLLORE TRANSPORT & LOGISTICS",
+    "titre": "Dividende net 92 FCFA/action - detachement 26/10, paiement 27/10",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-10-22",
+    "societe": "TRACTAFRIC CI",
+    "titre": "Dividende net 209 FCFA/action - detachement 22/10, paiement 23/10",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-09-17",
+    "societe": "SMB",
+    "titre": "Dividende net 800 FCFA/action - detachement 17/09, paiement 18/09",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-09-15",
+    "societe": "SODECI",
+    "titre": "Dividende net 525 FCFA/action - detachement 15/09, paiement 16/09",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-09-09",
+    "societe": "NEI-CEDA CI",
+    "titre": "Dividende net 159,54 FCFA/action - detachement 09/09, paiement 10/09",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-09-24",
+    "societe": "VIVO ENERGY CI",
+    "titre": "Dividende net 96,67 FCFA/action - detachement 24/09, paiement 25/09",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-08-28",
+    "societe": "TOTAL",
+    "titre": "Dividende net 158,8270 FCFA/action - detachement 28/08, paiement 31/08",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-08-27",
+    "societe": "SAPH CI",
+    "titre": "Dividende net 489 FCFA/action - detachement 27/08, paiement 28/08",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-08-21",
+    "societe": "SGCI",
+    "titre": "Dividende net 2 606 FCFA/action - detachement 21/08, paiement 24/08",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-09-04",
+    "societe": "NESTLE CI",
+    "titre": "Dividende net 420 FCFA/action - detachement 04/09, paiement 07/09",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-08-13",
+    "societe": "CFAO MOTORS CI",
+    "titre": "Dividende net 63 FCFA/action - detachement 13/08, paiement 14/08",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-08-12",
+    "societe": "SITAB",
+    "titre": "Dividende net 1 707,2 FCFA/action - detachement 12/08, paiement 13/08",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-07-05",
+    "societe": "SOGB",
+    "titre": "Dividende net 570 FCFA/action - detachement 05/07, paiement 06/08",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-08-03",
+    "societe": "NSBC",
+    "titre": "Dividende net 768,16 FCFA/action - detachement 03/08, paiement 04/08",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-07-31",
+    "societe": "LNB",
+    "titre": "Dividende net 164,1709 FCFA/action - detachement 31/07, paiement 03/08",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-07-29",
+    "societe": "SOLIBRA",
+    "titre": "Dividende net 2 127 FCFA/action - detachement 29/07, paiement 30/07",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-07-27",
+    "societe": "CIE CI",
+    "titre": "Dividende net 234 FCFA/action - detachement 27/07, paiement 28/07",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-07-30",
+    "societe": "BIIC",
+    "titre": "Dividende net 254,6 FCFA/action - detachement 30/07, paiement 31/07",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-09-29",
+    "societe": "SERVAIR ABIDJAN CI",
+    "titre": "Dividende net 124 FCFA/action - detachement 29/09, paiement 30/09",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-29",
+    "societe": "ECOBANK TG",
+    "titre": "Dividende net 0,9 FCFA/action - detachement 29/06, paiement 30/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-07-16",
+    "societe": "TOTAL SENEGAL S.A.",
+    "titre": "Dividende net 176,65 FCFA/action - detachement 16/07, paiement 17/07",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-07-30",
+    "societe": "SIB",
+    "titre": "Dividende net 425 F CFA/action - detachement 30/07, paiement 31/07",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-07-03",
+    "societe": "BICI CI",
+    "titre": "Dividende net 1 315 FCFA/action - detachement 03/07, paiement 06/07",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-29",
+    "societe": "ECOBANK TG",
+    "titre": "Dividende net 0,16 cents de dollars/action - detachement 29/06, paiement 30/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "PALM CI",
+    "titre": "Dividende net 501,596 FCFA/action - detachement 26/06, paiement 29/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-18",
+    "societe": "CORIS BANK INTERNATIONAL",
+    "titre": "Dividende net 900 FCFA/action - detachement 18/06, paiement 19/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-05",
+    "societe": "ORANGE CI",
+    "titre": "Dividende net 800 FCFA/action - detachement 05/06, paiement 08/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-12",
+    "societe": "ONATEL BF",
+    "titre": "Dividende net 145,3214 FCFA/action - detachement 12/06, paiement 15/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-05-29",
+    "societe": "SICABLE",
+    "titre": "Dividende net 152,02 FCFA/action - detachement 29/05, paiement 01/06",
+    "type": "dividende"
+   },
+   {
+    "date": "2026-06-02",
+    "societe": "BANK OF AFRICA ML",
+    "titre": "Dividende net 305,04 FCFA/action - detachement 02/06, paiement 03/06",
+    "type": "dividende"
+   },
+   {
     "date": "2026-05-22",
     "societe": "ECOBANK CI",
     "titre": "Dividende net 888 FCFA/action - detachement 22/05, paiement 26/05",
@@ -1737,13 +1917,13 @@
    {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
-    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
-    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -2071,6 +2251,186 @@
  },
  "_annonces": [
   {
+   "date": "2026-10-26",
+   "societe": "BOLLORE TRANSPORT & LOGISTICS",
+   "titre": "Dividende net 92 FCFA/action - detachement 26/10, paiement 27/10",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-10-22",
+   "societe": "TRACTAFRIC CI",
+   "titre": "Dividende net 209 FCFA/action - detachement 22/10, paiement 23/10",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-09-17",
+   "societe": "SMB",
+   "titre": "Dividende net 800 FCFA/action - detachement 17/09, paiement 18/09",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-09-15",
+   "societe": "SODECI",
+   "titre": "Dividende net 525 FCFA/action - detachement 15/09, paiement 16/09",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-09-09",
+   "societe": "NEI-CEDA CI",
+   "titre": "Dividende net 159,54 FCFA/action - detachement 09/09, paiement 10/09",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-09-24",
+   "societe": "VIVO ENERGY CI",
+   "titre": "Dividende net 96,67 FCFA/action - detachement 24/09, paiement 25/09",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-08-28",
+   "societe": "TOTAL",
+   "titre": "Dividende net 158,8270 FCFA/action - detachement 28/08, paiement 31/08",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-08-27",
+   "societe": "SAPH CI",
+   "titre": "Dividende net 489 FCFA/action - detachement 27/08, paiement 28/08",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-08-21",
+   "societe": "SGCI",
+   "titre": "Dividende net 2 606 FCFA/action - detachement 21/08, paiement 24/08",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-09-04",
+   "societe": "NESTLE CI",
+   "titre": "Dividende net 420 FCFA/action - detachement 04/09, paiement 07/09",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-08-13",
+   "societe": "CFAO MOTORS CI",
+   "titre": "Dividende net 63 FCFA/action - detachement 13/08, paiement 14/08",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-08-12",
+   "societe": "SITAB",
+   "titre": "Dividende net 1 707,2 FCFA/action - detachement 12/08, paiement 13/08",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-07-05",
+   "societe": "SOGB",
+   "titre": "Dividende net 570 FCFA/action - detachement 05/07, paiement 06/08",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-08-03",
+   "societe": "NSBC",
+   "titre": "Dividende net 768,16 FCFA/action - detachement 03/08, paiement 04/08",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-07-31",
+   "societe": "LNB",
+   "titre": "Dividende net 164,1709 FCFA/action - detachement 31/07, paiement 03/08",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-07-29",
+   "societe": "SOLIBRA",
+   "titre": "Dividende net 2 127 FCFA/action - detachement 29/07, paiement 30/07",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-07-27",
+   "societe": "CIE CI",
+   "titre": "Dividende net 234 FCFA/action - detachement 27/07, paiement 28/07",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-07-30",
+   "societe": "BIIC",
+   "titre": "Dividende net 254,6 FCFA/action - detachement 30/07, paiement 31/07",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-09-29",
+   "societe": "SERVAIR ABIDJAN CI",
+   "titre": "Dividende net 124 FCFA/action - detachement 29/09, paiement 30/09",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-29",
+   "societe": "ECOBANK TG",
+   "titre": "Dividende net 0,9 FCFA/action - detachement 29/06, paiement 30/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-07-16",
+   "societe": "TOTAL SENEGAL S.A.",
+   "titre": "Dividende net 176,65 FCFA/action - detachement 16/07, paiement 17/07",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-07-30",
+   "societe": "SIB",
+   "titre": "Dividende net 425 F CFA/action - detachement 30/07, paiement 31/07",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-07-03",
+   "societe": "BICI CI",
+   "titre": "Dividende net 1 315 FCFA/action - detachement 03/07, paiement 06/07",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-29",
+   "societe": "ECOBANK TG",
+   "titre": "Dividende net 0,16 cents de dollars/action - detachement 29/06, paiement 30/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "PALM CI",
+   "titre": "Dividende net 501,596 FCFA/action - detachement 26/06, paiement 29/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-18",
+   "societe": "CORIS BANK INTERNATIONAL",
+   "titre": "Dividende net 900 FCFA/action - detachement 18/06, paiement 19/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-05",
+   "societe": "ORANGE CI",
+   "titre": "Dividende net 800 FCFA/action - detachement 05/06, paiement 08/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-12",
+   "societe": "ONATEL BF",
+   "titre": "Dividende net 145,3214 FCFA/action - detachement 12/06, paiement 15/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-05-29",
+   "societe": "SICABLE",
+   "titre": "Dividende net 152,02 FCFA/action - detachement 29/05, paiement 01/06",
+   "type": "dividende"
+  },
+  {
+   "date": "2026-06-02",
+   "societe": "BANK OF AFRICA ML",
+   "titre": "Dividende net 305,04 FCFA/action - detachement 02/06, paiement 03/06",
+   "type": "dividende"
+  },
+  {
    "date": "2026-05-22",
    "societe": "ECOBANK CI",
    "titre": "Dividende net 888 FCFA/action - detachement 22/05, paiement 26/05",
@@ -2151,13 +2511,13 @@
   {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
-   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
-   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
