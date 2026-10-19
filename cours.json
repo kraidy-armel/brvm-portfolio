@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-10-19T09:50:09+00:00",
-  "updated_human": "19/10/2026 09:50 UTC",
+  "updated": "2026-10-19T10:05:10+00:00",
+  "updated_human": "19/10/2026 10:05 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -10,7 +10,7 @@
    "resultat": "49 titres",
    "dates_couvertes": "2026-10-19 -> 2026-10-19",
    "indice_composite": "532.61 (https://www.brvm.org/fr/indices/0)",
-   "annonces": "70 annonce(s)"
+   "annonces": "60 annonce(s)"
   }
  },
  "ABJC": {
@@ -1759,66 +1759,6 @@
     "type": "dividende"
    },
    {
-    "date": "2026-07-16",
-    "societe": "TOTAL SENEGAL S.A.",
-    "titre": "Dividende net 176,65 FCFA/action - detachement 16/07, paiement 17/07",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-07-30",
-    "societe": "SIB",
-    "titre": "Dividende net 425 F CFA/action - detachement 30/07, paiement 31/07",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-07-03",
-    "societe": "BICI CI",
-    "titre": "Dividende net 1 315 FCFA/action - detachement 03/07, paiement 06/07",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-06-29",
-    "societe": "ECOBANK TG",
-    "titre": "Dividende net 0,16 cents de dollars/action - detachement 29/06, paiement 30/06",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "PALM CI",
-    "titre": "Dividende net 501,596 FCFA/action - detachement 26/06, paiement 29/06",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-06-18",
-    "societe": "CORIS BANK INTERNATIONAL",
-    "titre": "Dividende net 900 FCFA/action - detachement 18/06, paiement 19/06",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-06-05",
-    "societe": "ORANGE CI",
-    "titre": "Dividende net 800 FCFA/action - detachement 05/06, paiement 08/06",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-06-12",
-    "societe": "ONATEL BF",
-    "titre": "Dividende net 145,3214 FCFA/action - detachement 12/06, paiement 15/06",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-05-29",
-    "societe": "SICABLE",
-    "titre": "Dividende net 152,02 FCFA/action - detachement 29/05, paiement 01/06",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-06-02",
-    "societe": "BANK OF AFRICA ML",
-    "titre": "Dividende net 305,04 FCFA/action - detachement 02/06, paiement 03/06",
-    "type": "dividende"
-   },
-   {
     "date": "2026-05-22",
     "societe": "ECOBANK CI",
     "titre": "Dividende net 888 FCFA/action - detachement 22/05, paiement 26/05",
@@ -2330,66 +2270,6 @@
    "date": "2026-06-29",
    "societe": "ECOBANK TG",
    "titre": "Dividende net 0,9 FCFA/action - detachement 29/06, paiement 30/06",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-07-16",
-   "societe": "TOTAL SENEGAL S.A.",
-   "titre": "Dividende net 176,65 FCFA/action - detachement 16/07, paiement 17/07",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-07-30",
-   "societe": "SIB",
-   "titre": "Dividende net 425 F CFA/action - detachement 30/07, paiement 31/07",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-07-03",
-   "societe": "BICI CI",
-   "titre": "Dividende net 1 315 FCFA/action - detachement 03/07, paiement 06/07",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-06-29",
-   "societe": "ECOBANK TG",
-   "titre": "Dividende net 0,16 cents de dollars/action - detachement 29/06, paiement 30/06",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "PALM CI",
-   "titre": "Dividende net 501,596 FCFA/action - detachement 26/06, paiement 29/06",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-06-18",
-   "societe": "CORIS BANK INTERNATIONAL",
-   "titre": "Dividende net 900 FCFA/action - detachement 18/06, paiement 19/06",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-06-05",
-   "societe": "ORANGE CI",
-   "titre": "Dividende net 800 FCFA/action - detachement 05/06, paiement 08/06",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-06-12",
-   "societe": "ONATEL BF",
-   "titre": "Dividende net 145,3214 FCFA/action - detachement 12/06, paiement 15/06",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-05-29",
-   "societe": "SICABLE",
-   "titre": "Dividende net 152,02 FCFA/action - detachement 29/05, paiement 01/06",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-06-02",
-   "societe": "BANK OF AFRICA ML",
-   "titre": "Dividende net 305,04 FCFA/action - detachement 02/06, paiement 03/06",
    "type": "dividende"
   },
   {
