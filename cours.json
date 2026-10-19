@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-10-19T11:50:10+00:00",
-  "updated_human": "19/10/2026 11:50 UTC",
+  "updated": "2026-10-19T12:05:09+00:00",
+  "updated_human": "19/10/2026 12:05 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -10,7 +10,7 @@
    "resultat": "49 titres",
    "dates_couvertes": "2026-10-19 -> 2026-10-19",
    "indice_composite": "532.61 (https://www.brvm.org/fr/indices/0)",
-   "annonces": "70 annonce(s)"
+   "annonces": "60 annonce(s)"
   }
  },
  "ABJC": {
@@ -1639,66 +1639,6 @@
   "_rapports_scan": "2026-10-19",
   "_annonces_prec": [
    {
-    "date": "2026-10-26",
-    "societe": "BOLLORE TRANSPORT & LOGISTICS",
-    "titre": "Dividende net 92 FCFA/action - detachement 26/10, paiement 27/10",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-10-22",
-    "societe": "TRACTAFRIC CI",
-    "titre": "Dividende net 209 FCFA/action - detachement 22/10, paiement 23/10",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-09-17",
-    "societe": "SMB",
-    "titre": "Dividende net 800 FCFA/action - detachement 17/09, paiement 18/09",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-09-15",
-    "societe": "SODECI",
-    "titre": "Dividende net 525 FCFA/action - detachement 15/09, paiement 16/09",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-09-09",
-    "societe": "NEI-CEDA CI",
-    "titre": "Dividende net 159,54 FCFA/action - detachement 09/09, paiement 10/09",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-09-24",
-    "societe": "VIVO ENERGY CI",
-    "titre": "Dividende net 96,67 FCFA/action - detachement 24/09, paiement 25/09",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-08-28",
-    "societe": "TOTAL",
-    "titre": "Dividende net 158,8270 FCFA/action - detachement 28/08, paiement 31/08",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-08-27",
-    "societe": "SAPH CI",
-    "titre": "Dividende net 489 FCFA/action - detachement 27/08, paiement 28/08",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-08-21",
-    "societe": "SGCI",
-    "titre": "Dividende net 2 606 FCFA/action - detachement 21/08, paiement 24/08",
-    "type": "dividende"
-   },
-   {
-    "date": "2026-09-04",
-    "societe": "NESTLE CI",
-    "titre": "Dividende net 420 FCFA/action - detachement 04/09, paiement 07/09",
-    "type": "dividende"
-   },
-   {
     "date": "2026-08-13",
     "societe": "CFAO MOTORS CI",
     "titre": "Dividende net 63 FCFA/action - detachement 13/08, paiement 14/08",
@@ -2212,66 +2152,6 @@
   "source": "https://www.brvm.org/fr/indices/0"
  },
  "_annonces": [
-  {
-   "date": "2026-10-26",
-   "societe": "BOLLORE TRANSPORT & LOGISTICS",
-   "titre": "Dividende net 92 FCFA/action - detachement 26/10, paiement 27/10",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-10-22",
-   "societe": "TRACTAFRIC CI",
-   "titre": "Dividende net 209 FCFA/action - detachement 22/10, paiement 23/10",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-09-17",
-   "societe": "SMB",
-   "titre": "Dividende net 800 FCFA/action - detachement 17/09, paiement 18/09",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-09-15",
-   "societe": "SODECI",
-   "titre": "Dividende net 525 FCFA/action - detachement 15/09, paiement 16/09",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-09-09",
-   "societe": "NEI-CEDA CI",
-   "titre": "Dividende net 159,54 FCFA/action - detachement 09/09, paiement 10/09",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-09-24",
-   "societe": "VIVO ENERGY CI",
-   "titre": "Dividende net 96,67 FCFA/action - detachement 24/09, paiement 25/09",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-08-28",
-   "societe": "TOTAL",
-   "titre": "Dividende net 158,8270 FCFA/action - detachement 28/08, paiement 31/08",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-08-27",
-   "societe": "SAPH CI",
-   "titre": "Dividende net 489 FCFA/action - detachement 27/08, paiement 28/08",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-08-21",
-   "societe": "SGCI",
-   "titre": "Dividende net 2 606 FCFA/action - detachement 21/08, paiement 24/08",
-   "type": "dividende"
-  },
-  {
-   "date": "2026-09-04",
-   "societe": "NESTLE CI",
-   "titre": "Dividende net 420 FCFA/action - detachement 04/09, paiement 07/09",
-   "type": "dividende"
-  },
   {
    "date": "2026-08-13",
    "societe": "CFAO MOTORS CI",
