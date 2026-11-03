@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-11-03T12:05:14+00:00",
-  "updated_human": "03/11/2026 12:05 UTC",
+  "updated": "2026-11-03T12:20:12+00:00",
+  "updated_human": "03/11/2026 12:20 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -20,7 +20,7 @@
   "source": "brvm.org"
  },
  "BBGC": {
-  "actuel": 9700.0,
+  "actuel": 9730.0,
   "veille": 9785,
   "date": "2026-11-03",
   "source": "brvm.org"
@@ -134,7 +134,7 @@
   "source": "brvm.org"
  },
  "NSBC": {
-  "actuel": 17500.0,
+  "actuel": 17495.0,
   "veille": 17995,
   "date": "2026-11-03",
   "source": "brvm.org"
@@ -164,7 +164,7 @@
   "source": "brvm.org"
  },
  "PALC": {
-  "actuel": 7495.0,
+  "actuel": 7450.0,
   "veille": 7380,
   "date": "2026-11-03",
   "source": "brvm.org"
@@ -194,7 +194,7 @@
   "source": "brvm.org"
  },
  "SDSC": {
-  "actuel": 2980.0,
+  "actuel": 2850.0,
   "veille": 3080,
   "date": "2026-11-03",
   "source": "brvm.org"
@@ -218,7 +218,7 @@
   "source": "brvm.org"
  },
  "SIBC": {
-  "actuel": 8800.0,
+  "actuel": 8850.0,
   "veille": 8800,
   "date": "2026-11-03",
   "source": "brvm.org"
@@ -248,7 +248,7 @@
   "source": "brvm.org"
  },
  "SNTS": {
-  "actuel": 4245.0,
+  "actuel": 4225.0,
   "veille": 4150,
   "date": "2026-11-03",
   "source": "brvm.org"
@@ -260,7 +260,7 @@
   "source": "brvm.org"
  },
  "SPHC": {
-  "actuel": 8000.0,
+  "actuel": 7990.0,
   "veille": 7700,
   "date": "2026-11-03",
   "source": "brvm.org"
@@ -296,7 +296,7 @@
   "source": "brvm.org"
  },
  "UNXC": {
-  "actuel": 2065.0,
+  "actuel": 2025.0,
   "veille": 2115,
   "date": "2026-11-03",
   "source": "brvm.org"
@@ -747,7 +747,7 @@
     "2026-10-29": 18650.0,
     "2026-10-30": 18650.0,
     "2026-11-02": 17995.0,
-    "2026-11-03": 17500.0
+    "2026-11-03": 17495.0
    },
    "NTLC": {
     "2026-10-07": 15500.0,
@@ -857,7 +857,7 @@
     "2026-10-29": 7500.0,
     "2026-10-30": 7360.0,
     "2026-11-02": 7380.0,
-    "2026-11-03": 7495.0
+    "2026-11-03": 7450.0
    },
    "PRSC": {
     "2026-10-07": 4340.0,
@@ -967,7 +967,7 @@
     "2026-10-29": 2960.0,
     "2026-10-30": 3045.0,
     "2026-11-02": 3080.0,
-    "2026-11-03": 2980.0
+    "2026-11-03": 2850.0
    },
    "SEMC": {
     "2026-10-07": 1495.0,
@@ -1055,7 +1055,7 @@
     "2026-10-29": 8800.0,
     "2026-10-30": 8805.0,
     "2026-11-02": 8800.0,
-    "2026-11-03": 8800.0
+    "2026-11-03": 8850.0
    },
    "SICC": {
     "2026-10-07": 8400.0,
@@ -1165,7 +1165,7 @@
     "2026-10-29": 4150.0,
     "2026-10-30": 4350.0,
     "2026-11-02": 4150.0,
-    "2026-11-03": 4245.0
+    "2026-11-03": 4225.0
    },
    "SOGC": {
     "2026-10-07": 7895.0,
@@ -1209,7 +1209,7 @@
     "2026-10-29": 8150.0,
     "2026-10-30": 8300.0,
     "2026-11-02": 7700.0,
-    "2026-11-03": 8000.0
+    "2026-11-03": 7990.0
    },
    "STAC": {
     "2026-10-07": 2065.0,
@@ -1341,7 +1341,7 @@
     "2026-10-29": 2100.0,
     "2026-10-30": 2120.0,
     "2026-11-02": 2115.0,
-    "2026-11-03": 2065.0
+    "2026-11-03": 2025.0
    },
    "SVOC": {
     "2019-05-10": 2395.0
@@ -1366,7 +1366,7 @@
     "2026-10-29": 9880.0,
     "2026-10-30": 9850.0,
     "2026-11-02": 9785.0,
-    "2026-11-03": 9700.0
+    "2026-11-03": 9730.0
    }
   },
   "derniere_notif": "2026-11-03",
@@ -2072,14 +2072,14 @@
    },
    {
     "date": "2026-06-29",
-    "societe": "LNB",
-    "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
+    "societe": "AIR LIQUIDE CI",
+    "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-29",
-    "societe": "AIR LIQUIDE CI",
-    "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
+    "societe": "LNB",
+    "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -2806,14 +2806,14 @@
   },
   {
    "date": "2026-06-29",
-   "societe": "LNB",
-   "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
+   "societe": "AIR LIQUIDE CI",
+   "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-29",
-   "societe": "AIR LIQUIDE CI",
-   "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
+   "societe": "LNB",
+   "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
