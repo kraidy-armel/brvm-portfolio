@@ -1,316 +1,315 @@
 {
  "_meta": {
-  "updated": "2026-11-02T19:25:57+00:00",
-  "updated_human": "02/11/2026 19:25 UTC",
+  "updated": "2026-11-03T09:05:11+00:00",
+  "updated_human": "03/11/2026 09:05 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
    "github_secours": "non utilise (officiel suffisant)",
    "alertes_perso": "aucun seuil franchi",
    "resultat": "49 titres",
-   "dates_couvertes": "2026-11-02 -> 2026-11-02",
-   "indice_composite": "534.71 (https://www.brvm.org/fr/indices/0)",
+   "dates_couvertes": "2026-11-03 -> 2026-11-03",
+   "indice_composite": "525.3 (https://www.brvm.org/fr/indices/0)",
    "annonces": "79 annonce(s)"
   }
  },
  "ABJC": {
   "actuel": 3300.0,
-  "veille": 3350,
-  "date": "2026-11-02",
+  "veille": 3300,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "BBGC": {
   "actuel": 9785.0,
-  "veille": 9850,
-  "date": "2026-11-02",
+  "veille": 9785,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "BICB": {
   "actuel": 8300.0,
-  "veille": 8400,
-  "date": "2026-11-02",
+  "veille": 8300,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "BICC": {
   "actuel": 32000.0,
-  "veille": 32151,
-  "date": "2026-11-02",
+  "veille": 32000,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "BNBC": {
   "actuel": 1980.0,
-  "veille": 2000,
-  "date": "2026-11-02",
+  "veille": 1980,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "BOAB": {
   "actuel": 9100.0,
-  "veille": 9365,
-  "date": "2026-11-02",
+  "veille": 9100,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "BOABF": {
   "actuel": 7950.0,
   "veille": 7950,
-  "date": "2026-11-02",
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "BOAC": {
   "actuel": 11700.0,
   "veille": 11700,
-  "date": "2026-11-02",
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "BOAM": {
   "actuel": 5845.0,
-  "veille": 5830,
-  "date": "2026-11-02",
+  "veille": 5845,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "BOAN": {
   "actuel": 5195.0,
-  "veille": 5250,
-  "date": "2026-11-02",
+  "veille": 5195,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "BOAS": {
   "actuel": 8210.0,
-  "veille": 8260,
-  "date": "2026-11-02",
+  "veille": 8210,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "CABC": {
   "actuel": 2705.0,
-  "veille": 2920,
-  "date": "2026-11-02",
+  "veille": 2705,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "CBIBF": {
   "actuel": 32000.0,
-  "veille": 31901,
-  "date": "2026-11-02",
+  "veille": 32000,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "CFAC": {
   "actuel": 1300.0,
-  "veille": 1400,
-  "date": "2026-11-02",
+  "veille": 1300,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "CIEC": {
   "actuel": 5295.0,
-  "veille": 5500,
-  "date": "2026-11-02",
+  "veille": 5295,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "ECOC": {
   "actuel": 15885.0,
-  "veille": 15880,
-  "date": "2026-11-02",
+  "veille": 15885,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "ETIT": {
   "actuel": 61.0,
-  "veille": 63,
-  "date": "2026-11-02",
+  "veille": 61,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "FTSC": {
   "actuel": 1720.0,
-  "veille": 1795,
-  "date": "2026-11-02",
+  "veille": 1720,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "LNBB": {
   "actuel": 3935.0,
-  "veille": 3950,
-  "date": "2026-11-02",
+  "veille": 3935,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "NEIC": {
   "actuel": 2145.0,
-  "veille": 2290,
-  "date": "2026-11-02",
+  "veille": 2145,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "NSBC": {
   "actuel": 17995.0,
-  "veille": 18650,
-  "date": "2026-11-02",
+  "veille": 17995,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "NTLC": {
   "actuel": 13495.0,
-  "veille": 13400,
-  "date": "2026-11-02",
+  "veille": 13495,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "ONTBF": {
   "actuel": 3070.0,
-  "veille": 3050,
-  "date": "2026-11-02",
+  "veille": 3070,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "ORAC": {
   "actuel": 21450.0,
-  "veille": 21301,
-  "date": "2026-11-02",
+  "veille": 21450,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "ORGT": {
   "actuel": 2700.0,
-  "veille": 2705,
-  "date": "2026-11-02",
+  "veille": 2700,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "PALC": {
   "actuel": 7380.0,
-  "veille": 7360,
-  "date": "2026-11-02",
+  "veille": 7380,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "PRSC": {
   "actuel": 3750.0,
-  "veille": 3710,
-  "date": "2026-11-02",
+  "veille": 3750,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "SAFC": {
   "actuel": 3700.0,
-  "veille": 3760,
-  "date": "2026-11-02",
+  "veille": 3700,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "SCRC": {
   "actuel": 2200.0,
-  "veille": 2270,
-  "date": "2026-11-02",
+  "veille": 2200,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "SDCC": {
   "actuel": 12300.0,
-  "veille": 12850,
-  "date": "2026-11-02",
+  "veille": 12300,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "SDSC": {
   "actuel": 3080.0,
-  "veille": 3045,
-  "date": "2026-11-02",
+  "veille": 3080,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "SEMC": {
   "actuel": 1495.0,
   "veille": 1495,
-  "date": "2026-11-02",
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "SGBC": {
   "actuel": 38505.0,
-  "veille": 39219,
-  "date": "2026-11-02",
+  "veille": 38505,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "SHEC": {
   "actuel": 2120.0,
-  "veille": 2115,
-  "date": "2026-11-02",
+  "veille": 2120,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "SIBC": {
   "actuel": 8800.0,
-  "veille": 8805,
-  "date": "2026-11-02",
+  "veille": 8800,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "SICC": {
   "actuel": 8400.0,
   "veille": 8400,
-  "date": "2026-11-02",
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "SIVC": {
   "actuel": 1700.0,
-  "veille": 1695,
-  "date": "2026-11-02",
+  "veille": 1700,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "SLBC": {
   "actuel": 38995.0,
-  "veille": 39991,
-  "date": "2026-11-02",
+  "veille": 38995,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "SMBC": {
   "actuel": 15695.0,
-  "veille": 14600,
-  "date": "2026-11-02",
+  "veille": 15695,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "SNTS": {
   "actuel": 4150.0,
-  "veille": 4350,
-  "date": "2026-11-02",
+  "veille": 4150,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "SOGC": {
   "actuel": 7775.0,
-  "veille": 7655,
-  "date": "2026-11-02",
+  "veille": 7775,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "SPHC": {
   "actuel": 7700.0,
-  "veille": 8300,
-  "date": "2026-11-02",
+  "veille": 7700,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "STAC": {
   "actuel": 1770.0,
-  "veille": 1780,
-  "date": "2026-11-02",
+  "veille": 1770,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "STBC": {
   "actuel": 20175.0,
-  "veille": 21499,
-  "date": "2026-11-02",
+  "veille": 20175,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "TTLC": {
   "actuel": 3010.0,
-  "veille": 3100,
-  "date": "2026-11-02",
+  "veille": 3010,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "TTLS": {
   "actuel": 3700.0,
   "veille": 3700,
-  "date": "2026-11-02",
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "UNLC": {
   "actuel": 48000.0,
-  "veille": 49000,
-  "date": "2026-11-02",
+  "veille": 48000,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "UNXC": {
   "actuel": 2115.0,
-  "veille": 2120,
-  "date": "2026-11-02",
+  "veille": 2115,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "SGBCI": {
   "actuel": 38505.0,
-  "veille": 39219,
-  "date": "2026-11-02",
+  "veille": 38505,
+  "date": "2026-11-03",
   "source": "brvm.org"
  },
  "_histo": {
   "points": {
    "ABJC": {
-    "2026-10-06": 3260.0,
     "2026-10-07": 3295.0,
     "2026-10-08": 3290.0,
     "2026-10-09": 3190.0,
@@ -329,10 +328,10 @@
     "2026-10-28": 3290.0,
     "2026-10-29": 3280.0,
     "2026-10-30": 3350.0,
-    "2026-11-02": 3300.0
+    "2026-11-02": 3300.0,
+    "2026-11-03": 3300.0
    },
    "BICB": {
-    "2026-10-06": 8600.0,
     "2026-10-07": 8650.0,
     "2026-10-08": 8520.0,
     "2026-10-09": 8440.0,
@@ -351,10 +350,10 @@
     "2026-10-28": 8440.0,
     "2026-10-29": 8440.0,
     "2026-10-30": 8400.0,
-    "2026-11-02": 8300.0
+    "2026-11-02": 8300.0,
+    "2026-11-03": 8300.0
    },
    "BICC": {
-    "2026-10-06": 31600.0,
     "2026-10-07": 31500.0,
     "2026-10-08": 31450.0,
     "2026-10-09": 32945.0,
@@ -373,10 +372,10 @@
     "2026-10-28": 32000.0,
     "2026-10-29": 32150.0,
     "2026-10-30": 32150.0,
-    "2026-11-02": 32000.0
+    "2026-11-02": 32000.0,
+    "2026-11-03": 32000.0
    },
    "BNBC": {
-    "2026-10-06": 1900.0,
     "2026-10-07": 1950.0,
     "2026-10-08": 1905.0,
     "2026-10-09": 1800.0,
@@ -395,10 +394,10 @@
     "2026-10-28": 1850.0,
     "2026-10-29": 1985.0,
     "2026-10-30": 2000.0,
-    "2026-11-02": 1980.0
+    "2026-11-02": 1980.0,
+    "2026-11-03": 1980.0
    },
    "BOAB": {
-    "2026-10-06": 9340.0,
     "2026-10-07": 9360.0,
     "2026-10-08": 9400.0,
     "2026-10-09": 9400.0,
@@ -417,10 +416,10 @@
     "2026-10-28": 9380.0,
     "2026-10-29": 9300.0,
     "2026-10-30": 9365.0,
-    "2026-11-02": 9100.0
+    "2026-11-02": 9100.0,
+    "2026-11-03": 9100.0
    },
    "BOABF": {
-    "2026-10-06": 7900.0,
     "2026-10-07": 7900.0,
     "2026-10-08": 7950.0,
     "2026-10-09": 8005.0,
@@ -439,10 +438,10 @@
     "2026-10-28": 7950.0,
     "2026-10-29": 8000.0,
     "2026-10-30": 7950.0,
-    "2026-11-02": 7950.0
+    "2026-11-02": 7950.0,
+    "2026-11-03": 7950.0
    },
    "BOAC": {
-    "2026-10-06": 11285.0,
     "2026-10-07": 11300.0,
     "2026-10-08": 11295.0,
     "2026-10-09": 11295.0,
@@ -461,10 +460,10 @@
     "2026-10-28": 11940.0,
     "2026-10-29": 12100.0,
     "2026-10-30": 11700.0,
-    "2026-11-02": 11700.0
+    "2026-11-02": 11700.0,
+    "2026-11-03": 11700.0
    },
    "BOAM": {
-    "2026-10-06": 6095.0,
     "2026-10-07": 6095.0,
     "2026-10-08": 6095.0,
     "2026-10-09": 6100.0,
@@ -483,10 +482,10 @@
     "2026-10-28": 5695.0,
     "2026-10-29": 5750.0,
     "2026-10-30": 5830.0,
-    "2026-11-02": 5845.0
+    "2026-11-02": 5845.0,
+    "2026-11-03": 5845.0
    },
    "BOAN": {
-    "2026-10-06": 4900.0,
     "2026-10-07": 5000.0,
     "2026-10-08": 4800.0,
     "2026-10-09": 4785.0,
@@ -505,10 +504,10 @@
     "2026-10-28": 5095.0,
     "2026-10-29": 5300.0,
     "2026-10-30": 5250.0,
-    "2026-11-02": 5195.0
+    "2026-11-02": 5195.0,
+    "2026-11-03": 5195.0
    },
    "BOAS": {
-    "2026-10-06": 8145.0,
     "2026-10-07": 8195.0,
     "2026-10-08": 8250.0,
     "2026-10-09": 8250.0,
@@ -527,10 +526,10 @@
     "2026-10-28": 8210.0,
     "2026-10-29": 8300.0,
     "2026-10-30": 8260.0,
-    "2026-11-02": 8210.0
+    "2026-11-02": 8210.0,
+    "2026-11-03": 8210.0
    },
    "CABC": {
-    "2026-10-06": 3300.0,
     "2026-10-07": 3250.0,
     "2026-10-08": 3175.0,
     "2026-10-09": 3180.0,
@@ -549,10 +548,10 @@
     "2026-10-28": 2995.0,
     "2026-10-29": 2925.0,
     "2026-10-30": 2920.0,
-    "2026-11-02": 2705.0
+    "2026-11-02": 2705.0,
+    "2026-11-03": 2705.0
    },
    "CBIBF": {
-    "2026-10-06": 31440.0,
     "2026-10-07": 31500.0,
     "2026-10-08": 31300.0,
     "2026-10-09": 30005.0,
@@ -571,10 +570,10 @@
     "2026-10-28": 32200.0,
     "2026-10-29": 31900.0,
     "2026-10-30": 31900.0,
-    "2026-11-02": 32000.0
+    "2026-11-02": 32000.0,
+    "2026-11-03": 32000.0
    },
    "CFAC": {
-    "2026-10-06": 1535.0,
     "2026-10-07": 1535.0,
     "2026-10-08": 1520.0,
     "2026-10-09": 1470.0,
@@ -593,10 +592,10 @@
     "2026-10-28": 1400.0,
     "2026-10-29": 1395.0,
     "2026-10-30": 1400.0,
-    "2026-11-02": 1300.0
+    "2026-11-02": 1300.0,
+    "2026-11-03": 1300.0
    },
    "CIEC": {
-    "2026-10-06": 6200.0,
     "2026-10-07": 6500.0,
     "2026-10-08": 6400.0,
     "2026-10-09": 6300.0,
@@ -615,10 +614,10 @@
     "2026-10-28": 5100.0,
     "2026-10-29": 5400.0,
     "2026-10-30": 5500.0,
-    "2026-11-02": 5295.0
+    "2026-11-02": 5295.0,
+    "2026-11-03": 5295.0
    },
    "ECOC": {
-    "2026-10-06": 16750.0,
     "2026-10-07": 16700.0,
     "2026-10-08": 16800.0,
     "2026-10-09": 16800.0,
@@ -637,10 +636,10 @@
     "2026-10-28": 16000.0,
     "2026-10-29": 15950.0,
     "2026-10-30": 15880.0,
-    "2026-11-02": 15885.0
+    "2026-11-02": 15885.0,
+    "2026-11-03": 15885.0
    },
    "ETIT": {
-    "2026-10-06": 65.0,
     "2026-10-07": 66.0,
     "2026-10-08": 68.0,
     "2026-10-09": 67.0,
@@ -659,10 +658,10 @@
     "2026-10-28": 61.0,
     "2026-10-29": 64.0,
     "2026-10-30": 63.0,
-    "2026-11-02": 61.0
+    "2026-11-02": 61.0,
+    "2026-11-03": 61.0
    },
    "FTSC": {
-    "2026-10-06": 1975.0,
     "2026-10-07": 1970.0,
     "2026-10-08": 1870.0,
     "2026-10-09": 1870.0,
@@ -681,10 +680,10 @@
     "2026-10-28": 1800.0,
     "2026-10-29": 1770.0,
     "2026-10-30": 1795.0,
-    "2026-11-02": 1720.0
+    "2026-11-02": 1720.0,
+    "2026-11-03": 1720.0
    },
    "LNBB": {
-    "2026-10-06": 3930.0,
     "2026-10-07": 3890.0,
     "2026-10-08": 3950.0,
     "2026-10-09": 3935.0,
@@ -703,10 +702,10 @@
     "2026-10-28": 3975.0,
     "2026-10-29": 3975.0,
     "2026-10-30": 3950.0,
-    "2026-11-02": 3935.0
+    "2026-11-02": 3935.0,
+    "2026-11-03": 3935.0
    },
    "NEIC": {
-    "2026-10-06": 2225.0,
     "2026-10-07": 2200.0,
     "2026-10-08": 2200.0,
     "2026-10-09": 2150.0,
@@ -725,10 +724,10 @@
     "2026-10-28": 2240.0,
     "2026-10-29": 2300.0,
     "2026-10-30": 2290.0,
-    "2026-11-02": 2145.0
+    "2026-11-02": 2145.0,
+    "2026-11-03": 2145.0
    },
    "NSBC": {
-    "2026-10-06": 21000.0,
     "2026-10-07": 21000.0,
     "2026-10-08": 21000.0,
     "2026-10-09": 20980.0,
@@ -747,10 +746,10 @@
     "2026-10-28": 19000.0,
     "2026-10-29": 18650.0,
     "2026-10-30": 18650.0,
-    "2026-11-02": 17995.0
+    "2026-11-02": 17995.0,
+    "2026-11-03": 17995.0
    },
    "NTLC": {
-    "2026-10-06": 15490.0,
     "2026-10-07": 15500.0,
     "2026-10-08": 15495.0,
     "2026-10-09": 15000.0,
@@ -769,10 +768,10 @@
     "2026-10-28": 13205.0,
     "2026-10-29": 13190.0,
     "2026-10-30": 13400.0,
-    "2026-11-02": 13495.0
+    "2026-11-02": 13495.0,
+    "2026-11-03": 13495.0
    },
    "ONTBF": {
-    "2026-10-06": 2945.0,
     "2026-10-07": 2770.0,
     "2026-10-08": 2945.0,
     "2026-10-09": 3005.0,
@@ -791,10 +790,10 @@
     "2026-10-28": 3060.0,
     "2026-10-29": 3060.0,
     "2026-10-30": 3050.0,
-    "2026-11-02": 3070.0
+    "2026-11-02": 3070.0,
+    "2026-11-03": 3070.0
    },
    "ORAC": {
-    "2026-10-06": 21390.0,
     "2026-10-07": 22000.0,
     "2026-10-08": 21990.0,
     "2026-10-09": 21995.0,
@@ -813,10 +812,10 @@
     "2026-10-28": 21500.0,
     "2026-10-29": 21000.0,
     "2026-10-30": 21300.0,
-    "2026-11-02": 21450.0
+    "2026-11-02": 21450.0,
+    "2026-11-03": 21450.0
    },
    "ORGT": {
-    "2026-10-06": 2950.0,
     "2026-10-07": 2990.0,
     "2026-10-08": 2890.0,
     "2026-10-09": 3000.0,
@@ -835,10 +834,10 @@
     "2026-10-28": 2680.0,
     "2026-10-29": 2700.0,
     "2026-10-30": 2705.0,
-    "2026-11-02": 2700.0
+    "2026-11-02": 2700.0,
+    "2026-11-03": 2700.0
    },
    "PALC": {
-    "2026-10-06": 8305.0,
     "2026-10-07": 8375.0,
     "2026-10-08": 7750.0,
     "2026-10-09": 7800.0,
@@ -857,10 +856,10 @@
     "2026-10-28": 7500.0,
     "2026-10-29": 7500.0,
     "2026-10-30": 7360.0,
-    "2026-11-02": 7380.0
+    "2026-11-02": 7380.0,
+    "2026-11-03": 7380.0
    },
    "PRSC": {
-    "2026-10-06": 4135.0,
     "2026-10-07": 4340.0,
     "2026-10-08": 4330.0,
     "2026-10-09": 4150.0,
@@ -879,10 +878,10 @@
     "2026-10-28": 3800.0,
     "2026-10-29": 3800.0,
     "2026-10-30": 3710.0,
-    "2026-11-02": 3750.0
+    "2026-11-02": 3750.0,
+    "2026-11-03": 3750.0
    },
    "SAFC": {
-    "2026-10-06": 4230.0,
     "2026-10-07": 4295.0,
     "2026-10-08": 4050.0,
     "2026-10-09": 4105.0,
@@ -901,10 +900,10 @@
     "2026-10-28": 3775.0,
     "2026-10-29": 3770.0,
     "2026-10-30": 3760.0,
-    "2026-11-02": 3700.0
+    "2026-11-02": 3700.0,
+    "2026-11-03": 3700.0
    },
    "SCRC": {
-    "2026-10-06": 2790.0,
     "2026-10-07": 2700.0,
     "2026-10-08": 2510.0,
     "2026-10-09": 2450.0,
@@ -923,10 +922,10 @@
     "2026-10-28": 2290.0,
     "2026-10-29": 2230.0,
     "2026-10-30": 2270.0,
-    "2026-11-02": 2200.0
+    "2026-11-02": 2200.0,
+    "2026-11-03": 2200.0
    },
    "SDCC": {
-    "2026-10-06": 12930.0,
     "2026-10-07": 13000.0,
     "2026-10-08": 12990.0,
     "2026-10-09": 12990.0,
@@ -945,10 +944,10 @@
     "2026-10-28": 12500.0,
     "2026-10-29": 12700.0,
     "2026-10-30": 12850.0,
-    "2026-11-02": 12300.0
+    "2026-11-02": 12300.0,
+    "2026-11-03": 12300.0
    },
    "SDSC": {
-    "2026-10-06": 3015.0,
     "2026-10-07": 3055.0,
     "2026-10-08": 2950.0,
     "2026-10-09": 2860.0,
@@ -967,10 +966,10 @@
     "2026-10-28": 2960.0,
     "2026-10-29": 2960.0,
     "2026-10-30": 3045.0,
-    "2026-11-02": 3080.0
+    "2026-11-02": 3080.0,
+    "2026-11-03": 3080.0
    },
    "SEMC": {
-    "2026-10-06": 1495.0,
     "2026-10-07": 1495.0,
     "2026-10-08": 1495.0,
     "2026-10-09": 1495.0,
@@ -989,10 +988,10 @@
     "2026-10-28": 1495.0,
     "2026-10-29": 1495.0,
     "2026-10-30": 1495.0,
-    "2026-11-02": 1495.0
+    "2026-11-02": 1495.0,
+    "2026-11-03": 1495.0
    },
    "SGBC": {
-    "2026-10-06": 39000.0,
     "2026-10-07": 39000.0,
     "2026-10-08": 39200.0,
     "2026-10-09": 39000.0,
@@ -1011,10 +1010,10 @@
     "2026-10-28": 38950.0,
     "2026-10-29": 39990.0,
     "2026-10-30": 39220.0,
-    "2026-11-02": 38505.0
+    "2026-11-02": 38505.0,
+    "2026-11-03": 38505.0
    },
    "SHEC": {
-    "2026-10-06": 2260.0,
     "2026-10-07": 2250.0,
     "2026-10-08": 2275.0,
     "2026-10-09": 2250.0,
@@ -1033,10 +1032,10 @@
     "2026-10-28": 2115.0,
     "2026-10-29": 2115.0,
     "2026-10-30": 2115.0,
-    "2026-11-02": 2120.0
+    "2026-11-02": 2120.0,
+    "2026-11-03": 2120.0
    },
    "SIBC": {
-    "2026-10-06": 9000.0,
     "2026-10-07": 8750.0,
     "2026-10-08": 8750.0,
     "2026-10-09": 8800.0,
@@ -1055,10 +1054,10 @@
     "2026-10-28": 8800.0,
     "2026-10-29": 8800.0,
     "2026-10-30": 8805.0,
-    "2026-11-02": 8800.0
+    "2026-11-02": 8800.0,
+    "2026-11-03": 8800.0
    },
    "SICC": {
-    "2026-10-06": 8400.0,
     "2026-10-07": 8400.0,
     "2026-10-08": 8400.0,
     "2026-10-09": 8400.0,
@@ -1077,10 +1076,10 @@
     "2026-10-28": 8400.0,
     "2026-10-29": 8400.0,
     "2026-10-30": 8400.0,
-    "2026-11-02": 8400.0
+    "2026-11-02": 8400.0,
+    "2026-11-03": 8400.0
    },
    "SIVC": {
-    "2026-10-06": 1985.0,
     "2026-10-07": 1985.0,
     "2026-10-08": 1930.0,
     "2026-10-09": 1960.0,
@@ -1099,10 +1098,10 @@
     "2026-10-28": 1670.0,
     "2026-10-29": 1685.0,
     "2026-10-30": 1695.0,
-    "2026-11-02": 1700.0
+    "2026-11-02": 1700.0,
+    "2026-11-03": 1700.0
    },
    "SLBC": {
-    "2026-10-06": 37400.0,
     "2026-10-07": 37400.0,
     "2026-10-08": 37090.0,
     "2026-10-09": 37950.0,
@@ -1121,10 +1120,10 @@
     "2026-10-28": 38710.0,
     "2026-10-29": 39000.0,
     "2026-10-30": 39990.0,
-    "2026-11-02": 38995.0
+    "2026-11-02": 38995.0,
+    "2026-11-03": 38995.0
    },
    "SMBC": {
-    "2026-10-06": 16000.0,
     "2026-10-07": 16500.0,
     "2026-10-08": 15900.0,
     "2026-10-09": 15800.0,
@@ -1143,10 +1142,10 @@
     "2026-10-28": 14600.0,
     "2026-10-29": 14595.0,
     "2026-10-30": 14600.0,
-    "2026-11-02": 15695.0
+    "2026-11-02": 15695.0,
+    "2026-11-03": 15695.0
    },
    "SNTS": {
-    "2026-10-06": 44990.0,
     "2026-10-07": 44980.0,
     "2026-10-08": 44980.0,
     "2026-10-09": 44980.0,
@@ -1165,10 +1164,10 @@
     "2026-10-28": 4200.0,
     "2026-10-29": 4150.0,
     "2026-10-30": 4350.0,
-    "2026-11-02": 4150.0
+    "2026-11-02": 4150.0,
+    "2026-11-03": 4150.0
    },
    "SOGC": {
-    "2026-10-06": 7895.0,
     "2026-10-07": 7895.0,
     "2026-10-08": 8000.0,
     "2026-10-09": 7985.0,
@@ -1187,10 +1186,10 @@
     "2026-10-28": 7505.0,
     "2026-10-29": 7600.0,
     "2026-10-30": 7655.0,
-    "2026-11-02": 7775.0
+    "2026-11-02": 7775.0,
+    "2026-11-03": 7775.0
    },
    "SPHC": {
-    "2026-10-06": 8000.0,
     "2026-10-07": 8005.0,
     "2026-10-08": 8050.0,
     "2026-10-09": 8000.0,
@@ -1209,10 +1208,10 @@
     "2026-10-28": 8010.0,
     "2026-10-29": 8150.0,
     "2026-10-30": 8300.0,
-    "2026-11-02": 7700.0
+    "2026-11-02": 7700.0,
+    "2026-11-03": 7700.0
    },
    "STAC": {
-    "2026-10-06": 2100.0,
     "2026-10-07": 2065.0,
     "2026-10-08": 2195.0,
     "2026-10-09": 2110.0,
@@ -1231,10 +1230,10 @@
     "2026-10-28": 1790.0,
     "2026-10-29": 1745.0,
     "2026-10-30": 1780.0,
-    "2026-11-02": 1770.0
+    "2026-11-02": 1770.0,
+    "2026-11-03": 1770.0
    },
    "STBC": {
-    "2026-10-06": 21800.0,
     "2026-10-07": 21770.0,
     "2026-10-08": 21695.0,
     "2026-10-09": 21300.0,
@@ -1253,10 +1252,10 @@
     "2026-10-28": 21250.0,
     "2026-10-29": 21300.0,
     "2026-10-30": 21500.0,
-    "2026-11-02": 20175.0
+    "2026-11-02": 20175.0,
+    "2026-11-03": 20175.0
    },
    "TTLC": {
-    "2026-10-06": 3025.0,
     "2026-10-07": 2990.0,
     "2026-10-08": 2980.0,
     "2026-10-09": 2870.0,
@@ -1275,10 +1274,10 @@
     "2026-10-28": 2995.0,
     "2026-10-29": 3025.0,
     "2026-10-30": 3100.0,
-    "2026-11-02": 3010.0
+    "2026-11-02": 3010.0,
+    "2026-11-03": 3010.0
    },
    "TTLS": {
-    "2026-10-06": 3620.0,
     "2026-10-07": 3610.0,
     "2026-10-08": 3800.0,
     "2026-10-09": 3650.0,
@@ -1297,10 +1296,10 @@
     "2026-10-28": 3700.0,
     "2026-10-29": 3700.0,
     "2026-10-30": 3700.0,
-    "2026-11-02": 3700.0
+    "2026-11-02": 3700.0,
+    "2026-11-03": 3700.0
    },
    "UNLC": {
-    "2026-10-06": 47750.0,
     "2026-10-07": 48000.0,
     "2026-10-08": 48000.0,
     "2026-10-09": 48000.0,
@@ -1319,10 +1318,10 @@
     "2026-10-28": 45200.0,
     "2026-10-29": 46000.0,
     "2026-10-30": 49000.0,
-    "2026-11-02": 48000.0
+    "2026-11-02": 48000.0,
+    "2026-11-03": 48000.0
    },
    "UNXC": {
-    "2026-10-06": 2295.0,
     "2026-10-07": 2300.0,
     "2026-10-08": 2310.0,
     "2026-10-09": 2285.0,
@@ -1341,13 +1340,13 @@
     "2026-10-28": 2000.0,
     "2026-10-29": 2100.0,
     "2026-10-30": 2120.0,
-    "2026-11-02": 2115.0
+    "2026-11-02": 2115.0,
+    "2026-11-03": 2115.0
    },
    "SVOC": {
     "2019-05-10": 2395.0
    },
    "BBGC": {
-    "2026-10-06": 9650.0,
     "2026-10-07": 9950.0,
     "2026-10-08": 10200.0,
     "2026-10-09": 10400.0,
@@ -1366,17 +1365,94 @@
     "2026-10-28": 9900.0,
     "2026-10-29": 9880.0,
     "2026-10-30": 9850.0,
-    "2026-11-02": 9785.0
+    "2026-11-02": 9785.0,
+    "2026-11-03": 9785.0
    }
   },
-  "derniere_notif": "2026-11-02",
+  "derniere_notif": "2026-11-03",
   "alertes_notifiees": {},
   "_indice_prec": {
-   "composite": 534.71,
-   "date": "2026-11-02",
+   "composite": 525.3,
+   "date": "2026-11-03",
    "source": "https://www.brvm.org/fr/indices/0"
   },
   "_rapports_prec": [
+   {
+    "date": "2026-11-02",
+    "societe": "BANK OF AFRICA BN",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "BOA BN : Rapport d'activités - 3e trimestre 2026",
+      "f": "20261102_-_rapport_dactivites_-_3e_trimestre_2026_-_boa_bn.pdf"
+     }
+    ],
+    "titre": "BOA BN : Rapport d'activités - 3e trimestre 2026"
+   },
+   {
+    "date": "2026-11-02",
+    "societe": "BANK OF AFRICA CI",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "BOA CI : Rapport d'activités - 3e trimestre 2026",
+      "f": "20261102_-_rapport_dactivites_-_3e_trimestre_2026_-_boa_ci.pdf"
+     }
+    ],
+    "titre": "BOA CI : Rapport d'activités - 3e trimestre 2026"
+   },
+   {
+    "date": "2026-11-02",
+    "societe": "FILTISAC CI",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "FILTISAC CI : Rapport d'activités - 1er semestre 2026",
+      "f": "20261102_-_rapport_dactivites_-_1er_semestre_2026_-_filtisac_ci.pdf"
+     },
+     {
+      "t": "FILTISAC CI : Rapport d'activités - 3e trimestre 2026",
+      "f": "20261102_-_rapport_dactivites_-_3e_trimestre_2026_-_filtisac_ci.pdf"
+     }
+    ],
+    "titre": "FILTISAC CI : 2 documents publies"
+   },
+   {
+    "date": "2026-11-02",
+    "societe": "SAFCA CI",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "SAFCA CI : Rapport d'activités - 3e trimestre 2026",
+      "f": "20261102_-_rapport_dactivites_-_3e_trimestre_2026_-_safca_ci.pdf"
+     }
+    ],
+    "titre": "SAFCA CI : Rapport d'activités - 3e trimestre 2026"
+   },
+   {
+    "date": "2026-11-02",
+    "societe": "SIB",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "SIB CI : Rapport d'activités - 3e trimestre 2026",
+      "f": "20261102_-_rapport_dactivites_-_3e_trimestre_2026_-_sib_ci.pdf"
+     }
+    ],
+    "titre": "SIB CI : Rapport d'activités - 3e trimestre 2026"
+   },
+   {
+    "date": "2026-11-02",
+    "societe": "SUCRIVOIRE",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "SUCRIVOIRE CI  : Rapport d'activités - 1er semestre 2026",
+      "f": "20261102_-_rapport_dactivites_-_1er_semestre_2026_-_sucrivoire_ci.pdf"
+     }
+    ],
+    "titre": "SUCRIVOIRE CI  : Rapport d'activités - 1er semestre 2026"
+   },
    {
     "date": "2026-10-30",
     "societe": "BICI CI",
@@ -1407,16 +1483,16 @@
     "type": "rapport",
     "docs": [
      {
-      "t": "NEI-CEDA CI : Rapport d'activités - 1er semestre 2026",
-      "f": "20261030_-_rapport_dactivites_-_1er_semestre_2026_-_nei-ceda_ci.pdf"
-     },
-     {
       "t": "NEI-CEDA CI : Attestation des Commissaires Aux Comptes sur le rapport d'activités - 1er se",
       "f": "20261030_-_attestation_des_commissaires_aux_comptes_sur_le_rapport_dactivites_-_1er_semestre_2026_-_nei-ceda_ci.pdf"
      },
      {
       "t": "NEI-CEDA CI : Rapport d'activités - 3e trimestre 2026",
       "f": "20261030_-_rapport_dactivites_-_3e_trimestre_2026_-_nei-ceda_ci.pdf"
+     },
+     {
+      "t": "NEI-CEDA CI : Rapport d'activités - 1er semestre 2026",
+      "f": "20261030_-_rapport_dactivites_-_1er_semestre_2026_-_nei-ceda_ci.pdf"
      }
     ],
     "titre": "NEI-CEDA CI : 3 documents publies"
@@ -1527,12 +1603,12 @@
     "type": "rapport",
     "docs": [
      {
-      "t": "SODE CI : Rapport d'activités - 3e trimestre 2026",
-      "f": "20261030_-_rapport_dactivites_-_3e_trimestre_2026_-_sode_ci.pdf"
-     },
-     {
       "t": "SODE CI : Rapport d'activités - 1er semestre 2026",
       "f": "20261030_-_rapport_dactivites_-_1er_semestre_2026_-_sode_ci.pdf"
+     },
+     {
+      "t": "SODE CI : Rapport d'activités - 3e trimestre 2026",
+      "f": "20261030_-_rapport_dactivites_-_3e_trimestre_2026_-_sode_ci.pdf"
      }
     ],
     "titre": "SODECI : 2 documents publies"
@@ -1732,89 +1808,9 @@
      }
     ],
     "titre": "ECOBANK CI : Rapport d'activités - 3e trimestre 2026"
-   },
-   {
-    "date": "2026-10-27",
-    "societe": "PALM CI",
-    "type": "rapport",
-    "docs": [
-     {
-      "t": "PALM CI : Rapport d'activités - 3e trimestre 2026",
-      "f": "20261027_-_rapport_dactivites_-_3e_trimestre_2026_-_palm_ci.pdf"
-     }
-    ],
-    "titre": "PALM CI : Rapport d'activités - 3e trimestre 2026"
-   },
-   {
-    "date": "2026-10-27",
-    "societe": "TOTAL",
-    "type": "rapport",
-    "docs": [
-     {
-      "t": "TOTALENERGIES MARKETING CI : Rapport d'activités - 1er semestre 2026",
-      "f": "20261027_-_rapport_dactivites_-_1er_semestre_2026_-_totalenergies_marketing_ci.pdf"
-     },
-     {
-      "t": "TOTALENERGIES MARKETING CI : Attestation des Commissaires Aux Comptes sur le rapport d'act",
-      "f": "20261027_-_attestation_des_commissaires_aux_comptes_sur_le_rapport_dactivites_-_1er_semestre_2026_-_totalenergies_marketing_ci.pdf"
-     },
-     {
-      "t": "TOTALENERGIES MARKETING CI  : Rapport d'activités - 3e trimestre 2026",
-      "f": "20261027_-_rapport_dactivites_-_3e_trimestre_2026_-_totalenergies_marketing_ci.pdf"
-     }
-    ],
-    "titre": "TOTAL : 3 documents publies"
-   },
-   {
-    "date": "2026-10-26",
-    "societe": "BANK OF AFRICA BF",
-    "type": "rapport",
-    "docs": [
-     {
-      "t": "BOA BF : Rapport d'activités - 3e trimestre 2026",
-      "f": "20261026_-_rapport_dactivites_-_3e_trimestre_2026_-_boa_bf.pdf"
-     }
-    ],
-    "titre": "BOA BF : Rapport d'activités - 3e trimestre 2026"
-   },
-   {
-    "date": "2026-10-26",
-    "societe": "BANK OF AFRICA NG",
-    "type": "rapport",
-    "docs": [
-     {
-      "t": "BOA NG : Rapport d'activités - 3e trimestre 2026",
-      "f": "20261026_-_rapport_dactivites_-_3e_trimestre_2026_-_boa_ng.pdf"
-     }
-    ],
-    "titre": "BOA NG : Rapport d'activités - 3e trimestre 2026"
-   },
-   {
-    "date": "2026-10-23",
-    "societe": "NSBC",
-    "type": "rapport",
-    "docs": [
-     {
-      "t": "NSIA BANQUE CI : Rapport d'activités - 1er semestre 2026",
-      "f": "20261023_-_rapport_dactivites_-_1er_semestre_2026_-_nsia_banque_ci.pdf"
-     }
-    ],
-    "titre": "NSIA BANQUE CI : Rapport d'activités - 1er semestre 2026"
-   },
-   {
-    "date": "2026-10-23",
-    "societe": "ONATEL BF",
-    "type": "rapport",
-    "docs": [
-     {
-      "t": "MOOV BF (Ex ONATEL) : Rapport d'activités - 3e trimestre 2026",
-      "f": "20261023_-_rapport_dactivites_-_3e_trimestre_2026_-_onatel_bf.pdf"
-     }
-    ],
-    "titre": "MOOV BF (Ex ONATEL) : Rapport d'activités - 3e trimestre 2026"
    }
   ],
-  "_rapports_scan": "2026-11-02",
+  "_rapports_scan": "2026-11-03",
   "_annonces_prec": [
    {
     "date": "2026-10-26",
@@ -2111,6 +2107,82 @@
     "type": "ago"
    },
    {
+    "date": "2026-11-02",
+    "societe": "BANK OF AFRICA BN",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "BOA BN : Rapport d'activités - 3e trimestre 2026",
+      "f": "20261102_-_rapport_dactivites_-_3e_trimestre_2026_-_boa_bn.pdf"
+     }
+    ],
+    "titre": "BOA BN : Rapport d'activités - 3e trimestre 2026"
+   },
+   {
+    "date": "2026-11-02",
+    "societe": "BANK OF AFRICA CI",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "BOA CI : Rapport d'activités - 3e trimestre 2026",
+      "f": "20261102_-_rapport_dactivites_-_3e_trimestre_2026_-_boa_ci.pdf"
+     }
+    ],
+    "titre": "BOA CI : Rapport d'activités - 3e trimestre 2026"
+   },
+   {
+    "date": "2026-11-02",
+    "societe": "FILTISAC CI",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "FILTISAC CI : Rapport d'activités - 1er semestre 2026",
+      "f": "20261102_-_rapport_dactivites_-_1er_semestre_2026_-_filtisac_ci.pdf"
+     },
+     {
+      "t": "FILTISAC CI : Rapport d'activités - 3e trimestre 2026",
+      "f": "20261102_-_rapport_dactivites_-_3e_trimestre_2026_-_filtisac_ci.pdf"
+     }
+    ],
+    "titre": "FILTISAC CI : 2 documents publies"
+   },
+   {
+    "date": "2026-11-02",
+    "societe": "SAFCA CI",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "SAFCA CI : Rapport d'activités - 3e trimestre 2026",
+      "f": "20261102_-_rapport_dactivites_-_3e_trimestre_2026_-_safca_ci.pdf"
+     }
+    ],
+    "titre": "SAFCA CI : Rapport d'activités - 3e trimestre 2026"
+   },
+   {
+    "date": "2026-11-02",
+    "societe": "SIB",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "SIB CI : Rapport d'activités - 3e trimestre 2026",
+      "f": "20261102_-_rapport_dactivites_-_3e_trimestre_2026_-_sib_ci.pdf"
+     }
+    ],
+    "titre": "SIB CI : Rapport d'activités - 3e trimestre 2026"
+   },
+   {
+    "date": "2026-11-02",
+    "societe": "SUCRIVOIRE",
+    "type": "rapport",
+    "docs": [
+     {
+      "t": "SUCRIVOIRE CI  : Rapport d'activités - 1er semestre 2026",
+      "f": "20261102_-_rapport_dactivites_-_1er_semestre_2026_-_sucrivoire_ci.pdf"
+     }
+    ],
+    "titre": "SUCRIVOIRE CI  : Rapport d'activités - 1er semestre 2026"
+   },
+   {
     "date": "2026-10-30",
     "societe": "BICI CI",
     "type": "rapport",
@@ -2140,16 +2212,16 @@
     "type": "rapport",
     "docs": [
      {
-      "t": "NEI-CEDA CI : Rapport d'activités - 1er semestre 2026",
-      "f": "20261030_-_rapport_dactivites_-_1er_semestre_2026_-_nei-ceda_ci.pdf"
-     },
-     {
       "t": "NEI-CEDA CI : Attestation des Commissaires Aux Comptes sur le rapport d'activités - 1er se",
       "f": "20261030_-_attestation_des_commissaires_aux_comptes_sur_le_rapport_dactivites_-_1er_semestre_2026_-_nei-ceda_ci.pdf"
      },
      {
       "t": "NEI-CEDA CI : Rapport d'activités - 3e trimestre 2026",
       "f": "20261030_-_rapport_dactivites_-_3e_trimestre_2026_-_nei-ceda_ci.pdf"
+     },
+     {
+      "t": "NEI-CEDA CI : Rapport d'activités - 1er semestre 2026",
+      "f": "20261030_-_rapport_dactivites_-_1er_semestre_2026_-_nei-ceda_ci.pdf"
      }
     ],
     "titre": "NEI-CEDA CI : 3 documents publies"
@@ -2260,12 +2332,12 @@
     "type": "rapport",
     "docs": [
      {
-      "t": "SODE CI : Rapport d'activités - 3e trimestre 2026",
-      "f": "20261030_-_rapport_dactivites_-_3e_trimestre_2026_-_sode_ci.pdf"
-     },
-     {
       "t": "SODE CI : Rapport d'activités - 1er semestre 2026",
       "f": "20261030_-_rapport_dactivites_-_1er_semestre_2026_-_sode_ci.pdf"
+     },
+     {
+      "t": "SODE CI : Rapport d'activités - 3e trimestre 2026",
+      "f": "20261030_-_rapport_dactivites_-_3e_trimestre_2026_-_sode_ci.pdf"
      }
     ],
     "titre": "SODECI : 2 documents publies"
@@ -2465,92 +2537,12 @@
      }
     ],
     "titre": "ECOBANK CI : Rapport d'activités - 3e trimestre 2026"
-   },
-   {
-    "date": "2026-10-27",
-    "societe": "PALM CI",
-    "type": "rapport",
-    "docs": [
-     {
-      "t": "PALM CI : Rapport d'activités - 3e trimestre 2026",
-      "f": "20261027_-_rapport_dactivites_-_3e_trimestre_2026_-_palm_ci.pdf"
-     }
-    ],
-    "titre": "PALM CI : Rapport d'activités - 3e trimestre 2026"
-   },
-   {
-    "date": "2026-10-27",
-    "societe": "TOTAL",
-    "type": "rapport",
-    "docs": [
-     {
-      "t": "TOTALENERGIES MARKETING CI : Rapport d'activités - 1er semestre 2026",
-      "f": "20261027_-_rapport_dactivites_-_1er_semestre_2026_-_totalenergies_marketing_ci.pdf"
-     },
-     {
-      "t": "TOTALENERGIES MARKETING CI : Attestation des Commissaires Aux Comptes sur le rapport d'act",
-      "f": "20261027_-_attestation_des_commissaires_aux_comptes_sur_le_rapport_dactivites_-_1er_semestre_2026_-_totalenergies_marketing_ci.pdf"
-     },
-     {
-      "t": "TOTALENERGIES MARKETING CI  : Rapport d'activités - 3e trimestre 2026",
-      "f": "20261027_-_rapport_dactivites_-_3e_trimestre_2026_-_totalenergies_marketing_ci.pdf"
-     }
-    ],
-    "titre": "TOTAL : 3 documents publies"
-   },
-   {
-    "date": "2026-10-26",
-    "societe": "BANK OF AFRICA BF",
-    "type": "rapport",
-    "docs": [
-     {
-      "t": "BOA BF : Rapport d'activités - 3e trimestre 2026",
-      "f": "20261026_-_rapport_dactivites_-_3e_trimestre_2026_-_boa_bf.pdf"
-     }
-    ],
-    "titre": "BOA BF : Rapport d'activités - 3e trimestre 2026"
-   },
-   {
-    "date": "2026-10-26",
-    "societe": "BANK OF AFRICA NG",
-    "type": "rapport",
-    "docs": [
-     {
-      "t": "BOA NG : Rapport d'activités - 3e trimestre 2026",
-      "f": "20261026_-_rapport_dactivites_-_3e_trimestre_2026_-_boa_ng.pdf"
-     }
-    ],
-    "titre": "BOA NG : Rapport d'activités - 3e trimestre 2026"
-   },
-   {
-    "date": "2026-10-23",
-    "societe": "NSBC",
-    "type": "rapport",
-    "docs": [
-     {
-      "t": "NSIA BANQUE CI : Rapport d'activités - 1er semestre 2026",
-      "f": "20261023_-_rapport_dactivites_-_1er_semestre_2026_-_nsia_banque_ci.pdf"
-     }
-    ],
-    "titre": "NSIA BANQUE CI : Rapport d'activités - 1er semestre 2026"
-   },
-   {
-    "date": "2026-10-23",
-    "societe": "ONATEL BF",
-    "type": "rapport",
-    "docs": [
-     {
-      "t": "MOOV BF (Ex ONATEL) : Rapport d'activités - 3e trimestre 2026",
-      "f": "20261023_-_rapport_dactivites_-_3e_trimestre_2026_-_onatel_bf.pdf"
-     }
-    ],
-    "titre": "MOOV BF (Ex ONATEL) : Rapport d'activités - 3e trimestre 2026"
    }
   ]
  },
  "_indice": {
-  "composite": 534.71,
-  "date": "2026-11-02",
+  "composite": 525.3,
+  "date": "2026-11-03",
   "source": "https://www.brvm.org/fr/indices/0"
  },
  "_annonces": [
@@ -2849,6 +2841,82 @@
    "type": "ago"
   },
   {
+   "date": "2026-11-02",
+   "societe": "BANK OF AFRICA BN",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "BOA BN : Rapport d'activités - 3e trimestre 2026",
+     "f": "20261102_-_rapport_dactivites_-_3e_trimestre_2026_-_boa_bn.pdf"
+    }
+   ],
+   "titre": "BOA BN : Rapport d'activités - 3e trimestre 2026"
+  },
+  {
+   "date": "2026-11-02",
+   "societe": "BANK OF AFRICA CI",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "BOA CI : Rapport d'activités - 3e trimestre 2026",
+     "f": "20261102_-_rapport_dactivites_-_3e_trimestre_2026_-_boa_ci.pdf"
+    }
+   ],
+   "titre": "BOA CI : Rapport d'activités - 3e trimestre 2026"
+  },
+  {
+   "date": "2026-11-02",
+   "societe": "FILTISAC CI",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "FILTISAC CI : Rapport d'activités - 1er semestre 2026",
+     "f": "20261102_-_rapport_dactivites_-_1er_semestre_2026_-_filtisac_ci.pdf"
+    },
+    {
+     "t": "FILTISAC CI : Rapport d'activités - 3e trimestre 2026",
+     "f": "20261102_-_rapport_dactivites_-_3e_trimestre_2026_-_filtisac_ci.pdf"
+    }
+   ],
+   "titre": "FILTISAC CI : 2 documents publies"
+  },
+  {
+   "date": "2026-11-02",
+   "societe": "SAFCA CI",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "SAFCA CI : Rapport d'activités - 3e trimestre 2026",
+     "f": "20261102_-_rapport_dactivites_-_3e_trimestre_2026_-_safca_ci.pdf"
+    }
+   ],
+   "titre": "SAFCA CI : Rapport d'activités - 3e trimestre 2026"
+  },
+  {
+   "date": "2026-11-02",
+   "societe": "SIB",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "SIB CI : Rapport d'activités - 3e trimestre 2026",
+     "f": "20261102_-_rapport_dactivites_-_3e_trimestre_2026_-_sib_ci.pdf"
+    }
+   ],
+   "titre": "SIB CI : Rapport d'activités - 3e trimestre 2026"
+  },
+  {
+   "date": "2026-11-02",
+   "societe": "SUCRIVOIRE",
+   "type": "rapport",
+   "docs": [
+    {
+     "t": "SUCRIVOIRE CI  : Rapport d'activités - 1er semestre 2026",
+     "f": "20261102_-_rapport_dactivites_-_1er_semestre_2026_-_sucrivoire_ci.pdf"
+    }
+   ],
+   "titre": "SUCRIVOIRE CI  : Rapport d'activités - 1er semestre 2026"
+  },
+  {
    "date": "2026-10-30",
    "societe": "BICI CI",
    "type": "rapport",
@@ -2878,16 +2946,16 @@
    "type": "rapport",
    "docs": [
     {
-     "t": "NEI-CEDA CI : Rapport d'activités - 1er semestre 2026",
-     "f": "20261030_-_rapport_dactivites_-_1er_semestre_2026_-_nei-ceda_ci.pdf"
-    },
-    {
      "t": "NEI-CEDA CI : Attestation des Commissaires Aux Comptes sur le rapport d'activités - 1er se",
      "f": "20261030_-_attestation_des_commissaires_aux_comptes_sur_le_rapport_dactivites_-_1er_semestre_2026_-_nei-ceda_ci.pdf"
     },
     {
      "t": "NEI-CEDA CI : Rapport d'activités - 3e trimestre 2026",
      "f": "20261030_-_rapport_dactivites_-_3e_trimestre_2026_-_nei-ceda_ci.pdf"
+    },
+    {
+     "t": "NEI-CEDA CI : Rapport d'activités - 1er semestre 2026",
+     "f": "20261030_-_rapport_dactivites_-_1er_semestre_2026_-_nei-ceda_ci.pdf"
     }
    ],
    "titre": "NEI-CEDA CI : 3 documents publies"
@@ -2998,12 +3066,12 @@
    "type": "rapport",
    "docs": [
     {
-     "t": "SODE CI : Rapport d'activités - 3e trimestre 2026",
-     "f": "20261030_-_rapport_dactivites_-_3e_trimestre_2026_-_sode_ci.pdf"
-    },
-    {
      "t": "SODE CI : Rapport d'activités - 1er semestre 2026",
      "f": "20261030_-_rapport_dactivites_-_1er_semestre_2026_-_sode_ci.pdf"
+    },
+    {
+     "t": "SODE CI : Rapport d'activités - 3e trimestre 2026",
+     "f": "20261030_-_rapport_dactivites_-_3e_trimestre_2026_-_sode_ci.pdf"
     }
    ],
    "titre": "SODECI : 2 documents publies"
@@ -3203,86 +3271,6 @@
     }
    ],
    "titre": "ECOBANK CI : Rapport d'activités - 3e trimestre 2026"
-  },
-  {
-   "date": "2026-10-27",
-   "societe": "PALM CI",
-   "type": "rapport",
-   "docs": [
-    {
-     "t": "PALM CI : Rapport d'activités - 3e trimestre 2026",
-     "f": "20261027_-_rapport_dactivites_-_3e_trimestre_2026_-_palm_ci.pdf"
-    }
-   ],
-   "titre": "PALM CI : Rapport d'activités - 3e trimestre 2026"
-  },
-  {
-   "date": "2026-10-27",
-   "societe": "TOTAL",
-   "type": "rapport",
-   "docs": [
-    {
-     "t": "TOTALENERGIES MARKETING CI : Rapport d'activités - 1er semestre 2026",
-     "f": "20261027_-_rapport_dactivites_-_1er_semestre_2026_-_totalenergies_marketing_ci.pdf"
-    },
-    {
-     "t": "TOTALENERGIES MARKETING CI : Attestation des Commissaires Aux Comptes sur le rapport d'act",
-     "f": "20261027_-_attestation_des_commissaires_aux_comptes_sur_le_rapport_dactivites_-_1er_semestre_2026_-_totalenergies_marketing_ci.pdf"
-    },
-    {
-     "t": "TOTALENERGIES MARKETING CI  : Rapport d'activités - 3e trimestre 2026",
-     "f": "20261027_-_rapport_dactivites_-_3e_trimestre_2026_-_totalenergies_marketing_ci.pdf"
-    }
-   ],
-   "titre": "TOTAL : 3 documents publies"
-  },
-  {
-   "date": "2026-10-26",
-   "societe": "BANK OF AFRICA BF",
-   "type": "rapport",
-   "docs": [
-    {
-     "t": "BOA BF : Rapport d'activités - 3e trimestre 2026",
-     "f": "20261026_-_rapport_dactivites_-_3e_trimestre_2026_-_boa_bf.pdf"
-    }
-   ],
-   "titre": "BOA BF : Rapport d'activités - 3e trimestre 2026"
-  },
-  {
-   "date": "2026-10-26",
-   "societe": "BANK OF AFRICA NG",
-   "type": "rapport",
-   "docs": [
-    {
-     "t": "BOA NG : Rapport d'activités - 3e trimestre 2026",
-     "f": "20261026_-_rapport_dactivites_-_3e_trimestre_2026_-_boa_ng.pdf"
-    }
-   ],
-   "titre": "BOA NG : Rapport d'activités - 3e trimestre 2026"
-  },
-  {
-   "date": "2026-10-23",
-   "societe": "NSBC",
-   "type": "rapport",
-   "docs": [
-    {
-     "t": "NSIA BANQUE CI : Rapport d'activités - 1er semestre 2026",
-     "f": "20261023_-_rapport_dactivites_-_1er_semestre_2026_-_nsia_banque_ci.pdf"
-    }
-   ],
-   "titre": "NSIA BANQUE CI : Rapport d'activités - 1er semestre 2026"
-  },
-  {
-   "date": "2026-10-23",
-   "societe": "ONATEL BF",
-   "type": "rapport",
-   "docs": [
-    {
-     "t": "MOOV BF (Ex ONATEL) : Rapport d'activités - 3e trimestre 2026",
-     "f": "20261023_-_rapport_dactivites_-_3e_trimestre_2026_-_onatel_bf.pdf"
-    }
-   ],
-   "titre": "MOOV BF (Ex ONATEL) : Rapport d'activités - 3e trimestre 2026"
   }
  ]
 }
