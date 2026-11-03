@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-11-03T14:35:22+00:00",
-  "updated_human": "03/11/2026 14:35 UTC",
+  "updated": "2026-11-03T14:50:13+00:00",
+  "updated_human": "03/11/2026 14:50 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -128,7 +128,7 @@
   "source": "brvm.org"
  },
  "NEIC": {
-  "actuel": 1985.0,
+  "actuel": 2140.0,
   "veille": 2145,
   "date": "2026-11-03",
   "source": "brvm.org"
@@ -176,7 +176,7 @@
   "source": "brvm.org"
  },
  "SAFC": {
-  "actuel": 3725.0,
+  "actuel": 3945.0,
   "veille": 3700,
   "date": "2026-11-03",
   "source": "brvm.org"
@@ -725,7 +725,7 @@
     "2026-10-29": 2300.0,
     "2026-10-30": 2290.0,
     "2026-11-02": 2145.0,
-    "2026-11-03": 1985.0
+    "2026-11-03": 2140.0
    },
    "NSBC": {
     "2026-10-07": 21000.0,
@@ -901,7 +901,7 @@
     "2026-10-29": 3770.0,
     "2026-10-30": 3760.0,
     "2026-11-02": 3700.0,
-    "2026-11-03": 3725.0
+    "2026-11-03": 3945.0
    },
    "SCRC": {
     "2026-10-07": 2700.0,
@@ -2072,14 +2072,14 @@
    },
    {
     "date": "2026-06-29",
-    "societe": "AIR LIQUIDE CI",
-    "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
+    "societe": "LNB",
+    "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-29",
-    "societe": "LNB",
-    "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
+    "societe": "AIR LIQUIDE CI",
+    "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -2806,14 +2806,14 @@
   },
   {
    "date": "2026-06-29",
-   "societe": "AIR LIQUIDE CI",
-   "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
+   "societe": "LNB",
+   "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-29",
-   "societe": "LNB",
-   "titre": "LNB BN (Annule et remplace le précédent) : Avis de convocation - Assemblée Générale Ordinaire",
+   "societe": "AIR LIQUIDE CI",
+   "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
