@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-11-03T14:05:13+00:00",
-  "updated_human": "03/11/2026 14:05 UTC",
+  "updated": "2026-11-03T14:20:12+00:00",
+  "updated_human": "03/11/2026 14:20 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -266,7 +266,7 @@
   "source": "brvm.org"
  },
  "STAC": {
-  "actuel": 1800.0,
+  "actuel": 1890.0,
   "veille": 1770,
   "date": "2026-11-03",
   "source": "brvm.org"
@@ -1231,7 +1231,7 @@
     "2026-10-29": 1745.0,
     "2026-10-30": 1780.0,
     "2026-11-02": 1770.0,
-    "2026-11-03": 1800.0
+    "2026-11-03": 1890.0
    },
    "STBC": {
     "2026-10-07": 21770.0,
@@ -2031,6 +2031,12 @@
    {
     "date": "2026-08-03",
     "societe": "BOLLORE TRANSPORT & LOGISTICS",
+    "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
+    "type": "ago"
+   },
+   {
+    "date": "2026-08-03",
+    "societe": "BOLLORE TRANSPORT & LOGISTICS",
     "titre": "AFRICA GLOBAL LOGISTICS CI : Pouvoir - Assemblée Générale Mixte",
     "type": "ago"
    },
@@ -2038,12 +2044,6 @@
     "date": "2026-08-03",
     "societe": "BOLLORE TRANSPORT & LOGISTICS",
     "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
-    "type": "ago"
-   },
-   {
-    "date": "2026-08-03",
-    "societe": "BOLLORE TRANSPORT & LOGISTICS",
-    "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
     "type": "ago"
    },
    {
@@ -2061,13 +2061,13 @@
    {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
-    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
-    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -2765,6 +2765,12 @@
   {
    "date": "2026-08-03",
    "societe": "BOLLORE TRANSPORT & LOGISTICS",
+   "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
+   "type": "ago"
+  },
+  {
+   "date": "2026-08-03",
+   "societe": "BOLLORE TRANSPORT & LOGISTICS",
    "titre": "AFRICA GLOBAL LOGISTICS CI : Pouvoir - Assemblée Générale Mixte",
    "type": "ago"
   },
@@ -2772,12 +2778,6 @@
    "date": "2026-08-03",
    "societe": "BOLLORE TRANSPORT & LOGISTICS",
    "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
-   "type": "ago"
-  },
-  {
-   "date": "2026-08-03",
-   "societe": "BOLLORE TRANSPORT & LOGISTICS",
-   "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
    "type": "ago"
   },
   {
@@ -2795,13 +2795,13 @@
   {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
-   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
-   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
