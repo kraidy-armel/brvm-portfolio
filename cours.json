@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-11-06T14:05:11+00:00",
-  "updated_human": "06/11/2026 14:05 UTC",
+  "updated": "2026-11-06T14:20:12+00:00",
+  "updated_human": "06/11/2026 14:20 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -110,7 +110,7 @@
   "source": "brvm.org"
  },
  "ETIT": {
-  "actuel": 59.0,
+  "actuel": 60.0,
   "veille": 59,
   "date": "2026-11-06",
   "source": "brvm.org"
@@ -659,7 +659,7 @@
     "2026-11-03": 60.0,
     "2026-11-04": 59.0,
     "2026-11-05": 59.0,
-    "2026-11-06": 59.0
+    "2026-11-06": 60.0
    },
    "FTSC": {
     "2026-10-12": 1860.0,
