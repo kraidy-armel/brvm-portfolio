@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-11-11T13:35:12+00:00",
-  "updated_human": "11/11/2026 13:35 UTC",
+  "updated": "2026-11-11T13:50:09+00:00",
+  "updated_human": "11/11/2026 13:50 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -20,7 +20,7 @@
   "source": "brvm.org"
  },
  "BBGC": {
-  "actuel": 9350.0,
+  "actuel": 9480.0,
   "veille": 9480,
   "date": "2026-11-11",
   "source": "brvm.org"
@@ -74,7 +74,7 @@
   "source": "brvm.org"
  },
  "BOAS": {
-  "actuel": 8155.0,
+  "actuel": 8150.0,
   "veille": 8240,
   "date": "2026-11-11",
   "source": "brvm.org"
@@ -86,13 +86,13 @@
   "source": "brvm.org"
  },
  "CBIBF": {
-  "actuel": 31000.0,
-  "veille": 31000,
+  "actuel": 31500.0,
+  "veille": 31001,
   "date": "2026-11-11",
   "source": "brvm.org"
  },
  "CFAC": {
-  "actuel": 1285.0,
+  "actuel": 1260.0,
   "veille": 1260,
   "date": "2026-11-11",
   "source": "brvm.org"
@@ -116,7 +116,7 @@
   "source": "brvm.org"
  },
  "FTSC": {
-  "actuel": 1625.0,
+  "actuel": 1690.0,
   "veille": 1625,
   "date": "2026-11-11",
   "source": "brvm.org"
@@ -140,8 +140,8 @@
   "source": "brvm.org"
  },
  "NTLC": {
-  "actuel": 13005.0,
-  "veille": 13000,
+  "actuel": 12500.0,
+  "veille": 13001,
   "date": "2026-11-11",
   "source": "brvm.org"
  },
@@ -164,7 +164,7 @@
   "source": "brvm.org"
  },
  "PALC": {
-  "actuel": 7590.0,
+  "actuel": 7595.0,
   "veille": 7595,
   "date": "2026-11-11",
   "source": "brvm.org"
@@ -188,7 +188,7 @@
   "source": "brvm.org"
  },
  "SDCC": {
-  "actuel": 12500.0,
+  "actuel": 12535.0,
   "veille": 12545,
   "date": "2026-11-11",
   "source": "brvm.org"
@@ -218,7 +218,7 @@
   "source": "brvm.org"
  },
  "SIBC": {
-  "actuel": 8800.0,
+  "actuel": 8795.0,
   "veille": 8800,
   "date": "2026-11-11",
   "source": "brvm.org"
@@ -230,25 +230,25 @@
   "source": "brvm.org"
  },
  "SIVC": {
-  "actuel": 1795.0,
+  "actuel": 1720.0,
   "veille": 1700,
   "date": "2026-11-11",
   "source": "brvm.org"
  },
  "SLBC": {
-  "actuel": 40000.0,
+  "actuel": 40500.0,
   "veille": 40000,
   "date": "2026-11-11",
   "source": "brvm.org"
  },
  "SMBC": {
-  "actuel": 17945.0,
-  "veille": 17950,
+  "actuel": 17940.0,
+  "veille": 17951,
   "date": "2026-11-11",
   "source": "brvm.org"
  },
  "SNTS": {
-  "actuel": 4190.0,
+  "actuel": 4180.0,
   "veille": 4000,
   "date": "2026-11-11",
   "source": "brvm.org"
@@ -260,7 +260,7 @@
   "source": "brvm.org"
  },
  "SPHC": {
-  "actuel": 8000.0,
+  "actuel": 7950.0,
   "veille": 7940,
   "date": "2026-11-11",
   "source": "brvm.org"
@@ -272,19 +272,19 @@
   "source": "brvm.org"
  },
  "STBC": {
-  "actuel": 21200.0,
-  "veille": 21149,
+  "actuel": 21150.0,
+  "veille": 21150,
   "date": "2026-11-11",
   "source": "brvm.org"
  },
  "TTLC": {
-  "actuel": 3020.0,
+  "actuel": 3015.0,
   "veille": 3030,
   "date": "2026-11-11",
   "source": "brvm.org"
  },
  "TTLS": {
-  "actuel": 3615.0,
+  "actuel": 3650.0,
   "veille": 3700,
   "date": "2026-11-11",
   "source": "brvm.org"
@@ -527,7 +527,7 @@
     "2026-11-06": 8350.0,
     "2026-11-09": 8280.0,
     "2026-11-10": 8240.0,
-    "2026-11-11": 8155.0
+    "2026-11-11": 8150.0
    },
    "CABC": {
     "2026-10-15": 3050.0,
@@ -571,7 +571,7 @@
     "2026-11-06": 32575.0,
     "2026-11-09": 32200.0,
     "2026-11-10": 31000.0,
-    "2026-11-11": 31000.0
+    "2026-11-11": 31500.0
    },
    "CFAC": {
     "2026-10-15": 1350.0,
@@ -593,7 +593,7 @@
     "2026-11-06": 1255.0,
     "2026-11-09": 1295.0,
     "2026-11-10": 1260.0,
-    "2026-11-11": 1285.0
+    "2026-11-11": 1260.0
    },
    "CIEC": {
     "2026-10-15": 5950.0,
@@ -681,7 +681,7 @@
     "2026-11-06": 1715.0,
     "2026-11-09": 1695.0,
     "2026-11-10": 1625.0,
-    "2026-11-11": 1625.0
+    "2026-11-11": 1690.0
    },
    "LNBB": {
     "2026-10-15": 4080.0,
@@ -769,7 +769,7 @@
     "2026-11-06": 13150.0,
     "2026-11-09": 13150.0,
     "2026-11-10": 13000.0,
-    "2026-11-11": 13005.0
+    "2026-11-11": 12500.0
    },
    "ONTBF": {
     "2026-10-15": 2900.0,
@@ -857,7 +857,7 @@
     "2026-11-06": 8000.0,
     "2026-11-09": 7600.0,
     "2026-11-10": 7595.0,
-    "2026-11-11": 7590.0
+    "2026-11-11": 7595.0
    },
    "PRSC": {
     "2026-10-15": 4250.0,
@@ -945,7 +945,7 @@
     "2026-11-06": 12500.0,
     "2026-11-09": 12300.0,
     "2026-11-10": 12545.0,
-    "2026-11-11": 12500.0
+    "2026-11-11": 12535.0
    },
    "SDSC": {
     "2026-10-15": 3065.0,
@@ -1055,7 +1055,7 @@
     "2026-11-06": 8795.0,
     "2026-11-09": 8800.0,
     "2026-11-10": 8800.0,
-    "2026-11-11": 8800.0
+    "2026-11-11": 8795.0
    },
    "SICC": {
     "2026-10-15": 8400.0,
@@ -1099,7 +1099,7 @@
     "2026-11-06": 1690.0,
     "2026-11-09": 1800.0,
     "2026-11-10": 1700.0,
-    "2026-11-11": 1795.0
+    "2026-11-11": 1720.0
    },
    "SLBC": {
     "2026-10-15": 38490.0,
@@ -1121,7 +1121,7 @@
     "2026-11-06": 39120.0,
     "2026-11-09": 40000.0,
     "2026-11-10": 40000.0,
-    "2026-11-11": 40000.0
+    "2026-11-11": 40500.0
    },
    "SMBC": {
     "2026-10-15": 15500.0,
@@ -1143,7 +1143,7 @@
     "2026-11-06": 17905.0,
     "2026-11-09": 17945.0,
     "2026-11-10": 17950.0,
-    "2026-11-11": 17945.0
+    "2026-11-11": 17940.0
    },
    "SNTS": {
     "2026-10-15": 43900.0,
@@ -1165,7 +1165,7 @@
     "2026-11-06": 4000.0,
     "2026-11-09": 4150.0,
     "2026-11-10": 4000.0,
-    "2026-11-11": 4190.0
+    "2026-11-11": 4180.0
    },
    "SOGC": {
     "2026-10-15": 7700.0,
@@ -1209,7 +1209,7 @@
     "2026-11-06": 8000.0,
     "2026-11-09": 8000.0,
     "2026-11-10": 7940.0,
-    "2026-11-11": 8000.0
+    "2026-11-11": 7950.0
    },
    "STAC": {
     "2026-10-15": 1905.0,
@@ -1253,7 +1253,7 @@
     "2026-11-06": 21195.0,
     "2026-11-09": 21200.0,
     "2026-11-10": 21150.0,
-    "2026-11-11": 21200.0
+    "2026-11-11": 21150.0
    },
    "TTLC": {
     "2026-10-15": 3000.0,
@@ -1275,7 +1275,7 @@
     "2026-11-06": 3040.0,
     "2026-11-09": 3030.0,
     "2026-11-10": 3030.0,
-    "2026-11-11": 3020.0
+    "2026-11-11": 3015.0
    },
    "TTLS": {
     "2026-10-15": 3700.0,
@@ -1297,7 +1297,7 @@
     "2026-11-06": 3700.0,
     "2026-11-09": 3650.0,
     "2026-11-10": 3700.0,
-    "2026-11-11": 3615.0
+    "2026-11-11": 3650.0
    },
    "UNLC": {
     "2026-10-15": 44410.0,
@@ -1366,7 +1366,7 @@
     "2026-11-06": 9550.0,
     "2026-11-09": 9550.0,
     "2026-11-10": 9480.0,
-    "2026-11-11": 9350.0
+    "2026-11-11": 9480.0
    }
   },
   "derniere_notif": "2026-11-11",
@@ -2023,6 +2023,12 @@
    {
     "date": "2026-08-03",
     "societe": "BOLLORE TRANSPORT & LOGISTICS",
+    "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
+    "type": "ago"
+   },
+   {
+    "date": "2026-08-03",
+    "societe": "BOLLORE TRANSPORT & LOGISTICS",
     "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
     "type": "ago"
    },
@@ -2030,12 +2036,6 @@
     "date": "2026-08-03",
     "societe": "BOLLORE TRANSPORT & LOGISTICS",
     "titre": "AFRICA GLOBAL LOGISTICS CI : Pouvoir - Assemblée Générale Mixte",
-    "type": "ago"
-   },
-   {
-    "date": "2026-08-03",
-    "societe": "BOLLORE TRANSPORT & LOGISTICS",
-    "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
     "type": "ago"
    },
    {
@@ -2749,6 +2749,12 @@
   {
    "date": "2026-08-03",
    "societe": "BOLLORE TRANSPORT & LOGISTICS",
+   "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
+   "type": "ago"
+  },
+  {
+   "date": "2026-08-03",
+   "societe": "BOLLORE TRANSPORT & LOGISTICS",
    "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
    "type": "ago"
   },
@@ -2756,12 +2762,6 @@
    "date": "2026-08-03",
    "societe": "BOLLORE TRANSPORT & LOGISTICS",
    "titre": "AFRICA GLOBAL LOGISTICS CI : Pouvoir - Assemblée Générale Mixte",
-   "type": "ago"
-  },
-  {
-   "date": "2026-08-03",
-   "societe": "BOLLORE TRANSPORT & LOGISTICS",
-   "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
    "type": "ago"
   },
   {
