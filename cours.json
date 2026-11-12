@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-11-12T14:05:13+00:00",
-  "updated_human": "12/11/2026 14:05 UTC",
+  "updated": "2026-11-12T14:20:10+00:00",
+  "updated_human": "12/11/2026 14:20 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -128,7 +128,7 @@
   "source": "brvm.org"
  },
  "NEIC": {
-  "actuel": 1855.0,
+  "actuel": 1980.0,
   "veille": 1965,
   "date": "2026-11-12",
   "source": "brvm.org"
@@ -725,7 +725,7 @@
     "2026-11-09": 1980.0,
     "2026-11-10": 1980.0,
     "2026-11-11": 1965.0,
-    "2026-11-12": 1855.0
+    "2026-11-12": 1980.0
    },
    "NSBC": {
     "2026-10-16": 20510.0,
