@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-11-17T09:35:10+00:00",
-  "updated_human": "17/11/2026 09:35 UTC",
+  "updated": "2026-11-17T09:50:11+00:00",
+  "updated_human": "17/11/2026 09:50 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -26,7 +26,7 @@
   "source": "brvm.org"
  },
  "BICB": {
-  "actuel": 8005.0,
+  "actuel": 8000.0,
   "veille": 8005,
   "date": "2026-11-17",
   "source": "brvm.org"
@@ -50,7 +50,7 @@
   "source": "brvm.org"
  },
  "BOABF": {
-  "actuel": 7900.0,
+  "actuel": 7850.0,
   "veille": 7900,
   "date": "2026-11-17",
   "source": "brvm.org"
@@ -62,7 +62,7 @@
   "source": "brvm.org"
  },
  "BOAM": {
-  "actuel": 5595.0,
+  "actuel": 5555.0,
   "veille": 5595,
   "date": "2026-11-17",
   "source": "brvm.org"
@@ -140,7 +140,7 @@
   "source": "brvm.org"
  },
  "NTLC": {
-  "actuel": 13095.0,
+  "actuel": 13075.0,
   "veille": 13095,
   "date": "2026-11-17",
   "source": "brvm.org"
@@ -170,25 +170,25 @@
   "source": "brvm.org"
  },
  "PRSC": {
-  "actuel": 3750.0,
+  "actuel": 3730.0,
   "veille": 3750,
   "date": "2026-11-17",
   "source": "brvm.org"
  },
  "SAFC": {
-  "actuel": 3600.0,
+  "actuel": 3550.0,
   "veille": 3600,
   "date": "2026-11-17",
   "source": "brvm.org"
  },
  "SCRC": {
-  "actuel": 1545.0,
+  "actuel": 1555.0,
   "veille": 1545,
   "date": "2026-11-17",
   "source": "brvm.org"
  },
  "SDCC": {
-  "actuel": 12200.0,
+  "actuel": 12150.0,
   "veille": 12200,
   "date": "2026-11-17",
   "source": "brvm.org"
@@ -212,7 +212,7 @@
   "source": "brvm.org"
  },
  "SHEC": {
-  "actuel": 2110.0,
+  "actuel": 2100.0,
   "veille": 2110,
   "date": "2026-11-17",
   "source": "brvm.org"
@@ -236,8 +236,8 @@
   "source": "brvm.org"
  },
  "SLBC": {
-  "actuel": 42290.0,
-  "veille": 42290,
+  "actuel": 42200.0,
+  "veille": 42289,
   "date": "2026-11-17",
   "source": "brvm.org"
  },
@@ -260,7 +260,7 @@
   "source": "brvm.org"
  },
  "SPHC": {
-  "actuel": 7800.0,
+  "actuel": 7750.0,
   "veille": 7800,
   "date": "2026-11-17",
   "source": "brvm.org"
@@ -272,8 +272,8 @@
   "source": "brvm.org"
  },
  "STBC": {
-  "actuel": 21300.0,
-  "veille": 21300,
+  "actuel": 21450.0,
+  "veille": 21301,
   "date": "2026-11-17",
   "source": "brvm.org"
  },
@@ -351,7 +351,7 @@
     "2026-11-12": 7950.0,
     "2026-11-13": 7950.0,
     "2026-11-16": 8005.0,
-    "2026-11-17": 8005.0
+    "2026-11-17": 8000.0
    },
    "BICC": {
     "2026-10-21": 30800.0,
@@ -439,7 +439,7 @@
     "2026-11-12": 8000.0,
     "2026-11-13": 7950.0,
     "2026-11-16": 7900.0,
-    "2026-11-17": 7900.0
+    "2026-11-17": 7850.0
    },
    "BOAC": {
     "2026-10-21": 11250.0,
@@ -483,7 +483,7 @@
     "2026-11-12": 5705.0,
     "2026-11-13": 5705.0,
     "2026-11-16": 5595.0,
-    "2026-11-17": 5595.0
+    "2026-11-17": 5555.0
    },
    "BOAN": {
     "2026-10-21": 4780.0,
@@ -769,7 +769,7 @@
     "2026-11-12": 13145.0,
     "2026-11-13": 13150.0,
     "2026-11-16": 13095.0,
-    "2026-11-17": 13095.0
+    "2026-11-17": 13075.0
    },
    "ONTBF": {
     "2026-10-21": 3085.0,
@@ -879,7 +879,7 @@
     "2026-11-12": 3700.0,
     "2026-11-13": 3790.0,
     "2026-11-16": 3750.0,
-    "2026-11-17": 3750.0
+    "2026-11-17": 3730.0
    },
    "SAFC": {
     "2026-10-21": 3890.0,
@@ -901,7 +901,7 @@
     "2026-11-12": 3685.0,
     "2026-11-13": 3650.0,
     "2026-11-16": 3600.0,
-    "2026-11-17": 3600.0
+    "2026-11-17": 3550.0
    },
    "SCRC": {
     "2026-10-21": 2150.0,
@@ -923,7 +923,7 @@
     "2026-11-12": 1600.0,
     "2026-11-13": 1555.0,
     "2026-11-16": 1545.0,
-    "2026-11-17": 1545.0
+    "2026-11-17": 1555.0
    },
    "SDCC": {
     "2026-10-21": 11605.0,
@@ -945,7 +945,7 @@
     "2026-11-12": 12500.0,
     "2026-11-13": 12400.0,
     "2026-11-16": 12200.0,
-    "2026-11-17": 12200.0
+    "2026-11-17": 12150.0
    },
    "SDSC": {
     "2026-10-21": 2950.0,
@@ -1033,7 +1033,7 @@
     "2026-11-12": 2030.0,
     "2026-11-13": 2170.0,
     "2026-11-16": 2110.0,
-    "2026-11-17": 2110.0
+    "2026-11-17": 2100.0
    },
    "SIBC": {
     "2026-10-21": 8600.0,
@@ -1121,7 +1121,7 @@
     "2026-11-12": 42945.0,
     "2026-11-13": 42950.0,
     "2026-11-16": 42290.0,
-    "2026-11-17": 42290.0
+    "2026-11-17": 42200.0
    },
    "SMBC": {
     "2026-10-21": 14505.0,
@@ -1209,7 +1209,7 @@
     "2026-11-12": 8000.0,
     "2026-11-13": 7990.0,
     "2026-11-16": 7800.0,
-    "2026-11-17": 7800.0
+    "2026-11-17": 7750.0
    },
    "STAC": {
     "2026-10-21": 1975.0,
@@ -1253,7 +1253,7 @@
     "2026-11-12": 21250.0,
     "2026-11-13": 21450.0,
     "2026-11-16": 21300.0,
-    "2026-11-17": 21300.0
+    "2026-11-17": 21450.0
    },
    "TTLC": {
     "2026-10-21": 2895.0,
@@ -2076,6 +2076,12 @@
    },
    {
     "date": "2026-06-26",
+    "societe": "AIR LIQUIDE CI",
+    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
     "societe": "SITAB",
     "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
@@ -2090,12 +2096,6 @@
     "date": "2026-06-26",
     "societe": "SITAB",
     "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "AIR LIQUIDE CI",
-    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
     "type": "ago"
    },
    {
@@ -2802,6 +2802,12 @@
   },
   {
    "date": "2026-06-26",
+   "societe": "AIR LIQUIDE CI",
+   "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
    "societe": "SITAB",
    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
@@ -2816,12 +2822,6 @@
    "date": "2026-06-26",
    "societe": "SITAB",
    "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "AIR LIQUIDE CI",
-   "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
    "type": "ago"
   },
   {
