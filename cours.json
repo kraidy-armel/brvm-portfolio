@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-11-17T14:35:10+00:00",
-  "updated_human": "17/11/2026 14:35 UTC",
+  "updated": "2026-11-17T14:50:10+00:00",
+  "updated_human": "17/11/2026 14:50 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -62,7 +62,7 @@
   "source": "brvm.org"
  },
  "BOAM": {
-  "actuel": 5595.0,
+  "actuel": 5400.0,
   "veille": 5595,
   "date": "2026-11-17",
   "source": "brvm.org"
@@ -74,7 +74,7 @@
   "source": "brvm.org"
  },
  "BOAS": {
-  "actuel": 8145.0,
+  "actuel": 7800.0,
   "veille": 8350,
   "date": "2026-11-17",
   "source": "brvm.org"
@@ -122,7 +122,7 @@
   "source": "brvm.org"
  },
  "LNBB": {
-  "actuel": 3760.0,
+  "actuel": 3800.0,
   "veille": 3800,
   "date": "2026-11-17",
   "source": "brvm.org"
@@ -182,7 +182,7 @@
   "source": "brvm.org"
  },
  "SCRC": {
-  "actuel": 1500.0,
+  "actuel": 1450.0,
   "veille": 1545,
   "date": "2026-11-17",
   "source": "brvm.org"
@@ -194,7 +194,7 @@
   "source": "brvm.org"
  },
  "SDSC": {
-  "actuel": 2780.0,
+  "actuel": 2580.0,
   "veille": 2780,
   "date": "2026-11-17",
   "source": "brvm.org"
@@ -483,7 +483,7 @@
     "2026-11-12": 5705.0,
     "2026-11-13": 5705.0,
     "2026-11-16": 5595.0,
-    "2026-11-17": 5595.0
+    "2026-11-17": 5400.0
    },
    "BOAN": {
     "2026-10-21": 4780.0,
@@ -527,7 +527,7 @@
     "2026-11-12": 8200.0,
     "2026-11-13": 8340.0,
     "2026-11-16": 8350.0,
-    "2026-11-17": 8145.0
+    "2026-11-17": 7800.0
    },
    "CABC": {
     "2026-10-21": 2990.0,
@@ -703,7 +703,7 @@
     "2026-11-12": 3935.0,
     "2026-11-13": 3800.0,
     "2026-11-16": 3800.0,
-    "2026-11-17": 3760.0
+    "2026-11-17": 3800.0
    },
    "NEIC": {
     "2026-10-21": 2130.0,
@@ -923,7 +923,7 @@
     "2026-11-12": 1600.0,
     "2026-11-13": 1555.0,
     "2026-11-16": 1545.0,
-    "2026-11-17": 1500.0
+    "2026-11-17": 1450.0
    },
    "SDCC": {
     "2026-10-21": 11605.0,
@@ -967,7 +967,7 @@
     "2026-11-12": 2800.0,
     "2026-11-13": 2780.0,
     "2026-11-16": 2780.0,
-    "2026-11-17": 2780.0
+    "2026-11-17": 2580.0
    },
    "SEMC": {
     "2026-10-21": 1495.0,
@@ -2077,18 +2077,6 @@
    {
     "date": "2026-06-26",
     "societe": "SITAB",
-    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "SITAB",
-    "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "SITAB",
     "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
     "type": "ago"
    },
@@ -2096,6 +2084,18 @@
     "date": "2026-06-26",
     "societe": "AIR LIQUIDE CI",
     "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "SITAB",
+    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "SITAB",
+    "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -2803,18 +2803,6 @@
   {
    "date": "2026-06-26",
    "societe": "SITAB",
-   "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "SITAB",
-   "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "SITAB",
    "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
    "type": "ago"
   },
@@ -2822,6 +2810,18 @@
    "date": "2026-06-26",
    "societe": "AIR LIQUIDE CI",
    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "SITAB",
+   "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "SITAB",
+   "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
