@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-11-19T14:35:11+00:00",
-  "updated_human": "19/11/2026 14:35 UTC",
+  "updated": "2026-11-19T14:50:17+00:00",
+  "updated_human": "19/11/2026 14:50 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -50,7 +50,7 @@
   "source": "brvm.org"
  },
  "BOABF": {
-  "actuel": 7700.0,
+  "actuel": 7780.0,
   "veille": 7790,
   "date": "2026-11-19",
   "source": "brvm.org"
@@ -218,7 +218,7 @@
   "source": "brvm.org"
  },
  "SIBC": {
-  "actuel": 8400.0,
+  "actuel": 8100.0,
   "veille": 8400,
   "date": "2026-11-19",
   "source": "brvm.org"
@@ -439,7 +439,7 @@
     "2026-11-16": 7900.0,
     "2026-11-17": 7815.0,
     "2026-11-18": 7790.0,
-    "2026-11-19": 7700.0
+    "2026-11-19": 7780.0
    },
    "BOAC": {
     "2026-10-23": 11200.0,
@@ -1055,7 +1055,7 @@
     "2026-11-16": 8515.0,
     "2026-11-17": 8500.0,
     "2026-11-18": 8400.0,
-    "2026-11-19": 8400.0
+    "2026-11-19": 8100.0
    },
    "SICC": {
     "2026-10-23": 8400.0,
@@ -2058,6 +2058,12 @@
    },
    {
     "date": "2026-06-26",
+    "societe": "AIR LIQUIDE CI",
+    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
     "societe": "SITAB",
     "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
     "type": "ago"
@@ -2072,12 +2078,6 @@
     "date": "2026-06-26",
     "societe": "SITAB",
     "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "AIR LIQUIDE CI",
-    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
     "type": "ago"
    },
    {
@@ -2766,6 +2766,12 @@
   },
   {
    "date": "2026-06-26",
+   "societe": "AIR LIQUIDE CI",
+   "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
    "societe": "SITAB",
    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
    "type": "ago"
@@ -2780,12 +2786,6 @@
    "date": "2026-06-26",
    "societe": "SITAB",
    "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "AIR LIQUIDE CI",
-   "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
    "type": "ago"
   },
   {
