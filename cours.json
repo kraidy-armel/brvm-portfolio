@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-11-20T14:35:14+00:00",
-  "updated_human": "20/11/2026 14:35 UTC",
+  "updated": "2026-11-20T14:50:10+00:00",
+  "updated_human": "20/11/2026 14:50 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -14,7 +14,7 @@
   }
  },
  "ABJC": {
-  "actuel": 3080.0,
+  "actuel": 3000.0,
   "veille": 3100,
   "date": "2026-11-20",
   "source": "brvm.org"
@@ -26,7 +26,7 @@
   "source": "brvm.org"
  },
  "BICB": {
-  "actuel": 7600.0,
+  "actuel": 7500.0,
   "veille": 7800,
   "date": "2026-11-20",
   "source": "brvm.org"
@@ -98,7 +98,7 @@
   "source": "brvm.org"
  },
  "CIEC": {
-  "actuel": 4250.0,
+  "actuel": 4400.0,
   "veille": 4200,
   "date": "2026-11-20",
   "source": "brvm.org"
@@ -110,7 +110,7 @@
   "source": "brvm.org"
  },
  "ETIT": {
-  "actuel": 56.0,
+  "actuel": 57.0,
   "veille": 57,
   "date": "2026-11-20",
   "source": "brvm.org"
@@ -329,7 +329,7 @@
     "2026-11-17": 3100.0,
     "2026-11-18": 3120.0,
     "2026-11-19": 3100.0,
-    "2026-11-20": 3080.0
+    "2026-11-20": 3000.0
    },
    "BICB": {
     "2026-10-26": 8520.0,
@@ -351,7 +351,7 @@
     "2026-11-17": 7960.0,
     "2026-11-18": 7995.0,
     "2026-11-19": 7800.0,
-    "2026-11-20": 7600.0
+    "2026-11-20": 7500.0
    },
    "BICC": {
     "2026-10-26": 31200.0,
@@ -615,7 +615,7 @@
     "2026-11-17": 4600.0,
     "2026-11-18": 4450.0,
     "2026-11-19": 4200.0,
-    "2026-11-20": 4250.0
+    "2026-11-20": 4400.0
    },
    "ECOC": {
     "2026-10-26": 16250.0,
@@ -659,7 +659,7 @@
     "2026-11-17": 58.0,
     "2026-11-18": 57.0,
     "2026-11-19": 57.0,
-    "2026-11-20": 56.0
+    "2026-11-20": 57.0
    },
    "FTSC": {
     "2026-10-26": 1795.0,
@@ -2005,12 +2005,6 @@
    {
     "date": "2026-08-03",
     "societe": "BOLLORE TRANSPORT & LOGISTICS",
-    "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
-    "type": "ago"
-   },
-   {
-    "date": "2026-08-03",
-    "societe": "BOLLORE TRANSPORT & LOGISTICS",
     "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
     "type": "ago"
    },
@@ -2018,6 +2012,12 @@
     "date": "2026-08-03",
     "societe": "BOLLORE TRANSPORT & LOGISTICS",
     "titre": "AFRICA GLOBAL LOGISTICS CI : Pouvoir - Assemblée Générale Mixte",
+    "type": "ago"
+   },
+   {
+    "date": "2026-08-03",
+    "societe": "BOLLORE TRANSPORT & LOGISTICS",
+    "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
     "type": "ago"
    },
    {
@@ -2059,18 +2059,6 @@
    {
     "date": "2026-06-26",
     "societe": "SITAB",
-    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "SITAB",
-    "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "SITAB",
     "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
     "type": "ago"
    },
@@ -2078,6 +2066,18 @@
     "date": "2026-06-26",
     "societe": "AIR LIQUIDE CI",
     "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "SITAB",
+    "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "SITAB",
+    "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -2713,12 +2713,6 @@
   {
    "date": "2026-08-03",
    "societe": "BOLLORE TRANSPORT & LOGISTICS",
-   "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
-   "type": "ago"
-  },
-  {
-   "date": "2026-08-03",
-   "societe": "BOLLORE TRANSPORT & LOGISTICS",
    "titre": "AFRICA GLOBAL LOGISTICS CI : Avis de convocation - Assemblée Générale Mixte",
    "type": "ago"
   },
@@ -2726,6 +2720,12 @@
    "date": "2026-08-03",
    "societe": "BOLLORE TRANSPORT & LOGISTICS",
    "titre": "AFRICA GLOBAL LOGISTICS CI : Pouvoir - Assemblée Générale Mixte",
+   "type": "ago"
+  },
+  {
+   "date": "2026-08-03",
+   "societe": "BOLLORE TRANSPORT & LOGISTICS",
+   "titre": "AFRICA GLOBAL LOGISTICS CI - Formulaire de vote par correspondance - Assemblée Générale Mixte",
    "type": "ago"
   },
   {
@@ -2767,18 +2767,6 @@
   {
    "date": "2026-06-26",
    "societe": "SITAB",
-   "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "SITAB",
-   "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "SITAB",
    "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
    "type": "ago"
   },
@@ -2786,6 +2774,18 @@
    "date": "2026-06-26",
    "societe": "AIR LIQUIDE CI",
    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "SITAB",
+   "titre": "SITAB CI : Avis de convocation - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "SITAB",
+   "titre": "SITAB CI : Pouvoir Personne Morale - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
