@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-11-23T14:05:20+00:00",
-  "updated_human": "23/11/2026 14:05 UTC",
+  "updated": "2026-11-23T14:20:11+00:00",
+  "updated_human": "23/11/2026 14:20 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -188,7 +188,7 @@
   "source": "brvm.org"
  },
  "SDCC": {
-  "actuel": 11300.0,
+  "actuel": 10460.0,
   "veille": 11300,
   "date": "2026-11-23",
   "source": "brvm.org"
@@ -945,7 +945,7 @@
     "2026-11-18": 12260.0,
     "2026-11-19": 11500.0,
     "2026-11-20": 11300.0,
-    "2026-11-23": 11300.0
+    "2026-11-23": 10460.0
    },
    "SDSC": {
     "2026-10-27": 2810.0,
