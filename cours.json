@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-11-24T14:20:11+00:00",
-  "updated_human": "24/11/2026 14:20 UTC",
+  "updated": "2026-11-24T14:35:11+00:00",
+  "updated_human": "24/11/2026 14:35 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -20,7 +20,7 @@
   "source": "brvm.org"
  },
  "BBGC": {
-  "actuel": 7580.0,
+  "actuel": 7500.0,
   "veille": 8000,
   "date": "2026-11-24",
   "source": "brvm.org"
@@ -44,7 +44,7 @@
   "source": "brvm.org"
  },
  "BOAB": {
-  "actuel": 8150.0,
+  "actuel": 8200.0,
   "veille": 8415,
   "date": "2026-11-24",
   "source": "brvm.org"
@@ -74,7 +74,7 @@
   "source": "brvm.org"
  },
  "BOAS": {
-  "actuel": 7645.0,
+  "actuel": 7615.0,
   "veille": 7600,
   "date": "2026-11-24",
   "source": "brvm.org"
@@ -104,7 +104,7 @@
   "source": "brvm.org"
  },
  "ECOC": {
-  "actuel": 14455.0,
+  "actuel": 14500.0,
   "veille": 14455,
   "date": "2026-11-24",
   "source": "brvm.org"
@@ -116,13 +116,13 @@
   "source": "brvm.org"
  },
  "FTSC": {
-  "actuel": 1470.0,
+  "actuel": 1475.0,
   "veille": 1585,
   "date": "2026-11-24",
   "source": "brvm.org"
  },
  "LNBB": {
-  "actuel": 3900.0,
+  "actuel": 3800.0,
   "veille": 3760,
   "date": "2026-11-24",
   "source": "brvm.org"
@@ -152,8 +152,8 @@
   "source": "brvm.org"
  },
  "ORAC": {
-  "actuel": 18900.0,
-  "veille": 19005,
+  "actuel": 18700.0,
+  "veille": 19004,
   "date": "2026-11-24",
   "source": "brvm.org"
  },
@@ -176,13 +176,13 @@
   "source": "brvm.org"
  },
  "SAFC": {
-  "actuel": 2780.0,
+  "actuel": 2800.0,
   "veille": 2890,
   "date": "2026-11-24",
   "source": "brvm.org"
  },
  "SCRC": {
-  "actuel": 1280.0,
+  "actuel": 1265.0,
   "veille": 1230,
   "date": "2026-11-24",
   "source": "brvm.org"
@@ -194,7 +194,7 @@
   "source": "brvm.org"
  },
  "SDSC": {
-  "actuel": 2700.0,
+  "actuel": 2695.0,
   "veille": 2550,
   "date": "2026-11-24",
   "source": "brvm.org"
@@ -218,7 +218,7 @@
   "source": "brvm.org"
  },
  "SIBC": {
-  "actuel": 8100.0,
+  "actuel": 7990.0,
   "veille": 8295,
   "date": "2026-11-24",
   "source": "brvm.org"
@@ -236,8 +236,8 @@
   "source": "brvm.org"
  },
  "SLBC": {
-  "actuel": 36080.0,
-  "veille": 39001,
+  "actuel": 36500.0,
+  "veille": 39000,
   "date": "2026-11-24",
   "source": "brvm.org"
  },
@@ -248,7 +248,7 @@
   "source": "brvm.org"
  },
  "SNTS": {
-  "actuel": 3895.0,
+  "actuel": 3890.0,
   "veille": 3900,
   "date": "2026-11-24",
   "source": "brvm.org"
@@ -278,7 +278,7 @@
   "source": "brvm.org"
  },
  "TTLC": {
-  "actuel": 3010.0,
+  "actuel": 2985.0,
   "veille": 2805,
   "date": "2026-11-24",
   "source": "brvm.org"
@@ -296,7 +296,7 @@
   "source": "brvm.org"
  },
  "UNXC": {
-  "actuel": 1700.0,
+  "actuel": 1750.0,
   "veille": 1700,
   "date": "2026-11-24",
   "source": "brvm.org"
@@ -417,7 +417,7 @@
     "2026-11-19": 9045.0,
     "2026-11-20": 9095.0,
     "2026-11-23": 8415.0,
-    "2026-11-24": 8150.0
+    "2026-11-24": 8200.0
    },
    "BOABF": {
     "2026-10-28": 7950.0,
@@ -527,7 +527,7 @@
     "2026-11-19": 7700.0,
     "2026-11-20": 7700.0,
     "2026-11-23": 7600.0,
-    "2026-11-24": 7645.0
+    "2026-11-24": 7615.0
    },
    "CABC": {
     "2026-10-28": 2995.0,
@@ -637,7 +637,7 @@
     "2026-11-19": 14890.0,
     "2026-11-20": 14795.0,
     "2026-11-23": 14455.0,
-    "2026-11-24": 14455.0
+    "2026-11-24": 14500.0
    },
    "ETIT": {
     "2026-10-28": 61.0,
@@ -681,7 +681,7 @@
     "2026-11-19": 1590.0,
     "2026-11-20": 1600.0,
     "2026-11-23": 1585.0,
-    "2026-11-24": 1470.0
+    "2026-11-24": 1475.0
    },
    "LNBB": {
     "2026-10-28": 3975.0,
@@ -703,7 +703,7 @@
     "2026-11-19": 3900.0,
     "2026-11-20": 3900.0,
     "2026-11-23": 3760.0,
-    "2026-11-24": 3900.0
+    "2026-11-24": 3800.0
    },
    "NEIC": {
     "2026-10-28": 2240.0,
@@ -813,7 +813,7 @@
     "2026-11-19": 19000.0,
     "2026-11-20": 19250.0,
     "2026-11-23": 19005.0,
-    "2026-11-24": 18900.0
+    "2026-11-24": 18700.0
    },
    "ORGT": {
     "2026-10-28": 2680.0,
@@ -901,7 +901,7 @@
     "2026-11-19": 3245.0,
     "2026-11-20": 3030.0,
     "2026-11-23": 2890.0,
-    "2026-11-24": 2780.0
+    "2026-11-24": 2800.0
    },
    "SCRC": {
     "2026-10-28": 2290.0,
@@ -923,7 +923,7 @@
     "2026-11-19": 1285.0,
     "2026-11-20": 1230.0,
     "2026-11-23": 1230.0,
-    "2026-11-24": 1280.0
+    "2026-11-24": 1265.0
    },
    "SDCC": {
     "2026-10-28": 12500.0,
@@ -967,7 +967,7 @@
     "2026-11-19": 2600.0,
     "2026-11-20": 2685.0,
     "2026-11-23": 2550.0,
-    "2026-11-24": 2700.0
+    "2026-11-24": 2695.0
    },
    "SEMC": {
     "2026-10-28": 1495.0,
@@ -1055,7 +1055,7 @@
     "2026-11-19": 8100.0,
     "2026-11-20": 8200.0,
     "2026-11-23": 8295.0,
-    "2026-11-24": 8100.0
+    "2026-11-24": 7990.0
    },
    "SICC": {
     "2026-10-28": 8400.0,
@@ -1121,7 +1121,7 @@
     "2026-11-19": 40500.0,
     "2026-11-20": 40500.0,
     "2026-11-23": 39000.0,
-    "2026-11-24": 36080.0
+    "2026-11-24": 36500.0
    },
    "SMBC": {
     "2026-10-28": 14600.0,
@@ -1165,7 +1165,7 @@
     "2026-11-19": 4090.0,
     "2026-11-20": 4040.0,
     "2026-11-23": 3900.0,
-    "2026-11-24": 3895.0
+    "2026-11-24": 3890.0
    },
    "SOGC": {
     "2026-10-28": 7505.0,
@@ -1275,7 +1275,7 @@
     "2026-11-19": 2990.0,
     "2026-11-20": 2990.0,
     "2026-11-23": 2805.0,
-    "2026-11-24": 3010.0
+    "2026-11-24": 2985.0
    },
    "TTLS": {
     "2026-10-28": 3700.0,
@@ -1341,7 +1341,7 @@
     "2026-11-19": 1695.0,
     "2026-11-20": 1705.0,
     "2026-11-23": 1700.0,
-    "2026-11-24": 1700.0
+    "2026-11-24": 1750.0
    },
    "SVOC": {
     "2019-05-10": 2395.0
@@ -1366,7 +1366,7 @@
     "2026-11-19": 8500.0,
     "2026-11-20": 8145.0,
     "2026-11-23": 8000.0,
-    "2026-11-24": 7580.0
+    "2026-11-24": 7500.0
    }
   },
   "derniere_notif": "2026-11-24",
@@ -2035,13 +2035,13 @@
    {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
-    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
-    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -2054,12 +2054,6 @@
     "date": "2026-06-29",
     "societe": "AIR LIQUIDE CI",
     "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
-    "type": "ago"
-   },
-   {
-    "date": "2026-06-26",
-    "societe": "AIR LIQUIDE CI",
-    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
     "type": "ago"
    },
    {
@@ -2078,6 +2072,12 @@
     "date": "2026-06-26",
     "societe": "SITAB",
     "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
+    "type": "ago"
+   },
+   {
+    "date": "2026-06-26",
+    "societe": "AIR LIQUIDE CI",
+    "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
     "type": "ago"
    },
    {
@@ -2743,13 +2743,13 @@
   {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
-   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
-   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
@@ -2762,12 +2762,6 @@
    "date": "2026-06-29",
    "societe": "AIR LIQUIDE CI",
    "titre": "ERIUM CI : Pouvoir - Assemblée Générale Ordinaire",
-   "type": "ago"
-  },
-  {
-   "date": "2026-06-26",
-   "societe": "AIR LIQUIDE CI",
-   "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
    "type": "ago"
   },
   {
@@ -2786,6 +2780,12 @@
    "date": "2026-06-26",
    "societe": "SITAB",
    "titre": "SITAB CI : Pouvoir Personne Physique - Assemblée Générale Ordinaire",
+   "type": "ago"
+  },
+  {
+   "date": "2026-06-26",
+   "societe": "AIR LIQUIDE CI",
+   "titre": "Avis de convocation - Assemblée Générale Ordinaire - ERIUM CI",
    "type": "ago"
   },
   {
