@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-11-25T11:05:18+00:00",
-  "updated_human": "25/11/2026 11:05 UTC",
+  "updated": "2026-11-25T11:20:10+00:00",
+  "updated_human": "25/11/2026 11:20 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -14,7 +14,7 @@
   }
  },
  "ABJC": {
-  "actuel": 2590.0,
+  "actuel": 2750.0,
   "veille": 2590,
   "date": "2026-11-25",
   "source": "brvm.org"
@@ -32,8 +32,8 @@
   "source": "brvm.org"
  },
  "BICC": {
-  "actuel": 30800.0,
-  "veille": 30973,
+  "actuel": 29000.0,
+  "veille": 30976,
   "date": "2026-11-25",
   "source": "brvm.org"
  },
@@ -86,7 +86,7 @@
   "source": "brvm.org"
  },
  "CBIBF": {
-  "actuel": 24100.0,
+  "actuel": 24005.0,
   "veille": 24899,
   "date": "2026-11-25",
   "source": "brvm.org"
@@ -98,14 +98,14 @@
   "source": "brvm.org"
  },
  "CIEC": {
-  "actuel": 4250.0,
+  "actuel": 4300.0,
   "veille": 4250,
   "date": "2026-11-25",
   "source": "brvm.org"
  },
  "ECOC": {
-  "actuel": 14395.0,
-  "veille": 14499,
+  "actuel": 14400.0,
+  "veille": 14500,
   "date": "2026-11-25",
   "source": "brvm.org"
  },
@@ -134,8 +134,8 @@
   "source": "brvm.org"
  },
  "NSBC": {
-  "actuel": 15000.0,
-  "veille": 15100,
+  "actuel": 15090.0,
+  "veille": 15101,
   "date": "2026-11-25",
   "source": "brvm.org"
  },
@@ -164,7 +164,7 @@
   "source": "brvm.org"
  },
  "PALC": {
-  "actuel": 7300.0,
+  "actuel": 7200.0,
   "veille": 7300,
   "date": "2026-11-25",
   "source": "brvm.org"
@@ -206,8 +206,8 @@
   "source": "brvm.org"
  },
  "SGBC": {
-  "actuel": 37020.0,
-  "veille": 37549,
+  "actuel": 37055.0,
+  "veille": 37551,
   "date": "2026-11-25",
   "source": "brvm.org"
  },
@@ -218,7 +218,7 @@
   "source": "brvm.org"
  },
  "SIBC": {
-  "actuel": 7900.0,
+  "actuel": 7925.0,
   "veille": 7990,
   "date": "2026-11-25",
   "source": "brvm.org"
@@ -284,7 +284,7 @@
   "source": "brvm.org"
  },
  "TTLS": {
-  "actuel": 3495.0,
+  "actuel": 3400.0,
   "veille": 3400,
   "date": "2026-11-25",
   "source": "brvm.org"
@@ -296,14 +296,14 @@
   "source": "brvm.org"
  },
  "UNXC": {
-  "actuel": 1705.0,
+  "actuel": 1690.0,
   "veille": 1750,
   "date": "2026-11-25",
   "source": "brvm.org"
  },
  "SGBCI": {
-  "actuel": 37020.0,
-  "veille": 37549,
+  "actuel": 37055.0,
+  "veille": 37551,
   "date": "2026-11-25",
   "source": "brvm.org"
  },
@@ -329,7 +329,7 @@
     "2026-11-20": 3000.0,
     "2026-11-23": 2795.0,
     "2026-11-24": 2590.0,
-    "2026-11-25": 2590.0
+    "2026-11-25": 2750.0
    },
    "BICB": {
     "2026-10-29": 8440.0,
@@ -373,7 +373,7 @@
     "2026-11-20": 31000.0,
     "2026-11-23": 29800.0,
     "2026-11-24": 30975.0,
-    "2026-11-25": 30800.0
+    "2026-11-25": 29000.0
    },
    "BNBC": {
     "2026-10-29": 1985.0,
@@ -571,7 +571,7 @@
     "2026-11-20": 27505.0,
     "2026-11-23": 25445.0,
     "2026-11-24": 24900.0,
-    "2026-11-25": 24100.0
+    "2026-11-25": 24005.0
    },
    "CFAC": {
     "2026-10-29": 1395.0,
@@ -615,7 +615,7 @@
     "2026-11-20": 4400.0,
     "2026-11-23": 4300.0,
     "2026-11-24": 4250.0,
-    "2026-11-25": 4250.0
+    "2026-11-25": 4300.0
    },
    "ECOC": {
     "2026-10-29": 15950.0,
@@ -637,7 +637,7 @@
     "2026-11-20": 14795.0,
     "2026-11-23": 14455.0,
     "2026-11-24": 14500.0,
-    "2026-11-25": 14395.0
+    "2026-11-25": 14400.0
    },
    "ETIT": {
     "2026-10-29": 64.0,
@@ -747,7 +747,7 @@
     "2026-11-20": 15000.0,
     "2026-11-23": 15000.0,
     "2026-11-24": 15100.0,
-    "2026-11-25": 15000.0
+    "2026-11-25": 15090.0
    },
    "NTLC": {
     "2026-10-29": 13190.0,
@@ -857,7 +857,7 @@
     "2026-11-20": 7440.0,
     "2026-11-23": 7310.0,
     "2026-11-24": 7300.0,
-    "2026-11-25": 7300.0
+    "2026-11-25": 7200.0
    },
    "PRSC": {
     "2026-10-29": 3800.0,
@@ -1011,7 +1011,7 @@
     "2026-11-20": 38795.0,
     "2026-11-23": 37610.0,
     "2026-11-24": 37550.0,
-    "2026-11-25": 37020.0
+    "2026-11-25": 37055.0
    },
    "SHEC": {
     "2026-10-29": 2115.0,
@@ -1055,7 +1055,7 @@
     "2026-11-20": 8200.0,
     "2026-11-23": 8295.0,
     "2026-11-24": 7990.0,
-    "2026-11-25": 7900.0
+    "2026-11-25": 7925.0
    },
    "SICC": {
     "2026-10-29": 8400.0,
@@ -1297,7 +1297,7 @@
     "2026-11-20": 3580.0,
     "2026-11-23": 3500.0,
     "2026-11-24": 3400.0,
-    "2026-11-25": 3495.0
+    "2026-11-25": 3400.0
    },
    "UNLC": {
     "2026-10-29": 46000.0,
@@ -1341,7 +1341,7 @@
     "2026-11-20": 1705.0,
     "2026-11-23": 1700.0,
     "2026-11-24": 1750.0,
-    "2026-11-25": 1705.0
+    "2026-11-25": 1690.0
    },
    "SVOC": {
     "2019-05-10": 2395.0
@@ -2035,13 +2035,13 @@
    {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
-    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
     "date": "2026-06-30",
     "societe": "UNIWAX CI",
-    "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+    "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
     "type": "ago"
    },
    {
@@ -2743,13 +2743,13 @@
   {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
-   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
+   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
    "date": "2026-06-30",
    "societe": "UNIWAX CI",
-   "titre": "UNIWAX CI : Formulaire de vote par correspondance - Assemblée Générale Ordinaire",
+   "titre": "UNIWAX CI : Avis de convocation et Projet de résolution - Assemblée Générale Ordinaire",
    "type": "ago"
   },
   {
