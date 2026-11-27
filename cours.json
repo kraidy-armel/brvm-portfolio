@@ -1,7 +1,7 @@
 {
  "_meta": {
-  "updated": "2026-11-27T09:50:16+00:00",
-  "updated_human": "27/11/2026 09:50 UTC",
+  "updated": "2026-11-27T10:05:10+00:00",
+  "updated_human": "27/11/2026 10:05 UTC",
   "count": 49,
   "diagnostic": {
    "brvm_officiel": "OK (https://www.brvm.org/fr/cours-actions/0, 48 titres)",
@@ -9,7 +9,7 @@
    "alertes_perso": "aucun seuil franchi",
    "resultat": "49 titres",
    "dates_couvertes": "2026-11-27 -> 2026-11-27",
-   "indice_composite": "464.78 (https://www.brvm.org/fr/indices/0)",
+   "indice_composite": "453.57 (https://www.brvm.org/fr/indices/0)",
    "annonces": "74 annonce(s)"
   }
  },
@@ -21,7 +21,7 @@
  },
  "BBGC": {
   "actuel": 7700.0,
-  "veille": 7800,
+  "veille": 7700,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
@@ -33,7 +33,7 @@
  },
  "BICC": {
   "actuel": 28800.0,
-  "veille": 29000,
+  "veille": 28800,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
@@ -45,37 +45,37 @@
  },
  "BOAB": {
   "actuel": 8000.0,
-  "veille": 8070,
+  "veille": 8000,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "BOABF": {
   "actuel": 6800.0,
-  "veille": 7015,
+  "veille": 6800,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "BOAC": {
   "actuel": 10590.0,
-  "veille": 10845,
+  "veille": 10590,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "BOAM": {
   "actuel": 5150.0,
-  "veille": 4875,
+  "veille": 5150,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "BOAN": {
   "actuel": 4270.0,
-  "veille": 4350,
+  "veille": 4270,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "BOAS": {
   "actuel": 7405.0,
-  "veille": 7495,
+  "veille": 7405,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
@@ -87,85 +87,85 @@
  },
  "CBIBF": {
   "actuel": 23050.0,
-  "veille": 23494,
+  "veille": 23050,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "CFAC": {
   "actuel": 1160.0,
-  "veille": 1180,
+  "veille": 1160,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "CIEC": {
   "actuel": 4050.0,
-  "veille": 4000,
+  "veille": 4050,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "ECOC": {
   "actuel": 14000.0,
-  "veille": 14500,
+  "veille": 14000,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "ETIT": {
   "actuel": 51.0,
-  "veille": 52,
+  "veille": 51,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "FTSC": {
   "actuel": 1350.0,
-  "veille": 1365,
+  "veille": 1350,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "LNBB": {
   "actuel": 3895.0,
-  "veille": 3800,
+  "veille": 3895,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "NEIC": {
   "actuel": 1790.0,
-  "veille": 1795,
+  "veille": 1790,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "NSBC": {
   "actuel": 16125.0,
-  "veille": 15000,
+  "veille": 16125,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "NTLC": {
   "actuel": 11700.0,
-  "veille": 11800,
+  "veille": 11700,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "ONTBF": {
   "actuel": 2895.0,
-  "veille": 2800,
+  "veille": 2895,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "ORAC": {
   "actuel": 17195.0,
-  "veille": 18499,
+  "veille": 17195,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "ORGT": {
   "actuel": 2250.0,
-  "veille": 2310,
+  "veille": 2250,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "PALC": {
   "actuel": 7200.0,
-  "veille": 7250,
+  "veille": 7200,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
@@ -183,19 +183,19 @@
  },
  "SCRC": {
   "actuel": 1395.0,
-  "veille": 1335,
+  "veille": 1395,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "SDCC": {
   "actuel": 10210.0,
-  "veille": 10400,
+  "veille": 10210,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "SDSC": {
   "actuel": 2685.0,
-  "veille": 2690,
+  "veille": 2685,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
@@ -207,19 +207,19 @@
  },
  "SGBC": {
   "actuel": 36500.0,
-  "veille": 36999,
+  "veille": 36500,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "SHEC": {
   "actuel": 1795.0,
-  "veille": 1900,
+  "veille": 1795,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "SIBC": {
   "actuel": 7680.0,
-  "veille": 7950,
+  "veille": 7680,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
@@ -231,55 +231,55 @@
  },
  "SIVC": {
   "actuel": 1365.0,
-  "veille": 1405,
+  "veille": 1365,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "SLBC": {
   "actuel": 34005.0,
-  "veille": 36513,
+  "veille": 34005,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "SMBC": {
   "actuel": 17395.0,
-  "veille": 17006,
+  "veille": 17395,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "SNTS": {
   "actuel": 3690.0,
-  "veille": 3750,
+  "veille": 3690,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "SOGC": {
   "actuel": 7230.0,
-  "veille": 7250,
+  "veille": 7230,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "SPHC": {
   "actuel": 7450.0,
-  "veille": 7440,
+  "veille": 7450,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "STAC": {
   "actuel": 2390.0,
-  "veille": 2300,
+  "veille": 2390,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "STBC": {
   "actuel": 20000.0,
-  "veille": 20300,
+  "veille": 20000,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
  "TTLC": {
   "actuel": 2950.0,
-  "veille": 2970,
+  "veille": 2950,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
@@ -291,7 +291,7 @@
  },
  "UNLC": {
   "actuel": 38850.0,
-  "veille": 42000,
+  "veille": 38850,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
@@ -303,7 +303,7 @@
  },
  "SGBCI": {
   "actuel": 36500.0,
-  "veille": 36999,
+  "veille": 36500,
   "date": "2026-11-27",
   "source": "brvm.org"
  },
@@ -1372,7 +1372,7 @@
   "derniere_notif": "2026-11-27",
   "alertes_notifiees": {},
   "_indice_prec": {
-   "composite": 464.78,
+   "composite": 453.57,
    "date": "2026-11-27",
    "source": "https://www.brvm.org/fr/indices/0"
   },
@@ -2495,7 +2495,7 @@
   ]
  },
  "_indice": {
-  "composite": 464.78,
+  "composite": 453.57,
   "date": "2026-11-27",
   "source": "https://www.brvm.org/fr/indices/0"
  },
